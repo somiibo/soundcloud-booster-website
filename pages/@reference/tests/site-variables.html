@@ -1,0 +1,29 @@
+---
+### ALL PAGES ###
+layout: null
+permalink: /@reference/tests/site-variables/
+
+### REGULAR PAGES ###
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+  </head>
+  <body>
+    <!-- CONTENT START -->
+    <div class="">
+      SITE URL: {{ site.url }}
+    </div>
+    <div class="">
+      SITE VERSION: {{ site.version }}
+    </div>
+    <div class="">
+      SITE META: {{ site.meta }}
+    </div>
+
+    <!-- CONTENT END -->
+    {%- include /master/global/foot.html -%}
+  </body>
+</html>

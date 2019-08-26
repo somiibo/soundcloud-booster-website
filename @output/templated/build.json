@@ -1,0 +1,10 @@
+{
+  "npm-build": {
+    "timestamp_utc": "%TIMESTAMP_UTC_NPM%",
+    "timestamp_pst": "%TIMESTAMP_PST_NPM%"
+  },
+  "gh-pages-push": {
+    "timestamp_utc": "%TIMESTAMP_UTC_GHP%",
+    "timestamp_pst": "%TIMESTAMP_PST_GHP%"
+  }
+}

@@ -1,0 +1,8 @@
+---
+layount: null
+permalink: /budget.json
+# NOTE: Edit this in _includes/app/misc/budget.json
+---
+[
+  {% include /app/misc/budget.json %}
+]

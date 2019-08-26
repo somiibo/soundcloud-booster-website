@@ -1,0 +1,39 @@
+---
+layount: null
+permalink: /manifest.json
+# NOTE: Edit this in _includes/app/misc/manifest.json
+---
+{%- if site.favicon.path != null and site.favicon.path != '' -%}
+{% assign favicon_path = site.favicon.path %}
+{%- else -%}
+{% assign favicon_path = '/assets/images/favicon' %}
+{%- endif -%}
+{
+
+  "name": "{{ site.manifest.name }}",
+  "short_name": "{{ site.manifest.short_name }}",
+  "icons": [
+    {
+      "src": "{{ favicon_path }}/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "{{ favicon_path }}/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "{%- if site.manifest.theme_color != null and site.manifest.theme_color != '' -%}{{ site.manifest.theme_color }}{%- else -%}#ffffff{%- endif -%}",
+  "background_color": "{%- if site.manifest.background_color != null and site.manifest.background_color != '' -%}{{ site.manifest.background_color }}{%- else -%}#ffffff{%- endif -%}",
+
+  "display": "{%- if site.manifest.display != null and site.manifest.display != '' -%}{{ site.manifest.display }}{%- else -%}standalone{%- endif -%}",
+  "start_url": "{%- if site.manifest.start_url != null and site.manifest.start_url != '' -%}{{ site.manifest.start_url }}{%- else -%}index.html{%- endif -%}",
+  "scope": "{%- if site.manifest.scope != null and site.manifest.scope != '' -%}{{ site.manifest.scope }}{%- else -%}/{%- endif -%}",
+  "orientation": "{%- if site.manifest.orientation != null and site.manifest.orientation != '' -%}{{ site.manifest.orientation }}{%- else -%}portrait{%- endif -%}",
+  "gcm_sender_id": "103953800507",
+
+  {% include /app/misc/manifest.json %}
+
+  "end": "end"
+}

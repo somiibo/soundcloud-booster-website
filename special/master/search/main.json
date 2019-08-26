@@ -1,0 +1,35 @@
+---
+layout: null
+permalink: /search/main.json/
+---
+[
+  {%- if site.search.enable != false -%}
+    {% for post in site.posts %}
+    {%- if post.search.enable != false -%}
+      {
+        "url": "{{ site.url }}{{ post.url }}",
+        "category": "",
+        "title": "{{ post.meta.title }}",
+        "desc": "{{ post.meta.description }}",
+        "breadcrumb": "{{ post.meta.breadcrumb }}",
+        "type": "post"
+      },
+    {%- endif -%}
+    {% endfor %}
+    {% for page in site.pages %}
+    {%- if page.search.enable != false -%}
+      {
+        "url": "{{ site.url }}{{ page.url }}",
+        "category": "",
+        "title": "{{ page.meta.title }}",
+        "desc": "{{ page.meta.description }}",
+        "breadcrumb": "{{ page.meta.breadcrumb }}",
+        "type": "{{ page.settings.page-type }}"
+      },
+    {%- endif -%}
+    {% endfor %}
+  {%- endif -%}
+  {
+    "END": "END"
+  }
+]

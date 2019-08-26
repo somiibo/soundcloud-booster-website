@@ -1,0 +1,33 @@
+# Sass
+.sass-cache
+*.scssc
+
+# Sublime Text
+sftp-config.json
+
+# Jekyll
+_site
+.jekyll-metadata
+/.bundle
+/vendor
+
+# Node.js
+node_modules/
+
+# Logfiles and tempfiles
+*.log
+/log/*
+!/log/.keep
+/tmp
+
+# Other unneeded files
+doc/
+*.swp
+*~
+.project
+.DS_Store
+.idea
+.secret
+
+# DEV
+/@output/regular/lighthouse-report.html

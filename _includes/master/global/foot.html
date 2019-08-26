@@ -1,0 +1,174 @@
+<!-- Performance -->
+<script type="text/javascript">
+  // Performance
+  if ('performance' in window) {
+    window.performance.mark('manager_preBundle');
+  }
+</script>
+
+<!-- Script - Bundle -->
+{%- if page.settings.include-script-bundle == false -%}
+{% elsif site.settings.include-script-bundle != false %}
+
+{%- if page.settings.include-script-bundle-optimization != null -%}
+{% assign bundle_optimization = page.settings.include-script-bundle-optimization %}
+{%- elsif site.settings.include-script-bundle-optimization == null -%}
+{% assign bundle_optimization = 'defer' %}
+{%- else -%}
+{% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
+{% endif %}
+<script {{ bundle_optimization }} src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" type="text/javascript"></script>
+{% endif %}
+
+<!-- Script - Google Analytics Tracking Script -->
+{%- if page.tracking.google-analytics == false -%}
+{% elsif site.tracking.google-analytics != false %}
+<script defer src="https://www.googletagmanager.com/gtag/js?id={{site.tracking.google-analytics}}" type="text/javascript"></script>
+<script type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{site.tracking.google-analytics}}');
+</script>
+{% endif %}
+
+<!-- Script - Facebook Pixel Tracking Script -->
+{%- if page.tracking.facebook-pixel == false -%}
+{% elsif site.tracking.facebook-pixel != false %}
+<script defer type="text/javascript">
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '{{site.tracking.facebook-pixel}}');
+  fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id={{site.tracking.facebook-pixel}}&ev=PageView&noscript=1"
+  />
+</noscript>
+{% endif %}
+
+<!-- Script - Social Share Kit Script -->
+{%- if page.layout == 'post' and page.settings.include-socialsharekit == false -%}
+{% assign include_socialsharekitscript = false %}
+{%- elsif page.layout == 'post' or page.settings.include-socialsharekit != false -%}
+{% assign include_socialsharekitscript = true %}
+{%- else -%}
+{% assign include_socialsharekitscript = false %}
+{%- endif -%}
+{% if include_socialsharekitscript == true %}
+<script defer type="text/javascript">
+  {% include /master/assets/scripts/social-share-kit.js %}
+
+  SocialShareKit.init();
+</script>
+{% endif %}
+
+<!-- Schema - Breadcrumbs -->
+{%- if page.schema.breadcrumbs == false -%}
+{% elsif site.schema.breadcrumbs != false %}
+<div class="hidden" hidden>
+  <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+  <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}/" title="Return home">
+      <span itemprop="name">Home</span>
+    </a><meta itemprop="position" content="1" />
+  </li>
+  {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
+  {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
+  {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
+  {%- for i in (1..forLoopMaxInt) -%}
+      {%- assign pos = forloop.index -%}
+      {%- capture current_breadcrumb_url -%}{{next_prepender}}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
+      {%- capture current_breadcrumb_md_url -%}{{next_prepender}}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
+      {%- capture next_prepender -%}{{next_prepender}}/{{ splitted_url_parts[i] }}{%- endcapture -%}
+      {%- for breadcrumb_page in site.pages -%}
+          {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
+          {% assign j = forLoopMaxInt | plus: 0 %}
+              <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                  {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
+                  <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{breadcrumb_page_page_url_without_index_html}}" title="Visit {{breadcrumb_page.breadcrumb}}">
+                    <span itemprop="name">{{breadcrumb_page.meta.breadcrumb}}</span>
+                    <meta itemprop="position" content="{{ pos | plus: 1 }}" />
+                  </a>
+              </li>
+          {%- endif -%}
+      {%- endfor -%}
+  {%- endfor -%}
+  </ol>
+</div>
+{% endif %}
+
+<!-- Schema - Brand -->
+{%- if page.schema.brand == false -%}
+{% elsif site.schema.brand != false %}
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "{{ site.brand.type }}",
+  "name": "{{ site.brand.name }}",
+  "description": "{{ site.brand.description }}",
+  "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
+  "url": "{{ site.url }}",
+  "sameAs": [
+    {%- if site.socials.linkedin != null -%}
+    "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
+    {%- endif -%}
+
+    {%- if site.socials.youtube != null -%}
+    "https://www.youtube.com/channel/{{ site.socials.youtube }}",
+    {%- endif -%}
+
+    {%- if site.socials.twitter != null -%}
+    "https://twitter.com/{{ site.socials.twitter }}",
+    {%- endif -%}
+
+    {%- if site.socials.instagram != null -%}
+    "https://www.instagram.com/{{ site.socials.instagram }}/",
+    {%- endif -%}
+
+    {%- if site.socials.tumblr != null -%}
+    "https://{{ site.socials.tumblr }}.tumblr.com/",
+    {%- endif -%}
+
+    {%- if site.socials.facebook != null -%}
+    "https://www.facebook.com/{{ site.socials.facebook }}/",
+    {%- endif -%}
+
+    ""
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "{{ site.brand.addressLocality }}",
+    "addressCountry": "{{ site.brand.addressCountry }}"
+  }
+}
+</script>
+{% endif %}
+
+<!-- Schema - Sitelinks -->
+{%- if page.schema.sitelinks == false -%}
+{% elsif site.schema.sitelinks != false %}
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "url": "{{site.url}}",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://cse.google.com/cse?cx={{ site.schema.sitelinks-pub }}&ie=UTF-8&q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
+{% endif %}
+
+<!-- App - Foot Content -->
+{% include /app/global/foot.html %}

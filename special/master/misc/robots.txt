@@ -1,0 +1,30 @@
+---
+layount: null
+permalink: /robots.txt
+# NOTE: Edit this in _includes/app/misc/robots.txt
+---
+User-agent: *
+#
+# @reference
+#
+Disallow: /@reference/
+Noindex: /@reference/
+#
+# Admin Pages
+#
+Disallow: /admin/
+Noindex: /admin/
+#
+# Protection
+#
+Disallow: /search
+Disallow: /index.html?
+Disallow: /?
+Disallow: /startup?page=
+Disallow: *page=
+Disallow: *?page=
+#
+# App/Custom pages
+#
+{% include /app/misc/robots.txt %}
+Sitemap: {{site.url}}/sitemap.xml

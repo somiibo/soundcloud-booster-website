@@ -1,0 +1,32 @@
+# Other unneeded files
+.DS_Store
+
+# Jekyll src files
+_includes
+_layouts
+_posts
+_site
+_websrc
+
+# Website files
+@output
+assets
+blog
+pages
+special
+vendor
+
+# Config files
+_config_app.yml
+_config_development.yml
+_config_master.yml
+.codeclimate.yml
+CNAME
+
+# Other files
+Gemfile
+Gemfile.lock
+gulpfile.js
+
+# App files
+### INCLUDE APP FILES HERE ###
