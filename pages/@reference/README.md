@@ -1,16 +1,16 @@
 # Creating & synching new repo from ultimate-jekyll template
 1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template**.
 2. In the next window, name the new repository and choose an organization to host the repository.
-3. Create a branch called `master`, then delete the branch called `template`.
+3. Create a branch called `master`, then make `master` the default branch, and finally delete the branch called `template`.
 4. Open the newly created repository on GitHub and click **Open in Desktop** then choose location using GitHub desktop.
 5. In the repo's settings add a secret called `ACCESS_TOKEN` and paste a GitHub token that has write permissions for this repo.
 6. Open Terminal and do the following commands:
-* `git remote add upstream https://github.com/iwiedenm/ultimate-jekyll.git`
-* `git remote set-url --push upstream no_push`
-* `git fetch upstream`
-* If prompted, enter *username* and *password*/*GitHub access token*
-* `git merge upstream/template --allow-unrelated-histories`
-* Type `:quit` then press `enter`
+* `git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git`.
+* `git remote set-url --push upstream no_push`.
+* `git fetch upstream template`.
+* If prompted, enter *username* and *password*/*GitHub access token*.
+* `git merge upstream/template --allow-unrelated-histories`.
+* Type `:quit` then press `enter`.
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
 
 # Get changes from ultimate-jekyll template
