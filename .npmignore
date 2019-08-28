@@ -1,6 +1,14 @@
 # Other unneeded files
 .DS_Store
 
+# Hidden Files
+.github
+.atomignore
+.editorconfig
+.eslintignore
+.eslintrc.js
+.travis.yml
+
 # Jekyll src files
 _includes
 _layouts
@@ -17,6 +25,7 @@ special
 vendor
 
 # Config files
+_config.yml
 _config_app.yml
 _config_development.yml
 _config_master.yml
