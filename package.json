@@ -4,7 +4,7 @@
   "description": "Ultimate Jekyll starter project including full setup for gulp, Sass, Autoprefixer, PostCSS, webpack, imagemin, Browsersync etc.",
   "main": "index.js",
   "scripts": {
-    "preinstall": "bundle install --path vendor/bundle",
+    "install:bundle": "bundle install --path vendor/bundle",
     "start": "bundle exec gulp",
     "test": "bundle exec gulp test",
     "browsersync": "bundle exec gulp browsersync",
