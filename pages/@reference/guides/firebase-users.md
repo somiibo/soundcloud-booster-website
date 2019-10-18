@@ -16,15 +16,44 @@ permalink: /@reference/guides/firebase-users/
     uid: '',
     email: '',
   },
+  permissions: {
+    admin: false,
+    developer: false,
+    betaTester: false,
+  },
   plan: {
     expires: {
       timestamp: '2111-01-01T00:00:00Z',
       timestampUNIX: 1556503067000,
     },
-    id: 'intro',
-    enterpriseLimits: {
-      // ...
+    id: 'intro', // intro | basic | advanced... (intro is default value)
+    enterprise: {
+      // expires: {
+      //   timestamp: '2111-01-01T00:00:00Z',
+      //   timestampUNIX: 1556503067000,
+      // },
+      limits: {
+        // ...
+        // accounts: 0,
+      }
     },
+    payment: {
+      method: '', // paypal | stripe | chargebee, etc
+      data: {
+        // Data from payment processor
+      }
+    }
+
+  },
+  affiliate: {
+    code: "",
+    referrals: {
+      // TIMESTAMPS for referrals as KEYS
+    },
+    referredBy: "",
+    prizeRedemptions: {
+
+    }
   },
   api: {
     privateKey: 'api_1908-ea7ad440-bfa8-11e9-b4c3-f32ee92844a3',
@@ -34,5 +63,6 @@ permalink: /@reference/guides/firebase-users/
       timestampUNIX: 1556503067000,
     },
   },
-},
+
+}
 ```

@@ -1,4 +1,5 @@
 const config = require('../../master.config.js');
+const configApp = require('../../app.config.js');
 const eslint = require('gulp-eslint');
 const gulp   = require('gulp');
 

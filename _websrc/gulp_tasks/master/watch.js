@@ -22,9 +22,11 @@ gulp.task('watch', function () {
   watch([
     config.assets + config.assetsSubpath + '/' + config.js.src + '/**/*',
     config.assets + config.assetsSubpath + '/' + config.sass.src + '/**/*',
+    './special'+ '/**/*',
   ], function () {
     gulp.start('copyJs');
     gulp.start('copyCss');
+    gulp.start('jekyll-build');
   });
 
   if (config.tasks.browsersync) {

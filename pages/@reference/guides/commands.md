@@ -6,7 +6,7 @@ permalink: /@reference/guides/commands/
 # Commands
 ## Build the site!
 `npm start`
-* Runs all gulp tasks, generates the site, and runs browsersync
+* Runs all gulp tasks, generates the site, and runs browsersync.
 ### Example
 * npm start
 
@@ -27,3 +27,20 @@ permalink: /@reference/guides/commands/
 * Saves a lighthouse performance report to `./_websrc/lighthouse-report/report.html`.
 ### Example
 * npm run lighthouse -- http://127.0.0.1:4000
+
+## Ruun unit tests
+`npm run test`
+* Outputs unit test results in command line. Write tests in `_websrc/unit_tests/app/test.js`.
+### Example
+* npm run test
+
+# Starting/building Site Command Arguments
+* Skip imagemin: `npm start -- --skipImageMin='true'`
+* Build location: `npm start -- --buildLocation='local'` (`local`, `server`)
+  * `server` creates a build.json with the time of build
+* Skip Jekyll build: `npm start -- --skipJekyll='true'` (`true`, `false`)
+* Skip eslint: `npm start -- --skipESLint='true'` (`true`, `false`)
+* Skip JS Minification: `npm start -- --skipJSMin='true'` (`true`, `false`)
+
+Common usecase example:
+`npm start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='false'`

@@ -1,3 +1,7 @@
+# Getting started
+`npm install:bundle`
+`npm install`
+
 # Creating & synching new repo from ultimate-jekyll template
 1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template**.
 2. In the next window, name the new repository and choose an organization to host the repository.
@@ -23,6 +27,12 @@
 7. Select `template` from the list.
 8. Click the blue **Merge `template` into `master`** button.
 9. Press **Push origin** in the top right.
+
+# Things to regularly update on ultimate-jekyll
+* ./special/master/misc/master-service-worker.js = instances of Firebase SDKs being loaded
+
+# Things to regularly update on web-manager
+* Dependencies in package.json
 
 # Reference
 * https://medium.com/sweetmeat/how-to-keep-a-downstream-git-repository-current-with-upstream-repository-changes-10b76fad6d97

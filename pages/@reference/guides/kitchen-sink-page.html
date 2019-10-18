@@ -29,7 +29,9 @@ settings:
   include-debug-performance: false
   manager-configuration: "
     {
-      auth: 'required'
+      auth: {
+        state: 'default' /* default | required | prohibited */
+      }
     }
   "
 

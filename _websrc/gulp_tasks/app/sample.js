@@ -1,6 +1,7 @@
 const gulp     = require('gulp');
 const newer    = require('gulp-newer');
 const watch    = require('gulp-watch');
+const through  = require('through2');
 
 // Tasks
 gulp.task('sample', function () {

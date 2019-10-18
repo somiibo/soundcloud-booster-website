@@ -14,6 +14,12 @@ permalink: /@reference/guides/query-string-keys/
 ## auth_email
 ## auth_premium
 
+## auth_aff
+  * Affiliate ID/email/etc. Immediately saved to local storage.
+
+## redirect
+  *
+
 NOTIFICATION STRUCTURE
 key = sequential UUID
 - token = browser token thing

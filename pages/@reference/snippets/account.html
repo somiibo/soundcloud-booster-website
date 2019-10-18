@@ -29,17 +29,19 @@ settings:
   <body>
     <!-- CONTENT START -->
     <div class="auth-signedin-true-element" hidden>
-      <fieldset>
-        <legend>My Account</legend>
-        <label for="email">Email</label>
-        <input id="email" class="auth-email-element" type="email" name="email" placeholder="name@example.com" disabled>
-        <label for="uid">User ID</label>
-        <input id="uid" class="auth-uid-element" type="text" name="uid" placeholder="1234567890" disabled>
-        <label for="password">Password</label>
-        <input id="password" class="" type="password" name="password" placeholder="******" disabled>
-      </fieldset>
+      <form action="" method="post" onsubmit="return false;">
+        <fieldset>
+          <legend>My Account</legend>
+          <label for="email">Email</label>
+          <input id="email" class="auth-email-element" type="email" name="email" placeholder="name@example.com" disabled>
+          <label for="uid">User ID</label>
+          <input id="uid" class="auth-uid-element" type="text" name="uid" placeholder="1234567890" disabled>
+          <label for="password">Password</label>
+          <input id="password" class="" type="password" name="password" placeholder="******" disabled>
+        </fieldset>
 
-      <a href="#" onclick="return false;" class="auth-signout-all-btn">Sign out</a>
+        <a href="#" onclick="return false;" class="auth-signout-all-btn">Sign out</a>
+      </form>
     </div>
 
     <!-- CONTENT END -->

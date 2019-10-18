@@ -13,11 +13,13 @@ const jekyll = process.platform === 'win32' ? 'jekyll.bat' : 'jekyll';
 const build  = Object.keys(config.tasks).filter((key) => config.tasks[key] && !['browsersync', 'watch'].includes(key))
 build.push('jekyll-build');
 
+// Display arguments
+console.log('Command line args => ', argv);
+
 /**
  * Build the Jekyll Site
  */
 gulp.task('jekyll-build', function (done) {
-  console.log('Command line args => ', argv);
   let jekyllConfig = config.jekyll.config.default;
   jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';
 
@@ -29,7 +31,6 @@ gulp.task('jekyll-build', function (done) {
   }
 
   if (argv.buildLocation == 'server') {
-    console.log('buildLocation =', 'server');
     var runCommand = '' +
     'build_log_path="@output/templated/build.json"' + ' && ' +
     'sed "s/%TIMESTAMP_UTC_NPM%/' + now({offset: 0}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' + ' && ' +
@@ -38,14 +39,14 @@ gulp.task('jekyll-build', function (done) {
 
     cmd.run(runCommand);
   } else {
-    console.log('buildLocation =', 'local');
+    // console.log('buildLocation =', 'local');
   }
 
   if (argv.skipJekyll == 'true') {
-    console.log('skipJekyll =', true);
+    // console.log('skipJekyll =', true);
     return done();
   } else {
-    console.log('skipJekyll =', false);
+    // console.log('skipJekyll =', false);
     return cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
       .on('close', done);
   }

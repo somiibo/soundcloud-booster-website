@@ -13,7 +13,9 @@ for (var i = 0; i <= config.js.entry.length - 1; i++) {
   entry.push(config.assets + config.assetsSubpath + '/' + config.js.src + '/' + config.js.entry[i]);
 }
 
-if (config.tasks.eslint) config_webpack.module.rules.push(config.eslintLoader);
+if (config.tasks.eslint && argv.skipESLint != 'true') {
+  config_webpack.module.rules.push(config.eslintLoader);
+}
 
 config_webpack.watch = argv.watch;
 config_webpack.mode = argv.mode || config_webpack.mode;

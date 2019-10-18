@@ -87,7 +87,7 @@ permalink: /@reference/examples/auth-and-notifications/
 
           <div class="form-group">
             <label for="password-input" class="sr-only">Password Confirm</label>
-            <input type="password" id="password-input" class="form-control auth-password-confirm-input" placeholder="Password confirm" required autofocus autocomplete="new-password">
+            <input type="password" id="password-confirm-input" class="form-control auth-password-confirm-input" placeholder="Password confirm" required autofocus autocomplete="new-password">
           </div>
 
           <div class="alert alert-danger auth-error-message-element" hidden>
@@ -143,8 +143,17 @@ permalink: /@reference/examples/auth-and-notifications/
 
     <!-- Exploring the library -->
     <script type="text/javascript">
+
       Manager.ready(function() {
         Manager.log('notification-subscription.js fired --> Manager.ready()', firebase);
+
+        // Inner event listener
+        Manager.auth().ready(function() {
+          console.log('auth().ready()... (inner)');
+          console.log('authenticated (inner): ', Manager.auth().isAuthenticated());
+          console.log('authenticated (inner): ', Manager.auth().getUser());
+        });
+
 
         Manager.dom().select('body').on('click', function(event) {
           if (event.target.matches('#subscribe-fake')) {
@@ -222,11 +231,17 @@ permalink: /@reference/examples/auth-and-notifications/
         })
       });
 
+      // Auth event listener
       Manager.auth().ready(function() {
         console.log('auth().ready()...');
-        console.log('authenticated: ', Manager.auth().authenticated());
-        console.log('authenticated: ', Manager.auth().user());
+        console.log('authenticated: ', Manager.auth().isAuthenticated());
+        console.log('authenticated: ', Manager.auth().getUser());
+        firebase.auth().onAuthStateChanged(function(user) {
+          console.log('onAuthStateChanged 1', user);
+        })
       });
+
+
 
     </script>
 
