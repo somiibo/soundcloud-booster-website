@@ -16,6 +16,10 @@
 * `git merge upstream/template --allow-unrelated-histories`.
 * Type `:quit` then press `enter`.
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
+8. Initialize the new repo by entering these commands in Terminal:
+* `npm run install:bundle`
+* `npm install`
+* `npm start`
 
 # Get changes from ultimate-jekyll template
 1. Open GitHub Desktop and select the project (not ultimate-jekyll, the project requiring an update from it).
