@@ -2,6 +2,8 @@ const argv   = require('yargs').argv;
 let config = require('../../master.config.js');
 let appGulpTasks = require('../../app.config.js');
 const cmd      = require('node-cmd');
+let yaml = require('js-yaml');
+let fs = require('fs');
 
 config.tasks = Object.assign(config.tasks, appGulpTasks.tasks);
 
@@ -20,6 +22,17 @@ console.log('Command line args => ', argv);
  * Build the Jekyll Site
  */
 gulp.task('jekyll-build', function (done) {
+  // console.log('--------------******');
+  let doc = yaml.safeLoad(fs.readFileSync('_config.yml', 'utf8'));
+  let cmd_cfZone = `rm -rf @output/_temp && mkdir -p @output/_temp && echo '${doc.cloudflare.zone}' >@output/_temp/cloudflare-zone.txt`;
+  cmd.run(cmd_cfZone);
+  // setTimeout(function () {
+  //   let cmd_cfZone2 = 'cf_zone=$(cat @output/_temp/cloudflare-zone.txt) && ' +
+  //   `curl -X POST http://localhost:5000/itw-creative-works/us-central1/cloudflare -H "Content-Type: application/json" -d '{ "body": { "purge_everything": true }, "zone": "'$cf_zone'", "command": "purge_cache" }'`;
+  //   // console.log('RUNNING', cmd_cfZone2);
+  //   cmd.run(cmd_cfZone2);
+  // }, 1000);
+
   let jekyllConfig = config.jekyll.config.default;
   jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';
 
@@ -31,13 +44,13 @@ gulp.task('jekyll-build', function (done) {
   }
 
   if (argv.buildLocation == 'server') {
-    var runCommand = '' +
+    var cmd_buildJson = '' +
     'build_log_path="@output/templated/build.json"' + ' && ' +
     'sed "s/%TIMESTAMP_UTC_NPM%/' + now({offset: 0}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' + ' && ' +
     'sed "s/%TIMESTAMP_PST_NPM%/' + now({offset: -7}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' +
     '';
 
-    cmd.run(runCommand);
+    cmd.run(cmd_buildJson);
   } else {
     // console.log('buildLocation =', 'local');
   }

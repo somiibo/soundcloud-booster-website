@@ -27,6 +27,9 @@ meta:
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
 
+cloudflare:
+  zone: '29d731e1d6cd3ae11a0c44ea8c761bb8'
+
 socials:
   facebook: "" # string, example: somiibo
   twitter: "" # string, example: somiibo
