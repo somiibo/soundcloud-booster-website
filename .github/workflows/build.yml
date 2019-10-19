@@ -57,5 +57,5 @@ jobs:
           git push origin HEAD:gh-pages --force
       - name: Purge CloudFlare Cache
         run: |
-          cf_zone=$(cat @output/_temp/cloudflare-zone.txt)
+          cf_zone=$(cat @output/.temp/cloudflare-zone.txt)
           curl -X POST https://api.itwcreativeworks.com/cloudflare -H "Content-Type: application/json" -d '{ "body": { "purge_everything": true }, "zone": "'$cf_zone'", "command": "purge_cache" }'
