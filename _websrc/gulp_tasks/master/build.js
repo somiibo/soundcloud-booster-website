@@ -33,21 +33,16 @@ gulp.task('jekyll-build', function (done) {
   }
 
   if (argv.buildLocation == 'server') {
+    // Create CloudFlare Zone File
     let doc = yaml.safeLoad(fs.readFileSync('_config.yml', 'utf8'));
     cmd.run(`rm -rf @output/.temp && mkdir -p @output/.temp && echo '${doc.cloudflare.zone}' >@output/.temp/cloudflare-zone.txt`);
-    // setTimeout(function () {
-    //   let cmd_cfZone2 = 'cf_zone=$(cat @output/_temp/cloudflare-zone.txt) && ' +
-    //   `curl -X POST http://localhost:5000/itw-creative-works/us-central1/cloudflare -H "Content-Type: application/json" -d '{ "body": { "purge_everything": true }, "zone": "'$cf_zone'", "command": "purge_cache" }'`;
-    //   // console.log('RUNNING', cmd_cfZone2);
-    //   cmd.run(cmd_cfZone2);
-    // }, 1000);
-    var cmd_buildJson = '' +
+
+    // Create build log JSON
+    cmd.run('' +
     'build_log_path="@output/templated/build.json"' + ' && ' +
     'sed "s/%TIMESTAMP_UTC_NPM%/' + now({offset: 0}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' + ' && ' +
     'sed "s/%TIMESTAMP_PST_NPM%/' + now({offset: -7}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' +
-    '';
-
-    cmd.run(cmd_buildJson);
+    '');
   } else {
     // console.log('buildLocation =', 'local');
   }
