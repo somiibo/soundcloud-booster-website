@@ -28,7 +28,7 @@ meta:
   viewport: "" # string, leave blank to use default
 
 cloudflare:
-  zone: '29d731e1d6cd3ae11a0c44ea8c761bb8'
+  zone: '282d4b5b8f71a0cb5f9ccae85b905a48'
 
 socials:
   facebook: "" # string, example: somiibo
