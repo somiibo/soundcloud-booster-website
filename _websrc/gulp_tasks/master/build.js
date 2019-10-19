@@ -41,7 +41,6 @@ gulp.task('jekyll-build', function (done) {
     //   // console.log('RUNNING', cmd_cfZone2);
     //   cmd.run(cmd_cfZone2);
     // }, 1000);
-
     var cmd_buildJson = '' +
     'build_log_path="@output/templated/build.json"' + ' && ' +
     'sed "s/%TIMESTAMP_UTC_NPM%/' + now({offset: 0}) + '/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path' + ' && ' +
