@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 10
       - name: Run node install
-        run: npm install
+        run: npm run install:bundle && npm install
       - name: Run node build
         run: npm run build -- --buildLocation='server' --skipJekyll='true'
       - name: Push to gh-pages branch
@@ -55,3 +55,6 @@ jobs:
           git remote -v
           git checkout -b gh-pages
           git push origin HEAD:gh-pages --force
+
+          cf_zone=$(cat @output/_temp/cloudflare-zone.txt)
+          curl -X POST https://api.itwcreativeworks.com/cloudflare -H "Content-Type: application/json" -d '{ "body": { "purge_everything": true }, "zone": "'$cf_zone'", "command": "purge_cache" }'
