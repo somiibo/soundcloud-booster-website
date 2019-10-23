@@ -4,7 +4,7 @@ npm install:bundle
 npm install
 ```
 
-# Creating & synching new repo from ultimate-jekyll template
+# Creating & synching new repo from the ultimate-jekyll template
 1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template**.
 2. In the next window, name the new repository and choose an organization to host the repository.
 3. Create a branch called `master`, then make `master` the default branch, and finally delete the branch called `template`.
@@ -23,7 +23,7 @@ npm install
 * `npm install`
 * `npm start`
 
-# Get changes from ultimate-jekyll template
+# Get changes from the ultimate-jekyll template
 1. Open GitHub Desktop and select the project (not ultimate-jekyll, the project requiring an update from it).
 2. Change current branch to `template`.
 3. Then press **Fetch upstream**.
