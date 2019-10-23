@@ -31,3 +31,7 @@ doc/
 
 # DEV
 /@output/regular/lighthouse-report.html
+/assets/css/
+/assets/images/
+/assets/js/
+package-lock.json

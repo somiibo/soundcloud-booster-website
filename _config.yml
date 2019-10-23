@@ -141,6 +141,11 @@ settings:
     }
   " # javascript object to set the Configuration object for Web Manager
 
+# Escape shortcuts
+escapes:
+  underscore: "_"
+  asterisk: "*"
+
 # Blog & Pagination
 permalink: /blog/:title/
 paginate: 6
