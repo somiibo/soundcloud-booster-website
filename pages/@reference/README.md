@@ -13,15 +13,15 @@ npm install
 6. Open Terminal and do the following commands:
     * `git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git`.
     * `git remote set-url --push upstream no_push`.
-  * `git fetch upstream template`.
-  * If prompted, enter *username* and *password*/*GitHub access token*.
-  * `git merge upstream/template --allow-unrelated-histories`.
-  * Type `:quit` then press `enter`.
+    * `git fetch upstream template`.
+    * If prompted, enter *username* and *password*/*GitHub access token*.
+    * `git merge upstream/template --allow-unrelated-histories`.
+    * Type `:quit` then press `enter`.
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
 8. Initialize the new repo by entering these commands in Terminal:
-  * `npm run install:bundle`
-  * `npm install`
-  * `npm start`
+    * `npm run install:bundle`
+    * `npm install`
+    * `npm start`
 
 # Get changes from the ultimate-jekyll template
 1. Open GitHub Desktop and select the project (not ultimate-jekyll, the project requiring an update from it).
