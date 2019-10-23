@@ -1,6 +1,6 @@
 # Getting started
 ```shell
-npm install:bundle
+npm run install:bundle
 npm install
 ```
 
