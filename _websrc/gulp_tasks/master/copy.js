@@ -37,3 +37,11 @@ gulp.task('copyJs', function () {
     .pipe(gulp.dest(config.assets + '/js/theme'));
 
 });
+
+gulp.task('copyUncompiled', function () {
+
+  gulp.src([config.assets + config.assetsSubpathUncompiled + '/**/*'])
+    .pipe(newer(config.assets))
+    .pipe(gulp.dest(config.assets));
+
+});

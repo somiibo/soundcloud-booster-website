@@ -7,6 +7,7 @@ module.exports = {
     imagemin:     true,
     imageminResponsive: true,
     copyJs:   true,
+    copyUncompiled:   true,
     copyCss:   true,
     copyImages:   true,
     sass:         true,
@@ -16,6 +17,7 @@ module.exports = {
 
   assets: './assets',
   assetsSubpath: '/_src',
+  assetsSubpathUncompiled: '/_src-uncompiled',
 
   browsersync: {
     browsers: [

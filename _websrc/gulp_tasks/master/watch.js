@@ -29,6 +29,13 @@ gulp.task('watch', function () {
     gulp.start('jekyll-build');
   });
 
+  watch([
+    config.assets + config.assetsSubpathUncompiled + '/**/*',
+  ], function () {
+    gulp.start('copyUncompiled');
+    gulp.start('jekyll-build');
+  });
+
   if (config.tasks.browsersync) {
     watch([
       '!./node_modules/**/*',
