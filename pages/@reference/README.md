@@ -1,6 +1,8 @@
 # Getting started
-`npm install:bundle`
-`npm install`
+```shell
+npm install:bundle
+npm install
+```
 
 # Creating & synching new repo from ultimate-jekyll template
 1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template**.
