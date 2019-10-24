@@ -29,9 +29,14 @@ doc/
 .idea
 .secret
 
-# DEV
-/@output/regular/lighthouse-report.html
+# Generated Files
 /assets/css/
 /assets/images/
 /assets/js/
 package-lock.json
+
+# Development
+/@output/regular/lighthouse-report.html
+
+# App
+# ... include ignored files here
