@@ -7,6 +7,7 @@
     "install:bundle": "bundle install --path vendor/bundle",
     "start": "bundle exec gulp",
     "prototype": "npm start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='true'",
+    "prototype:public": "npm run prototype -- --ngrokOpen='true'",
     "_test": "bundle exec gulp test",
     "test": "mocha ./_websrc/unit_tests/ --recursive",
     "browsersync": "bundle exec gulp browsersync",
@@ -80,6 +81,6 @@
     "yargs": "^12.0.1"
   },
   "dependencies": {
-    "web-manager": "^1.2.0"
+    "web-manager": "^1.5.0"
   }
 }

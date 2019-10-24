@@ -1,9 +1,9 @@
 <!-- Performance -->
 <script type="text/javascript">
   // Performance
-  if ('performance' in window) {
+  try {
     window.performance.mark('manager_preBundle');
-  }
+  } catch (e) {}
 </script>
 
 <!-- Script - Bundle -->

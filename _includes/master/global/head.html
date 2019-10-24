@@ -183,9 +183,9 @@
 <!-- Initialize Manager -->
 <script type="text/javascript">
   // Performance
-  if ('performance' in window) {
+  try {
     window.performance.mark('manager_start');
-  }
+  } catch (e) {}
 
   function Manager$() {
     this.properties = {};
