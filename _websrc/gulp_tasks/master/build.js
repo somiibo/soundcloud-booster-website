@@ -53,10 +53,8 @@ gulp.task('jekyll-build', function (done) {
     return done();
   } else {
     // console.log('skipJekyll =', false);
-    // setTimeout(function () {
-      return cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
-        .on('close', done);
-    // }, 5000);
+    return cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
+      .on('close', done);
   }
 });
 
