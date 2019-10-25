@@ -2,6 +2,7 @@ module.exports = {
   port: 4000,
 
   tasks: {
+    _prefill:  true,
     browsersync:  true,
     eslint:       true,
     imagemin:     true,

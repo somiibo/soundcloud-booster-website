@@ -30,5 +30,3 @@ function asyncCmd(command) {
     );
   });
 }
-
-// temp 2
