@@ -1,6 +1,6 @@
 # Getting started
 ```shell
-npm run install:bundle
+npm run install:pre
 npm install
 ```
 
@@ -19,7 +19,7 @@ npm install
     * Type `:quit` then press `enter`.
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
 8. Initialize the new repo by entering these commands in Terminal:
-    * `npm run install:bundle`
+    * `npm run install:pre`
     * `npm install`
     * `npm start`
 
