@@ -30,11 +30,8 @@ gulp.task('jekyll-build', function (done) {
     jekyllConfig += config.jekyll.config.production ? ',' + config.jekyll.config.production : '';
   } else {
     jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
+    jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
   }
-
-  console.log('***JEKYLL');
-  jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
-  console.log("----------jekyllConfig", jekyllConfig);
 
   if (argv.buildLocation == 'server') {
     // Create CloudFlare Zone File
