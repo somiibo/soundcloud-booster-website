@@ -39,6 +39,7 @@ package-lock.json
 # Development
 /@output/regular/lighthouse-report.html
 /@output/ngrok/
+/@output/.temp/
 
 # App
 # ... include ignored files here

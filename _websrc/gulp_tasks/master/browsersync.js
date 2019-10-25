@@ -10,7 +10,8 @@ let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.brow
 /**
  * Wait for jekyll-build, then launch the Server
  */
-gulp.task('browsersync', ['jekyll-build'], function () {
+// gulp.task('browsersync', ['jekyll-build'], function () {
+gulp.task('browsersync', function () {
   browsersync.init({
     port: config.port,
     browser: browser,
@@ -18,6 +19,8 @@ gulp.task('browsersync', ['jekyll-build'], function () {
       baseDir: config.jekyll.dest,
     }
   }, function (error, instance) {
+    cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
+
     // Launch ngrok if enabled
     if (!error && argv.ngrokOpen == 'true') {
       const ngrok = require('/usr/local/lib/node_modules/ngrok');

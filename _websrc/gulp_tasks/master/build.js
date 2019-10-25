@@ -32,6 +32,10 @@ gulp.task('jekyll-build', function (done) {
     jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
   }
 
+  console.log('***JEKYLL');
+  jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
+  console.log("----------jekyllConfig", jekyllConfig);
+
   if (argv.buildLocation == 'server') {
     // Create CloudFlare Zone File
     let doc = yaml.safeLoad(fs.readFileSync('_config.yml', 'utf8'));
@@ -52,8 +56,10 @@ gulp.task('jekyll-build', function (done) {
     return done();
   } else {
     // console.log('skipJekyll =', false);
-    return cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
-      .on('close', done);
+    // setTimeout(function () {
+      return cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
+        .on('close', done);
+    // }, 5000);
   }
 });
 
