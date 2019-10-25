@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const cmd  = require('node-cmd');
 
+
 gulp.task('template:update', async function () {
   cmd.run(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git merge template -m "Merged from template." && git push origin`);
 });
