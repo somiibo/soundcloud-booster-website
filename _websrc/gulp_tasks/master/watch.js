@@ -16,7 +16,9 @@ gulp.task('watch', function () {
     });
   }
 
-  appConfig.watch(gulp, watch);
+  if (appConfig.watch) {
+    appConfig.watch(gulp, watch);
+  }
 
   // Copying
   watch([
