@@ -1,7 +1,6 @@
 ---
-layout: app/global/default
-
 ### ALL PAGES ###
+layout: master/global/default
 permalink: /@reference/starter/support/
 
 ### REGULAR PAGES ###

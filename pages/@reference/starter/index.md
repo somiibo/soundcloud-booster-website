@@ -1,12 +1,12 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /@reference/starter/about/
+permalink: /@reference/starter/index/
 
 ### REGULAR PAGES ###
 meta:
-  title: "About"
+  title: "Home"
   description: "We are a great company and would love to design an intuitive solution for you!"
-  breadcrumb: "About"
+  breadcrumb: "Home"
 ---
-We are a great company and would love to design an intuitive solution for you!
+This is the homepage, welcome!

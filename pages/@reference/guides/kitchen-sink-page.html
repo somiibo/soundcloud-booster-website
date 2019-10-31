@@ -1,5 +1,6 @@
 ---
 ### ALL PAGES ###
+layout: null
 permalink: /@reference/guides/kitchen-sink-page/
 
 ### REGULAR PAGES ###
@@ -7,6 +8,16 @@ meta:
   title: "Page Title"
   description: "Page description."
   breadcrumb: "default"
+
+head:
+  content: "
+    <!-- Inject code right before closing </head> tag -->
+  "
+
+foot:
+  content: "
+    <!-- Inject code right before closing </body> tag -->
+  "
 
 tracking:
   google-analytics: true
@@ -30,7 +41,7 @@ settings:
   manager-configuration: "
     {
       auth: {
-        state: 'default' /* default | required | prohibited */
+        state: 'default', /* default | required | prohibited */
       }
     }
   "

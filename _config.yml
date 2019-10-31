@@ -178,4 +178,5 @@ exclude:
   - vendor/ruby/
   - yarn.lock
   # MASTER
+  - .placeholder
   # APP
