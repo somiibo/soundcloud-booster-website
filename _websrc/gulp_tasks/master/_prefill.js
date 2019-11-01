@@ -55,21 +55,24 @@ gulp.task("_prefill", async () => {
 
       // only create these files if NOT on template
       if (!isTemplate) {
-        await createFile('./pages/index.md',
-          '---' + '\n' +
-          '### ALL PAGES ###' + '\n' +
-          'layout: master/global/default' + '\n' +
-          'permalink: /' + '\n' +
-          '' + '\n' +
-          '### REGULAR PAGES ###' + '\n' +
-          'meta:' + '\n' +
-          '  title: "About"' + '\n' +
-          '  description: "We are a great company and would love to design an intuitive solution for you!"' + '\n' +
-          '  breadcrumb: "About"' + '\n' +
-          '---' + '\n' +
-          'This is a wonderful homepage!' +
-          ''
-        )
+        if (!fs.existsSync('./pages/index.md') || !fs.existsSync('./pages/index.html')) {
+          await createFile('./pages/index.md',
+            '---' + '\n' +
+            '### ALL PAGES ###' + '\n' +
+            'layout: master/global/default' + '\n' +
+            'permalink: /' + '\n' +
+            '' + '\n' +
+            '### REGULAR PAGES ###' + '\n' +
+            'meta:' + '\n' +
+            '  title: "Home"' + '\n' +
+            '  description: "We are a great company and would love to design an intuitive solution for you!"' + '\n' +
+            '  breadcrumb: "Home"' + '\n' +
+            '---' + '\n' +
+            'This is a wonderful homepage!' +
+            ''
+          )
+        }
+
         await createFile(config.assets + config.assetsSubpath + '/js/app/service-workers/app-service-worker.js',
           "// app-service-worker.js code" + "\n" +
           "if (typeof log === 'undefined') {" + "\n" +
@@ -81,7 +84,6 @@ gulp.task("_prefill", async () => {
           "// importScripts('../../app/service-workers/app-service-worker.js');" + "\n" +
           ''
         )
-
         await createFile('_websrc/gulp_tasks/app/main.js',
           "const gulp     = require('gulp');" + "\n" +
           "const newer    = require('gulp-newer');" + "\n" +
@@ -95,6 +97,7 @@ gulp.task("_prefill", async () => {
         )
 
       }
+
       // only create these files if IS ON template OR server
       if (isTemplate && !isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
