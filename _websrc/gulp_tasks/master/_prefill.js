@@ -34,12 +34,23 @@ gulp.task("_prefill", async () => {
           ""
         )
         await createFile('./_includes/app/global/foot.html', '<!-- App Foot Content  -->')
-        await createFile('./_includes/app/global/foot.html', '<!-- App Head Content  -->')
+        await createFile('./_includes/app/global/head.html', '<!-- App Head Content  -->')
 
         await createFile('./_includes/app/misc/ads.txt', '')
         await createFile('./_includes/app/misc/budget.json', '')
         await createFile('./_includes/app/misc/manifest.json', '')
         await createFile('./_includes/app/misc/robots.txt', '')
+
+        await createFile(config.assets + config.assetsSubpath + '/js/app/app.js',
+          "Manager.ready(function() {" + "\n" +
+            "  Manager.log('app.js fired Manager.ready()');" + "\n" +
+            "" + "\n" +
+            "  // Add additional logic here!" + "\n" +
+            "  // var theme = require('../theme/theme.js');" + "\n" +
+            "" + "\n" +
+          "});" + "\n" +
+          ""
+        )
       }
 
       // only create these files if NOT on template
@@ -70,16 +81,7 @@ gulp.task("_prefill", async () => {
           "// importScripts('../../app/service-workers/app-service-worker.js');" + "\n" +
           ''
         )
-        await createFile(config.assets + config.assetsSubpath + '/js/app/app.js',
-          "Manager.ready(function() {" + "\n" +
-            "  Manager.log('app.js fired Manager.ready()');" + "\n" +
-            "" + "\n" +
-            "  // Add additional logic here!" + "\n" +
-            "  // var theme = require('../theme/theme.js');" + "\n" +
-            "" + "\n" +
-          "});" + "\n" +
-          ""
-        )
+
         await createFile('_websrc/gulp_tasks/app/main.js',
           "const gulp     = require('gulp');" + "\n" +
           "const newer    = require('gulp-newer');" + "\n" +
@@ -94,8 +96,9 @@ gulp.task("_prefill", async () => {
 
       }
       // only create these files if IS ON template OR server
-      if (isTemplate || isServer) {
+      if (isTemplate && !isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+        await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
         await createFile('./_includes/app/misc/.gitignore', GITIGNORE_EX_PLACEHOLDER)
         await createFile('./_includes/app/global/.gitignore', GITIGNORE_EX_PLACEHOLDER)
       }
