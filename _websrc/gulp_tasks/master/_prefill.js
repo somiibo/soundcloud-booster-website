@@ -1,14 +1,38 @@
-const gulp = require('gulp');
-const cmd  = require('node-cmd');
-const fs   = require('fs');
-let config = require('../../master.config.js');
+const gulp     = require('gulp');
+const cmd      = require('node-cmd');
+const fs       = require('fs');
+const argv     = require('yargs').argv;
+let config     = require('../../master.config.js');
 let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
+let isServer   = (argv.buildLocation == 'server');
+
+const GITIGNORE_EX_PLACEHOLDER =
+  "*" + "\n" +
+  "!.placeholder" + "\n" +
+  "";
 
 gulp.task("_prefill", async () => {
   await new Promise(async (resolve, reject) => {
-    if (!isTemplate) {
-      try {
-        await createFile(config.assets + config.assetsSubpath + '/sass/app/app.scss', '')
+    try {
+
+      // all versions need these files to run properly
+      {
+        await createFile(config.assets + config.assetsSubpath + '/sass/app/app.scss',
+          "/*" + "\n" +
+            "  assets/_src/sass/app/app.scss" + "\n" +
+          "*/" + "\n" +
+          "" + "\n" +
+          "/*" + "\n" +
+            "  CHARSET" + "\n" +
+          "*/" + "\n" +
+          "" + "\n" +
+          '@charset "UTF-8";' + "\n" +
+          "" + "\n" +
+          "/*" + "\n" +
+          "  IMPORTS" + "\n" +
+          "*/" + "\n" +
+          ""
+        )
         await createFile('./_includes/app/global/foot.html', '<!-- App Foot Content  -->')
         await createFile('./_includes/app/global/foot.html', '<!-- App Head Content  -->')
 
@@ -16,6 +40,10 @@ gulp.task("_prefill", async () => {
         await createFile('./_includes/app/misc/budget.json', '')
         await createFile('./_includes/app/misc/manifest.json', '')
         await createFile('./_includes/app/misc/robots.txt', '')
+      }
+
+      // only create these files if NOT on template
+      if (!isTemplate) {
         await createFile('./pages/index.md',
           '---' + '\n' +
           '### ALL PAGES ###' + '\n' +
@@ -64,12 +92,16 @@ gulp.task("_prefill", async () => {
           ""
         )
 
-        resolve();
-      } catch (e) {
-        reject(e)
       }
-    } else {
+      // only create these files if IS ON template OR server
+      if (isTemplate || isServer) {
+        await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+        await createFile('./_includes/app/misc/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+        await createFile('./_includes/app/global/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+      }
       resolve();
+    } catch (e) {
+      reject(e)
     }
 
   });
@@ -77,17 +109,24 @@ gulp.task("_prefill", async () => {
 
 
 async function createFile(file, contents) {
+  var response = {
+    exists: false,
+    error: null,
+  }
   return new Promise(function(resolve, reject) {
     try {
       if (fs.existsSync(file)) {
-        resolve('Created: ' + file)
+        response.exists = true;
+        resolve(response)
       } else {
          fs.writeFile(file, contents, function () {
-           resolve('Created: ' + file)
+           response.exists = false;
+           resolve(response);
          })
       }
     } catch (e) {
-      reject('Failed to create: ' + file + ' ' + e)
+      response.error = e;
+      reject(response);
     }
   });
 }
