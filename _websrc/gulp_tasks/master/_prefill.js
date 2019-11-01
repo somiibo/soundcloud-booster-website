@@ -55,7 +55,7 @@ gulp.task("_prefill", async () => {
 
       // only create these files if NOT on template
       if (!isTemplate) {
-        if (!fs.existsSync('./pages/index.md') || !fs.existsSync('./pages/index.html')) {
+        if (!fs.existsSync('./pages/index.md') && !fs.existsSync('./pages/index.html')) {
           await createFile('./pages/index.md',
             '---' + '\n' +
             '### ALL PAGES ###' + '\n' +
