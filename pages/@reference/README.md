@@ -1,5 +1,3 @@
----
----
 # Getting started
 ```shell
 npm run install:pre
