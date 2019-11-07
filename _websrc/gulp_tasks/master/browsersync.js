@@ -12,12 +12,14 @@ let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.brow
  */
 // gulp.task('browsersync', ['jekyll-build'], function () {
 gulp.task('browsersync', function () {
+  // options: https://www.browsersync.io/docs/options
   browsersync.init({
     port: config.port,
     browser: browser,
     server: {
       baseDir: config.jekyll.dest,
-    }
+    },
+    open: 'external',
   }, function (error, instance) {
     cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
 

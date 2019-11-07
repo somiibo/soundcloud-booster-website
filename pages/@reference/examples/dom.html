@@ -126,7 +126,7 @@ permalink: /@reference/examples/dom/
     <script type="text/javascript">
       Manager.ready(function() {
         console.log('--- Exploring the .dom() API ---');
-        const el = Manager.dom().select('.el'); // Select using a standard querySelectorAll argument
+        var el = Manager.dom().select('.el'); // Select using a standard querySelectorAll argument
         el.addClass('new-class'); // Add a class
         el.removeClass('old-class'); // Remove a class
         el.each(function(index, element) { // Iterate through the elements
@@ -138,34 +138,34 @@ permalink: /@reference/examples/dom/
         console.log('Exists ', el.exists());
         console.log('Exists (false)', Manager.dom().select('.this-doesnt-exist').exists());
 
-        const el2 = Manager.dom().select('.hide-me');
+        var el2 = Manager.dom().select('.hide-me');
         el2.hide(); // Hide an element
 
-        const el3 = Manager.dom().select('.show-me');
+        var el3 = Manager.dom().select('.show-me');
         el3.show(); // Show an element
 
-        const el4 = Manager.dom().select('#attributes');
+        var el4 = Manager.dom().select('#attributes');
         console.log('Attribute 1: ', el4.getAttribute('data-foo')); // Get an attribute
         el4.setAttribute('data-foo', 'baz'); // Set an attribute
         console.log('Attribute 2: ', el4.getAttribute('data-foo'));
         console.log('Remove Attribute: ', el4.removeAttribute('data-foo'));
         console.log('Attribute 3: ', el4.getAttribute('data-foo'));
 
-        const el5 = Manager.dom().select('#textfield');
+        var el5 = Manager.dom().select('#textfield');
         console.log('Value 1: ', el5.getValue()); // Get value of an input
         el5.setValue('Hello again World!'); // Set a value
         console.log('Value 2: ', el5.getValue());
 
-        const elText = Manager.dom().select('#textfield');
+        var elText = Manager.dom().select('#textfield');
         console.log(elText.getValue());
-        const elCheck = Manager.dom().select('#check1');
+        var elCheck = Manager.dom().select('#check1');
         elCheck.setValue(true);
         console.log(elCheck.getValue());
-        const elRadioGroup = Manager.dom().select('*[name="radioGroup"]');
+        var elRadioGroup = Manager.dom().select('*[name="radioGroup"]');
         console.log(elRadioGroup.getValue());
         Manager.dom().select('#radio2').setValue(true);
 
-        const elSelect = Manager.dom().select('#select1');
+        var elSelect = Manager.dom().select('#select1');
         elSelect.setValue('2')
         console.log(elSelect.getValue());
 
@@ -183,8 +183,9 @@ permalink: /@reference/examples/dom/
 
         // Register events
         var clicks = 0;
-        const el6 = Manager.dom().select('.click-me');
+        var el6 = Manager.dom().select('.click-me');
         Manager.dom().select('body').on('click', function(event) {
+          // console.log('Click body...');
           if (event.target.matches('.click-me')) {
             clicks++;
             el6.setInnerHTML('Click counter: ' + clicks)

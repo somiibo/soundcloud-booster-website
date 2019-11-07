@@ -51,10 +51,6 @@ gulp.task("_prefill", async () => {
           "});" + "\n" +
           ""
         )
-      }
-
-      // only create these files if NOT on template
-      if (!isTemplate) {
         if (!fs.existsSync('./pages/index.md') && !fs.existsSync('./pages/index.html')) {
           await createFile('./pages/index.md',
             '---' + '\n' +
@@ -88,6 +84,10 @@ gulp.task("_prefill", async () => {
           "const gulp     = require('gulp');" + "\n" +
           "const newer    = require('gulp-newer');" + "\n" +
           "const through  = require('through2');" + "\n" +
+          "const argv     = require('yargs').argv;" + "\n" +
+          "const request  = require('request');" + "\n" +
+          "let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;" + "\n" +
+          "let isServer   = (argv.buildLocation == 'server');" + "\n" +
           "" + "\n" +
           "gulp.task('sample', function() {" + "\n" +
             "  // write your first task here!" + "\n" +
@@ -98,12 +98,20 @@ gulp.task("_prefill", async () => {
 
       }
 
+      // only create these files if NOT on template
+      if (!isTemplate) {
+
+
+      }
+
       // only create these files if IS ON template OR server
       if (isTemplate && !isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
         await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
         await createFile('./_includes/app/misc/.gitignore', GITIGNORE_EX_PLACEHOLDER)
         await createFile('./_includes/app/global/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+        await createFile('./_websrc/gulp_tasks/app/.gitignore', GITIGNORE_EX_PLACEHOLDER)
+        await createFile('./pages/.gitignore', '/index.md'+'\n'+'.gitignore'+'\n')
       }
       resolve();
     } catch (e) {

@@ -248,6 +248,53 @@
 
 </script>
 
+<!-- Master - Alert Box Style -->
+<style media="screen">
+  .master-alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    bottom:0;
+    left:0;
+    position:fixed;
+    z-index:9999;
+    width: 100%;
+  }
+
+  .master-alert a {
+    color: white;
+    text-decoration: underline;
+  }
+  .master-alert a:hover {
+    color: black;
+  }
+
+  .master-alert-close {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .master-alert-close:hover {
+    color: black;
+  }
+
+  .master-alert-outdated {
+    display: none;
+  }
+</style>
+
+<!-- Style - IE 8 and Below Only -->
+<!--[if lte IE 8]>
+<link rel="stylesheet" type="text/css" href="/assets/css/master/lte-ie8.css?cb={{ site.time | date: '%s' }}">
+<![endif]-->
+
+
 <!-- App - Head Content -->
 {% include /app/global/head.html %}
 

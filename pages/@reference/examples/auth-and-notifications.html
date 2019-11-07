@@ -67,7 +67,7 @@ permalink: /@reference/examples/auth-and-notifications/
 
   <body class="">
     <div class="form-signin text-center">
-      <form class="" onsubmit="return false;">
+      <form class="auth-signin-form auth-signup-form" onsubmit="return false;">
         <h1 class="h3 mb-3 font-weight-normal">.auth() Library</h1>
 
         <div class="auth-signedin-false-element" hidden>
@@ -93,9 +93,9 @@ permalink: /@reference/examples/auth-and-notifications/
           <div class="alert alert-danger auth-error-message-element" hidden>
           </div>
 
-          <button class="btn btn-lg btn-primary btn-block auth-signin-email-btn" type="button" name="button">Sign in</button>
-          <button class="btn btn-lg btn-primary btn-block auth-signup-email-btn" type="button" name="button">Sign up</button>
-          <button class="btn btn-lg btn-primary btn-block auth-forgot-email-btn" type="button" name="button">Forgot</button>
+          <button class="btn btn-lg btn-primary btn-block auth-signin-email-btn" type="submit" name="button">Sign in</button>
+          <button class="btn btn-lg btn-primary btn-block auth-signup-email-btn" type="submit" name="button">Sign up</button>
+          <button class="btn btn-lg btn-primary btn-block auth-forgot-email-btn" type="submit" name="button">Forgot</button>
 
         </div>
 
@@ -179,7 +179,7 @@ permalink: /@reference/examples/auth-and-notifications/
                   }
                 },
                 tags: ['general']
-              },
+              }
               )
               .then(function() {
                 Manager.dom().select('#result').setInnerHTML('Successfully set fake subscription!')

@@ -21,7 +21,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 # Custom Configuration
 version: '1.0.0'
 meta:
-  title: "Default tile"
+  title: "Default title"
   description: "Default description"
   og-image: "https://defaultogimage.com"
   keywords: "" # false or blank to disable, comma separated kws

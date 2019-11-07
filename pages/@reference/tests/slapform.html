@@ -1,0 +1,43 @@
+---
+### ALL PAGES ###
+permalink: /@reference/tests/slapform/
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+  </head>
+
+  <body>
+    <!-- CONTENT START -->
+
+    <script type="text/javascript">
+      Manager.ready(function() {
+        Manager.log('--- Exploring slapform ---');
+        var slapform = new Slapform();
+        slapform.submit({
+          account: 'ian.wiedenman@gmail.com', // Replace this with the email that submissions should be sent to
+          data: { // The data you want submitted and emailed to you
+            name: 'Jon Snow',
+            message: 'Hello World!'
+          }
+        })
+        .success(function (response, data) { // This function runs only on success
+          console.log('Success!', response, data);
+        })
+        .error(function (response, error) { // This function runs only on error
+          console.log('Fail!', response, error);
+        })
+        .always(function (response) { // This function runs regardless of success or error
+          console.log('This always runs!', response);
+        });
+      });
+    </script>
+    <!-- CONTENT END -->
+
+    {%- include /master/global/foot.html -%}
+
+    <script src="https://cdn.jsdelivr.net/npm/slapform?cb={{ site.time | date: '%s' }}"></script>
+  </body>
+
+</html>

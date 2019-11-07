@@ -12,6 +12,10 @@ gulp.task('copyCss', function () {
     .pipe(newer(config.assets + '/css/app'))
     .pipe(gulp.dest(config.assets + '/css/app'));
 
+  gulp.src([config.assets + config.assetsSubpath + '/sass/master/**/*', '!' + config.assets + config.assetsSubpath + '/sass/master/main.scss', '!./**/*.scss'])
+    .pipe(newer(config.assets + '/css/master'))
+    .pipe(gulp.dest(config.assets + '/css/master'));
+
 });
 
 gulp.task('copyImages', function () {
