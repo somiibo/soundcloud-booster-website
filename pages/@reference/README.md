@@ -10,13 +10,13 @@ npm install
 3. Create a branch called `master`, then make `master` the default branch, and finally delete the branch called `template`.
 4. Open the newly created repository on GitHub and click **Open in Desktop** then choose location using GitHub desktop.
 5. In the repo's settings add a secret called `ACCESS_TOKEN` and paste a GitHub token that has write permissions for this repo.
-6. Open Terminal and do the following commands:
-    * `git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git`.
-    * `git remote set-url --push upstream no_push`.
-    * `git fetch upstream template`.
-    * If prompted, enter *username* and *password*/*GitHub access token*.
-    * `git merge upstream/template --allow-unrelated-histories`.
-    * Type `:quit` then press `enter`.
+6. Open Terminal and do the following commands or simply `npm run template:setup`
+    * `git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git`
+    * `git remote set-url --push upstream no_push`
+    * `git fetch upstream template`
+    * If prompted, enter *username* and *password*/*GitHub access token*
+    * `git merge upstream/template --allow-unrelated-histories`
+    * Type `:quit` then press `enter`
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
 8. Initialize the new repo by entering these commands in Terminal:
     * `npm run install:pre`
@@ -24,6 +24,7 @@ npm install
     * `npm start`
 
 # Get changes from the ultimate-jekyll template
+Perform the following steps or simply run `npm run template:update`
 1. Open GitHub Desktop and select the project (not ultimate-jekyll, the project requiring an update from it).
 2. Change current branch to `template`.
 3. Then press **Fetch upstream**.
