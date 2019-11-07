@@ -5,7 +5,7 @@ npm install
 ```
 
 # Creating & synching new repo from the ultimate-jekyll template
-1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template**.
+1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template** or just **(https://github.com/iwiedenm/ultimate-jekyll/generate)[generate it here]**.
 2. In the next window, name the new repository and choose an organization to host the repository.
 3. Create a branch called `master`, then make `master` the default branch, and finally delete the branch called `template`.
 4. Open the newly created repository on GitHub and click **Open in Desktop** then choose location using GitHub desktop.
