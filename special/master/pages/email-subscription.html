@@ -129,6 +129,7 @@ settings:
             <label for="mce-FNAME">First Name </label>
             <input type="text" value="" name="FNAME" class="form-control form-control-sm" id="mce-FNAME" autocomplete="fname">
           </div>
+
           <div class="mc-field-group form-group mb-1">
             <label for="mce-LNAME">Last Name </label>
             <input type="text" value="" name="LNAME" class="form-control form-control-sm" id="mce-LNAME" autocomplete="lname">
@@ -227,17 +228,19 @@ settings:
 
 
     <script type="text/javascript">
-      Manager.authReady(function() {
-        var emailAuth = Manager.get('auth.user.email');
-        var emailQuery = Manager.query().create(window.location.href).get('auth_email');
-        Manager.dom().select('#mce-EMAIL').setValue(emailQuery || emailAuth || '')
-
-        // if (emailAuth) {
-        //   Manager.dom().select('#mce-EMAIL').setValue(emailAuth)
-        // } else if (emailQuery) {
-        //   Manager.dom().select('#mce-EMAIL').setValue(emailAuth)
-        // }
+      Manager.ready(function() {
+        setEmail(Manager.query().create(window.location.href).get('auth_email'));
       });
+
+      Manager.auth().ready(function() {
+        setEmail(Manager.get('auth.user.email'));
+      });
+
+      function setEmail(email) {
+        if (email && Manager.dom().select('#mce-EMAIL').getValue() == '') {
+          Manager.dom().select('#mce-EMAIL').setValue(email)
+        }
+      }
     </script>
 
     <!-- CONTENT END -->
