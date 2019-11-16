@@ -201,13 +201,17 @@
     var waitFor = true;
     for (var i = 0; i < options.waitFor.length; i++) {
       var cur = options.waitFor[i] || {};
-      var val = cur.typeof ? typeof window[cur.name] : window[cur.name];
+      var val = window[cur.name];
 
       if (cur.condition == '==' && val != cur.value) {
         waitFor = false;
         break;
       }
       if (cur.condition == '!=' && val == cur.value) {
+        waitFor = false;
+        break;
+      }
+      if (cur.condition == 'defined' && typeof val == 'undefined') {
         waitFor = false;
         break;
       }

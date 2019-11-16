@@ -100,13 +100,22 @@ permalink: /@reference/examples/general/
 
       });
       setTimeout(function () {
-        window.waitFor4test = true;
+        window.waitForTest4 = true;
       }, 3000);
+      setTimeout(function () {
+        window.waitForTest5 = 'notUndefined';
+      }, 5000);
 
       Manager.ready(function() {
-        console.log('waitFor 4 satisfied');
+        console.log('waitForTest4 satisfied');
       }, {
-        waitFor: [{name: 'waitFor4test', condition: '==', value: true}]
+        waitFor: [{name: 'waitForTest4', condition: '==', value: true}]
+      });
+
+      Manager.ready(function() {
+        console.log('waitForTest5 satisfied');
+      }, {
+        waitFor: [{name: 'waitForTest5', condition: 'defined'}]
       });
 
     </script>
