@@ -196,6 +196,17 @@
     var tryAgain = true;
     options = options || {};
     options.retryInterval = options.retryInterval || 100;
+    options.waitFor = options.waitFor || [];
+
+    var waitFor = true;
+    for (var i = 0; i < options.waitFor.length; i++) {
+      var cur = options.waitFor[i] || {};
+
+      if (cur.condition == '==' && window[cur.name] != cur.value) {
+        waitFor = false;
+        break;
+      }
+    }
 
     try {
       tryAgain = (Manager.get('page.status.ready', false) == false);
@@ -203,7 +214,8 @@
     } catch (e) {
       tryAgain = true;
     }
-    if (tryAgain) {
+    if (tryAgain || !waitFor) {
+      // console.log('polling a...', options.waitFor, !waitFor);
       setTimeout(function () {
         This.ready(fn, options);
       }, options.retryInterval);

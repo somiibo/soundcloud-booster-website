@@ -99,6 +99,16 @@ permalink: /@reference/examples/general/
         });
 
       });
+      setTimeout(function () {
+        window.waitFor4test = true;
+      }, 3000);
+
+      Manager.ready(function() {
+        console.log('waitFor 4 satisfied');
+      }, {
+        waitFor: [{name: 'waitFor4test', condition: '==', value: true}]
+      });
+
     </script>
 
     {%- include /master/global/foot.html -%}
