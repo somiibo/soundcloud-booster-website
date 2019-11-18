@@ -20,6 +20,7 @@ gulp.task('browsersync', function () {
       baseDir: config.jekyll.dest,
     },
     open: 'external',
+    ghostMode: false,
   }, function (error, instance) {
     cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
 
