@@ -27,6 +27,7 @@ permalink: /@reference/guides/commands/
 * Saves a lighthouse performance report to `./_websrc/lighthouse-report/report.html`.
 ### Example
 * npm run lighthouse -- http://127.0.0.1:4000
+* Output will be available at [http://127.0.0.1:4000/@output/regular/lighthouse-report.report.html](http://127.0.0.1:4000/@output/regular/lighthouse-report.report.html)
 
 ## Ruun unit tests
 `npm run test`
