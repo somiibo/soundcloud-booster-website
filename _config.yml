@@ -47,7 +47,7 @@ tracking:
 
 advertising:
   google-adsense: "ca-pub-7372939085773564" # false to disable, example: ca-pub-7372999999999999
-  cse-site-id: "partner-pub-7372939085773564:2814939217" # example: partner-pub-7372939085773564:2814939217 (create on: https://www.google.com/adsense/new/u/5/pub-7372939085773564/main/myads-viewall-adunits?product=SELF_SERVICE_SEARCH_ADS)
+  cse-site-id: "" # example: partner-pub-7372939085773564:2814939217 (create on: https://www.google.com/adsense/new/u/5/pub-7372939085773564/main/myads-viewall-adunits?product=SELF_SERVICE_SEARCH_ADS)
 
 email-marketing: # Get this information from Mailchimp > Audience > Manage Audience > Signup forms > Embedded forms > Then look at code
   mailchimp-user-id: "06dd652b8c707fdf51ebcff20" # string, example: 06dd652b8c707fdf51ebcff20
