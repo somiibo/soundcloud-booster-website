@@ -37,7 +37,7 @@ package-lock.json
 # <<<GEN
 
 # Development
-/@output/regular/lighthouse-report.html
+/@output/regular/*lighthouse*
 /@output/ngrok/
 /@output/.temp/
 
