@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: default
+layout: master/global/default
 permalink: /@reference/redirects/redirect-example/
 
 ### REGULAR PAGES ###
