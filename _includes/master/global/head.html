@@ -61,7 +61,7 @@
 <meta property="og:image" content="{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}" />
 {%- else -%}
 <meta name="twitter:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
-<meta name="og:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
+<meta property="og:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
 {%- endif -%}
 
 <!-- OG: Twitter -->
@@ -95,8 +95,7 @@
       code: '{%- if page.settings.page-code -%}{{ page.settings.page-code }}{%- else -%}{{ page.settings.breadcrumb }}{%- endif -%}',
       type: '{%- if page.layout == 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.settings.breadcrumb }}',
-      settings: {% if page.settings.manager-configuration %}{{ page.settings.manager-configuration }}{% else %}{}{% endif %},
-      end: 'end'
+      settings: {% if page.settings.manager-configuration %}{{ page.settings.manager-configuration }}{% else %}{}{% endif %}
     },
     global: {
       version: '{{ site.version }}',
@@ -105,8 +104,7 @@
       settings: {% if site.settings.manager-configuration %}{{ site.settings.manager-configuration }}{% else %}{}{% endif %},
       brand: {
         name: '{{ site.brand.name }}'
-      },
-      end: 'end'
+      }
     }
   };
 </script>
