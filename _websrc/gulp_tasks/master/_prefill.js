@@ -96,7 +96,7 @@ gulp.task("_prefill", async () => {
 
 
         // post
-        let posts = await listFiles('./_posts')
+        let posts = await listFiles('./_posts') || [];
         if (posts.find(function (name) {
           return name.indexOf('example-post') > -1;
         })) {
