@@ -79,13 +79,13 @@ permalink: /@reference/tests/ajax/
 
       <div class="form-group">
         <label for="address" class="sr-only">Endpoint</label>
-        <input type="text" id="endpoint" class="form-control" placeholder="Web address" value="https://api.slapform.com" required autofocus>
+        <input type="text" id="endpoint" class="form-control" placeholder="Web address" value="http://localhost:5000" required autofocus>
         <p>https://api.slapform.com</p>
         <p>http://localhost:5000</p>
       </div>
       <div class="form-group">
         <label for="address" class="sr-only">Body</label>
-        <textarea type="text" id="body" class="form-control" placeholder="{}" required autofocus>{}</textarea>
+        <textarea type="text" id="body" class="form-control" rows="9" placeholder="{}" required autofocus>{}</textarea>
       </div>
 
       <button id="go" class="btn btn-lg btn-primary btn-block" type="submit">Go</button>
@@ -98,43 +98,40 @@ permalink: /@reference/tests/ajax/
       var slapform;
       Manager.ready(function() {
         console.log('--- Exploring Ajax ---');
-        slapform = new Slapform();
-        Manager.dom().select('#body').setValue(
-        '{' + '\n' +
-          '  "variable1": "He",' + '\n' +
-          '  "variable2": "apples",' + '\n' +
-          '  "result": "${variable1} likes ${ variable2 }.",' + '\n' +
-          '  "noexist": "Nothing happens if the variable is nonexistant > ${blank}.",' + '\n' +
-          '  "system": "Date = ${slap_meta_date}",' + '\n' +
-          '  "slap_replyto": "${variable1}",' + '\n' +
-          '  "slap_email": ""' + '\n' +
-        '}' + '\n'
-        )
+        Manager.dom().select('#body').setValue(JSON.stringify({
+          name: "Ian",
+          variable1: "He",
+          variable2: "apples",
+          result: "${variable1} likes ${ variable2 }.",
+          noexist: "Nothing happens if the variable is nonexistant > ${blank}.",
+          system: "Date = ${slap_meta_date}",
+          slap_replyto: "${variable1}",
+          slap_email: "",
+          slap_test_forcenumber: 0,
+          slap_test_forcestring: "test",
+          slap_test_forceboolean: true
+        }, null, 2))
         Manager.dom().select('body').on('click', function(event) {
           if (event.target.matches('#go')) {
+            var endpoint = Manager.dom().select('#endpoint').getValue();
+            var body = JSON.parse(Manager.dom().select('#body').getValue());
+            console.log('Sending to ', endpoint);
+            console.log('This data ', body);
             $.ajax({
-              type: "POST",
-              url: Manager.dom().select('#endpoint').getValue(),
-              data: Manager.dom().select('#body').getValue(),
-              contentType: "application/json; charset=utf-8",
-              dataType: "json",
-              success: function(data){
-                console.log(data);
-                Manager.dom().select('#result').setInnerHTML(JSON.stringify(data), null, 2); // Set setInnerHTML
-
-              },
-              failure: function(errMsg) {
-                console.log(errMsg);
-                Manager.dom().select('#result').setInnerHTML(errMsg); // Set setInnerHTML
+              dataType: 'json',
+              url: endpoint,
+              // contentType: "application/json; charset=utf-8",
+              type: 'POST',
+              data: body,
+              success: function (one,two,three) {
+                console.log(one,two,three);
               }
             });
           }
         })
 
-
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/slapform?cb={{ site.time | date: '%s' }}"></script>
 
     {%- include /master/global/foot.html -%}
   </body>

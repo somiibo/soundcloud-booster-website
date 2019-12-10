@@ -63,6 +63,7 @@ brand:
   type: "Corporation" # example: Corporation
   description: "Default description." # example: A search engine company.
   logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1000x1000.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
+  logo-image-svg: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.svg
   addressLocality: "Los Angeles" # String | example: Los Angeles
   addressCountry: "United States" # String | example: United States
 
@@ -83,9 +84,9 @@ schema:
 
 favicon:
   path: "" # example: /assets/images/favicon
-  safari-pinned-tab: "" # example: #5bbad5
-  msapp-tile-color: "" # example: #da532c"
-  theme-color: "" # example: #ffffff
+  safari-pinned-tab: "#5bbad5" # example: #5bbad5
+  msapp-tile-color: "#da532c" # example: #da532c"
+  theme-color: "#ffffff" # example: #ffffff
 
 search:
   enable: true # true | false
@@ -150,6 +151,18 @@ escapes:
 permalink: /blog/:title/
 paginate: 6
 paginate_path: "/blog/page:num/"
+
+# Jekyll Defaults
+collections:
+  authors:
+    title: Authors
+    output: true
+defaults:
+- scope:
+    path: ''
+    type: authors
+  values:
+    permalink: "/blog/authors/:title/"
 
 # Build settings
 markdown: kramdown

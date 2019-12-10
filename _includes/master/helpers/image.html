@@ -1,8 +1,16 @@
 {%- if include.mode == 'default' or include.mode == null -%}
+{% raw %}
 <picture>
+{% endraw %}
+
 	<!--[if IE 9]><video style="display: none"><![endif]-->
 		{%- if include.include-webp != false -%}
 			{% assign src_path = include.src | replace: ".jpg", "" | replace: ".png", "" %}
+			<source
+				data-srcset="{{ src_path }}-320px.webp"
+				media="(max-width: 320px)"
+				type="image/webp"
+			>
 			<source
 				data-srcset="{{ src_path }}-640px.webp"
 				media="(max-width: 640px)"
@@ -27,7 +35,10 @@
 		{%- endif -%}
 
 		{% assign src_path = include.src | replace: ".jpg", "" | replace: ".png", "" %}
-
+		<source
+			data-srcset="{{ src_path }}-320px{{ src_extension }}"
+			media="(max-width: 320px)"
+		>
 		<source
 			data-srcset="{{ src_path }}-640px{{ src_extension }}"
 			media="(max-width: 640px)"
@@ -52,5 +63,7 @@
 		height="{{ include.height }}"
     {{ include.attributes }}
   >
+{% raw %}
 </picture>
+{% endraw %}
 {%- endif -%}

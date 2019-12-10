@@ -1,6 +1,8 @@
 <!-- https://www.sarasoueidan.com/blog/svg-picture/ -->
 {%- if include.mode == 'default' or include.mode == null -%}
+{% raw %}
 <picture>
+{% endraw %}
   <!--[if IE 9]><video style="display: none"><![endif]-->
     <source
       type="image/svg+xml"
@@ -36,5 +38,7 @@
     width="{{ include.width }}"
     height="{{ include.height }}"
   >
+{% raw %}
 </picture>
+{% endraw %}
 {%- endif -%}

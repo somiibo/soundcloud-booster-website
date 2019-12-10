@@ -4,6 +4,7 @@ const config      = require('../../master.config.js');
 const cp          = require('child_process');
 const cmd         = require('node-cmd');
 const gulp        = require('gulp');
+let createPost;
 
 let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
 
@@ -18,6 +19,20 @@ gulp.task('browsersync', function () {
     browser: browser,
     server: {
       baseDir: config.jekyll.dest,
+      middleware: async function (req, res, next) {
+        if (/post\/create.json/.test(req.url)) {
+          createPost = createPost || require('./create-post.js');
+          let post = new createPost();
+          return await post.create({
+            req: req,
+            res: res,
+            test: {test: 'test'},
+          })
+          // res.write(JSON.stringify({test: 'penis'}));
+          // return res.end();
+        }
+        next();
+      }
     },
     open: 'external',
     ghostMode: false,

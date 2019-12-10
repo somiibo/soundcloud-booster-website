@@ -1,0 +1,542 @@
+---
+### ALL PAGES ###
+permalink: /@reference/tools/post/create/
+sitemap:
+  include: false
+---
+<!doctype html>
+<html lang="en">
+
+  <head>
+    {%- include /master/global/head.html -%}
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .container {
+        max-width: 960px;
+      }
+
+      .lh-condensed { line-height: 1.25; }
+    </style>
+
+    <style media="screen">
+      /* STACK EDIT STYLING */
+      .stackedit-iframe {
+        left: 0px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-light">
+    <div class="container">
+  <div class="py-5 text-center">
+    {%- include /master/helpers/svg.html src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="144" height="144" class="d-block mx-auto" -%}
+
+    <h2>Post Creator</h2>
+    <p class="lead">Create blog posts with ease, including the beautiful markdown editor <strong>StackEdit</strong>!</p>
+  </div>
+
+  <div class="row loaded-false">
+    <div class="col-lg-8 offset-lg-2">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row loaded-true" hidden>
+    <div class="col-lg-8 offset-lg-2">
+      <h4 class="mb-3">Post details</h4>
+      <form class="" onsubmit="return false;" id="post-creator-form">
+
+        <div class="mb-3">
+          <label for="title">Title <span class="text-muted"></span></label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Best title here">
+          <small class="text-muted">The title of the post</small>
+        </div>
+
+
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="url">URL <span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="url" name="url" placeholder="your-best-title">
+            <small class="text-muted">The URL of the post</small>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="path">Layout <span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="layout" name="layout" placeholder="master/blog/post" value="master/blog/post">
+            <small class="text-muted">Usually <code class="highlighter-rouge">master/blog/post</code> or <code class="highlighter-rouge">app/blog/post</code></small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="date">Date <span class="text-muted"></span></label>
+            <input type="date" class="form-control" id="date" name="date" placeholder="2019-12-04" required>
+            <small class="text-muted">The date of the post</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="id">ID <span class="text-muted"></span></label>
+            <input type="number" class="form-control" id="id" name="id" placeholder="0" required>
+            <small class="text-muted">The id of the post</small>
+          </div>
+        </div>
+
+        <div class="row">
+
+
+          <div class="col-md-6 mb-3">
+            <label for="author">Author <span class="text-muted"></span></label>
+            <select class="custom-select" id="author" name="author" required>
+              <option value="">Select an author</option>
+            </select>
+            <small class="text-muted">Who wrote this beautiful piece of work?</small>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="affiliate">Affiliate search term <span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="affiliate" name="affiliate" placeholder="Search term" required>
+            <small class="text-muted">This term is automatically applied to some ads</small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="tags">Tags <span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag one, Tag two" required>
+            <small class="text-muted">Comma separated tags</small>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="categories">Categories<span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="categories" name="categories" placeholder="Category 1, Category 2" required>
+            <small class="text-muted">Comma separated categories</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="excerpt">Excerpt</label>
+          <textarea class="form-control" id="excerpt" rows="2" name="excerpt"></textarea>
+          <small class="text-muted">Text preview of the post</small>
+        </div>
+
+        <div class="mb-3">
+          <label for="headerImage">Main Image URL</label>
+          <input type="text" class="form-control" id="headerImage" name="headerImage" placeholder="https://unsplash.com/your-image" value="https://google.com" required>
+          <small class="text-muted">Image preview of the post</small>
+        </div>
+
+        <div class="mb-3"></div>
+
+        <h4 class="mb-3">Post Content</h4>
+
+        <div class="row">
+
+          <div class="col-12 mb-3">
+            <label for="body">Body</label>
+            <textarea class="form-control" id="body" rows="9" name="body"></textarea>
+            <div class="row mt-3">
+              <div class="col-6">
+                <a href="" onclick="return false;" class="btn btn-lg btn-secondary btn-block" id="stackedit-edit">Edit in StackEdit</a>
+              </div>
+              <div class="col-6">
+                <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary btn-block" id="import-google-docs" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3"></div>
+
+        <h4 class="mb-3">Advanced Options</h4>
+
+        <div class="row">
+
+          <div class="col-12 mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="enableReplaceImagesMarkdown" name="enableReplaceImagesMarkdown" checked="true">
+              <label class="form-check-label" for="enableReplaceImagesMarkdown">
+                Replace image markdown with liquid tag
+              </label>
+              <br>
+              <small class="text-muted">Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code></small>
+            </div>
+            <div class="form-group">
+              <label for="replaceImagesIncludeTag">Tag to replace with <span class="text-muted"></span></label>
+              <input type="text" class="form-control" id="replaceImagesIncludeTag" name="replaceImagesIncludeTag" placeholder="" required>
+              <small class="text-muted">Which one to use? Blank = default.</small>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="includeLocalImagePath" name="includeLocalImagePath" checked="true">
+              <label class="form-check-label" for="includeLocalImagePath">
+                Include image path before image tags
+              </label>
+              <br>
+              <small class="text-muted">Include the standard local image path <code class="highlighter-rouge">/assets/images/blog/posts/post-${id}/</code> in image tags</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label for="path">Save path <span class="text-muted"></span></label>
+            <input type="text" class="form-control" id="path" name="path" placeholder="./_posts/" value="./_posts/">
+            <small class="text-muted">The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code></small>
+          </div>
+        </div>
+
+        <div id="response" hidden>
+          <div class="my-3">
+            <div class="alert alert-success" role="alert" hidden>
+              <h4 class="alert-heading">Well done!</h4>
+              <p>Aww yeah, you successfully posted that amazing piece of work ;)</p>
+              <hr>
+              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
+              <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p>
+            </div>
+            <div class="alert alert-danger" role="alert" hidden>
+              <h4 class="alert-heading">Aw snap!</h4>
+              <p>Something went wrong, please examine the error below:</p>
+              <hr>
+              <pre><code id="main-response-code">waiting...
+              </code></pre>
+            </div>
+          </div>
+        </div>
+
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Post!</button>
+      </form>
+
+    </div>
+    <div class="col-lg-8 offset-lg-2">
+    <div>
+  </div>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; {{ site.time | date: '%Y' }} {{ site.brand.name }}</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="{{ site.url }}">Home</a></li>
+      <li class="list-inline-item"><a href="{{ site.url }}/blog">Blog</a></li>
+    </ul>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="importGoogleDoc" tabindex="-1" role="dialog" aria-labelledby="importGoogleDoc" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Import from Google Doc</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="google-doc-form" class="" action="" method="post" onsubmit="return false;">
+        <div class="modal-body">
+          <div class="row px-3 pb-3">
+            <div class="col-12">
+              <strong>Publish the doc</strong> by going to <code class="highlighter-rouge">File > Publish to the Web > Start publishing</code>
+              <!-- <ol class="pl-4">
+                <li></li>
+              </ol> -->
+            </div>
+          </div>
+          <div class="row mx-3">
+            <div class="col-12">
+              <div class="form-group row">
+                <label class="control-label" for="importUrl">Doc URL</label>
+                <input id="importUrl" name="importUrl" type="text" class="form-control" placeholder="https://docs.google.com/document/d/e/KEY123/pub" value="" required>
+                <!-- <p>https://docs.google.com/document/d/e/2PACX-1vRvfKsOYUZW0uhK6iOy95P4L-_n0FMk2I9jKTI9M0rK1EXVIuaUd7jTQoIvTuoZ36aTm-gfKkRGbamc/pub</p> -->
+                <small class="form-text text-muted">Remember, the Doc must be published!</small>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-check row">
+                <input class="form-check-input" type="checkbox" id="replaceHeadings" name="replaceHeadings" checked="true">
+                <label class="form-check-label" for="replaceHeadings">
+                  Replace <code class="highlighter-rouge">---</code> with <code class="highlighter-rouge">#</code>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row m-3">
+            <div id="google-doc-error" class="alert alert-danger" role="alert" hidden>
+              <h4 class="alert-heading">Aw snap!</h4>
+              <p>Something went wrong, please examine the error below:</p>
+              <hr>
+              <pre><code id="google-response-code">waiting...
+              </code></pre>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Import</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript">
+      // fields
+      var fields = {};
+      var authors = [];
+      {% for post in site.posts limit:1 %}
+      fields = {
+        title: "{{ post.post.title }}",
+        url: "{{ post.url }}",
+        excerpt: "{{ post.post.excerpt }}",
+        id: "{{ post.post.id }}",
+        author: "{{ post.post.author }}",
+        date: '{{ post.date | date: "%Y-%m-%d" }}',
+        affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
+        tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
+        categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
+        replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/image.html src="{{url}}" alt="{{alt}}" -%}{% endraw %}',
+      }
+      {% endfor %}
+
+      authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
+
+      // console.log('FIELDS', fields);
+      // console.log('AUTHORS', authors);
+
+    </script>
+
+    <!-- Exploring the library -->
+    <script type="text/javascript">
+
+      var navBlocked = false;
+      var allowLeave = false;
+      var stackEditElement = document.querySelector('#body');
+      var stackedit;
+      var turndownService;
+
+      Manager.ready(function() {
+        console.log('--- Exploring Ajax ---');
+        blockNavigation();
+        setupStackedit();
+        setupForm();
+        // Manager.dom().select('#body').setValue()
+        Manager.dom().select('body').on('click', function(event) {
+          if (event.target.matches('#stackedit-edit')) {
+            // Open the iframe
+            stackedit.openFile({
+              name: 'Filename', // with an optional filename
+              content: {
+                text: stackEditElement.value // and the Markdown content.
+              }
+            });
+          }
+        })
+        console.log($.ajax);
+        Manager.dom().select('#post-creator-form').on('submit', function (event) {
+          blockNavigation();
+          var endpoint = '{{ site.url }}/@reference/tools/post/create.json';
+          var data = {};
+          Manager.dom().select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
+            var curField = Manager.dom().select(el);
+            data[curField.getAttribute('name')] = curField.getValue();
+          })
+          console.log('#post-creator-form', endpoint, data);
+
+          Manager.ajax().request({
+            type: 'POST',
+            url: endpoint,
+            data: data,
+          })
+          .success(function (one,two,three) {
+            console.log(one,two,three);
+            Manager.dom().select('#response').show()
+            Manager.dom().select('#response .alert-success').show()
+            Manager.dom().select('#response .alert-danger').hide()
+
+            window.refreshTimer = 2;
+            allowLeave = true;
+            setInterval(function () {
+              console.log('TIME...', window.refreshTimer);
+              Manager.dom().select('#refresh-timer').setInnerHTML(window.refreshTimer);
+              window.refreshTimer--;
+              if (window.refreshTimer <= 0) {
+                window.location.href = window.location.href;
+              }
+            }, 1000);
+          })
+          .error(function (response, status, error) {
+            console.error(response, status, error);
+            Manager.dom().select('#response').show()
+            Manager.dom().select('#response .alert-success').hide()
+            Manager.dom().select('#response .alert-danger').show()
+            Manager.dom().select('#main-response-code').setInnerHTML(error)
+          })
+
+        });
+
+        Manager.dom().select('#google-doc-form').on('submit', function (event) {
+          var formData = {};
+          Manager.dom().select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
+            var curField = Manager.dom().select(el);
+            formData[curField.getAttribute('name')] = curField.getValue();
+          })
+
+          console.log('#google-doc-form', formData);
+
+          Manager.ajax().request({
+            type: 'GET',
+            url: 'https://docs.google.com/document/d/e/2PACX-1vRvfKsOYUZW0uhK6iOy95P4L-_n0FMk2I9jKTI9M0rK1EXVIuaUd7jTQoIvTuoZ36aTm-gfKkRGbamc/pub',
+            data: {},
+          })
+          .success(function (one,two,data) {
+            //temp
+            // var query = query || {};
+
+            // Clean
+            var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+            body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+            body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
+            body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+
+            // Fix no spaces with links
+            // body = body.replace(/><a/img, '> <a');
+            // body = body.replace(/><\/a/img, '> </a');
+            // body = body.replace(/<\/a></img, ' </a><');
+
+            // https://github.com/domchristie/turndown
+            var markdown = turndownService.turndown(body);
+
+            // Fix no spaces with links
+            markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
+            markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
+
+            // Fixes
+            markdown = markdown.replace(/ \. /img, '. '); // fix periods
+            markdown = markdown.replace(/ \, /img, ', '); // fix periods
+            markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
+            markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
+
+
+            // Clear promos stuff
+            markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
+
+            // Remove hr breaks
+            if (formData.replaceHeadings) {
+              markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
+              markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
+            }
+
+            Manager.dom().select('#body').setValue(markdown);
+            Manager.dom().select('#google-doc-error').hide();
+
+            $('#importGoogleDoc').modal('toggle');
+          })
+          .error(function (one,two,error) {
+            Manager.dom().select('#google-doc-error').show();
+            Manager.dom().select('#google-response-code').setInnerHTML(error);
+          })
+
+        })
+
+
+
+      }, {
+        waitFor: [{name: 'Stackedit', condition: 'defined'},{name: 'TurndownService', condition: 'defined'},]
+      });
+
+      function setupForm() {
+        var select = Manager.dom().select('#author').get(0);
+        for (var i = 0; i < authors.length; i++) {
+          var opt = document.createElement('option');
+          opt.value = authors[i];
+          opt.innerHTML = authors[i];
+          select.appendChild(opt);
+        }
+
+        Manager.dom().select('#title').setValue(fields.title);
+        Manager.dom().select('#url').setValue(fields.url.replace(/\/(.*?)\//,'').replace(/\//,''));
+        Manager.dom().select('#date').setValue(fields.date);
+        Manager.dom().select('#id').setValue(fields.id);
+        Manager.dom().select('#author').setValue(fields.author);
+        Manager.dom().select('#affiliate').setValue(fields.affiliateSearchTerm);
+        Manager.dom().select('#tags').setValue(fields.tags.toString().replace(/,/g, ', '));
+        Manager.dom().select('#categories').setValue(fields.categories.toString().replace(/,/g, ', '));
+        Manager.dom().select('#excerpt').setValue(fields.excerpt);
+        Manager.dom().select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
+
+        Manager.dom().select('#body').setValue("## This is a post in markdown! \nClick 'edit' to start authoring your post. \n\nYou can also... \n- Edit in StackEdit \n- Import from Google Docs \n\n[Here is a regular link](https://itwcreativeworks.com) \n[Here is a Google link](https://www.google.com/url?q=https://itwcreativeworks.com) \n![Here is an image](https://via.placeholder.com/150)");
+
+        // Finally, make everything visible
+        Manager.dom().select('.loaded-false').hide();
+        Manager.dom().select('.loaded-true').show();
+      }
+
+      function blockNavigation() {
+        if (navBlocked === true) {
+          return;
+        }
+        navBlocked = true;
+        try {
+          window.onbeforeunload = function(event) {
+            if (allowLeave) {
+              event.preventDefault();
+            } else {
+              event.returnValue = "Write something clever here..";
+            }
+          };
+        } catch (e) {
+          console.error('Error creating post', e);
+        }
+      }
+
+
+      function setupStackedit() {
+        console.log('Launched stackedit');
+        stackedit = new Stackedit({
+          url: 'https://stackedit.io/app',
+          // url: '{{ site.url }}/@reference/tools/post/stackedit',
+        });
+
+        turndownService = new TurndownService();
+
+        // Listen to StackEdit events and apply the changes to the textarea.
+        stackedit.on('fileChange', (file) => {
+          stackEditElement.value = file.content.text;
+        });
+      }
+    </script>
+
+    <!-- https://benweet.github.io/stackedit.js/ -->
+    <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script>
+    <script src="https://unpkg.com/turndown/dist/turndown.js" async></script>
+
+
+    {%- include /master/global/foot.html -%}
+  </body>
+
+</html>

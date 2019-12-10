@@ -30,7 +30,7 @@ permalink: /sitemap.xml
       </url>
     {% endfor %}
     {% for page in site.pages %}
-      {%- if page.sitemap.enable != false -%}
+      {%- if page.sitemap.include != false -%}
       <url>
         <loc>{{ site.url }}{{ page.url }}</loc>
 

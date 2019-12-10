@@ -7,5 +7,5 @@ permalink: /@reference/redirects/redirect-example/
 redirect:
   url: "https://google.com"
 sitemap:
-  exclude: true
+  include: false
 ---

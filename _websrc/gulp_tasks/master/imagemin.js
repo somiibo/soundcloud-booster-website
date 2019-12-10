@@ -31,6 +31,13 @@ gulp.task('imageminResponsive', function () {
     .pipe(responsive({
       '**/*.{jpg,jpeg}': [
         {
+          width: 320,
+          rename: {
+            suffix: '-320px',
+            extname: '.jpg',
+          },
+        },
+        {
           width: 640,
           rename: {
             suffix: '-640px',
@@ -42,6 +49,13 @@ gulp.task('imageminResponsive', function () {
           rename: {
             suffix: '-1024px',
             extname: '.jpg',
+          },
+        },
+        {
+          width: 320,
+          rename: {
+            suffix: '-320px',
+            extname: '.webp',
           },
         },
         {
@@ -78,6 +92,13 @@ gulp.task('imageminResponsive', function () {
       ],
       '**/*.png': [
         {
+          width: 320,
+          rename: {
+            suffix: '-320px',
+            extname: '.png',
+          },
+        },
+        {
           width: 640,
           rename: {
             suffix: '-640px',
@@ -89,6 +110,13 @@ gulp.task('imageminResponsive', function () {
           rename: {
             suffix: '-1024px',
             extname: '.png',
+          },
+        },
+        {
+          width: 320,
+          rename: {
+            suffix: '-320px',
+            extname: '.webp',
           },
         },
         {
