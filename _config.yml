@@ -99,7 +99,7 @@ settings:
   include-script-bundle: true # true | false
   include-script-bundle-optimization: "defer" # defer | async | ""
   include-css-bundle: true # true | false
-  include-css-normalize: true # true | false
+  include-css-normalize: false # true | false
   include-css-reset: false # true | false
   include-css-defaults: true # true | false
   include-html5shiv: true # true | false
