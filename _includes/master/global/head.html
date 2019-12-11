@@ -273,8 +273,9 @@
 
 </script>
 
-<!-- Master - Alert Box Style -->
+<!-- Master - Styles -->
 <style media="screen">
+  /* Alert box */
   .master-alert {
     padding: 20px;
     background-color: #f44336;
@@ -311,6 +312,40 @@
 
   .master-alert-outdated {
     display: none;
+  }
+
+  /* Chat box opener */
+  #prechat-btn {
+    position: fixed;
+    background: #237AFC;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 1;
+    border-radius: 50%;
+    right: 20px;
+    bottom: 20px;
+    transition: background 0.5s;
+    z-index: 11;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 10px 0px;
+  }
+
+  #prechat-btn svg {
+    padding-top: 25%;
+    color: #fff;
+    width: 50%;
+    opacity: 1.0;
+    pointer-events: none;
+  }
+  #prechat-btn:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    #prechat-btn {
+      bottom: 15px;
+    }
   }
 </style>
 

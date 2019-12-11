@@ -128,7 +128,7 @@ settings:
         tawk: {
           enabled: true,
           config: {
-            chatId: '5c885bdec37db86fcfcd71ed'
+            chatId: '5df1636b43be710e1d21af38'
           }
         },
         sentry: {
