@@ -182,6 +182,7 @@ gulp.task("_prefill", async () => {
       if (isTemplate && !isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', gitignore_ph);
+        await createFile(config.assets + config.assetsSubpath + '/images/blog/.gitignore', gitignore_ph);
         await createFile('./_includes/app/misc/.gitignore', gitignore_ph);
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
