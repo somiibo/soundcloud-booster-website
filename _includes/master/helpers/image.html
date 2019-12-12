@@ -2,30 +2,68 @@
 {% raw %}
 <picture>
 {% endraw %}
+	{%- if "320, 640, 1024" contains include.max-width -%}
+		{% assign max_width = include.max-width | downcase %}
+	{%- else -%}
+		{% assign max_width = false %}
+	{%- endif -%}
 
 	<!--[if IE 9]><video style="display: none"><![endif]-->
 		{%- if include.include-webp != false -%}
 			{% assign src_path = include.src | replace: ".jpg", "" | replace: ".png", "" %}
-			<source
-				data-srcset="{{ src_path }}-320px.webp"
-				media="(max-width: 320px)"
-				type="image/webp"
-			>
-			<source
-				data-srcset="{{ src_path }}-640px.webp"
-				media="(max-width: 640px)"
-				type="image/webp"
-			>
-			<source
-				data-srcset="{{ src_path }}-1024px.webp"
-				media="(max-width: 1024px)"
-				type="image/webp"
-			>
-			<source
-				data-srcset="{{ src_path }}.webp"
-				media="(min-width: 1025px)"
-				type="image/webp"
-			>
+
+			{%- if max_width == "320" -%}
+				<source
+					data-srcset="{{ src_path }}-320px.webp"
+					type="image/webp"
+				>
+			{%- elsif max_width == "640" -%}
+				<source
+					data-srcset="{{ src_path }}-320px.webp"
+					media="(max-width: 320px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}-640px.webp"
+					type="image/webp"
+				>
+			{%- elsif max_width == "1024" -%}
+				<source
+					data-srcset="{{ src_path }}-320px.webp"
+					media="(max-width: 320px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}-640px.webp"
+					media="(max-width: 640px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}-1024px.webp"
+					type="image/webp"
+				>
+			{%- else -%}
+				<source
+					data-srcset="{{ src_path }}-320px.webp"
+					media="(max-width: 320px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}-640px.webp"
+					media="(max-width: 640px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}-1024px.webp"
+					media="(max-width: 1024px)"
+					type="image/webp"
+				>
+				<source
+					data-srcset="{{ src_path }}.webp"
+					type="image/webp"
+				>
+			{%- endif -%}
+
 		{%- endif -%}
 
 		{%- if include.src contains ".jpg" -%}
@@ -35,22 +73,48 @@
 		{%- endif -%}
 
 		{% assign src_path = include.src | replace: ".jpg", "" | replace: ".png", "" %}
-		<source
-			data-srcset="{{ src_path }}-320px{{ src_extension }}"
-			media="(max-width: 320px)"
-		>
-		<source
-			data-srcset="{{ src_path }}-640px{{ src_extension }}"
-			media="(max-width: 640px)"
-		>
-		<source
-			data-srcset="{{ src_path }}-1024px{{ src_extension }}"
-			media="(max-width: 1024px)"
-		>
-		<source
-			data-srcset="{{ include.src }}"
-			media="(min-width: 1025px)"
-		>
+		{%- if max_width == "320" -%}
+			<source
+				data-srcset="{{ src_path }}-320px{{ src_extension }}"
+			>
+		{%- elsif max_width == "640" -%}
+			<source
+				data-srcset="{{ src_path }}-320px{{ src_extension }}"
+				media="(max-width: 320px)"
+			>
+			<source
+				data-srcset="{{ src_path }}-640px{{ src_extension }}"
+			>
+		{%- elsif max_width == "1024" -%}
+			<source
+				data-srcset="{{ src_path }}-320px{{ src_extension }}"
+				media="(max-width: 320px)"
+			>
+			<source
+				data-srcset="{{ src_path }}-640px{{ src_extension }}"
+				media="(max-width: 640px)"
+			>
+			<source
+				data-srcset="{{ src_path }}-1024px{{ src_extension }}"
+			>
+		{%- else -%}
+			<source
+				data-srcset="{{ src_path }}-320px{{ src_extension }}"
+				media="(max-width: 320px)"
+			>
+			<source
+				data-srcset="{{ src_path }}-640px{{ src_extension }}"
+				media="(max-width: 640px)"
+			>
+			<source
+				data-srcset="{{ src_path }}-1024px{{ src_extension }}"
+				media="(max-width: 1024px)"
+			>
+			<source
+				data-srcset="{{ include.src }}"
+				media="(min-width: 1025px)"
+			>
+		{%- endif -%}
 
   <!--[if IE 9]></video><![endif]-->
   <img
