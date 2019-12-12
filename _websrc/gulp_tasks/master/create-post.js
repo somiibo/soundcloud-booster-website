@@ -43,16 +43,11 @@ Post.prototype.create = async function (options) {
 
     }
   }
-  // res.write(JSON.stringify({test: 'penis'}));
-  // return res.end();
-
   const { headers, method, url } = req;
   let body = [];
   console.log('Creating post...');
 
   return new Promise(function(resolve, reject) {
-    // res.write(JSON.stringify({test: 'penis'}));
-    // return resolve(res.end());
 
     req.on('data', function(chunk) {
       body.push(chunk.toString());
@@ -67,18 +62,11 @@ Post.prototype.create = async function (options) {
 
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
-      // Note: the 2 lines above could be replaced with this next one:
-      // response.writeHead(200, {'Content-Type': 'application/json'})
 
       const responseBody = { headers, method, url, body };
 
       res.write(JSON.stringify(response));
       return resolve(res.end());
-      // Note: the 2 lines above could be replaced with this next one:
-      // response.end(JSON.stringify(responseBody))
-
-      // END OF NEW STUFF
-
     });
   });
 

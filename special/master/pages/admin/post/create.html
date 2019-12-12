@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/tools/post/create/
+permalink: /admin/post/create/
 sitemap:
   include: false
 ---
@@ -359,7 +359,7 @@ sitemap:
         console.log($.ajax);
         Manager.dom().select('#post-creator-form').on('submit', function (event) {
           blockNavigation();
-          var endpoint = '{{ site.url }}/@reference/tools/post/create.json';
+          var endpoint = '{{ site.url }}/admin/post/create.json';
           var data = {};
           Manager.dom().select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
             var curField = Manager.dom().select(el);
@@ -519,7 +519,7 @@ sitemap:
         console.log('Launched stackedit');
         stackedit = new Stackedit({
           url: 'https://stackedit.io/app',
-          // url: '{{ site.url }}/@reference/tools/post/stackedit',
+          // url: '{{ site.url }}/admin/post/stackedit/',
         });
 
         turndownService = new TurndownService();

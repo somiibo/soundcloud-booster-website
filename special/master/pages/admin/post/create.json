@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/tools/post/create.json
+permalink: /admin/post/create.json
 ---
 {
   "test": "val"
