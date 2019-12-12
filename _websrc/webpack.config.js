@@ -11,6 +11,7 @@ const path = require('path');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const argv   = require('yargs').argv;
+
 module.exports = {
   mode: 'production',
   devtool: 'source-map',
