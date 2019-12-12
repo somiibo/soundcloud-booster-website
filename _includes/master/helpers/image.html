@@ -2,8 +2,8 @@
 {% raw %}
 <picture>
 {% endraw %}
-	{%- if "320, 640, 1024" contains include.max-width -%}
-		{% assign max_width = include.max-width | downcase %}
+	{%- if "320, 640, 1024" contains include.max-src-width -%}
+		{% assign max_width = include.max-src-width | downcase %}
 	{%- else -%}
 		{% assign max_width = false %}
 	{%- endif -%}
