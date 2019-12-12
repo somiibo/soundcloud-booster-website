@@ -36,6 +36,7 @@ gulp.task('browsersync', function () {
     },
     open: 'external',
     ghostMode: false,
+    // https: true, // some stuff fails if this is true (like service workers)
   }, function (error, instance) {
     cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
 
