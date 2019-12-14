@@ -45,6 +45,7 @@ gulp.task('jekyll-build', async function (done) {
     } catch (e) {
       console.error('Error updating build.json', e);
     }
+    console.log('----------build.json', fs.read('@output/build/build.json'));
 
     // Create CloudFlare Zone File
     try {
@@ -53,6 +54,7 @@ gulp.task('jekyll-build', async function (done) {
     } catch (e) {
       console.error('Error creating cloudflare-zone.txt', e);
     }
+    console.log('----------cloudflare-zone.txt', fs.read('@output/.temp/cloudflare-zone.txt'));
 
     if (argv.buildLocation == 'server') {
       // Create CloudFlare Zone File
