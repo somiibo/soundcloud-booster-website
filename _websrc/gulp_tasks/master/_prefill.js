@@ -175,7 +175,8 @@ gulp.task("_prefill", async () => {
         // fs.dir(`./@output/build`);
         fs.remove('./@output/build/build.json');
         await createFile('./@output/build/build.json', build_json);
-
+        console.log('--------_prefill list ./@output/build', fs.list('./@output/build'));
+        console.log('--------_prefill read ./@output/build/build.json', fs.read('./@output/build/build.json'));
       }
 
       // only create these files if NOT on template
