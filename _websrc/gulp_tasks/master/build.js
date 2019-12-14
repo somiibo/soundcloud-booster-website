@@ -46,6 +46,7 @@ gulp.task('jekyll-build', async function (done) {
       console.error('Error updating build.json', e);
     }
     console.log('----------build.json', fs.read('@output/build/build.json'));
+    console.log('----------list @output/build/', fs.list('@output/build/'));
 
     // Create CloudFlare Zone File
     try {
