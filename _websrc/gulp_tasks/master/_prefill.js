@@ -11,6 +11,7 @@ let isServer   = (argv.buildLocation == 'server');
 gulp.task("_prefill", async () => {
   await new Promise(async (resolve, reject) => {
     const gitignore_ph = await readFile('./_websrc/templates/master/gitignore/all');
+    const build_json = await readFile('./_websrc/templates/master/output/build/build.json');
     try {
 
       // all versions need these files to run properly
@@ -171,6 +172,10 @@ gulp.task("_prefill", async () => {
         fs.dir(`./special/app/pages`);
         fs.dir(`./special/app/search`);
 
+        // fs.dir(`./@output/build`);
+        fs.remove('./@output/build/build.json');
+        await createFile('./@output/build/build.json', build_json);
+
       }
 
       // only create these files if NOT on template
@@ -178,7 +183,7 @@ gulp.task("_prefill", async () => {
 
       }
 
-      // only create these files if IS ON template OR server
+      // only create these files if IS ON template and IS NOT server
       if (isTemplate && !isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', gitignore_ph);
@@ -193,6 +198,11 @@ gulp.task("_prefill", async () => {
         await createFile('./_posts/.gitignore', gitignore_ph);
         await createFile('./_authors/.gitignore', gitignore_ph);
       }
+
+      if (!isServer) {
+        await createFile('./@output/build/.gitignore', gitignore_ph);
+      }
+
       resolve();
     } catch (e) {
       reject(e)

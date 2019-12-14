@@ -38,7 +38,7 @@ Gemfile.lock
 gulpfile.js
 
 # Development
-/@output/regular/lighthouse-report.html
+/@output/lighthouse/lighthouse-report.html
 /@output/ngrok/
 
 # App files
