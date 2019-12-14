@@ -25,6 +25,8 @@ jobs:
         run: npm install
       - name: Run node build
         run: npm run build -- --buildLocation='server' --skipJekyll='true'
+      - name: Run gulp test
+        run: npm run cloudflare:purge
       - name: Push to gh-pages branch
         run: |
           export TZ=UTC date
