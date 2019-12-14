@@ -2,11 +2,10 @@ const argv        = require('yargs').argv;
 const browsersync = require('browser-sync').create();
 const config      = require('../../master.config.js');
 const cp          = require('child_process');
-// const cmd         = require('node-cmd');
-const fs          = require('fs-jetpack');
+const cmd         = require('node-cmd');
 const gulp        = require('gulp');
 let tools         = new (require('../../libraries/tools.js'));
-let Global        = require('../../libraries/global.js');
+
 let createPost;
 
 let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
@@ -16,10 +15,12 @@ let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.brow
  */
 // gulp.task('browsersync', ['jekyll-build'], function () {
 gulp.task('browsersync', async function () {
+  return await new Promise(async function(resolve, reject) {
+
     await tools.poll(function () {
-      console.log('browsersync polling Global.get(prefillStatus)....', Global.get('prefillStatus'));
-      return Global.get('prefillStatus') == 'done';
+      return global._prefillStatus == 'done';
     }, {timeout: 60000});
+
     // options: https://www.browsersync.io/docs/options
     browsersync.init({
       port: config.port,
@@ -45,8 +46,7 @@ gulp.task('browsersync', async function () {
       ghostMode: false,
       // https: true, // some stuff fails if this is true (like service workers)
     }, function (error, instance) {
-      // cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
-      fs.write('@output/.temp/_config_browsersync.yml', `url: ${instance.options.get('urls').get('external')}`)
+      cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
 
       // Launch ngrok if enabled
       if (!error && argv.ngrokOpen == 'true') {
@@ -62,12 +62,13 @@ gulp.task('browsersync', async function () {
           console.log('');
           console.log('\x1b[0m');
           // cmd.run(`mkdir -p @output/ngrok/ && echo '<meta http-equiv="Refresh" content="0; url=${url}" />' >@output/ngrok/index.html`);
-          Global.set('browserSyncStatus', 'done');
+          return resolve();
         })();
       } else {
-        Global.set('browserSyncStatus', 'done');
+        return resolve();
       }
     });
+  });
 });
 
 /**

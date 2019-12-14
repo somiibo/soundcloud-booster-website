@@ -8,7 +8,6 @@ const plumber        = require('gulp-plumber');
 const webpackStream  = require('webpack-stream');
 const webpack        = require('webpack');
 let tools            = new (require('../../libraries/tools.js'));
-let Global           = require('../../libraries/global.js');
 
 
 const entry = [];
@@ -24,16 +23,17 @@ config_webpack.watch = argv.watch;
 config_webpack.mode = argv.mode || config_webpack.mode;
 
 gulp.task('webpack', async function () {
-  await tools.poll(function () {
-    console.log('webpack polling Global.get(prefillStatus)....', Global.get('prefillStatus'));
-    return Global.get('prefillStatus') == 'done';
-  }, {timeout: 60000});
-  return gulp.src(entry)
-    .pipe(plumber())
-    .pipe(named())
-    .pipe(babel(config.babel))
-    .pipe(webpackStream(config_webpack, webpack))
-    .pipe(gulp.dest(config.assets + '/' + config.js.dest));
+  return await new Promise(async function(resolve, reject) {
+    await tools.poll(function () {
+      return global._prefillStatus == 'done';
+    }, {timeout: 60000});
+    return resolve(gulp.src(entry)
+      .pipe(plumber())
+      .pipe(named())
+      .pipe(babel(config.babel))
+      .pipe(webpackStream(config_webpack, webpack))
+      .pipe(gulp.dest(config.assets + '/' + config.js.dest)));
+  });
 });
 
 // For internal use only

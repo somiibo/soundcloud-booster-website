@@ -7,9 +7,11 @@ let config     = require('../../master.config.js');
 let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
 let isServer   = (argv.buildLocation == 'server');
 
+let Global = require('../../libraries/global.js');
 
 gulp.task("_prefill", async () => {
   await new Promise(async (resolve, reject) => {
+
     const gitignore_ph = await readFile('./_websrc/templates/master/gitignore/all');
     const build_json = await readFile('./_websrc/templates/master/output/build/build.json');
     try {
@@ -203,10 +205,10 @@ gulp.task("_prefill", async () => {
       if (!isServer) {
         await createFile('./@output/build/.gitignore', gitignore_ph);
       }
-
-      resolve();
+      Global.set('prefillStatus', 'done');
+      return resolve();
     } catch (e) {
-      reject(e)
+      return reject(e)
     }
 
   });
