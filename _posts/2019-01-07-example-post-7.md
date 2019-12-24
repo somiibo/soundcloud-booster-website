@@ -21,4 +21,4 @@ You can also...
 
 [Here is a regular link](https://itwcreativeworks.com) 
 [Here is a Google link](https://www.google.com/url?q=https://itwcreativeworks.com) 
-{%- include /master/helpers/image.html src="/assets/images/blog/posts/post-7/here-is-an-imagepng" alt="Here is an image" -%}
+{%- include /master/helpers/image.html src="/assets/images/blog/posts/post-7/here-is-an-imageundefined" alt="Here is an image" -%}
