@@ -273,6 +273,13 @@ settings:
 
         <div id="response" hidden>
           <div class="my-3">
+            <div class="alert alert-info" role="alert" hidden>
+              <h4 class="alert-heading">Waiting...</h4>
+              <p>Hold up</p>
+              <!-- <hr>
+              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
+              <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p> -->
+            </div>
             <div class="alert alert-success" role="alert" hidden>
               <h4 class="alert-heading">Well done!</h4>
               <p>Aww yeah, you successfully posted that amazing piece of work ;)</p>
@@ -291,7 +298,7 @@ settings:
         </div>
 
         <hr class="mb-4">
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Post!</button>
+        <button class="btn btn-primary btn-lg btn-block" id="post-submit-btn" type="submit">Post!</button>
       </form>
 
     </div>
@@ -441,6 +448,7 @@ settings:
 
           dom.select('#post-creator-form').on('submit', function (event) {
             blockNavigation();
+            displayWaiting();
             // var endpoint = '{{ site.url }}/admin/post/create.json';
             var endpoint = dom.select('#processingAddy').getValue();
             // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
@@ -509,7 +517,16 @@ settings:
 
           });
 
+          function displayWaiting() {
+            dom.select('#response .alert-info').show()
+            dom.select('#response').show()
+            dom.select('#post-submit-btn').setAttribute('disabled', true);
+
+          }
+
           function displayError(error) {
+            dom.select('#response .alert-info').hide()
+            dom.select('#post-submit-btn').removeAttribute('disabled');
             if (error) {
               dom.select('#response').show()
               dom.select('#response .alert-success').hide()
