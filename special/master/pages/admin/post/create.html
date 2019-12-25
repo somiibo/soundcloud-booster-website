@@ -443,7 +443,7 @@ settings:
             blockNavigation();
             // var endpoint = '{{ site.url }}/admin/post/create.json';
             var endpoint = dom.select('#processingAddy').getValue();
-            endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
+            // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
 
             var token = '';
             firebase.auth().currentUser.getIdToken(true)
