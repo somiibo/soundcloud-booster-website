@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/examples/auth-and-notifications/
+permalink: /@reference/tests/firestore-rules/
 settings:
   manager-configuration: "
     {
@@ -76,7 +76,7 @@ settings:
   <body class="">
     <div class="form-signin text-center">
       <form class="auth-signin-form auth-signup-form" onsubmit="return false;">
-        <h1 class="h3 mb-3 font-weight-normal">.auth() Library</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Firestore Rules Testing Suite</h1>
 
         <div class="auth-signedin-false-element" hidden>
           <div class="mb-3">
@@ -85,7 +85,7 @@ settings:
 
           <div class="form-group">
             <label for="email-input" class="sr-only">Email</label>
-            <input type="text" id="email-input" class="form-control auth-email-input" placeholder="Email" required autofocus autocomplete="email">
+            <input type="email" id="email-input" class="form-control auth-email-input" placeholder="Email" required autofocus autocomplete="email">
           </div>
 
           <div class="form-group">
@@ -136,14 +136,25 @@ settings:
 
       <form class="" onsubmit="return false;">
         <div class="">
-          <h1 class="h3 my-3 font-weight-normal">.notifications() Library</h1>
-          <h5 class="my-3">Subscribing</h5>
-          <button class="btn btn-lg btn-primary btn-block" id="subscribe-check" type="button" name="button">.isSubscribed()</button>
-
-          <button class="btn btn-lg btn-primary btn-block" id="subscribe-real" type="button" name="button">.subscribe()</button>
-          <button class="btn btn-lg btn-primary btn-block" id="subscribe-fake" type="button" name="button">Subscribe fake</button>
-          <h5 class="my-3">Sending</h5>
-          <button class="btn btn-lg btn-primary btn-block" id="send" type="button" name="button">Send</button>
+          <h1 class="h3 my-3 font-weight-normal">Request Builder</h1>
+          <div class="form-group">
+            <label for="path" class="">Document Path</label>
+            <input type="text" id="path" class="form-control" placeholder="users/test.regular@test.com" required autofocus value="users/test.regular@test.com">
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <h5 class="my-3">Get Data</h5>
+              <button class="btn btn-lg btn-primary btn-block" id="dataGet" type="button" name="button">Run .get()</button>
+            </div>
+            <div class="col-6">
+              <h5 class="my-3">Set Data</h5>
+              <div class="form-group">
+                <label for="body" class="">Document Path</label>
+                <textarea type="text" id="body" class="form-control" placeholder="{}" required autofocus>{}</textarea>
+              </div>
+              <button class="btn btn-lg btn-primary btn-block" id="dataSet" type="button" name="button">Run .set()</button>
+            </div>
+          </div>
 
           <div class="card my-3" style="">
             <div class="card-body">
@@ -159,21 +170,38 @@ settings:
     </div>
 
     <!-- Exploring the library -->
-    <script type="text/javascript">
-
+    <!-- <script type="text/javascript">
       Manager.ready(function() {
-        Manager.log('notification-subscription.js fired --> Manager.ready()', firebase);
 
-        // Inner event listener
-        Manager.auth().ready(function() {
-          console.log('.auth().ready()');
-          console.log('.isAuthenticated():', Manager.auth().isAuthenticated());
-          console.log('.getUser(): ', Manager.auth().getUser());
-          firebase.auth().onAuthStateChanged(function(user) {
-            console.log('.onAuthStateChanged():', user);
-          })
-        });
+        function display(message) {
+          Manager.log(message);
+          Manager.dom().select('#result').setInnerHTML(message);
+        }
 
+        Manager.auth().ready(function () {
+          console.log('AUTH READY');
+          var db = firebase.firestore();
+          var docRef = db.collection("users").doc("qweqwe14@gmail.com");
+
+          docRef.get().then(function(doc) {
+              if (doc.exists) {
+                  console.log("Document data:", doc.data());
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No such document!");
+              }
+          }).catch(function(error) {
+              console.log("Error getting document:", error);
+          });
+
+        })
+
+
+      });
+
+    </script> -->
+    <script type="text/javascript">
+      Manager.ready(function() {
 
         function display(message) {
           Manager.log(message);
@@ -181,84 +209,40 @@ settings:
         }
 
         Manager.dom().select('body').on('click', function(event) {
-          if (event.target.matches('#subscribe-fake')) {
-            var tempID = Math.floor(Math.random() * 10000) + 1;
-            firebase.firestore().doc('notifications/subscriptions/all/' + tempID)
-              .set(
-              {
-                meta: {
-                  dateSubscribed: {
-                    timestamp: '',
-                    timestampUNIX: new Date().getTime(),
-                  },
-                },
-                token: tempID.toString(),
-                linked: {
-                  user: {
-                    timestampLastLinked: '',
-                    data: {
-                      meta: {
-                        uid: ''
-                      }
-                    }
-                  }
-                },
-                tags: ['general']
-              }
-              )
-              .then(function(data) {
-                display('Successfully set fake subscription!', data)
-              })
-              .catch(function(e) {
-                display('Failed to set Firestore doc: ' + JSON.stringify(e, undefined, 2))
-              });
-          } else if (event.target.matches('#subscribe-real')) {
-            Manager.notifications().subscribe()
-              .then(function(response) {
-                display('Success. Was subscribe performed? = ' + JSON.stringify(response, undefined, 2))
-              })
-              .catch(function(e) {
-                display('Failed to subscribe: ' + JSON.stringify(e, undefined, 2))
-              })
+          display('wating...')
+          var path = Manager.dom().select('#path').getValue();
+          var reqBody = Manager.dom().select('#body').getValue();
+          reqBody = JSON.parse((reqBody));
+          console.log('Writing');
+          console.log(path);
+          console.log(reqBody);
 
-            } else if (event.target.matches('#subscribe-check')) {
-              // Manager.notifications().checkSubscription()
-              //   .then(function(response) {
-              //     Manager.dom().select('#result').setInnerHTML('Subscription status = ' + JSON.stringify(response, undefined, 2))
-              //   })
-              //   .catch(function(e) {
-              //     Manager.dom().select('#result').setInnerHTML('Failed to check subscription status: ' + JSON.stringify(e, undefined, 2))
-              //   })
-              Manager.notifications().isSubscribed()
-                .then(function(response) {
-                  display('isSubscribed = ' + JSON.stringify(response, undefined, 2))
-                })
-                .catch(function(e) {
-                  display('Failed to check subscription status: ' + JSON.stringify(e, undefined, 2))
-                })
+          if (event.target.matches('#dataGet')) {
+            firebase.firestore().doc(path)
+            .get()
+            .then(function (doc) {
+              display('SUCCESS: \n' + JSON.stringify(doc.data()))
+            })
+            .catch(function (error) {
+              display('FAILED: \n' + JSON.stringify(error) )
+            })
 
-            } else if (event.target.matches('#send')) {
-              firebase.firestore().collection('/notifications/processing/all')
-                .add(
-                  {
-                    payload: {
-                      icon: '{{ site.brand.logo-image }}',
-                      click_action: '{{ site.url }}',
-                      title: 'Test title',
-                      body: 'Test body'
-                    },
-                    meta: {
-                      date: '2019-01-01'
-                    }
-                  }
-                )
-                .then(function(data) {
-                  display('Successfully sent notification!', data);
-                })
-                .catch(function(e) {
-                  display('Failed to set Firestore doc: ' + e);
-                });
+          } else if (event.target.matches('#dataSet')) {
+            firebase.firestore().doc(path)
+            .set(reqBody,
+            {
+              merge: true
             }
+
+            )
+            .then(function (doc) {
+              display('SUCCESS:')
+            })
+            .catch(function (error) {
+              display('FAILED: \n' + JSON.stringify(error) )
+            })
+
+          }
 
         })
       });

@@ -1,5 +1,5 @@
-Manager = new (require('web-manager'));
-// Manager = new (require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/web-manager'));
+// Manager = new (require('web-manager'));
+Manager = new (require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/web-manager'));
 
 Manager.init(Configuration, function() {
   Manager.log('Init main.js');
@@ -38,7 +38,7 @@ Manager.init(Configuration, function() {
     });
     if (pass) {
       Manager.ajax().request({
-        type: 'POST',
+        method: 'POST',
         url: dom.select(idSelector).getAttribute('action'),
         data: formData,
       })

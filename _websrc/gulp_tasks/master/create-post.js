@@ -1,33 +1,13 @@
-const config   = require('../../master.config.js');
-const gulp     = require('gulp');
-const argv     = require('yargs').argv;
-const querystring     = require('querystring');
+const config      = require('../../master.config.js');
+const gulp        = require('gulp');
+const argv        = require('yargs').argv;
+const querystring = require('querystring');
 const request     = require('request');
+const Poster      = require('ultimate-jekyll-poster');
+// const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
 
 // const jsonminify = require("jsonminify");
 const fs = require("fs-jetpack");
-
-let template =
-`
----
-### ALL PAGES ###
-layout: {{layout}}
-
-### POST ONLY ###
-post:
-  title: {{title}}
-  excerpt: {{excerpt}}
-  description: {{description}}
-  author: {{author}}
-  id: {{id}}
-  tags: {{tags}}
-  categories: {{categories}}
-  affiliate-search-term: {{affiliate}}
----
-{{body}}
-`
-
-let imgTemplate = `{%- include /master/helpers/image.html src="{{url}}" alt="{{alt}}" -%}`;
 
 function Post() {
 
@@ -54,7 +34,30 @@ Post.prototype.create = async function (options) {
     });
     req.on('end', async function() {
       body = body.join('');
-      await createPost(JSON.parse(body));
+      let poster = new Poster({
+        environment: 'development'
+      });
+
+      // Save to disk OR commit
+      // poster.onDownload = async function (req, filepath, filename, ext) {
+      poster.onDownload = async function (meta) {
+        return new Promise(async function(resolve, reject) {
+          // let path = `${filepath}${filename}.${ext}`;
+          console.log('onDownload', meta.tempPath);
+          // req.pipe(fs.createWriteStream(path));
+          // req.pipe(poster.createWriteStream(path));
+          await poster.saveImage(meta.finalPath)
+          console.log('...done');
+          resolve();
+        });
+      }
+      let finalPost = await poster.create(JSON.parse(body));
+
+      // Save post OR commit
+      // fs.write(finalPost.path, finalPost.content)
+      // console.log('-----1');
+      poster.write(finalPost.path, finalPost.content);
+      // console.log('-----2');
 
       res.on('error', (err) => {
         console.error(err);
@@ -72,116 +75,10 @@ Post.prototype.create = async function (options) {
 
 };
 
-function createPost(body) {
-  return new Promise(async function(resolve, reject) {
-    // body = querystring.parse(body);
-    let keys = Object.keys(body);
-    let images = [];
-    let imagesMatrix = [];
-    let links = [];
-    let linksMatrix = [];
-    let content = template;
-    let imageSavePath = `./assets/_src/images/blog/posts/post-${body.id}/`;
-    let imageSavePathReg = `/assets/images/blog/posts/post-${body.id}/`;
-    body.replaceImagesIncludeTag = body.replaceImagesIncludeTag || imgTemplate;
-    for (var i = 0; i < keys.length; i++) {
-      // console.log('-------->replacing',[keys[i]], 'with', body[keys[i]]);
-      content = content.replace(`{{${[keys[i]]}}}`, body[keys[i]]);
-    }
-    images = content.match(/(?:!\[(.*?)\]\((.*?)\))/img) || [];
-    links = content.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
-    // Images
-    for (var i = 0; i < images.length; i++) {
-      let alt = ((images[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
-      let title = ((images[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '');
-      let link = title.replace(/\s.*?"(.*?)"\s*/g,'');
-      let different = (title != link);
-      // let newLink = (alt.replace(/\s/g, '-') + '.jpg').toLowerCase();
-      let newLink = (alt.trim().replace(/\s/g, '-') + '').toLowerCase();
-      imagesMatrix.push({
-        alt: alt,
-        link: link,
-        newLink: newLink,
-      })
-
-      let curSavePath = `${imageSavePath}${newLink}`;
-      await download(link, `${imageSavePath}${newLink}`)
-      .then(function (result) {
-        console.log('Saved image to ', curSavePath, result);
-        let tempPrePath = (body.includeLocalImagePath ? imageSavePathReg : '');
-        let lookForLink = different ? title : link;
-        if (body.enableReplaceImagesMarkdown) {
-          content = content.replace(`![${alt}](${lookForLink})`, body.replaceImagesIncludeTag.replace('{{url}}', tempPrePath + newLink + result.extension).replace('{{alt}}', alt))
-        } else {
-          content = content.replace(`![${alt}](${lookForLink})`, `![${alt}](${tempPrePath + newLink + result.extension})`)
-        }
-      })
-    }
-    // Links
-    for (var i = 0; i < links.length; i++) {
-      if (content.indexOf('!' + links[i]) == -1) {
-        let alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
-        let link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
-        let newLink = false;
-        let needsReplacing = link.indexOf('url?q=') != -1;
-        if (needsReplacing) {
-          newLink = (querystring.parse(link.split('?')[1]).q)
-        }
-        linksMatrix.push({
-          alt: alt,
-          link: link,
-          newLink: newLink,
-        });
-        if (needsReplacing) {
-          content = content.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
-        }
-      }
-    }
-    console.log('imagesMatrix', imagesMatrix);
-    console.log('linksMatrix', linksMatrix);
-    console.log('final content', content);
-
-    // Trim and add final line at bottom
-    content = `${content.trim()}\n`;
-
-    // Save post
-    let postPath = `${body.path}/${body.date}-${body.url}.md`.replace(/\/\//g, '/');
-    console.log('Saving to....', postPath);
-    fs.write(postPath, content)
-
-    resolve();
-  });
-}
-
-
-var download = function(uri, filename, callback){
-  return new Promise(function(resolve, reject) {
-    let meta = {};
-    request.head(uri, function(err, res, body){
-      meta['content-type'] = res.headers['content-type'];
-      meta['content-length'] = res.headers['content-length'];
-      meta.extension = '';
-      if (meta['content-type'].indexOf('png') != -1) {
-        meta.extension = '.png'
-      } else if (meta['content-type'].indexOf('jpg') != -1) {
-        meta.extension = '.jpg'
-      } else if (meta['content-type'].indexOf('jpeg') != -1) {
-        // meta.extension = '.jpeg'
-        meta.extension = '.jpg'
-      }
-
-      let dir = filename.split('/');
-      dir.pop();
-      dir = dir.join('/');
-      fs.dir(dir);
-      request(uri).pipe(fs.createWriteStream(filename + meta.extension)).on('close', function () {
-        // callback(meta);
-        resolve(meta);
-      });
-    });
-  });;
-};
-
-
-
 module.exports = Post;
+
+
+
+// console.log('Type', );
+// console.log('saving to', filename);
+// req.pipe(fs.createWriteStream(filename + '.jpg'));

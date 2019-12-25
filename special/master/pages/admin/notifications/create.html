@@ -3,6 +3,27 @@
 permalink: /admin/notifications/create/
 sitemap:
   include: false
+
+### REGULAR PAGES ###
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required'
+      }
+    }
+  "
 ---
 <!doctype html>
 <html lang="en">
@@ -72,8 +93,6 @@ sitemap:
           <input type="text" class="form-control" id="title" name="title" placeholder="Best title here">
           <small class="text-muted">The title of the post</small>
         </div>
-
-
 
         <div class="row">
           <div class="col-md-6 mb-3">
@@ -228,7 +247,7 @@ sitemap:
 
     </div>
     <div class="col-lg-8 offset-lg-2">
-    <div>
+    </div>
   </div>
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
@@ -368,7 +387,7 @@ sitemap:
           console.log('#post-creator-form', endpoint, data);
 
           Manager.ajax().request({
-            type: 'POST',
+            method: 'POST',
             url: endpoint,
             data: data,
           })
@@ -409,7 +428,7 @@ sitemap:
           console.log('#google-doc-form', formData);
 
           Manager.ajax().request({
-            type: 'GET',
+            method: 'GET',
             url: 'https://docs.google.com/document/d/e/2PACX-1vRvfKsOYUZW0uhK6iOy95P4L-_n0FMk2I9jKTI9M0rK1EXVIuaUd7jTQoIvTuoZ36aTm-gfKkRGbamc/pub',
             data: {},
           })

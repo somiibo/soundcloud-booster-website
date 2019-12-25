@@ -25,7 +25,7 @@ config_webpack.mode = argv.mode || config_webpack.mode;
 
 gulp.task('webpack', async function () {
   await tools.poll(function () {
-    console.log('webpack polling Global.get(prefillStatus)....', Global.get('prefillStatus'));
+    // console.log('webpack polling Global.get(prefillStatus)....', Global.get('prefillStatus'));
     return Global.get('prefillStatus') == 'done';
   }, {timeout: 60000});
   return gulp.src(entry)

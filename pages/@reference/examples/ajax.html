@@ -100,7 +100,7 @@ permalink: /@reference/examples/ajax/
             console.log('---click 2');
             Manager.dom().select('#result').setInnerHTML('Sending request...'); // Set setInnerHTML
             Manager.ajax().request({
-              type: 'POST',
+              method: 'POST',
               url: Manager.dom().select('#address').getValue(),
               // url: 'http://localhost:5001/itw-creative-works/us-central1/wrapper_sendgrid',
               // contentType: 'application/json', // application/x-www-form-urlencoded | application/json

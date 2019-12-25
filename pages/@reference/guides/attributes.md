@@ -18,7 +18,8 @@ permalink: /@reference/guides/attributes/
 ## .auth-signup-email-btn
 ## .auth-signout-all-btn
 ## .auth-forgot-email-btn
-## .auth-subscribe-push-notifications-btn
+## .auth-subscribe-notifications-btn
+  * Automatically calls `Manager.notifications().subscribe();`.
 
 ## .auth-email-element
 ## .auth-name-element

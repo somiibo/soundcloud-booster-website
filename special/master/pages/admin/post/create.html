@@ -3,6 +3,32 @@
 permalink: /admin/post/create/
 sitemap:
   include: false
+
+### REGULAR PAGES ###
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+
 ---
 <!doctype html>
 <html lang="en">
@@ -65,10 +91,7 @@ sitemap:
   <div class="row loaded-true" hidden>
     <div class="col-lg-8 offset-lg-2">
       <h4 class="mb-3">Post details</h4>
-      <div id="child-test">
-        <div id="child-1">child 1</div>
-        <div id="child-2">child 2</div>
-      </div>
+
       <form class="" onsubmit="return false;" id="post-creator-form">
 
         <!-- <div class="mb-3">
@@ -109,7 +132,7 @@ sitemap:
 
         <div class="mb-3">
           <label for="path">Layout <span class="text-muted"></span></label>
-          <input type="text" class="form-control" id="layout" name="layout" placeholder="master/blog/post" value="master/blog/post">
+          <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
           <small class="text-muted">Usually <code class="highlighter-rouge">master/blog/post</code> or <code class="highlighter-rouge">app/blog/post</code></small>
         </div>
 
@@ -175,9 +198,9 @@ sitemap:
         </div>
 
         <div class="mb-3">
-          <label for="headerImage">Header Image URL</label>
-          <input type="text" class="form-control" id="headerImage" name="headerImage" placeholder="https://unsplash.com/your-image" value="" required>
-          <small class="text-muted">Image preview of the post</small>
+          <label for="headerImageURL">Header Image URL</label>
+          <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image" value="" required>
+          <small class="text-muted">Image preview of the post. Will be named the same as the title of the post.</small>
         </div>
 
         <div class="mb-3"></div>
@@ -236,6 +259,16 @@ sitemap:
             <input type="text" class="form-control" id="path" name="path" placeholder="./_posts/" value="./_posts/">
             <small class="text-muted">The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code></small>
           </div>
+          <div class="col-md-12 mb-3">
+            <label for="author">Processing Address <span class="text-muted"></span></label>
+            <select class="custom-select" id="processingAddy" name="processingAddy" required>
+              <option id="processingAddy_none" value="">Select an address</option>
+              <option id="processingAddy_dev" value="">Development</option>
+              <option id="processingAddy_prod" value="">Production</option>
+              <option id="processingAddy_prodDev" value="">Production (dev)</option>
+            </select>
+            <small class="text-muted">What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.</small>
+          </div>
         </div>
 
         <div id="response" hidden>
@@ -263,7 +296,7 @@ sitemap:
 
     </div>
     <div class="col-lg-8 offset-lg-2">
-    <div>
+    </div>
   </div>
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
@@ -375,132 +408,202 @@ sitemap:
       var turndownService;
       var dom;
 
+      var buildFile = {};
+
       Manager.ready(function() {
-        dom = Manager.dom();
-        blockNavigation();
-        setupStackedit();
-        setupForm();
-        countChars();
-        // dom.select('#body').setValue()
-        dom.select('body').on('click', function(event) {
-          if (event.target.matches('#stackedit-edit')) {
-            // Open the iframe
-            stackedit.openFile({
-              name: 'Filename', // with an optional filename
-              content: {
-                text: stackEditElement.value // and the Markdown content.
-              }
-            });
-          }
+        Manager.ajax().request({
+          url: '{{ site.url }}/@output/build/build.json',
+          method: 'GET',
         })
-        dom.select('body').on('keyup', function (event) {
-          countChars();
-        })
-
-        dom.select('#post-creator-form').on('submit', function (event) {
+        .success(function (one, two, build) {
+          buildFile = build;
+          dom = Manager.dom();
           blockNavigation();
-          var endpoint = '{{ site.url }}/admin/post/create.json';
-          var data = {};
-          dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
-            var curField = dom.select(el);
-            data[curField.getAttribute('name')] = curField.getValue();
-          })
-          console.log('#post-creator-form', endpoint, data);
-
-          Manager.ajax().request({
-            type: 'POST',
-            url: endpoint,
-            data: data,
-          })
-          .success(function (one,two,three) {
-            console.log(one,two,three);
-            dom.select('#response').show()
-            dom.select('#response .alert-success').show()
-            dom.select('#response .alert-danger').hide()
-
-            window.refreshTimer = 2;
-            allowLeave = true;
-            setInterval(function () {
-              console.log('TIME...', window.refreshTimer);
-              dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
-              window.refreshTimer--;
-              if (window.refreshTimer <= 0) {
-                window.location.href = window.location.href;
-              }
-            }, 1000);
-          })
-          .error(function (response, status, error) {
-            console.error(response, status, error);
-            dom.select('#response').show()
-            dom.select('#response .alert-success').hide()
-            dom.select('#response .alert-danger').show()
-            dom.select('#main-response-code').setInnerHTML(error)
-          })
-
-        });
-
-        dom.select('#google-doc-form').on('submit', function (event) {
-          var formData = {};
-          dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
-            var curField = dom.select(el);
-            formData[curField.getAttribute('name')] = curField.getValue();
-          })
-
-          console.log('#google-doc-form', formData);
-
-          Manager.ajax().request({
-            type: 'GET',
-            url: formData.importUrl,
-            data: {},
-          })
-          .success(function (one,two,data) {
-            //temp
-            // var query = query || {};
-
-            // Clean
-            var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
-            body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
-            body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
-            body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
-
-            // Fix no spaces with links
-            // body = body.replace(/><a/img, '> <a');
-            // body = body.replace(/><\/a/img, '> </a');
-            // body = body.replace(/<\/a></img, ' </a><');
-
-            // https://github.com/domchristie/turndown
-            var markdown = turndownService.turndown(body);
-
-            // Fix no spaces with links
-            markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
-            markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
-
-            // Fixes
-            markdown = markdown.replace(/ \. /img, '. '); // fix periods
-            markdown = markdown.replace(/ \, /img, ', '); // fix periods
-            markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
-            markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
-
-
-            // Clear promos stuff
-            markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
-
-            // Remove hr breaks
-            if (formData.replaceHeadings) {
-              markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
-              markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
+          setupStackedit();
+          setupForm();
+          countChars();
+          // dom.select('#body').setValue()
+          dom.select('body').on('click', function(event) {
+            if (event.target.matches('#stackedit-edit')) {
+              // Open the iframe
+              stackedit.openFile({
+                name: 'Filename', // with an optional filename
+                content: {
+                  text: stackEditElement.value // and the Markdown content.
+                }
+              });
             }
+          });
 
-            dom.select('#body').setValue(markdown);
-            dom.select('#google-doc-error').hide();
+          dom.select('body').on('keyup', function (event) {
+            countChars();
+          });
 
-            $('#importGoogleDoc').modal('toggle');
+          dom.select('#post-creator-form').on('submit', function (event) {
+            blockNavigation();
+            // var endpoint = '{{ site.url }}/admin/post/create.json';
+            var endpoint = dom.select('#processingAddy').getValue();
+            endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
+
+            var token = '';
+            firebase.auth().currentUser.getIdToken(true)
+            .then(function(token) {
+              token = token;
+
+              var data = {};
+              dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
+                var curField = dom.select(el);
+                data[curField.getAttribute('name')] = curField.getValue();
+              });
+              data.backendManagerKey = token;
+
+              console.log('#post-creator-form', endpoint, data);
+
+              // Check for invalid things
+              if (data.body.indexOf('[](') > -1) {
+                var bodyLines = data.body.split('\n');
+                var lineNum = 0;
+                var colNum = 0;
+                for (var i = 0; i < bodyLines.length; i++) {
+                  var tempIndex = bodyLines[i].indexOf('[](');
+                  if (tempIndex > -1) {
+                    lineNum = i + 1;
+                    colNum = tempIndex;
+                    break;
+                  }
+                }
+                displayError('There is an empty link tag or image tag at line ' + lineNum + ', column ' + colNum);
+                return;
+              }
+
+              Manager.ajax().request({
+                method: 'POST',
+                url: endpoint,
+                data: data,
+              })
+              .success(function (one,two,three) {
+                console.log(one,two,three);
+                displayError();
+
+                window.refreshTimer = 2;
+                allowLeave = true;
+                setInterval(function () {
+                  console.log('TIME...', window.refreshTimer);
+                  dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
+                  window.refreshTimer--;
+                  if (window.refreshTimer <= 0) {
+                    window.location.href = window.location.href;
+                  }
+                }, 1000);
+              })
+              .error(function (response, status, error) {
+                console.error(response, status, error);
+                displayError(error);
+              })
+
+            })
+            .catch(function(error) {
+              display('Failed to get firebase token: ' + error);
+            })
+
+
+          });
+
+          function displayError(error) {
+            if (error) {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').hide()
+              dom.select('#response .alert-danger').show()
+              dom.select('#main-response-code').setInnerHTML(error)
+            } else {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').show()
+              dom.select('#response .alert-danger').hide()
+            }
+          }
+
+          dom.select('#google-doc-form').on('submit', function (event) {
+            var formData = {};
+            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
+              var curField = dom.select(el);
+              formData[curField.getAttribute('name')] = curField.getValue();
+            })
+
+            console.log('#google-doc-form', formData);
+
+            Manager.ajax().request({
+              method: 'GET',
+              url: formData.importUrl,
+              data: {},
+            })
+            .success(function (one,two,data) {
+              //temp
+              // var query = query || {};
+
+              // Clean
+              var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+              body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+              body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
+              body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+
+              // Fix no spaces with links
+              // body = body.replace(/><a/img, '> <a');
+              // body = body.replace(/><\/a/img, '> </a');
+              // body = body.replace(/<\/a></img, ' </a><');
+
+              // https://github.com/domchristie/turndown
+              var markdown = turndownService.turndown(body);
+
+              // Fix no spaces with links
+              markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
+              markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
+
+              // Fixes
+              markdown = markdown.replace(/ \. /img, '. '); // fix periods
+              markdown = markdown.replace(/ \, /img, ', '); // fix periods
+              markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
+              markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
+
+
+              // Clear promos stuff
+              markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
+
+              // Remove hr breaks
+              if (formData.replaceHeadings) {
+                markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
+                markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
+              }
+
+              var links = [];
+              links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
+              // Fix Google Links
+              for (var i = 0; i < links.length; i++) {
+                if (markdown.indexOf('!' + links[i]) == -1) {
+                  var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
+                  var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
+                  var newLink = false;
+                  var needsReplacing = link.indexOf('url?q=') != -1;
+                  if (needsReplacing) {
+                    newLink = Manager.query().create(link).get('q');
+                    console.log('Extracted link:', newLink);
+                  }
+                  if (needsReplacing) {
+                    markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
+                  }
+                }
+              }
+
+              dom.select('#body').setValue(markdown);
+              dom.select('#google-doc-error').hide();
+
+              $('#importGoogleDoc').modal('toggle');
+            })
+            .error(function (one,two,error) {
+              dom.select('#google-doc-error').show();
+              dom.select('#google-response-code').setInnerHTML(error);
+            })
+
           })
-          .error(function (one,two,error) {
-            dom.select('#google-doc-error').show();
-            dom.select('#google-response-code').setInnerHTML(error);
-          })
-
         })
 
       }, {
@@ -538,6 +641,19 @@ sitemap:
         dom.select('#categories').setValue(fields.categories.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
         dom.select('#excerpt').setValue(fields.excerpt);
         dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
+
+        // special
+        var serverDev = '{{ site.url }}/admin/post/create.json';
+        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
+        var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
+        var env = buildFile.environment;
+        dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
+        dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
+        dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
+        dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('name', serverProdDev);
+        if (Manager.properties.meta.environment != 'development') {
+          dom.select('#processingAddy_prodDev').hide();
+        }
 
         dom.select('#body').setValue("## This is a post in markdown! \nClick 'edit' to start authoring your post. \n\nYou can also... \n- Edit in StackEdit \n- Import from Google Docs \n\n[Here is a regular link](https://itwcreativeworks.com) \n[Here is a Google link](https://www.google.com/url?q=https://itwcreativeworks.com) \n![Here is an image](https://via.placeholder.com/150)");
 
@@ -583,7 +699,11 @@ sitemap:
 
     <!-- https://benweet.github.io/stackedit.js/ -->
     <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script>
-    <script src="https://unpkg.com/turndown/dist/turndown.js" async></script>
+    <!-- <script src="https://unpkg.com/turndown/dist/turndown.js" async></script> -->
+    <script src="/special/master/pages/admin/post/vendor/turndown.js" type="text/javascript"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/turndown@5.0.3/lib/turndown.cjs.min.js" async></script> -->
+
 
 
     {%- include /master/global/foot.html -%}

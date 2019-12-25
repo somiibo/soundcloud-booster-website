@@ -1,6 +1,4 @@
 const gulp     = require('gulp');
-const cmd      = require('node-cmd');
-// const fs       = require('fs');
 const fs       = require('fs-jetpack');
 const argv     = require('yargs').argv;
 let config     = require('../../master.config.js');
@@ -174,11 +172,9 @@ gulp.task("_prefill", async () => {
         fs.dir(`./special/app/pages`);
         fs.dir(`./special/app/search`);
 
-        // fs.dir(`./@output/build`);
+        fs.dir('./@output/lighthouse');
         fs.remove('./@output/build/build.json');
         await createFile('./@output/build/build.json', build_json);
-        console.log('--------_prefill list ./@output/build', fs.list('./@output/build'));
-        console.log('--------_prefill read ./@output/build/build.json', fs.read('./@output/build/build.json'));
       }
 
       // only create these files if NOT on template

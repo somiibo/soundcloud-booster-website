@@ -6,7 +6,22 @@ permalink: /@reference/guides/firebase-users/
 # Basic Firebase User Skeleton
 ```js
 {
+  person: {
+    firstName: 'Ian',
+    lastName: 'Wieds',
+    birthday: {
+      timestamp: '',
+      timestampUNIX: 0
+    }
+  },
+  verifications: {
+    email: true
+  },
   activity: {
+    created: {
+      timestamp: '2019-04-29T01:57:47Z',
+      timestampUNIX: 1556503067000,
+    },
     lastActivity: {
       timestamp: '2019-04-29T01:57:47Z',
       timestampUNIX: 1556503067000,
@@ -16,7 +31,7 @@ permalink: /@reference/guides/firebase-users/
     uid: '',
     email: '',
   },
-  permissions: {
+  roles: {
     admin: false,
     developer: false,
     betaTester: false,
@@ -28,10 +43,6 @@ permalink: /@reference/guides/firebase-users/
     },
     id: 'intro', // intro | basic | advanced... (intro is default value)
     enterprise: {
-      // expires: {
-      //   timestamp: '2111-01-01T00:00:00Z',
-      //   timestampUNIX: 1556503067000,
-      // },
       limits: {
         // ...
         // accounts: 0,
@@ -40,7 +51,7 @@ permalink: /@reference/guides/firebase-users/
     payment: {
       method: '', // paypal | stripe | chargebee, etc
       data: {
-        // Data from payment processor
+        // Data from payment processor like
       }
     }
 
@@ -63,6 +74,13 @@ permalink: /@reference/guides/firebase-users/
       timestampUNIX: 1556503067000,
     },
   },
-
+  view: {
+    key: ',' // if they have this, they can view the doc temporarily without being logged in
+    expires: {
+      timestamp: '2111-01-01T00:00:00Z',
+      timestampUNIX: 1556503067000,
+    },    
+  },
+  // temp: false,
 }
 ```

@@ -1,8 +1,7 @@
 const argv   = require('yargs').argv;
 let config = require('../../master.config.js');
 let appGulpTasks = require('../../app.config.js');
-const cmd      = require('node-cmd');
-let yaml = require('js-yaml');
+// let yaml = require('js-yaml');
 let fs = require('fs-jetpack');
 let tools = new (require('../../libraries/tools.js'));
 let Global = require('../../libraries/global.js');
@@ -29,7 +28,7 @@ gulp.task('jekyll-build', async function (done) {
   await new Promise(async function(resolve, reject) {
 
     await tools.poll(function () {
-      console.log('jekyll-build polling Global.get(prefillStatus)', Global.get('prefillStatus'));
+      // console.log('jekyll-build polling Global.get(prefillStatus)', Global.get('prefillStatus'));
       return Global.get('prefillStatus') == 'done';
     }, {timeout: 60000});
 
@@ -41,7 +40,7 @@ gulp.task('jekyll-build', async function (done) {
       jekyllConfig += config.jekyll.config.production ? ',' + config.jekyll.config.production : '';
     } else {
       await tools.poll(function () {
-        console.log('jekyll-build polling Global.get(browserSyncStatus)....', Global.get('browserSyncStatus'));
+        // console.log('jekyll-build polling Global.get(browserSyncStatus)....', Global.get('browserSyncStatus'));
         return Global.get('browserSyncStatus') == 'done';
       }, {timeout: 60000});
       jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
@@ -53,22 +52,30 @@ gulp.task('jekyll-build', async function (done) {
       let build = JSON.parse(fs.read('@output/build/build.json'));
       build['npm-build'].timestamp_utc = now({offset: 0});
       build['npm-build'].timestamp_pst = now({offset: -7});
+
+      let info = await getGitInfo();
+
+      build['repo'].user = info.user;
+      build['repo'].name = info.name;
+
+      build['environment'] = argv.jekyllEnv == 'production' ? 'production' : 'development';
+
       build.packages['web-manager'] = require('web-manager/package.json').version;
       fs.write('@output/build/build.json', JSON.stringify(build, null, 2));
     } catch (e) {
       console.error('Error updating build.json', e);
     }
-    console.log('----------build.json', fs.read('@output/build/build.json'));
-    console.log('----------list @output/build/', fs.list('@output/build/'));
+    // console.log('----------build.json', fs.read('@output/build/build.json'));
+    // console.log('----------list @output/build/', fs.list('@output/build/'));
 
     // Create CloudFlare Zone File
-    try {
-      let doc = yaml.safeLoad(fs.read('_config.yml'));
-      fs.write('@output/.temp/cloudflare-zone.txt', doc.cloudflare.zone);
-    } catch (e) {
-      console.error('Error creating cloudflare-zone.txt', e);
-    }
-    console.log('----------cloudflare-zone.txt', fs.read('@output/.temp/cloudflare-zone.txt'));
+    // try {
+    //   let doc = yaml.safeLoad(fs.read('_config.yml'));
+    //   fs.write('@output/.temp/cloudflare-zone.txt', doc.cloudflare.zone);
+    // } catch (e) {
+    //   console.error('Error creating cloudflare-zone.txt', e);
+    // }
+    // console.log('----------cloudflare-zone.txt', fs.read('@output/.temp/cloudflare-zone.txt'));
 
     if (argv.buildLocation == 'server') {
       // Create CloudFlare Zone File
@@ -94,11 +101,15 @@ gulp.task('jekyll-build', async function (done) {
     if (argv.skipJekyll == 'true') {
       // console.log('skipJekyll =', true);
       // return resolve(done());
-      return (done());
+      // return (done());
+      return done();
     } else {
       // console.log('skipJekyll =', false);
       // return resolve(cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
       //   .on('close', done));
+      // return (cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
+      //   .on('close', done));
+
       return (cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
         .on('close', done));
       // update 1
@@ -155,4 +166,26 @@ function now(options) {
 
     return cur_day + "T" + hours + ":" + minutes + ":" + seconds + "Z";
 
+}
+
+
+async function getGitInfo() {
+  return new Promise(function(resolve, reject) {
+    var exec = require('child_process').exec;
+    var cmd = exec('git remote -v', function (error, stdout, stderr) {
+    });
+    cmd.stdout.on('data', (data) => {
+      // console.log(`stdout: ${data}`);
+      let info = data.match(/origin(.+)\(push\)/, '')[1].trim();
+      var split = info.split('/')
+      var length = split.length;
+      var user = split[length - 2];
+      var name = split[length - 1].replace('.git', '');
+      resolve({user: user, name: name});
+    });
+    cmd.stderr.on('data', (data) => {
+      // console.error(`stderr: ${data}`);
+      reject(data);
+    });
+  });
 }

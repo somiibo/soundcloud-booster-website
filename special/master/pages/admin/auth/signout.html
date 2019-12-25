@@ -1,0 +1,84 @@
+---
+### ALL PAGES ###
+permalink: /admin/signout/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      }
+    }
+  "
+---
+<!doctype html>
+<html lang="en">
+
+  <head>
+    {%- include /master/global/head.html -%}
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .container {
+        max-width: 960px;
+      }
+
+      .lh-condensed { line-height: 1.25; }
+    </style>
+
+  </head>
+
+  <body class="bg-light">
+    <div class="container">
+      <div class="py-3 text-center">
+        {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+
+        <h2>Sad to see you go!</h2>
+        <p class="lead">Signing out...</p>
+      </div>
+
+    </div>
+
+    <script type="text/javascript">
+      Manager.ready(function() {
+        Manager.auth().signOut();
+        Manager.auth().ready(function(user) {
+          if (!user) {
+            window.location.href = '{{ site.url }}/admin/signin/';
+          }
+        })
+      });
+    </script>
+
+    {%- include /master/global/foot.html -%}
+  </body>
+
+</html>

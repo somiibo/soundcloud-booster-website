@@ -1,0 +1,119 @@
+---
+### ALL PAGES ###
+permalink: /admin/signup/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'prohibited',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+---
+<!doctype html>
+<html lang="en">
+
+  <head>
+    {%- include /master/global/head.html -%}
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .container {
+        max-width: 960px;
+      }
+
+      .lh-condensed { line-height: 1.25; }
+    </style>
+
+  </head>
+
+  <body class="bg-light">
+    <div class="container">
+      <div class="py-3 text-center">
+        {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+
+        <h2>Sign in</h2>
+        <p class="lead">Welcome to the <strong>{{ site.brand.name }}</strong> admin dashboard!</p>
+      </div>
+
+      <div class="row">
+        <div class="col-6 offset-3">
+          <div class="form-signin text-center">
+            <form class="auth-signin-form auth-signup-form" onsubmit="return false;">
+
+              <div class="form-group">
+                <label for="email-input" class="sr-only">Email</label>
+                <input type="text" id="email-input" class="form-control auth-email-input" placeholder="Email" required autofocus autocomplete="email">
+              </div>
+
+              <div class="form-group">
+                <label for="password-input" class="sr-only">Password</label>
+                <input type="password" id="password-input" class="form-control auth-password-input" placeholder="Password" required autofocus autocomplete="current-password">
+              </div>
+
+              <div class="form-group">
+                <label for="password-confirm-input" class="sr-only">Password Confirm</label>
+                <input type="password" id="password-confirm-input" class="form-control auth-password-confirm-input" placeholder="Password confirm" required autofocus autocomplete="new-password">
+              </div>
+
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input auth-terms-input" id="auth-terms-input" required>
+                <label class="form-check-label" for="auth-terms-input">I agree to the Terms and Conditions</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input auth-newsletter-input" id="auth-newsletter-input">
+                <label class="form-check-label" for="auth-newsletter-input">Sign up for our newsletter</label>
+              </div>
+
+              <div class="alert alert-danger auth-error-message-element" hidden>
+              </div>
+
+              <button class="btn btn-lg btn-primary btn-block auth-signup-email-btn" type="submit" name="button">Sign up</button>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- include /master/global/foot.html -%}
+  </body>
+
+</html>

@@ -1,4 +1,9 @@
 {
+  "environment": "%ENVIRONMENT%",
+  "repo": {
+    "user": "%REPO_USER%",
+    "name": "%REPO_NAME%"
+  },
   "npm-build": {
     "timestamp_utc": "%TIMESTAMP_UTC_NPM%",
     "timestamp_pst": "%TIMESTAMP_PST_NPM%"
