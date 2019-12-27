@@ -1,0 +1,30 @@
+---
+layout: master/global/default
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+
+    <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/css/theme.min.css" id="stylesheetLight">
+
+  </head>
+
+  <body class="">
+    <!-- CONTENT START -->
+    <div class="main-content">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-10 col-xl-8">
+            {{ content }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- CONTENT END -->
+
+    {%- include /master/global/foot.html -%}
+
+    <!-- <script src="https://dashkit.goodthemes.co/assets/js/theme.min.js"></script> -->
+  </body>
+</html>

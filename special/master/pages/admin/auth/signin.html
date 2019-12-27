@@ -1,5 +1,6 @@
 ---
 ### ALL PAGES ###
+layout: master/admin/auth
 permalink: /admin/signin/
 sitemap:
   include: false
@@ -29,78 +30,77 @@ settings:
     }
   "
 ---
-<!doctype html>
-<html lang="en">
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-5 col-xl-4 my-5">
 
-  <head>
-    {%- include /master/global/head.html -%}
+      {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+      <!-- Heading -->
+      <h1 class="display-4 text-center mb-3">
+        Sign in
+      </h1>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <!-- Subheading -->
+      <p class="text-muted text-center mb-5">
+        Welcome to the <strong>{{ site.brand.name }}</strong> admin dashboard!
+      </p>
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+      <!-- Form -->
+      <form onsubmit="return false;">
+        <!-- Email address -->
+        <div class="form-group">
+          <!-- Label -->
+          <label>Email Address</label>
+          <!-- Input -->
+          <input type="email" class="form-control auth-email-input" placeholder="Your email" required autofocus autocomplete="email">
+        </div>
 
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
+        <!-- Password -->
+        <div class="form-group">
+          <div class="row">
+            <div class="col">
+              <!-- Label -->
+              <label>Password</label>
+            </div>
+            <div class="col-auto">
+              <!-- Help text -->
+              <a href="{{ site.url }}/admin/forgot/" class="form-text small text-muted">
+                Forgot password?
+              </a>
+            </div>
+          </div> <!-- / .row -->
 
-      .container {
-        max-width: 960px;
-      }
-
-      .lh-condensed { line-height: 1.25; }
-    </style>
-
-  </head>
-
-  <body class="bg-light">
-    <div class="container">
-      <div class="py- text-center">
-        {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
-
-        <h2>Sign in</h2>
-        <p class="lead">Welcome to the <strong>{{ site.brand.name }}</strong> admin dashboard!</p>
-      </div>
-
-      <div class="row">
-        <div class="col-6 offset-3">
-          <div class="form-signin text-center">
-            <form class="auth-signin-form auth-signup-form" onsubmit="return false;">
-
-
-                <div class="form-group">
-                  <label for="email-input" class="sr-only">Email</label>
-                  <input type="text" id="email-input" class="form-control auth-email-input" placeholder="Email" required autofocus autocomplete="email">
-                </div>
-
-                <div class="form-group">
-                  <label for="password-input" class="sr-only">Password</label>
-                  <input type="password" id="password-input" class="form-control auth-password-input" placeholder="Password" required autofocus autocomplete="current-password">
-                </div>
-
-                <div class="alert alert-danger auth-error-message-element" hidden>
-                </div>
-
-                <button class="btn btn-lg btn-primary btn-block auth-signin-email-btn" type="submit" name="button">Sign in</button>
-
-            </form>
-
+          <!-- Input group -->
+          <div class="input-group input-group-merge">
+            <!-- Input -->
+            <input type="password" class="form-control form-control-appended auth-password-input" placeholder="Your password" required autocomplete="current-password">
+            <!-- Icon -->
+            <div class="input-group-append">
+              <span class="input-group-text">
+                <i class="fe fe-eye"></i>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div class="alert alert-danger auth-error-message-element" role="alert" hidden>
+          Waiting...
+        </div>
+
+        <!-- Submit -->
+        <button class="btn btn-lg btn-block btn-primary mb-3 auth-signin-email-btn">
+          Sign in
+        </button>
+
+        <!-- Link -->
+        <div class="text-center">
+          <small class="text-muted text-center">
+            Don't have an account yet? <a href="{{ site.url }}/admin/signup/">Sign up</a>.
+          </small>
+        </div>
+
+      </form>
+
     </div>
-
-    {%- include /master/global/foot.html -%}
-  </body>
-
-</html>
+  </div> <!-- / .row -->
+</div> <!-- / .container -->

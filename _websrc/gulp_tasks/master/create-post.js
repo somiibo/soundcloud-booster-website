@@ -3,8 +3,8 @@ const gulp        = require('gulp');
 const argv        = require('yargs').argv;
 const querystring = require('querystring');
 const request     = require('request');
-const Poster      = require('ultimate-jekyll-poster');
-// const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
+// const Poster      = require('ultimate-jekyll-poster');
+const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
 
 // const jsonminify = require("jsonminify");
 const fs = require("fs-jetpack");
@@ -43,31 +43,44 @@ Post.prototype.create = async function (options) {
       poster.onDownload = async function (meta) {
         return new Promise(async function(resolve, reject) {
           // let path = `${filepath}${filename}.${ext}`;
-          console.log('onDownload', meta.tempPath);
+          // console.log('onDownload', meta.tempPath);
           // req.pipe(fs.createWriteStream(path));
           // req.pipe(poster.createWriteStream(path));
           await poster.saveImage(meta.finalPath)
-          console.log('...done');
+          // console.log('...done');
           resolve();
         });
       }
-      let finalPost = await poster.create(JSON.parse(body));
+      let finalPost = await poster.create(JSON.parse(body))
+      .catch(function (e) {
+        response.status = 500;
+        response.error = e.toString();
+        // console.log('----------e', e);
+      })
 
       // Save post OR commit
       // fs.write(finalPost.path, finalPost.content)
       // console.log('-----1');
-      poster.write(finalPost.path, finalPost.content);
       // console.log('-----2');
 
       res.on('error', (err) => {
         console.error(err);
+        response.status = 500;
+        response.error = err.toString();
+        // console.log('----------err', err);
       });
 
-      res.statusCode = 200;
+
+      if (response.status == 200) {
+        poster.write(finalPost.path, finalPost.content);
+      }
+
+      res.statusCode = response.status;
       res.setHeader('Content-Type', 'application/json');
 
       const responseBody = { headers, method, url, body };
 
+      // console.log('------response', response);
       res.write(JSON.stringify(response));
       return resolve(res.end());
     });

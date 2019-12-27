@@ -16,9 +16,6 @@ post:
 Click 'edit' to start authoring your post. 
 
 You can also... 
-
-TES 9
-
 - Edit in StackEdit 
 - Import from Google Docs 
 

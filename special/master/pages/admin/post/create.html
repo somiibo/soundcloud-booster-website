@@ -1,6 +1,7 @@
 ---
 ### ALL PAGES ###
-permalink: /admin/post/create/
+layout: master/admin/main
+permalink: /admin/post/create2/
 sitemap:
   include: false
 
@@ -30,252 +31,337 @@ settings:
   "
 
 ---
-<!doctype html>
-<html lang="en">
+<!-- Header -->
+<div class="header mt-md-5">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
 
-  <head>
-    {%- include /master/global/head.html -%}
+        <!-- Pretitle -->
+        <h6 class="header-pretitle">
+          Post
+        </h6>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <!-- Title -->
+        <h1 class="header-title">
+          New
+        </h1>
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .container {
-        max-width: 960px;
-      }
-
-      .lh-condensed { line-height: 1.25; }
-    </style>
-
-    <style media="screen">
-      /* STACK EDIT STYLING */
-      .stackedit-iframe {
-        left: 0px;
-      }
-    </style>
-  </head>
-
-  <body class="bg-light">
-    <div class="container">
-  <div class="py-5 text-center">
-    {%- include /master/helpers/svg.html src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="144" height="144" class="d-block mx-auto" -%}
-
-    <h2>Post Creator</h2>
-    <p class="lead">Create blog posts with ease, including the beautiful markdown editor <strong>StackEdit</strong>!</p>
+        <p class="text-muted mb-0">Create blog posts with ease, including the beautiful markdown editor <strong>StackEdit</strong>!</p>
+      </div>
+    </div> <!-- / .row -->
   </div>
+</div>
 
-  <div class="row loaded-false">
-    <div class="col-lg-8 offset-lg-2">
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
+<div class="row loaded-false">
+  <div class="col-lg-8 offset-lg-2">
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
       </div>
     </div>
   </div>
-  <div class="row loaded-true" hidden>
-    <div class="col-lg-8 offset-lg-2">
-      <h4 class="mb-3">Post details</h4>
+</div>
 
-      <form class="" onsubmit="return false;" id="post-creator-form">
+<!-- Form -->
+<div class="loaded-true" hidden>
+  <form class="mb-4" onsubmit="return false;" id="post-creator-form">
 
-        <!-- <div class="mb-3">
-          <label for="test">Your vanity URL<span class="text-muted"></span></label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">$</span>
-            </div>
-            <input type="text" id="test" name="test" class="form-control" aria-label="Amount (to the nearest dollar)">
+    <h2 class="header-title my-3">
+      Post details
+    </h2>
+
+    <div class="row">
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Title
+          </label>
+          <small class="form-text text-muted">
+            The title of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control form-control-appended" id="title" name="title">
             <div class="input-group-append">
-              <span class="input-group-text">.00</span>
+              <span class="input-group-text">
+                0
+              </span>
             </div>
           </div>
-          <small class="text-muted">The title of the post</small>
-        </div> -->
+        </div>
+      </div>
 
-        <div class="mb-3">
-          <label for="title">Title<span class="text-muted"></span></label>
-          <div class="input-group">
-            <input type="text" id="title" name="title" class="form-control" aria-label="Best title here">
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            URL
+          </label>
+          <small class="form-text text-muted">
+            The URL of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control form-control-appended" id="url" name="url">
             <div class="input-group-append">
-              <span class="input-group-text">0</span>
+              <span class="input-group-text">
+                0
+              </span>
             </div>
           </div>
-          <small class="text-muted">The title of the post</small>
         </div>
+      </div>
 
-        <div class="mb-3">
-          <label for="url">URL<span class="text-muted"></span></label>
-          <div class="input-group">
-            <input type="text" id="url" name="url" class="form-control" aria-label="your-best-title">
-            <div class="input-group-append">
-              <span class="input-group-text">0</span>
-            </div>
-          </div>
-          <small class="text-muted">The URL of the post</small>
-        </div>
-
-        <div class="mb-3">
-          <label for="path">Layout <span class="text-muted"></span></label>
-          <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
-          <small class="text-muted">Usually <code class="highlighter-rouge">master/blog/post</code> or <code class="highlighter-rouge">app/blog/post</code></small>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="date">Date <span class="text-muted"></span></label>
-            <input type="date" class="form-control" id="date" name="date" placeholder="2019-12-04" required>
-            <small class="text-muted">The date of the post</small>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="id">ID <span class="text-muted"></span></label>
-            <input type="number" class="form-control" id="id" name="id" placeholder="0" required>
-            <small class="text-muted">The id of the post</small>
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Layout
+          </label>
+          <small class="form-text text-muted">
+            Usually <code class="highlighter-rouge">master/blog/post</code> or <code class="highlighter-rouge">app/blog/post</code>
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
           </div>
         </div>
+      </div>
 
-        <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            Date
+          </label>
+          <small class="form-text text-muted">
+            The date of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="date" class="form-control" id="date" name="date" placeholder="2019-12-04">
+          </div>
+        </div>
+      </div>
 
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            ID
+          </label>
+          <small class="form-text text-muted">
+            The id of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="number" class="form-control" id="id" name="id" placeholder="0">
+          </div>
+        </div>
+      </div>
 
-          <div class="col-md-6 mb-3">
-            <label for="author">Author <span class="text-muted"></span></label>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            Author
+          </label>
+          <small class="form-text text-muted">
+            Who wrote this beautiful piece of work?
+          </small>
+          <div class="input-group input-group-merge mb-3">
             <select class="custom-select" id="author" name="author" required>
               <option value="">Select an author</option>
             </select>
-            <small class="text-muted">Who wrote this beautiful piece of work?</small>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <label for="affiliate">Affiliate search term <span class="text-muted"></span></label>
-            <input type="text" class="form-control" id="affiliate" name="affiliate" placeholder="Search term" required>
-            <small class="text-muted">This term is automatically applied to some ads</small>
           </div>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="tags">Tags <span class="text-muted"></span></label>
-            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag one, Tag two" required>
-            <small class="text-muted">Comma separated tags</small>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="categories">Categories<span class="text-muted"></span></label>
-            <input type="text" class="form-control" id="categories" name="categories" placeholder="Category 1, Category 2" required>
-            <small class="text-muted">Comma separated categories</small>
-          </div>
-        </div>
-
-        <!-- <div class="mb-3">
-          <label for="excerpt">Excerpt</label>
-          <textarea class="form-control" id="excerpt" rows="2" name="excerpt"></textarea>
-          <small class="text-muted">Text preview of the post</small>
-        </div> -->
-
-        <div class="mb-3">
-          <label for="excerpt">Excerpt<span class="text-muted"></span></label>
-          <div class="input-group">
-            <textarea class="form-control" id="excerpt" rows="2" name="excerpt"></textarea>
-            <div class="input-group-append">
-              <span class="input-group-text">0</span>
-            </div>
-          </div>
-          <small class="text-muted">Text preview of the post</small>
-        </div>
-
-        <div class="mb-3">
-          <label for="headerImageURL">Header Image URL</label>
-          <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image" value="" required>
-          <small class="text-muted">Image preview of the post. Will be named the same as the title of the post.</small>
-        </div>
-
-        <div class="mb-3"></div>
-
-        <h4 class="mb-3">Post Content</h4>
-
-        <div class="row">
-
-          <div class="col-12 mb-3">
-            <label for="body">Body</label>
-            <textarea class="form-control" id="body" rows="9" name="body"></textarea>
-            <div class="row mt-3">
-              <div class="col-6">
-                <a href="" onclick="return false;" class="btn btn-lg btn-secondary btn-block" id="stackedit-edit">Edit in StackEdit</a>
-              </div>
-              <div class="col-6">
-                <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary btn-block" id="import-google-docs" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
-              </div>
-            </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            Affiliate search term
+          </label>
+          <small class="form-text text-muted">
+            This term is automatically applied to some ads
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="affiliate" name="affiliate" placeholder="Search term">
           </div>
         </div>
-        <div class="mb-3"></div>
+      </div>
 
-        <h4 class="mb-3">Advanced Options</h4>
-
-        <div class="row">
-
-          <div class="col-12 mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="enableReplaceImagesMarkdown" name="enableReplaceImagesMarkdown" checked="true">
-              <label class="form-check-label" for="enableReplaceImagesMarkdown">
-                Replace image markdown with liquid tag
-              </label>
-              <br>
-              <small class="text-muted">Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code></small>
-            </div>
-            <div class="form-group">
-              <label for="replaceImagesIncludeTag">Tag to replace with <span class="text-muted"></span></label>
-              <input type="text" class="form-control" id="replaceImagesIncludeTag" name="replaceImagesIncludeTag" placeholder="" required>
-              <small class="text-muted">Which one to use? Blank = default.</small>
-            </div>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="includeLocalImagePath" name="includeLocalImagePath" checked="true">
-              <label class="form-check-label" for="includeLocalImagePath">
-                Include image path before image tags
-              </label>
-              <br>
-              <small class="text-muted">Include the standard local image path <code class="highlighter-rouge">/assets/images/blog/posts/post-${id}/</code> in image tags</small>
-            </div>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            Tags
+          </label>
+          <small class="form-text text-muted">
+            Comma separated tags
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag 1, Tag 2">
           </div>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="col-12 mb-3">
-            <label for="path">Save path <span class="text-muted"></span></label>
+      <div class="col-12 col-md-6">
+        <div class="form-group">
+          <label>
+            Categories
+          </label>
+          <small class="form-text text-muted">
+            Comma separated categories
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="categories" name="categories" placeholder="Category 1, Category 2">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Excerpt
+          </label>
+          <small class="form-text text-muted">
+            Text preview of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <textarea class="form-control" id="excerpt" name="excerpt"rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Header Image URL
+          </label>
+          <small class="form-text text-muted">
+            Image preview of the post. Will be named the same as the title of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mt-4 mb-5">
+
+    <h2 class="header-title my-3">
+      Post content
+    </h2>
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Body
+          </label>
+          <small class="form-text text-muted">
+            The content of the post
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <textarea class="form-control" id="body" name="body"rows="9"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row mt-3">
+          <div class="col-6">
+            <a href="" onclick="return false;" class="btn btn-lg btn-secondary btn-block" id="stackedit-edit">Edit in StackEdit</a>
+          </div>
+          <div class="col-6">
+            <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary btn-block" id="import-google-docs" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="mt-5 mb-5">
+
+    <h2 class="header-title my-3">
+      Advanced options
+    </h2>
+    <div class="row">
+
+      <div class="col-12">
+        <div class="custom-control custom-checkbox table-checkbox">
+          <input type="checkbox" class="custom-control-input auth-newsletter-input" id="enableReplaceImagesMarkdown" name="enableReplaceImagesMarkdown" checked="true">
+          <label class="custom-control-label" for="enableReplaceImagesMarkdown">
+            Replace image markdown with liquid tag
+          </label>
+          <small class="form-text text-muted">
+            Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code>
+          </small>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Tags to replace with
+          </label>
+          <small class="form-text text-muted">
+            Which one to use? Blank = default.
+          </small>
+          <div class="input-group input-group-merge mb-3">
+            <input type="text" class="form-control" id="replaceImagesIncludeTag" name="replaceImagesIncludeTag" placeholder="">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="custom-control custom-checkbox table-checkbox">
+          <input type="checkbox" class="custom-control-input auth-newsletter-input" id="includeLocalImagePath" name="includeLocalImagePath" checked="true">
+          <label class="custom-control-label" for="includeLocalImagePath">
+            Include image path before image tags
+          </label>
+          <small class="form-text text-muted">
+            Include the standard local image path <code class="highlighter-rouge">/assets/images/blog/posts/post-${id}/</code> in image tags
+          </small>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Save path
+          </label>
+          <small class="form-text text-muted">
+            The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code>
+          </small>
+          <div class="input-group input-group-merge mb-3">
             <input type="text" class="form-control" id="path" name="path" placeholder="./_posts/" value="./_posts/">
-            <small class="text-muted">The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code></small>
           </div>
-          <div class="col-md-12 mb-3">
-            <label for="author">Processing Address <span class="text-muted"></span></label>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group">
+          <label>
+            Processing Address
+          </label>
+          <small class="form-text text-muted">
+            What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.
+          </small>
+          <div class="input-group input-group-merge mb-3">
             <select class="custom-select" id="processingAddy" name="processingAddy" required>
               <option id="processingAddy_none" value="">Select an address</option>
               <option id="processingAddy_dev" value="">Development</option>
               <option id="processingAddy_prod" value="">Production</option>
               <option id="processingAddy_prodDev" value="">Production (dev)</option>
             </select>
-            <small class="text-muted">What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.</small>
           </div>
         </div>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <hr class="mt-4 mb-5">
+
+    <div class="row">
+      <div class="col-12">
 
         <div id="response" hidden>
           <div class="my-3">
             <div class="alert alert-info" role="alert" hidden>
               <h4 class="alert-heading">Waiting...</h4>
-              <p>Hold up</p>
+              <p class="mb-0">Hold up</p>
               <!-- <hr>
               <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
               <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p> -->
@@ -289,71 +375,93 @@ settings:
             </div>
             <div class="alert alert-danger" role="alert" hidden>
               <h4 class="alert-heading">Aw snap!</h4>
-              <p>Something went wrong, please examine the error below:</p>
+              <p class="mb-0">Something went wrong, please examine the error below:</p>
               <hr>
-              <pre><code id="main-response-code">waiting...
+              <pre><code id="main-response-code" class="text-white">waiting...
               </code></pre>
             </div>
           </div>
         </div>
+      </div>
 
-        <hr class="mb-4">
+      <div class="col-12">
         <button class="btn btn-primary btn-lg btn-block" id="post-submit-btn" type="submit">Post!</button>
-      </form>
+      </div>
 
     </div>
-    <div class="col-lg-8 offset-lg-2">
-    </div>
-  </div>
 
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; {{ site.time | date: '%Y' }} {{ site.brand.name }}</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="{{ site.url }}">Home</a></li>
-      <li class="list-inline-item"><a href="{{ site.url }}/blog">Blog</a></li>
-    </ul>
-  </footer>
+
+  </form>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="importGoogleDoc" tabindex="-1" role="dialog" aria-labelledby="importGoogleDoc" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Import from Google Doc</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="google-doc-form" class="" action="" method="post" onsubmit="return false;">
+
+
+<!-- MODAL -->
+<div class="modal fade" id="importGoogleDoc" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-lighter">
+      <form id="google-doc-form" onsubmit="return false;" class="my-4">
         <div class="modal-body">
-          <div class="row px-3 pb-3">
-            <div class="col-12">
-              <strong>Publish the doc</strong> by going to <code class="highlighter-rouge">File > Publish to the Web > Start publishing</code>
-              <!-- <ol class="pl-4">
-                <li></li>
-              </ol> -->
+
+          <!-- Header -->
+          <div class="row">
+            <div class="col">
+
+              <!-- Prettitle -->
+              <h6 class="text-uppercase text-muted mb-3">
+                <a href="#!" class="text-reset">Google Doc Import</a>
+              </h6>
+
+              <!-- Title -->
+              <h2 class="mb-2">
+                Import posts directly from Google Docs
+              </h2>
+
             </div>
+            <div class="col-auto">
+
+              <!-- Close -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">
+                  ×
+                </span>
+              </button>
+
+            </div>
+          </div> <!-- / .row -->
+
+          <!-- Divider -->
+          <hr class="my-4">
+
+          <div class="col-12">
+            <strong>Publish the doc</strong> by going to <code class="highlighter-rouge">File > Publish to the Web > Start publishing</code>
           </div>
-          <div class="row mx-3">
-            <div class="col-12">
-              <div class="form-group row">
-                <label class="control-label" for="importUrl">Doc URL</label>
-                <input id="importUrl" name="importUrl" type="text" class="form-control" placeholder="https://docs.google.com/document/d/e/KEY123/pub" value="" required>
-                <!-- <p>https://docs.google.com/document/d/e/2PACX-1vRvfKsOYUZW0uhK6iOy95P4L-_n0FMk2I9jKTI9M0rK1EXVIuaUd7jTQoIvTuoZ36aTm-gfKkRGbamc/pub</p> -->
-                <small class="form-text text-muted">Remember, the Doc must be published!</small>
+
+
+          <div class="col-12">
+            <div class="form-group">
+              <label>
+                Doc URL
+              </label>
+              <small class="form-text text-muted">
+                Remember, the Doc must be published!
+              </small>
+              <div class="input-group input-group-merge mb-3">
+                <input type="text" class="form-control" id="importUrl" name="importUrl" placeholder="https://docs.google.com/document/d/e/KEY123/pub" value="" required>
               </div>
             </div>
-            <div class="col-12">
-              <div class="form-check row">
-                <input class="form-check-input" type="checkbox" id="replaceHeadings" name="replaceHeadings" checked="true">
-                <label class="form-check-label" for="replaceHeadings">
-                  Replace <code class="highlighter-rouge">---</code> with <code class="highlighter-rouge">#</code>
-                </label>
-              </div>
+          </div>
+
+          <div class="col-12">
+            <div class="custom-control custom-checkbox table-checkbox">
+              <input type="checkbox" class="custom-control-input auth-newsletter-input" id="replaceHeadings" name="replaceHeadings" checked="true">
+              <label class="custom-control-label" for="replaceHeadings">
+                Replace <code class="highlighter-rouge">---</code> with <code class="highlighter-rouge">#</code>
+              </label>
             </div>
           </div>
-          <div class="row m-3">
+
+          <div class="col-12">
             <div id="google-doc-error" class="alert alert-danger" role="alert" hidden>
               <h4 class="alert-heading">Aw snap!</h4>
               <p>Something went wrong, please examine the error below:</p>
@@ -365,365 +473,355 @@ settings:
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Import</button>
         </div>
       </form>
-
     </div>
   </div>
 </div>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 
-    <script type="text/javascript">
-      // fields
-      var fields = {};
-      var authors = [];
-      {% for post in site.posts limit:1 %}
-      fields = {
-        title: "{{ post.post.title }}",
-        url: "{{ post.url }}",
-        excerpt: "{{ post.post.excerpt }}",
-        id: "{{ post.post.id }}",
-        author: "{{ post.post.author }}",
-        date: '{{ post.date | date: "%Y-%m-%d" }}',
-        affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
-        tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
-        categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
-        replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/image.html src="{{url}}" alt="{{alt}}" -%}{% endraw %}',
-      }
-      {% endfor %}
+<script type="text/javascript">
+  // fields
+  var fields = {};
+  var authors = [];
+  {% for post in site.posts limit:1 %}
+  fields = {
+    title: "{{ post.post.title }}",
+    url: "{{ post.url }}",
+    excerpt: "{{ post.post.excerpt }}",
+    id: "{{ post.post.id }}",
+    author: "{{ post.post.author }}",
+    date: '{{ post.date | date: "%Y-%m-%d" }}',
+    affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
+    tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
+    categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
+    replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/image.html src="{{url}}" alt="{{alt}}" -%}{% endraw %}',
+  }
+  {% endfor %}
 
-      authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
+  authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
 
-      // console.log('FIELDS', fields);
-      // console.log('AUTHORS', authors);
+  // console.log('FIELDS', fields);
+  // console.log('AUTHORS', authors);
 
-    </script>
+</script>
 
-    <!-- Exploring the library -->
-    <script type="text/javascript">
+<!-- Exploring the library -->
+<script type="text/javascript">
 
-      var navBlocked = false;
-      var allowLeave = false;
-      var stackEditElement = document.querySelector('#body');
-      var stackedit;
-      var turndownService;
-      var dom;
+  var navBlocked = false;
+  var allowLeave = false;
+  var stackEditElement = document.querySelector('#body');
+  var stackedit;
+  var turndownService;
+  var dom;
 
-      var buildFile = {};
+  var buildFile = {};
 
-      Manager.ready(function() {
-        Manager.ajax().request({
-          url: '{{ site.url }}/@output/build/build.json',
-          method: 'GET',
-        })
-        .success(function (one, two, build) {
-          buildFile = build;
-          dom = Manager.dom();
-          blockNavigation();
-          setupStackedit();
-          setupForm();
-          countChars();
-          // dom.select('#body').setValue()
-          dom.select('body').on('click', function(event) {
-            if (event.target.matches('#stackedit-edit')) {
-              // Open the iframe
-              stackedit.openFile({
-                name: 'Filename', // with an optional filename
-                content: {
-                  text: stackEditElement.value // and the Markdown content.
-                }
-              });
+  Manager.ready(function() {
+    Manager.ajax().request({
+      url: '{{ site.url }}/@output/build/build.json',
+      method: 'GET',
+    })
+    .success(function (one, two, build) {
+      buildFile = build;
+      dom = Manager.dom();
+      blockNavigation();
+      setupStackedit();
+      setupForm();
+      countChars();
+      // dom.select('#body').setValue()
+      dom.select('body').on('click', function(event) {
+        if (event.target.matches('#stackedit-edit')) {
+          // Open the iframe
+          stackedit.openFile({
+            name: 'Filename', // with an optional filename
+            content: {
+              text: stackEditElement.value // and the Markdown content.
             }
           });
-
-          dom.select('body').on('keyup', function (event) {
-            countChars();
-          });
-
-          dom.select('#post-creator-form').on('submit', function (event) {
-            blockNavigation();
-            displayWaiting();
-            // var endpoint = '{{ site.url }}/admin/post/create.json';
-            var endpoint = dom.select('#processingAddy').getValue();
-            // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
-
-            var token = '';
-            firebase.auth().currentUser.getIdToken(true)
-            .then(function(token) {
-              token = token;
-
-              var data = {};
-              dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
-                var curField = dom.select(el);
-                data[curField.getAttribute('name')] = curField.getValue();
-              });
-              data.backendManagerKey = token;
-
-              console.log('#post-creator-form', endpoint, data);
-
-              // Check for invalid things
-              if (data.body.indexOf('[](') > -1) {
-                var bodyLines = data.body.split('\n');
-                var lineNum = 0;
-                var colNum = 0;
-                for (var i = 0; i < bodyLines.length; i++) {
-                  var tempIndex = bodyLines[i].indexOf('[](');
-                  if (tempIndex > -1) {
-                    lineNum = i + 1;
-                    colNum = tempIndex;
-                    break;
-                  }
-                }
-                displayError('There is an empty link tag or image tag at line ' + lineNum + ', column ' + colNum);
-                return;
-              }
-
-              Manager.ajax().request({
-                method: 'POST',
-                url: endpoint,
-                data: data,
-              })
-              .success(function (one,two,three) {
-                console.log(one,two,three);
-                displayError();
-
-                window.refreshTimer = 2;
-                allowLeave = true;
-                setInterval(function () {
-                  console.log('TIME...', window.refreshTimer);
-                  dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
-                  window.refreshTimer--;
-                  if (window.refreshTimer <= 0) {
-                    window.location.href = window.location.href;
-                  }
-                }, 1000);
-              })
-              .error(function (response, status, error) {
-                console.error(response, status, error);
-                displayError(error);
-              })
-
-            })
-            .catch(function(error) {
-              display('Failed to get firebase token: ' + error);
-            })
-
-
-          });
-
-          function displayWaiting() {
-            dom.select('#response .alert-info').show()
-            dom.select('#response').show()
-            dom.select('#post-submit-btn').setAttribute('disabled', true);
-
-          }
-
-          function displayError(error) {
-            dom.select('#response .alert-info').hide()
-            dom.select('#post-submit-btn').removeAttribute('disabled');
-            if (error) {
-              dom.select('#response').show()
-              dom.select('#response .alert-success').hide()
-              dom.select('#response .alert-danger').show()
-              dom.select('#main-response-code').setInnerHTML(error)
-            } else {
-              dom.select('#response').show()
-              dom.select('#response .alert-success').show()
-              dom.select('#response .alert-danger').hide()
-            }
-          }
-
-          dom.select('#google-doc-form').on('submit', function (event) {
-            var formData = {};
-            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
-              var curField = dom.select(el);
-              formData[curField.getAttribute('name')] = curField.getValue();
-            })
-
-            console.log('#google-doc-form', formData);
-
-            Manager.ajax().request({
-              method: 'GET',
-              url: formData.importUrl,
-              data: {},
-            })
-            .success(function (one,two,data) {
-              //temp
-              // var query = query || {};
-
-              // Clean
-              var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
-              body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
-              body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
-              body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
-
-              // Fix no spaces with links
-              // body = body.replace(/><a/img, '> <a');
-              // body = body.replace(/><\/a/img, '> </a');
-              // body = body.replace(/<\/a></img, ' </a><');
-
-              // https://github.com/domchristie/turndown
-              var markdown = turndownService.turndown(body);
-
-              // Fix no spaces with links
-              markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
-              markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
-
-              // Fixes
-              markdown = markdown.replace(/ \. /img, '. '); // fix periods
-              markdown = markdown.replace(/ \, /img, ', '); // fix periods
-              markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
-              markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
-
-
-              // Clear promos stuff
-              markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
-
-              // Remove hr breaks
-              if (formData.replaceHeadings) {
-                markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
-                markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
-              }
-
-              var links = [];
-              links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
-              // Fix Google Links
-              for (var i = 0; i < links.length; i++) {
-                if (markdown.indexOf('!' + links[i]) == -1) {
-                  var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
-                  var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
-                  var newLink = false;
-                  var needsReplacing = link.indexOf('url?q=') != -1;
-                  if (needsReplacing) {
-                    newLink = Manager.query().create(link).get('q');
-                    console.log('Extracted link:', newLink);
-                  }
-                  if (needsReplacing) {
-                    markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
-                  }
-                }
-              }
-
-              dom.select('#body').setValue(markdown);
-              dom.select('#google-doc-error').hide();
-
-              $('#importGoogleDoc').modal('toggle');
-            })
-            .error(function (one,two,error) {
-              dom.select('#google-doc-error').show();
-              dom.select('#google-response-code').setInnerHTML(error);
-            })
-
-          })
-        })
-
-      }, {
-        waitFor: [{name: 'Stackedit', condition: 'defined'},{name: 'TurndownService', condition: 'defined'},]
+        }
       });
 
-      function countChars() {
-        var charCountFields = ['title', 'url', 'excerpt'];
-        for (var i = 0; i < charCountFields.length; i++) {
-          var cur = dom.select('*[name="' + charCountFields[i] + '"]').get(0);
-          dom.select(cur.parentNode.childNodes).each(function (i, element) {
-            if (element.matches('.input-group-append')) {
-              dom.select(element.querySelectorAll('.input-group-append .input-group-text')).setInnerHTML(dom.select(cur).getValue().length);
+      dom.select('body').on('keyup', function (event) {
+        countChars();
+      });
+
+      dom.select('#post-creator-form').on('submit', function (event) {
+        blockNavigation();
+        displayWaiting();
+        // var endpoint = '{{ site.url }}/admin/post/create.json';
+        var endpoint = dom.select('#processingAddy').getValue();
+        // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
+
+        var token = '';
+        firebase.auth().currentUser.getIdToken(true)
+        .then(function(token) {
+          token = token;
+
+          var data = {};
+          dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
+            var curField = dom.select(el);
+            data[curField.getAttribute('name')] = curField.getValue();
+          });
+          data.backendManagerKey = token;
+
+          console.log('#post-creator-form', endpoint, data);
+
+          // Check for invalid things
+          if (data.body.indexOf('[](') > -1) {
+            var bodyLines = data.body.split('\n');
+            var lineNum = 0;
+            var colNum = 0;
+            for (var i = 0; i < bodyLines.length; i++) {
+              var tempIndex = bodyLines[i].indexOf('[](');
+              if (tempIndex > -1) {
+                lineNum = i + 1;
+                colNum = tempIndex;
+                break;
+              }
             }
+            displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
+            return;
+          }
+
+          Manager.ajax().request({
+            method: 'POST',
+            url: endpoint,
+            data: data,
           })
+          .success(function (one,two,three) {
+            console.log(one,two,three);
+            displayError();
+
+            window.refreshTimer = 2;
+            allowLeave = true;
+            setInterval(function () {
+              console.log('TIME...', window.refreshTimer);
+              dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
+              window.refreshTimer--;
+              if (window.refreshTimer <= 0) {
+                window.location.href = window.location.href;
+              }
+            }, 1000);
+          })
+          .error(function (response, status, error) {
+            console.error(response, status, error);
+            displayError(error + '\n' + response.response);
+          })
+
+        })
+        .catch(function(error) {
+          display('Failed to get firebase token: ' + error);
+        })
+      });
+
+      function displayWaiting() {
+        dom.select('#response .alert-info').show()
+        dom.select('#response').show()
+        dom.select('#post-submit-btn').setAttribute('disabled', true);
+      }
+
+      function displayError(error) {
+        dom.select('#response .alert-info').hide()
+        dom.select('#post-submit-btn').removeAttribute('disabled');
+        if (error) {
+          dom.select('#response').show()
+          dom.select('#response .alert-success').hide()
+          dom.select('#response .alert-danger').show()
+          dom.select('#main-response-code').setInnerHTML(error)
+        } else {
+          dom.select('#response').show()
+          dom.select('#response .alert-success').show()
+          dom.select('#response .alert-danger').hide()
         }
       }
 
-      function setupForm() {
-        var select = dom.select('#author').get(0);
-        for (var i = 0; i < authors.length; i++) {
-          var opt = document.createElement('option');
-          opt.value = authors[i];
-          opt.innerHTML = authors[i];
-          select.appendChild(opt);
-        }
+      dom.select('#google-doc-form').on('submit', function (event) {
+        var formData = {};
+        console.log('CLICK');
+        dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
+          var curField = dom.select(el);
+          formData[curField.getAttribute('name')] = curField.getValue();
+        })
 
-        dom.select('#title').setValue(fields.title);
-        dom.select('#url').setValue(fields.url.replace(/\/(.*?)\//,'').replace(/\//,''));
-        dom.select('#date').setValue(fields.date);
-        dom.select('#id').setValue(fields.id);
-        dom.select('#author').setValue(fields.author);
-        dom.select('#affiliate').setValue(fields.affiliateSearchTerm);
-        dom.select('#tags').setValue(fields.tags.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
-        dom.select('#categories').setValue(fields.categories.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
-        dom.select('#excerpt').setValue(fields.excerpt);
-        dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
+        console.log('#google-doc-form', formData);
 
-        // special
-        var serverDev = '{{ site.url }}/admin/post/create.json';
-        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
-        var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
-        var env = buildFile.environment;
-        dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
-        dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
-        dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
-        dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('name', serverProdDev);
-        if (Manager.properties.meta.environment != 'development') {
-          dom.select('#processingAddy_prodDev').hide();
-        }
+        Manager.ajax().request({
+          method: 'GET',
+          url: formData.importUrl,
+          data: {},
+        })
+        .success(function (one,two,data) {
+          //temp
+          // var query = query || {};
 
-        dom.select('#body').setValue("## This is a post in markdown! \nClick 'edit' to start authoring your post. \n\nYou can also... \n- Edit in StackEdit \n- Import from Google Docs \n\n[Here is a regular link](https://itwcreativeworks.com) \n[Here is a Google link](https://www.google.com/url?q=https://itwcreativeworks.com) \n![Here is an image](https://via.placeholder.com/150)");
+          // Clean
+          var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+          body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+          body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
+          body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
 
-        // Finally, make everything visible
-        dom.select('.loaded-false').hide();
-        dom.select('.loaded-true').show();
-      }
+          // Fix no spaces with links
+          // body = body.replace(/><a/img, '> <a');
+          // body = body.replace(/><\/a/img, '> </a');
+          // body = body.replace(/<\/a></img, ' </a><');
 
-      function blockNavigation() {
-        if (navBlocked === true) {
-          return;
-        }
-        navBlocked = true;
-        try {
-          window.onbeforeunload = function(event) {
-            if (allowLeave) {
-              event.preventDefault();
-            } else {
-              event.returnValue = "Write something clever here..";
+          // https://github.com/domchristie/turndown
+          var markdown = turndownService.turndown(body);
+
+          // Fix no spaces with links
+          markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
+          markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
+
+          // Fixes
+          markdown = markdown.replace(/ \. /img, '. '); // fix periods
+          markdown = markdown.replace(/ \, /img, ', '); // fix periods
+          markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
+          markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
+
+
+          // Clear promos stuff
+          markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
+
+          // Remove hr breaks
+          if (formData.replaceHeadings) {
+            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
+            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
+          }
+
+          var links = [];
+          links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
+          // Fix Google Links
+          for (var i = 0; i < links.length; i++) {
+            if (markdown.indexOf('!' + links[i]) == -1) {
+              var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
+              var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
+              var newLink = false;
+              var needsReplacing = link.indexOf('url?q=') != -1;
+              if (needsReplacing) {
+                newLink = Manager.query().create(link).get('q');
+                console.log('Extracted link:', newLink);
+              }
+              if (needsReplacing) {
+                markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
+              }
             }
-          };
-        } catch (e) {
-          console.error('Error creating post', e);
+          }
+
+          dom.select('#body').setValue(markdown);
+          dom.select('#google-doc-error').hide();
+
+          $('#importGoogleDoc').modal('toggle');
+        })
+        .error(function (one,two,error) {
+          dom.select('#google-doc-error').show();
+          dom.select('#google-response-code').setInnerHTML(error);
+        })
+
+      })
+    })
+
+  }, {
+    waitFor: [{name: 'Stackedit', condition: 'defined'},{name: 'TurndownService', condition: 'defined'},]
+  });
+
+  function countChars() {
+    var charCountFields = ['title', 'url', 'excerpt'];
+    for (var i = 0; i < charCountFields.length; i++) {
+      var cur = dom.select('*[name="' + charCountFields[i] + '"]').get(0);
+      dom.select(cur.parentNode.childNodes).each(function (i, element) {
+        if (element.matches('.input-group-append')) {
+          dom.select(element.querySelectorAll('.input-group-append .input-group-text')).setInnerHTML(dom.select(cur).getValue().length);
         }
-      }
+      })
+    }
+  }
+
+  function setupForm() {
+    var select = dom.select('#author').get(0);
+    for (var i = 0; i < authors.length; i++) {
+      var opt = document.createElement('option');
+      opt.value = authors[i];
+      opt.innerHTML = authors[i];
+      select.appendChild(opt);
+    }
+
+    dom.select('#title').setValue(fields.title);
+    dom.select('#url').setValue(fields.url.replace(/\/(.*?)\//,'').replace(/\//,''));
+    dom.select('#date').setValue(fields.date);
+    dom.select('#id').setValue(fields.id);
+    dom.select('#author').setValue(fields.author);
+    dom.select('#affiliate').setValue(fields.affiliateSearchTerm);
+    dom.select('#tags').setValue(fields.tags.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
+    dom.select('#categories').setValue(fields.categories.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
+    dom.select('#excerpt').setValue(fields.excerpt);
+    dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
+
+    // special
+    var serverDev = '{{ site.url }}/admin/post/create.json';
+    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
+    var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
+    var env = buildFile.environment;
+    dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
+    dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
+    dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
+    dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('name', serverProdDev);
+    if (Manager.properties.meta.environment != 'development') {
+      dom.select('#processingAddy_prodDev').hide();
+    }
+
+    dom.select('#body').setValue("## This is a post in markdown! \nClick 'edit' to start authoring your post. \n\nYou can also... \n- Edit in StackEdit \n- Import from Google Docs \n\n[Here is a regular link](https://itwcreativeworks.com) \n[Here is a Google link](https://www.google.com/url?q=https://itwcreativeworks.com) \n![Here is an image](https://via.placeholder.com/1200)");
+
+    // Finally, make everything visible
+    dom.select('.loaded-false').hide();
+    dom.select('.loaded-true').show();
+  }
+
+  function blockNavigation() {
+    if (navBlocked === true) {
+      return;
+    }
+    navBlocked = true;
+    try {
+      window.onbeforeunload = function(event) {
+        if (allowLeave) {
+          event.preventDefault();
+        } else {
+          event.returnValue = "Write something clever here..";
+        }
+      };
+    } catch (e) {
+      console.error('Error creating post', e);
+    }
+  }
 
 
-      function setupStackedit() {
-        console.log('Launched stackedit');
-        stackedit = new Stackedit({
-          url: 'https://stackedit.io/app',
-          // url: '{{ site.url }}/admin/post/stackedit/',
-        });
+  function setupStackedit() {
+    console.log('Launched stackedit');
+    stackedit = new Stackedit({
+      url: 'https://stackedit.io/app',
+      // url: '{{ site.url }}/admin/post/stackedit/',
+    });
 
-        turndownService = new TurndownService();
+    turndownService = new TurndownService();
 
-        // Listen to StackEdit events and apply the changes to the textarea.
-        stackedit.on('fileChange', (file) => {
-          stackEditElement.value = file.content.text;
-        });
-      }
-    </script>
+    // Listen to StackEdit events and apply the changes to the textarea.
+    stackedit.on('fileChange', (file) => {
+      stackEditElement.value = file.content.text;
+    });
+  }
+</script>
 
-    <!-- https://benweet.github.io/stackedit.js/ -->
-    <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script>
-    <!-- <script src="https://unpkg.com/turndown/dist/turndown.js" async></script> -->
-    <script src="/special/master/pages/admin/post/vendor/turndown.js" type="text/javascript"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/turndown@5.0.3/lib/turndown.cjs.min.js" async></script> -->
-
-
-
-    {%- include /master/global/foot.html -%}
-  </body>
-
-</html>
+<!-- https://benweet.github.io/stackedit.js/ -->
+<script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script>
+<!-- <script src="https://unpkg.com/turndown/dist/turndown.js" async></script> -->
+<script src="/special/master/pages/admin/post/vendor/turndown.js" type="text/javascript"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/turndown@5.0.3/lib/turndown.cjs.min.js" async></script> -->
