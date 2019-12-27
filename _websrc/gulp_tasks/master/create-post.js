@@ -3,8 +3,8 @@ const gulp        = require('gulp');
 const argv        = require('yargs').argv;
 const querystring = require('querystring');
 const request     = require('request');
-// const Poster      = require('ultimate-jekyll-poster');
-const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
+const Poster      = require('ultimate-jekyll-poster');
+// const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
 
 // const jsonminify = require("jsonminify");
 const fs = require("fs-jetpack");

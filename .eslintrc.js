@@ -27,6 +27,8 @@ module.exports = {
     'comma-dangle': 'off',
     'space-before-function-paren': 'off',
     'new-cap': 'off',
+    'operator-linebreak': 'off',
+    'indent': 'off',
 
     // App rules
 
