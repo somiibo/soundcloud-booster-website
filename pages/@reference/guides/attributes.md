@@ -30,7 +30,9 @@ permalink: /@reference/guides/attributes/
 ## .auth-plan-premium-false-element
 
 ## .auth-signedin-true-element
+  * Shows if user is signed in otherwise its hidden
 ## .auth-signedin-false-element
+  * Shows if user is NOT signed in otherwise its hidden
 
 ## .ad-unit
   * Hidden if user is premium

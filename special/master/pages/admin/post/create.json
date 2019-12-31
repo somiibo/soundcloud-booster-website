@@ -1,7 +1,0 @@
----
-### ALL PAGES ###
-permalink: /admin/post/create.json
----
-{
-  "test": "val"
-}

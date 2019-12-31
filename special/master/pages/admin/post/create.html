@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/main
-permalink: /admin/post/create2/
+permalink: /admin/post/
 sitemap:
   include: false
 
@@ -26,10 +26,12 @@ settings:
           required: '/admin/signin/',
           prohibited: '/admin/dashboard/'
         }
-      }
+      },
+      pushNotifications: {
+        autoRequest: false
+      }  
     }
   "
-
 ---
 <!-- Header -->
 <div class="header mt-md-5">
@@ -516,7 +518,7 @@ settings:
 <script type="text/javascript">
 
   var navBlocked = false;
-  var allowLeave = false;
+  var allowLeave = true;
   var stackEditElement = document.querySelector('#body');
   var stackedit;
   var turndownService;
@@ -538,6 +540,7 @@ settings:
       countChars();
       // dom.select('#body').setValue()
       dom.select('body').on('click', function(event) {
+        // allowLeave = false;
         if (event.target.matches('#stackedit-edit')) {
           // Open the iframe
           stackedit.openFile({
@@ -551,6 +554,7 @@ settings:
 
       dom.select('body').on('keyup', function (event) {
         countChars();
+        allowLeave = false;
       });
 
       dom.select('#post-creator-form').on('submit', function (event) {
@@ -607,6 +611,7 @@ settings:
               dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
               window.refreshTimer--;
               if (window.refreshTimer <= 0) {
+                allowLeave = true;
                 window.location.href = window.location.href;
               }
             }, 1000);
@@ -623,6 +628,9 @@ settings:
       });
 
       function displayWaiting() {
+        dom.select('#response .alert-danger').hide()
+        dom.select('#response .alert-success').hide()
+
         dom.select('#response .alert-info').show()
         dom.select('#response').show()
         dom.select('#post-submit-btn').setAttribute('disabled', true);
@@ -645,7 +653,6 @@ settings:
 
       dom.select('#google-doc-form').on('submit', function (event) {
         var formData = {};
-        console.log('CLICK');
         dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
           var curField = dom.select(el);
           formData[curField.getAttribute('name')] = curField.getValue();
@@ -765,7 +772,7 @@ settings:
     dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
 
     // special
-    var serverDev = '{{ site.url }}/admin/post/create.json';
+    var serverDev = '{{ site.url }}/_post.json';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
     var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
     var env = buildFile.environment;
@@ -807,7 +814,7 @@ settings:
     console.log('Launched stackedit');
     stackedit = new Stackedit({
       url: 'https://stackedit.io/app',
-      // url: '{{ site.url }}/admin/post/stackedit/',
+      // url: '{{ site.url }}/admin/post/vendor/stackedit/',
     });
 
     turndownService = new TurndownService();

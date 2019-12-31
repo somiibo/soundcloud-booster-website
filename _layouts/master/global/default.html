@@ -7,7 +7,7 @@ layout: null
     {%- include /master/global/head.html -%}
   </head>
 
-  <body>
+  <body class="{{ layout.body.class }} {{ page.body.class }}">
     <!-- CONTENT START -->
     {{ content }}
     <!-- CONTENT END -->

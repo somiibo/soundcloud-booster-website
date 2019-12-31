@@ -30,7 +30,7 @@ gulp.task('browsersync', async function () {
       server: {
         baseDir: config.jekyll.dest,
         middleware: async function (req, res, next) {
-          if (/post\/create.json/.test(req.url)) {
+          if (/_post.json/.test(req.url)) {
             createPost = createPost || require('./create-post.js');
             let post = new createPost();
             return await post.create({

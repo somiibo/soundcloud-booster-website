@@ -1,22 +1,15 @@
 ---
 layout: master/global/default
----
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {%- include /master/global/head.html -%}
-
+head:
+  content: '
     <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/css/theme.min.css" id="stylesheetLight">
+  '
 
-  </head>
+foot:
+  content: '
+  '
 
-  <body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-    <!-- CONTENT START -->
-    {{ content }}
-    <!-- CONTENT END -->
-
-    {%- include /master/global/foot.html -%}
-
-    <!-- <script src="https://dashkit.goodthemes.co/assets/js/theme.min.js"></script> -->
-  </body>
-</html>
+body:
+  class: "d-flex align-items-center bg-auth border-top border-top-2 border-primary"
+---
+{{ content }}

@@ -1,0 +1,590 @@
+---
+### ALL PAGES ###
+layout: master/admin/main
+permalink: /admin/explore/users/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      },
+      pushNotifications: {
+        autoRequest: false
+      }
+    }
+  "
+---
+<div class="row">
+  <div class="col-12">
+
+    <!-- Header -->
+    <div class="header mt-md-5">
+      <div class="header-body">
+        <div class="row align-items-center">
+          <div class="col">
+
+            <!-- Pretitle -->
+            <h6 class="header-pretitle">
+              Explore
+            </h6>
+
+            <!-- Title -->
+            <h1 class="header-title">
+              Explore users
+            </h1>
+
+          </div>
+          <div class="col-auto">
+
+            <!-- Button -->
+            <a href="#" class="btn btn-primary lift">
+              New user (disabled)
+            </a>
+
+          </div>
+        </div> <!-- / .row -->
+        <div class="row align-items-center">
+          <div class="col">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card" data-toggle="lists" data-options='{"valueNames": ["orders-order", "orders-product", "orders-date", "orders-total", "orders-status", "orders-method"]}'>
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+
+            <!-- Search -->
+            <form class="row align-items-center" onsubmit="return false;" id="search-form">
+              <div class="col-auto pr-0">
+                <span class="fe fe-search text-muted"></span>
+              </div>
+              <div class="col">
+                <input type="search" class="form-control form-control-flush search" placeholder="Search" id="search-input">
+              </div>
+            </form>
+
+          </div>
+          <div class="col-auto">
+
+            <!-- Button -->
+
+            <!-- <div class="dropdown">
+              <button class="btn btn-sm btn-white dropdown-toggle" type="button" id="bulkActionDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Bulk action
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bulkActionDropdown">
+                <a class="dropdown-item" href="#!">Action</a>
+                <a class="dropdown-item" href="#!">Another action</a>
+                <a class="dropdown-item" href="#!">Something else here</a>
+              </div>
+            </div> -->
+            <button href="#" onclick="return false;" class="btn btn-primary lift" id="search-btn" disabled>Search</button>
+
+          </div>
+        </div> <!-- / .row -->
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm table-nowrap card-table" id="search-table">
+          <thead>
+            <tr>
+              <th>
+                <div class="custom-control custom-checkbox table-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectAll">
+                  <label class="custom-control-label" for="ordersSelectAll">
+                    &nbsp;
+                  </label>
+                </div>
+              </th>
+              <th>
+                <a href="#" class="text-muted sort" data-sort="orders-order">
+                  UID
+                </a>
+              </th>
+              <th>
+                <a href="#" class="text-muted sort" data-sort="orders-product">
+                  Email
+                </a>
+              </th>
+              <th>
+                <a href="#" class="text-muted sort" data-sort="orders-date">
+                  Admin
+                </a>
+              </th>
+              <th>
+                <a href="#" class="text-muted sort" data-sort="orders-total">
+                  Plan
+                </a>
+              </th>
+              <th>
+                <a href="#" class="text-muted sort" data-sort="orders-status">
+                  Created
+                </a>
+              </th>
+              <th colspan="2">
+                <a href="#" class="text-muted sort" data-sort="orders-method">
+                  New
+                </a>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="list" id="search-result">
+            <!--
+            <tr>
+              <td>
+                <div class="custom-control custom-checkbox table-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="ordersSelect" id="ordersSelectOne">
+                  <label class="custom-control-label" for="ordersSelectOne">
+                    &nbsp;
+                  </label>
+                </div>
+              </td>
+              <td class="orders-order">
+                #6520
+              </td>
+              <td class="orders-product">
+                5' x 3' Wall Poster
+              </td>
+              <td class="orders-date">
+                <time datetime="2018-07-30">07/30/18</time>
+              </td>
+              <td class="orders-total">
+                $55.25
+              </td>
+              <td class="orders-status">
+                <div class="badge badge-soft-success">
+                  Shipped
+                </div>
+              </td>
+              <td class="orders-method">
+                Mastercard
+              </td>
+              <td class="text-right">
+                <div class="dropdown">
+                  <a href="#" class="dropdown-ellipses dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fe fe-more-vertical"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#!" class="dropdown-item">
+                      Action
+                    </a>
+                    <a href="#!" class="dropdown-item">
+                      Another action
+                    </a>
+                    <a href="#!" class="dropdown-item">
+                      Something else here
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-12">
+    <div id="response" hidden>
+      <div class="my-3">
+        <div class="alert alert-info" role="alert" hidden>
+          <h4 class="alert-heading">Waiting...</h4>
+          <p class="mb-0">Hold up</p>
+          <!-- <hr>
+          <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
+          <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p> -->
+        </div>
+        <div class="alert alert-success" role="alert" hidden>
+          <h4 class="alert-heading">Well done!</h4>
+          <p>Aww yeah, the request was <strong>successful</strong>. ;)</p>
+          <hr>
+          <p class="mb-0"></p>
+          <pre><code id="success-response-code" class="text-white">waiting...</code></pre>
+        </div>
+        <div class="alert alert-danger" role="alert" hidden>
+          <h4 class="alert-heading">Aw snap!</h4>
+          <p class="mb-0">Something went wrong, please examine the error below:</p>
+          <hr>
+          <pre><code id="failed-response-code" class="text-white">waiting...</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="editSearchRecord" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-lighter">
+      <form id="record-editing-form" onsubmit="return false;" class="my-4">
+        <div class="modal-body">
+
+          <!-- Header -->
+          <div class="row">
+            <div class="col">
+
+              <!-- Prettitle -->
+              <h6 class="text-uppercase text-muted mb-3">
+                <a href="#!" class="text-reset">Edit user</a>
+              </h6>
+
+              <!-- Title -->
+              <h2 class="mb-2" id="search-record-edit-heading">
+                Editing
+              </h2>
+
+            </div>
+            <div class="col-auto">
+
+              <!-- Close -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">
+                  ×
+                </span>
+              </button>
+
+            </div>
+          </div> <!-- / .row -->
+
+          <!-- Divider -->
+          <hr class="my-4">
+
+          <div class="col-12">
+            <textarea id="record-editing-input" name="record-editing-input"></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+    var navBlocked = false;
+    var allowLeave = true;
+    var CurrentEditId = 0;
+
+    Manager.auth().ready(function () {
+      dom.select('#search-btn').removeAttribute('disabled')
+    })
+
+    Manager.ready(function() {
+      window.dom = Manager.dom();
+      window.util = Manager.utilities();
+      window.htmlEditor = CodeMirror.fromTextArea(document.getElementById("record-editing-input"), {
+        lineNumbers: true,
+        mode: 'application/ld+json',
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        viewportMargin: Infinity
+        // theme: 'default',
+      });
+
+      dom.select('body').on('click', function (event) {
+        if (event.target.matches('#search-btn')) {
+          performSearch();
+        } else if (event.target.matches('.search-record-btn')) {
+          window.CurrentEditId = event.target.dataset.record - 1;
+          var user = window.Table[window.CurrentEditId];
+          // console.log('window.CurrentEditId', window.CurrentEditId);
+          // console.log('window.Table', window.Table);
+          // console.log('user', user);
+          Manager.dom().select('#search-record-edit-heading').setInnerHTML('Editing ' + util.get(user, 'firebase.uid', '?'))
+          $('#editSearchRecord').modal('show');
+          // var body = JSON5.parse(htmlEditor.getDoc().getValue())
+          window.htmlEditor.getDoc().setValue(JSON5.stringify(user, null, 2));
+          setTimeout(function () {
+            window.htmlEditor.refresh();
+          }, 200);
+        }
+      })
+      dom.select('#search-form').on('submit', function (event) {
+        performSearch();
+      })
+      dom.select('#record-editing-form').on('submit', function (event) {
+        saveEdits();
+      })
+    },
+    {
+      waitFor: [{name: 'CodeMirror', condition: 'defined'}]
+    });
+
+    function saveEdits() {
+      var body = JSON5.parse(window.htmlEditor.getDoc().getValue());
+      var uid = window.util.get(body, 'firebase.uid', '');
+      // console.log('window.CurrentEditId', window.CurrentEditId);
+      if (uid) {
+        firebase.firestore().doc('users/' + uid)
+        .set(body,
+          {
+            merge: true
+          })
+          .then(function () {
+            $('#editSearchRecord').modal('hide');
+            window.Table[window.CurrentEditId] = body;
+            table_clear({reset: false});
+            table_build();
+          })
+
+      } else {
+
+      }
+    }
+
+    function performSearch() {
+      display('hide');
+      table_clear({reset: true});
+      firebase.auth().currentUser.getIdToken(true)
+      .then(function(token) {
+        window.token = token;
+        var promises = [];
+        promises.push(runQuery('firebase.email'), runQuery('firebase.uid'));
+        Promise.all(promises)
+        .then(function () {
+          table_build();
+        })
+        .catch(function (e) {
+          display('failed', e)
+        })
+        // runQuery();
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    }
+
+    function runQuery(field) {
+      var searchText = dom.select('#search-input').getValue();
+      var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_query';
+      var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_query';
+
+      return new Promise(function(resolve, reject) {
+        if (!searchText) {
+          return reject(new Error('Please enter a query to search.'))
+        } else {
+          Manager.ajax().request({
+            url: serverDev,
+            method: 'POST',
+            data: {
+              queries: [
+                {
+                  collection: 'users',
+                  // where: [{field: 'firebase.email', operator: '==', value: searchText}],
+                  // limit: 2,
+                  filter: [{field: field, regex: searchText, flags: 'i'}],
+                }
+              ],
+              backendManagerKey: window.token
+              // orderBy: 'firebase.email',
+              // startAt: 'asd',
+              // endAt: 'asd',
+            }
+          })
+          .success(function (o,t,data) {
+            console.log(data);
+            table_add(data);
+            resolve();
+          })
+          .error(function (o,t,e) {
+            // console.log(e);
+            display('failed', 'Error sending request: ' + e)
+            reject();
+          })
+        }
+      });
+
+      // var users = firebase.firestore().collection('users')
+      // // .where('status', 'in', [''])
+      // .orderBy(field)
+      // // .startAt('test').endAt('test'+ "\uf8ff")
+      // .startAt(searchText).endAt(searchText + "\uf8ff")
+      // // .startAt(searchText).endAt("\uE000" + searchText)
+      // // .startAt("\uE000").endAt(searchText)
+      // .get()
+      // .then(function (querySnapshot) {
+      //   allowLeave = true;
+      //   // console.log(doc);
+      //   table_clear();
+      //   querySnapshot.forEach(function (doc) {
+      //       console.log(doc.id, ' => ', doc.data());
+      //       table_add(doc.data());
+      //   });
+      //   // display('success', 'Success: \n' + JSON.stringify(doc.data()))
+      // })
+      // .catch(function (error) {
+      //   console.log("ERROR", error);
+      //   allowLeave = true;
+      //   // display('failed', 'Failed: \n' + JSON.stringify(error) )
+      // });
+    }
+
+    function table_add(data) {
+      window.Table = window.Table || [];
+
+      for (var i = 0; i < data.length; i++) {
+        window.Table.push(data[i]);
+      }
+    }
+
+    function table_build() {
+
+
+      window.Table = window.Table || [];
+      window.TableId = (window.TableId || 0);
+      // table_removeDuplicates();
+      // window.Table = [{firebase: {uid: 'test'}}, {firebase: {uid: 'test'}}, {firebase: {uid: 'test2'}}]
+      var util = Manager.utilities();
+      var buildString = '';
+      var table = Manager.dom().select('#search-result').get(0);
+      window.Table = window.Table.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+      //   t.place === thing.place && t.name === thing.name))
+        util.get(t, 'firebase.uid') === util.get(thing, 'firebase.uid')))
+      );
+
+      if (window.Table.length == 0) {
+        display('failed', new Error('No records found that match your query.'))
+        return;
+      }
+
+      for (var i = 0; i < window.Table.length; i++) {
+        var item = window.Table[i];
+        var tid = 'search-id-' + window.TableId;
+        window.TableId++;
+        var util = Manager.utilities();
+        var admin = util.get(item, 'roles.admin', false);
+        var plan = util.get(item, 'plan.id', 'basic');
+        // console.log('ADDING ITEM', item);
+        var timestamp = util.get(item, 'activity.created.timestamp', '?');
+        buildString +=
+        `
+          <tr>
+            <td>
+              <div class="custom-control custom-checkbox table-checkbox">
+                <input type="checkbox" class="custom-control-input" name="${tid}" id="${tid}">
+                <label class="custom-control-label" for="${tid}">
+                  &nbsp;
+                </label>
+              </div>
+            </td>
+            <td class="">
+              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'firebase.uid', '?')}</a>
+            </td>
+            <td class="orders-product">
+              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'firebase.email', '?')}</a>
+            </td>
+            <td class="orders-status">
+              <div class="badge badge-soft-${admin ? 'success' : 'danger'}">
+                ${admin}
+              </div>
+            </td>
+            <td class="orders-status">
+              <div class="badge badge-soft-${plan === 'basic' ? 'secondary' : 'primary'}">
+                ${plan}
+              </div>
+            </td>
+            <td class="orders-date">
+              <time datetime="${timestamp}">${timestamp.split('T')[0]}</time>
+            </td>
+
+            <td class="text-right">
+              <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block search-record-btn" data-record="${window.TableId}">
+                Edit
+              </a>
+
+            </td>
+          </tr>
+        `;
+      }
+
+      // Manager.dom().select('#search-result').get(0).appendChild(buildString);
+      table.innerHTML = buildString;
+
+
+
+    }
+
+    function display(type, message) {
+      dom.select('#response .alert-info').hide()
+      dom.select('#post-submit-btn').removeAttribute('disabled');
+      dom.select('#response').show()
+      if (type == 'failed') {
+        dom.select('#response .alert-success').hide()
+        dom.select('#response .alert-danger').show()
+        dom.select('#failed-response-code').setInnerHTML(message)
+      } else if (type == 'success') {
+        dom.select('#response .alert-success').show()
+        dom.select('#response .alert-danger').hide()
+        dom.select('#success-response-code').setInnerHTML(message)
+      } else if (type == 'waiting') {
+        dom.select('#response .alert-danger').hide()
+        dom.select('#response .alert-success').hide()
+        dom.select('#response .alert-info').show()
+        dom.select('#post-submit-btn').setAttribute('disabled', true);
+      } else {
+        dom.select('#response').hide()
+      }
+    }
+
+    function table_clear(options) {
+      options = options || {};
+      if (options.reset == true) {
+        window.Table = [];
+      }
+      window.TableId = 0;
+
+      var table = Manager.dom().select('#search-result').get(0);
+      table.innerHTML = '';
+    }
+
+
+    function blockNavigation() {
+      if (navBlocked === true) {
+        return;
+      }
+      navBlocked = true;
+      try {
+        window.onbeforeunload = function(event) {
+          if (allowLeave) {
+            event.preventDefault();
+          } else {
+            event.returnValue = "Write something clever here..";
+          }
+        };
+      } catch (e) {
+        console.error('Error creating post', e);
+      }
+    }
+</script>

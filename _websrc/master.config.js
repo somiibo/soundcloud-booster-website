@@ -5,7 +5,7 @@ module.exports = {
     _prefill:  true,
     browsersync:  true,
     eslint:       true,
-    imagemin:     true,
+    // imagemin:     true,
     imageminResponsive: true,
     copyJs:   true,
     copyUncompiled:   true,

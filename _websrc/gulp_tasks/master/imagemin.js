@@ -1,24 +1,24 @@
 const config   = require('../../master.config.js');
 const gulp     = require('gulp');
-const imagemin = require('gulp-imagemin');
+// const imagemin = require('gulp-imagemin');
 const newer    = require('gulp-newer');
 const plumber  = require('gulp-plumber');
-const pngquant = require('imagemin-pngquant');
+// const pngquant = require('imagemin-pngquant');
 const responsive = require('gulp-responsive');
 const cached = require('gulp-cached');
 const argv   = require('yargs').argv;
 
-gulp.task('imagemin', function () {
-  return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.svg', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
-    .pipe(plumber())
-    .pipe(newer(config.assets + '/' + config.imagemin.dest))
-    .pipe(imagemin({
-      progressive: config.imagemin.progressive,
-      svgoPlugins: config.imagemin.svgoPlugins,
-      use:         [pngquant()],
-    }))
-    .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest));
-});
+// gulp.task('imagemin', function () {
+//   return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.svg', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
+//     .pipe(plumber())
+//     .pipe(newer(config.assets + '/' + config.imagemin.dest))
+//     .pipe(imagemin({
+//       progressive: config.imagemin.progressive,
+//       svgoPlugins: config.imagemin.svgoPlugins,
+//       use:         [pngquant()],
+//     }))
+//     .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest));
+// });
 
 gulp.task('imageminResponsive', function () {
   if (argv.skipImageMin == 'true') {
