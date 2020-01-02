@@ -29,23 +29,14 @@ jobs:
         run: |
           export TZ=UTC date
           timestamp_utc=$(date +%FT%TZ)
-          echo $timestamp_utc
           export TZ=America/Los_Angeles date
           timestamp_pst=$(date +%FT%TZ)
-          echo $timestamp_pst
-
-          github_repo=$(basename `git rev-parse --show-toplevel`)
-          echo $github_repo
-
-          github_origin_url=$(git remote get-url origin)
-          echo $github_origin_url
-
-          github_username="$(cut -d'/' -f4 <<<$github_origin_url)"
-          echo $github_username
-          echo username below
-          echo $GITHUB_ACTOR
-
           temp_build_json=$(cat @output/build/build.json)
+
+          echo account: $GITHUB_ACTOR,
+          echo repo: $GITHUB_REPOSITORY
+          echo: timestamp_utc: $timestamp_utc
+          echo timestamp_pst: $timestamp_pst
           echo "build.json:" $temp_build_json
 
           build_log_path="@output/build/build.json"
@@ -58,7 +49,7 @@ jobs:
           git config user.name "Name"
           git add .
           git commit -m "Compile and Build: $timestamp_pst"
-          git remote set-url origin https://iwiedenm:${{secrets.ACCESS_TOKEN}}@github.com/$github_username/$github_repo.git
+          git remote set-url origin https://$GITHUB_ACTOR:${{secrets.ACCESS_TOKEN}}@github.com/$GITHUB_REPOSITORY.git
           git remote -v
           git checkout -b gh-pages
           git push origin HEAD:gh-pages --force
