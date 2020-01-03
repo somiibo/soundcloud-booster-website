@@ -142,6 +142,11 @@ settings:
     }
   " # javascript object to set the Configuration object for Web Manager
 
+# Custom admin dashboard pages
+admin-dashboard-pages: "{
+  'pages': []
+}"
+
 # Escape shortcuts
 escapes:
   underscore: "_"

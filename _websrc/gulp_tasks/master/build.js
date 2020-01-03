@@ -1,9 +1,10 @@
 const argv   = require('yargs').argv;
 let config = require('../../master.config.js');
 let appGulpTasks = require('../../app.config.js');
-// let yaml = require('js-yaml');
+let yaml = require('js-yaml');
 let fs = require('fs-jetpack');
 let tools = new (require('../../libraries/tools.js'));
+let JSON5 = require('json5');
 let Global = require('../../libraries/global.js');
 
 // let webManager = require('web-manager/package.json').version;
@@ -61,6 +62,15 @@ gulp.task('jekyll-build', async function (done) {
       build['environment'] = argv.jekyllEnv == 'production' ? 'production' : 'development';
 
       build.packages['web-manager'] = require('web-manager/package.json').version;
+
+      // Set _config.yml stuff
+      let _configYml = yaml.safeLoad(fs.read('_config.yml'));
+      build.brand = _configYml.brand;
+
+      // Set custom admin dashboard pages
+      build['admin-dashboard-pages'] = JSON5.parse(_configYml['admin-dashboard-pages']);
+      // build['admin-dashboard-pages'] = 'asd'
+
       fs.write('@output/build/build.json', JSON.stringify(build, null, 2));
     } catch (e) {
       console.error('Error updating build.json', e);
