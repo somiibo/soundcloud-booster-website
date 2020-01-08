@@ -44,6 +44,11 @@
 	left: 0;
 }
 
+/* Pointer events - can help fix bubbling issues for click listeners */
+.pointer-none {
+  pointer-events: none;
+}
+
 /*
   MASTER CSS DEPENDENCIES
 */

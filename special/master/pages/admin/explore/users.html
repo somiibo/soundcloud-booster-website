@@ -395,7 +395,7 @@ settings:
           return reject(new Error('Please enter a query to search.'))
         } else {
           Manager.ajax().request({
-            url: serverDev,
+            url: serverProd,
             method: 'POST',
             data: {
               queries: [
