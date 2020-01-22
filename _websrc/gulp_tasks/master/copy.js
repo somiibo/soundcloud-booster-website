@@ -1,9 +1,13 @@
 const config   = require('../../master.config.js');
 const gulp     = require('gulp');
 const newer    = require('gulp-newer');
+const argv   = require('yargs').argv;
 
 gulp.task('copyCss', function () {
-
+  if (argv.skipCopyCss == 'true') {
+    console.log('Skipping copyCss');
+    return;
+  }
   gulp.src([config.assets + config.assetsSubpath + '/sass/theme/**/*', '!./**/*.scss'])
     .pipe(newer(config.assets + '/css/theme'))
     .pipe(gulp.dest(config.assets + '/css/theme'));
@@ -27,7 +31,10 @@ gulp.task('copyImages', function () {
 });
 
 gulp.task('copyJs', function () {
-
+  if (argv.skipCopyJs == 'true') {
+    console.log('Skipping copyJs');
+    return;
+  }
   gulp.src([config.assets + config.assetsSubpath + '/js/master/service-workers/*'])
     .pipe(newer(config.assets + '/js/master/service-workers'))
     .pipe(gulp.dest(config.assets + '/js/master/service-workers'));
@@ -43,7 +50,10 @@ gulp.task('copyJs', function () {
 });
 
 gulp.task('copyUncompiled', function () {
-
+  if (argv.skipCopyUncompiled == 'true') {
+    console.log('Skipping copyUncompiled');
+    return;
+  }
   gulp.src([config.assets + config.assetsSubpathUncompiled + '/**/*'])
     .pipe(newer(config.assets))
     .pipe(gulp.dest(config.assets));
