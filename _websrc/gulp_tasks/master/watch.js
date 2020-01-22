@@ -48,6 +48,8 @@ gulp.task('watch', function () {
       './**/*.html',
       './**/*.md',
       './**/*.markdown',
+      './**/*.js',
+      './**/*.json',
       config.jekyll.data + '/**/*',
       // config.assets + config.sass.dest + '/**/*',
       // config.assets + config.js.dest + '/**/*',

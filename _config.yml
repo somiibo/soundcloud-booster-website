@@ -37,6 +37,8 @@ socials:
   youtube: "" # string, example: somiibo
   instagram: "" # string, example: somiibo
   tumblr: "" # string, example: somiibo
+  slack: "" # string, example: https://somiibo.slack.com
+  discord-invite: "" # string, example: https://discord.gg/vkeZEqb
 
 comments:
   disqus: "" # string, example: somiibo

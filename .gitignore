@@ -30,9 +30,9 @@ doc/
 .secret
 
 # Generated Files GEN>>>
-/assets/css/
-/assets/images/
-/assets/js/
+/assets/*
+!/assets/_src
+!/assets/_src-uncompiled
 package-lock.json
 # <<<GEN
 
