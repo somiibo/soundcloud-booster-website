@@ -45,6 +45,8 @@ jobs:
 
           sed -n '1h;1!H;${;g;s/GEN>>>.*<<<GEN/<REDACTED FOR LIVE PUBLISH>/g;p;}' .gitignore > .gitignore
 
+          rm -R node_modules
+
           git config user.email "$GITHUB_ACTOR@email.com"
           git config user.name "$GITHUB_ACTOR"
           git add .
