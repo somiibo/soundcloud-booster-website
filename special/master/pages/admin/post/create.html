@@ -29,7 +29,7 @@ settings:
       },
       pushNotifications: {
         autoRequest: false
-      }  
+      }
     }
   "
 ---
@@ -236,7 +236,7 @@ settings:
             Image preview of the post. Will be named the same as the title of the post
           </small>
           <div class="input-group input-group-merge mb-3">
-            <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image">
+            <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image" required>
           </div>
         </div>
       </div>
@@ -623,7 +623,8 @@ settings:
 
         })
         .catch(function(error) {
-          display('Failed to get firebase token: ' + error);
+          console.error(error);
+          displayError('Failed to get firebase token: ' + error);
         })
       });
 
@@ -779,7 +780,7 @@ settings:
     dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
     dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
     dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
-    dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('name', serverProdDev);
+    dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('value', serverProdDev);
     if (Manager.properties.meta.environment != 'development') {
       dom.select('#processingAddy_prodDev').hide();
     }
