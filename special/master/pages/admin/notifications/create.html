@@ -273,21 +273,8 @@ settings:
       function getPreviewIcon() {
         var newPreviewIcon = dom.select('#icon').getValue();
         if (lastPreviewIcon != newPreviewIcon) {
-          console.log('NEW', newPreviewIcon);
+          // console.log('NEW', newPreviewIcon);
           lastPreviewIcon = newPreviewIcon;
-          // Manager.ajax().request({
-          //   url: newPreviewIcon,
-          //   method: 'GET',
-          // })
-          // .success(function (one, two, three) {
-          //   console.log(one);
-          //   console.log(two);
-          //   console.log(three);
-          // })
-          // .error(function () {
-          //
-          // })
-
           dom.select('#preview-icon').setAttribute('src', newPreviewIcon);
         }
       }
@@ -327,7 +314,7 @@ settings:
             var curField = dom.select(el);
             data[curField.getAttribute('name')] = curField.getValue();
           });
-          finalData.backendManagerKey = token;
+          finalData.authenticationToken = token;
           finalData.payload = {};
           finalData.payload.title = data.title;
           finalData.payload.icon = data.icon;

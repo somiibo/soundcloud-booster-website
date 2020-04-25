@@ -574,7 +574,7 @@ settings:
             var curField = dom.select(el);
             data[curField.getAttribute('name')] = curField.getValue();
           });
-          data.backendManagerKey = token;
+          data.authenticationToken = token;
 
           console.log('#post-creator-form', endpoint, data);
 

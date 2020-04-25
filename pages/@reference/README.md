@@ -35,6 +35,16 @@ Perform the following steps or simply run `npm run template:update`
 8. Click the blue **Merge `template` into `master`** button.
 9. Press **Push origin** in the top right.
 
+# Run a local https server
+1. Execute:
+  * `npm run create:cert`
+  * `npm run prototype:https`
+2. Press <kbd>cmd + option + i</kbd> on the webpage that opens.
+3. Go to **Security** tab and press **Show certificate**.
+4. Drag the certificate to your Desktop then double-click it
+5. Double-click it when it has opened in keychain
+6. Open the **trust** dropdown and change it to **always trust**
+
 # Things to regularly update on ultimate-jekyll
 * ./special/master/misc/master-service-worker.js = instances of Firebase SDKs being loaded
 

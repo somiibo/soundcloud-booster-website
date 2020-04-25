@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/examples/admin-auth-check/
+permalink: /@reference/tests/admin-auth-check/
 settings:
   manager-configuration: "
     {
@@ -170,8 +170,8 @@ settings:
     <script type="text/javascript">
       Manager.ready(function() {
 
-        var serverAddyDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_test_authorizeAdmin';
-        var serverAddyProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_test_authorizeAdmin';
+        var serverAddyDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_test_authorize';
+        var serverAddyProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_test_authorize';
 
         Manager.dom().select('#server-addy').setValue(serverAddyDev);
         Manager.dom().select('#server-addy-dev').setValue(serverAddyDev);
@@ -225,7 +225,7 @@ settings:
                 Manager.ajax().request({
                   method: 'POST',
                   url: authUrl,
-                  data: {backendManagerKey: token},
+                  data: {authenticationToken: token},
                 })
                 .success(function (response, status, data) { // This function runs only on success
                   console.log('Success');
@@ -239,7 +239,7 @@ settings:
                   console.log(response);
                   console.log(status);
                   console.log(error);
-                  Manager.dom().select('#result').setInnerHTML(error); // Set setInnerHTML
+                  Manager.dom().select('#result').setInnerHTML(error.toString()); // Set setInnerHTML
                 })
                 .always(function (response, status) { // This function runs regardless of a success or error
                   console.log('Always');
