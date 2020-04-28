@@ -178,7 +178,7 @@ settings:
           if (Manager.properties.meta.environment === 'development') {
             Manager.dom().select('#notification-address').setValue('http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification');
           } else {
-            Manager.dom().select('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification');
+            Manager.dom().select('#notification-address').setValue('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification');
           }
 
         });
