@@ -11,7 +11,7 @@ permalink: /manifest.json
 {
 
   "name": "{{ site.manifest.name }}",
-  "short_name": "{{ site.manifest.short_name }}",
+  "short_name": "{{ site.manifest.short-name }}",
   "icons": [
     {
       "src": "{{ favicon_path }}/android-chrome-192x192.png",
@@ -24,11 +24,11 @@ permalink: /manifest.json
       "type": "image/png"
     }
   ],
-  "theme_color": "{%- if site.manifest.theme_color != null and site.manifest.theme_color != '' -%}{{ site.manifest.theme_color }}{%- else -%}#ffffff{%- endif -%}",
-  "background_color": "{%- if site.manifest.background_color != null and site.manifest.background_color != '' -%}{{ site.manifest.background_color }}{%- else -%}#ffffff{%- endif -%}",
+  "theme_color": "{%- if site.manifest.theme-color != null and site.manifest.theme-color != '' -%}{{ site.manifest.theme-color }}{%- else -%}#ffffff{%- endif -%}",
+  "background_color": "{%- if site.manifest.background-color != null and site.manifest.background-color != '' -%}{{ site.manifest.background-color }}{%- else -%}#ffffff{%- endif -%}",
 
   "display": "{%- if site.manifest.display != null and site.manifest.display != '' -%}{{ site.manifest.display }}{%- else -%}standalone{%- endif -%}",
-  "start_url": "{%- if site.manifest.start_url != null and site.manifest.start_url != '' -%}{{ site.manifest.start_url }}{%- else -%}index.html{%- endif -%}",
+  "start_url": "{%- if site.manifest.start-url != null and site.manifest.start-url != '' -%}{{ site.manifest.start-url }}{%- else -%}index.html{%- endif -%}",
   "scope": "{%- if site.manifest.scope != null and site.manifest.scope != '' -%}{{ site.manifest.scope }}{%- else -%}/{%- endif -%}",
   "orientation": "{%- if site.manifest.orientation != null and site.manifest.orientation != '' -%}{{ site.manifest.orientation }}{%- else -%}portrait{%- endif -%}",
   "gcm_sender_id": "103953800507",

@@ -66,16 +66,16 @@ brand:
   description: "Default description." # example: A search engine company.
   logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1000x1000.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
   logo-image-svg: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.svg
-  addressLocality: "Los Angeles" # String | example: Los Angeles
-  addressCountry: "United States" # String | example: United States
+  address-locality: "Los Angeles" # String | example: Los Angeles
+  address-country: "United States" # String | example: United States
 
 manifest:
   name: "" # example: Google Maps
-  short_name: "" # example: Maps
-  theme_color: "#ffffff" # example: #ffffff
-  background_color: "#ffffff" # example: #ffffff
+  short-name: "" # example: Maps
+  theme-color: "#ffffff" # example: #ffffff
+  background-color: "#ffffff" # example: #ffffff
   display: "standalone" # example: standalone
-  start_url: "index.html" # example: index.html, /maps/?source=pwa
+  start-url: "index.html" # example: index.html, /maps/?source=pwa
   scope: "/" # example: /maps/, /
   orientation: "portrait" # example: portrait,
 
