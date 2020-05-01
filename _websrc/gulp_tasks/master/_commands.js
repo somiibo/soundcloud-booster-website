@@ -33,7 +33,7 @@ gulp.task('cloudflare:purge', async function (done) {
       return resolve(json);
     })
     .catch(e => {
-      console.error(err);
+      console.error(e);
       return resolve(e);
     })
   });
