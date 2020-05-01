@@ -13,7 +13,6 @@ gulp.task('cloudflare:purge', async function (done) {
   await new Promise(function(resolve, reject) {
     // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
     fetch('https://api.itwcreativeworks.com/wrapper/cloudflare', {
-    // fetch('http://localhost:5001/itw-creative-works/us-central1/wrapper_cloudflare', {
       method: 'post',
       body: JSON.stringify({
         body: {
