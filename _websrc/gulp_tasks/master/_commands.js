@@ -1,49 +1,42 @@
 const gulp    = require('gulp');
-const request = require('request');
+const fetch   = require('node-fetch');
 const argv    = require('yargs').argv;
-let fs;
-let yaml;
-const del = require('del');
-const exec = require('child_process').exec;
-
+const del     = require('del');
+const exec    = require('child_process').exec;
+const fs      = require('fs-jetpack');
+const yaml    = require('js-yaml');
 
 gulp.task('cloudflare:purge', async function (done) {
-  yaml = yaml || require('js-yaml');
-  fs = fs || require('fs-jetpack');
   let doc = yaml.safeLoad(fs.read('_config.yml'));
   console.log(`starting cloudflare:purge on zone: ${doc.cloudflare.zone} ...`);
 
   await new Promise(function(resolve, reject) {
-    try {
-      // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
-      request.post(
-        {
-          url: 'https://api.itwcreativeworks.com/wrapper/cloudflare',
-          body: {
-            body: {
-              purge_everything: true
-            },
-            zone: doc.cloudflare.zone,
-            command: 'purge_cache',
-            delay: parseInt(argv.delay) || 1,
-          },
-          timeout: parseInt(argv.timeout) || 30000,
-          json: true,
+    // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
+    fetch('https://api.itwcreativeworks.com/wrapper/cloudflare', {
+    // fetch('http://localhost:5001/itw-creative-works/us-central1/wrapper_cloudflare', {
+      method: 'post',
+      body: JSON.stringify({
+        body: {
+          purge_everything: true
         },
-        function (err, httpResponse, body) {
-          if (err) {
-            console.error(err);
-            resolve();
-          } else {
-            console.log(body);
-            resolve();
-          }
-
-        }
-      );
-    } catch (e) {
-      resolve();
-    }
+        zone: doc.cloudflare.zone,
+        command: 'purge_cache',
+        delay: parseInt(argv.delay) || 1,
+      }),
+      timeout: parseInt(argv.timeout) || 30000,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+      return resolve(json);
+    })
+    .catch(e => {
+      console.error(err);
+      return resolve(e);
+    })
   });
 });
 

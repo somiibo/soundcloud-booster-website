@@ -84,7 +84,7 @@ gulp.task("_prefill", async () => {
           "const newer    = require('gulp-newer');" + "\n" +
           "const through  = require('through2');" + "\n" +
           "const argv     = require('yargs').argv;" + "\n" +
-          "const request  = require('request');" + "\n" +
+          "const fetch    = require('node-fetch');" + "\n" +
           "let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;" + "\n" +
           "let isServer   = (argv.buildLocation == 'server');" + "\n" +
           "" + "\n" +
