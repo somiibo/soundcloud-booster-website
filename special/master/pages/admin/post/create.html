@@ -618,7 +618,7 @@ settings:
           })
           .error(function (response, status, error) {
             console.error(response, status, error);
-            displayError(error + '\n' + response.response);
+            displayError(error);
           })
 
         })
@@ -737,7 +737,9 @@ settings:
     })
 
   }, {
-    waitFor: [{name: 'Stackedit', condition: 'defined'},{name: 'TurndownService', condition: 'defined'},]
+    waitFor: function () {
+      return typeof window.Stackedit !== 'undefined' && typeof window.TurndownService !== 'undefined';
+    }
   });
 
   function countChars() {

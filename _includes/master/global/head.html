@@ -198,28 +198,11 @@
   Manager$.prototype.ready = function(fn, options) {
     var This = this;
     var tryAgain = true;
-    options = options || {};
-    options.retryInterval = options.retryInterval || 100;
-    options.waitFor = options.waitFor || [];
-
     var waitFor = true;
-    for (var i = 0; i < options.waitFor.length; i++) {
-      var cur = options.waitFor[i] || {};
-      var val = window[cur.name];
+    options = options || {};
+    options.interval = options.interval || 100;
 
-      if (cur.condition == '==' && val != cur.value) {
-        waitFor = false;
-        break;
-      }
-      if (cur.condition == '!=' && val == cur.value) {
-        waitFor = false;
-        break;
-      }
-      if (cur.condition == 'defined' && typeof val == 'undefined') {
-        waitFor = false;
-        break;
-      }
-    }
+    waitFor = !options.waitFor || (options.waitFor && options.waitFor())
 
     try {
       tryAgain = (Manager.get('page.status.ready', false) == false);
@@ -228,10 +211,9 @@
       tryAgain = true;
     }
     if (tryAgain || !waitFor) {
-      // console.log('polling a...', options.waitFor, !waitFor);
       setTimeout(function () {
         This.ready(fn, options);
-      }, options.retryInterval);
+      }, options.interval);
     } else {
       return fn();
     }
@@ -243,7 +225,7 @@
       ready: function (fn, options) {
         var tryAgain = true;
         options = options || {};
-        options.retryInterval = options.retryInterval || 100;
+        options.interval = options.interval || 100;
 
         try {
           tryAgain = (Manager.get('page.status.authReady', false) == false);
@@ -254,7 +236,7 @@
         if (tryAgain) {
           setTimeout(function () {
             This.auth().ready(fn, options);
-          }, options.retryInterval);
+          }, options.interval);
         } else {
           return fn();
         }

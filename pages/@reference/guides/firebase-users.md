@@ -27,7 +27,7 @@ permalink: /@reference/guides/firebase-users/
       timestampUNIX: 1556503067000,
     },
   },
-  firebase: {
+  auth: {
     uid: '',
     email: '',
   },
@@ -37,11 +37,11 @@ permalink: /@reference/guides/firebase-users/
     betaTester: false,
   },
   plan: {
+    id: null, // intro | basic | advanced... (intro is default value)
     expires: {
       timestamp: '2111-01-01T00:00:00Z',
       timestampUNIX: 1556503067000,
     },
-    id: 'intro', // intro | basic | advanced... (intro is default value)
     enterprise: {
       limits: {
         // ...

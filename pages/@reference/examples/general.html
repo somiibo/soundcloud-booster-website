@@ -109,13 +109,17 @@ permalink: /@reference/examples/general/
       Manager.ready(function() {
         console.log('waitForTest4 satisfied');
       }, {
-        waitFor: [{name: 'waitForTest4', condition: '==', value: true}]
+        waitFor: function () {
+          return window.waitForTest4 === true;
+        }
       });
 
       Manager.ready(function() {
         console.log('waitForTest5 satisfied');
       }, {
-        waitFor: [{name: 'waitForTest5', condition: 'defined'}]
+        waitFor: function () {
+          return typeof window.waitForTest5 !== 'undefined';
+        }
       });
 
     </script>

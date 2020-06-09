@@ -89,7 +89,9 @@ sitemap:
         });
 
       }, {
-        waitFor: [{name: 'Slapform', condition: 'defined'}]
+        waitFor: function () {
+          return typeof window.Slapform !== 'undefined';
+        }
       });
 
     </script>

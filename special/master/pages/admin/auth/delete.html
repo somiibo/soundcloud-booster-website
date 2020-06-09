@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/auth
-permalink: /admin/signout/
+permalink: /admin/delete/
 sitemap:
   include: false
 
@@ -45,11 +45,31 @@ settings:
 
 <script type="text/javascript">
   Manager.ready(function() {
-    Manager.auth().signOut();
+
     Manager.auth().ready(function(user) {
-      if (!user || !user.uid) {
+      if (user && user.uid) {
+        user.getIdToken(false)
+          .then(function(token) {
+            Manager.ajax().request({
+              url: 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_deleteUser',
+              // url: 'http://localhost:5001/ultimate-jekyll/us-central1/bm_deleteUser',
+              body: {
+                authenticationToken: token,
+              },
+              timeout: 20000,
+            })
+            .always(function (response, status) {
+              if (!user || !user.uid) {
+                window.location.href = '{{ site.url }}/admin/signin/';
+              }
+            });
+          })
+          .catch(function(error) {
+            console.error(error);
+          });
+      } else {
         window.location.href = '{{ site.url }}/admin/signin/';
       }
-    })
+    });
   });
 </script>

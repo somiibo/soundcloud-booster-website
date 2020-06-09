@@ -81,6 +81,6 @@
     "yargs": "^15.0.2"
   },
   "dependencies": {
-    "web-manager": "^1.5.31"
+    "web-manager": "^1.6.0"
   }
 }

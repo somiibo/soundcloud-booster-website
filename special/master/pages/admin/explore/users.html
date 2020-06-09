@@ -82,7 +82,7 @@ settings:
                 <span class="fe fe-search text-muted"></span>
               </div>
               <div class="col">
-                <input type="search" class="form-control form-control-flush search" placeholder="Search" id="search-input">
+                <input type="search" class="form-control form-control-flush search" placeholder="Search" id="search-input" readonly>
               </div>
             </form>
 
@@ -145,7 +145,7 @@ settings:
               </th>
               <th colspan="2">
                 <a href="#" class="text-muted sort" data-sort="orders-method">
-                  New
+                  Edit
                 </a>
               </th>
             </tr>
@@ -211,12 +211,16 @@ settings:
   <div class="col-12">
     <div id="response" hidden>
       <div class="my-3">
-        <div class="alert alert-info" role="alert" hidden>
+        <!-- <div class="alert alert-info" role="alert" hidden>
           <h4 class="alert-heading">Waiting...</h4>
           <p class="mb-0">Hold up</p>
-          <!-- <hr>
-          <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
-          <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p> -->
+        </div> -->
+        <div id="search-preloader" class="">
+          <div id="" class="d-flex justify-content-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
         <div class="alert alert-success" role="alert" hidden>
           <h4 class="alert-heading">Well done!</h4>
@@ -273,7 +277,7 @@ settings:
           <!-- Divider -->
           <hr class="my-4">
 
-          <div class="col-12">
+          <div class="col-12 pr-0 pl-0">
             <textarea id="record-editing-input" name="record-editing-input"></textarea>
           </div>
 
@@ -297,7 +301,7 @@ settings:
     var CurrentEditId = 0;
 
     Manager.auth().ready(function () {
-      dom.select('#search-btn').removeAttribute('disabled')
+      dom.select('#search-btn, #search-input').removeAttribute('disabled').removeAttribute('readonly')
     })
 
     Manager.ready(function() {
@@ -318,13 +322,9 @@ settings:
         } else if (event.target.matches('.search-record-btn')) {
           window.CurrentEditId = event.target.dataset.record - 1;
           var user = window.Table[window.CurrentEditId];
-          // console.log('window.CurrentEditId', window.CurrentEditId);
-          // console.log('window.Table', window.Table);
-          // console.log('user', user);
-          Manager.dom().select('#search-record-edit-heading').setInnerHTML('Editing ' + util.get(user, 'firebase.uid', '?'))
+          Manager.dom().select('#search-record-edit-heading').setInnerHTML('Editing ' + util.get(user, 'auth.uid', '?'))
           $('#editSearchRecord').modal('show');
-          // var body = JSON5.parse(htmlEditor.getDoc().getValue())
-          window.htmlEditor.getDoc().setValue(JSON5.stringify(user, null, 2));
+          window.htmlEditor.getDoc().setValue(JSON5.stringify(util.get(user, '', {}), null, 2));
           setTimeout(function () {
             window.htmlEditor.refresh();
           }, 200);
@@ -338,13 +338,14 @@ settings:
       })
     },
     {
-      waitFor: [{name: 'CodeMirror', condition: 'defined'}]
+      waitFor: function () {
+        return typeof window.CodeMirror !== 'undefined';
+      }
     });
 
     function saveEdits() {
       var body = JSON5.parse(window.htmlEditor.getDoc().getValue());
-      var uid = window.util.get(body, 'firebase.uid', '');
-      // console.log('window.CurrentEditId', window.CurrentEditId);
+      var uid = window.util.get(body, 'auth.uid', '');
       if (uid) {
         firebase.firestore().doc('users/' + uid)
         .set(body,
@@ -364,16 +365,15 @@ settings:
     }
 
     function performSearch() {
-      display('hide');
+      display('waiting');
       table_clear({reset: true});
       firebase.auth().currentUser.getIdToken(true)
       .then(function(token) {
         window.token = token;
-        var promises = [];
-        promises.push(runQuery('firebase.email'), runQuery('firebase.uid'));
-        Promise.all(promises)
-        .then(function () {
+        runQuery()
+        .then(function (r) {
           table_build();
+          display('success', r)
         })
         .catch(function (e) {
           display('failed', e)
@@ -381,7 +381,7 @@ settings:
         // runQuery();
       })
       .catch(function(error) {
-        console.log(error);
+        console.error(error);
       });
     }
 
@@ -401,15 +401,16 @@ settings:
               queries: [
                 {
                   collection: 'users',
-                  // where: [{field: 'firebase.email', operator: '==', value: searchText}],
-                  // limit: 2,
-                  filter: [{field: field, regex: searchText, flags: 'i'}],
-                }
+                  orderBy: [
+                    { field: 'activity.created.timestampUNIX', order: 'desc' },
+                    // { field: 'auth.uid', order: 'asc' },
+                  ],
+                  filter: [
+                    { field: 'auth.email || auth.uid', matches: '/' + searchText + '/i' },
+                  ],
+                },
               ],
               authenticationToken: window.token
-              // orderBy: 'firebase.email',
-              // startAt: 'asd',
-              // endAt: 'asd',
             }
           })
           .success(function (o,t,data) {
@@ -418,43 +419,18 @@ settings:
             resolve();
           })
           .error(function (o,t,e) {
-            // console.log(e);
-            display('failed', 'Error sending request: ' + e)
-            reject();
+            console.log(o,t,e);
+            reject(e);
           })
         }
       });
-
-      // var users = firebase.firestore().collection('users')
-      // // .where('status', 'in', [''])
-      // .orderBy(field)
-      // // .startAt('test').endAt('test'+ "\uf8ff")
-      // .startAt(searchText).endAt(searchText + "\uf8ff")
-      // // .startAt(searchText).endAt("\uE000" + searchText)
-      // // .startAt("\uE000").endAt(searchText)
-      // .get()
-      // .then(function (querySnapshot) {
-      //   allowLeave = true;
-      //   // console.log(doc);
-      //   table_clear();
-      //   querySnapshot.forEach(function (doc) {
-      //       console.log(doc.id, ' => ', doc.data());
-      //       table_add(doc.data());
-      //   });
-      //   // display('success', 'Success: \n' + JSON.stringify(doc.data()))
-      // })
-      // .catch(function (error) {
-      //   console.log("ERROR", error);
-      //   allowLeave = true;
-      //   // display('failed', 'Failed: \n' + JSON.stringify(error) )
-      // });
     }
 
     function table_add(data) {
       window.Table = window.Table || [];
 
       for (var i = 0; i < data.length; i++) {
-        window.Table.push(data[i]);
+        window.Table.push(data[i].data);
       }
     }
 
@@ -463,16 +439,17 @@ settings:
 
       window.Table = window.Table || [];
       window.TableId = (window.TableId || 0);
-      // table_removeDuplicates();
-      // window.Table = [{firebase: {uid: 'test'}}, {firebase: {uid: 'test'}}, {firebase: {uid: 'test2'}}]
       var util = Manager.utilities();
       var buildString = '';
       var table = Manager.dom().select('#search-result').get(0);
-      window.Table = window.Table.filter((thing, index, self) =>
-        index === self.findIndex((t) => (
-      //   t.place === thing.place && t.name === thing.name))
-        util.get(t, 'firebase.uid') === util.get(thing, 'firebase.uid')))
-      );
+
+      window.Table = window.Table.filter(function (el, index, self) {
+        return index === window.Table.findIndex(function (el2) {
+          return util.get(el, 'auth.uid') === util.get(el2, 'auth.uid')
+        })
+      });
+
+      // console.log('window.Table', window.Table);
 
       if (window.Table.length == 0) {
         display('failed', new Error('No records found that match your query.'))
@@ -486,7 +463,6 @@ settings:
         var util = Manager.utilities();
         var admin = util.get(item, 'roles.admin', false);
         var plan = util.get(item, 'plan.id', 'basic');
-        // console.log('ADDING ITEM', item);
         var timestamp = util.get(item, 'activity.created.timestamp', '?');
         buildString +=
         `
@@ -500,10 +476,10 @@ settings:
               </div>
             </td>
             <td class="">
-              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'firebase.uid', '?')}</a>
+              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'auth.uid', '?')}</a>
             </td>
             <td class="orders-product">
-              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'firebase.email', '?')}</a>
+              <a href="#" onclick="return false"; class="search-record-btn" data-record="${window.TableId}">${util.get(item, 'auth.email', '?')}</a>
             </td>
             <td class="orders-status">
               <div class="badge badge-soft-${admin ? 'success' : 'danger'}">
@@ -519,7 +495,7 @@ settings:
               <time datetime="${timestamp}">${timestamp.split('T')[0]}</time>
             </td>
 
-            <td class="text-right">
+            <td class="">
               <a href="#!" class="btn btn-sm btn-white d-none d-md-inline-block search-record-btn" data-record="${window.TableId}">
                 Edit
               </a>
@@ -537,22 +513,24 @@ settings:
     }
 
     function display(type, message) {
-      dom.select('#response .alert-info').hide()
-      dom.select('#post-submit-btn').removeAttribute('disabled');
+      dom.select('#response #search-preloader').hide()
+      dom.select('#search-btn').removeAttribute('disabled').removeClass('disabled');
       dom.select('#response').show()
       if (type == 'failed') {
         dom.select('#response .alert-success').hide()
         dom.select('#response .alert-danger').show()
+        dom.select('#response #search-preloader').hide()
         dom.select('#failed-response-code').setInnerHTML(message)
       } else if (type == 'success') {
-        dom.select('#response .alert-success').show()
+        // dom.select('#response .alert-success').show()
         dom.select('#response .alert-danger').hide()
+        dom.select('#response #search-preloader').hide()
         dom.select('#success-response-code').setInnerHTML(message)
       } else if (type == 'waiting') {
         dom.select('#response .alert-danger').hide()
         dom.select('#response .alert-success').hide()
-        dom.select('#response .alert-info').show()
-        dom.select('#post-submit-btn').setAttribute('disabled', true);
+        dom.select('#response #search-preloader').show()
+        dom.select('#search-btn').setAttribute('disabled', true).addClass('disabled');
       } else {
         dom.select('#response').hide()
       }

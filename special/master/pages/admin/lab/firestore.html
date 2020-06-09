@@ -374,8 +374,9 @@ settings:
     })
 
   }, {
-    // waitFor: [{name: 'JSON5', condition: 'defined'}, {name: 'CodeFlask', condition: 'defined'}]
-    waitFor: [{name: 'JSON5', condition: 'defined'}]
+    waitFor: function () {
+      return typeof window.JSON5 !== 'undefined';
+    }
   });
 
   function countChars() {
