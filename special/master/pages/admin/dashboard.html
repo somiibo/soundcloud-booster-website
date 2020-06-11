@@ -882,6 +882,7 @@ settings:
 <script type="text/javascript">
 
   Manager.auth().ready(function(user) {
+    var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_getStats';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_getStats';
 
     if (user && user.uid) {
