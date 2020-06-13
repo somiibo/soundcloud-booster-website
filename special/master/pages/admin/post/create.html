@@ -81,7 +81,7 @@ settings:
             Title
           </label>
           <small class="form-text text-muted">
-            The title of the post
+            The title of the post: <code class="ml-1">My Post Title</code>
           </small>
           <div class="input-group input-group-merge mb-3">
             <input type="text" class="form-control form-control-appended" id="title" name="title">
@@ -100,7 +100,7 @@ settings:
             URL
           </label>
           <small class="form-text text-muted">
-            The URL of the post
+            The URL of the post: <code class="ml-1">my-post-url</code>
           </small>
           <div class="input-group input-group-merge mb-3">
             <input type="text" class="form-control form-control-appended" id="url" name="url">
@@ -119,7 +119,7 @@ settings:
             Layout
           </label>
           <small class="form-text text-muted">
-            Usually <code class="highlighter-rouge">master/blog/post</code> or <code class="highlighter-rouge">app/blog/post</code>
+            Usually <code class="highlighter-rouge">app/blog/post</code> or <code class="highlighter-rouge">master/blog/post</code>
           </small>
           <div class="input-group input-group-merge mb-3">
             <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
@@ -494,12 +494,15 @@ settings:
   var authors = [];
   {% for post in site.posts limit:1 %}
   fields = {
-    title: "{{ post.post.title }}",
-    url: "{{ post.url }}",
-    excerpt: "{{ post.post.excerpt }}",
-    id: "{{ post.post.id }}",
+    // title: "{{ post.post.title }}",
+    title: "",
+    // url: "{{ post.url }}",
+    url: "",
+    // excerpt: "{{ post.post.excerpt }}",
+    excerpt: "",
+    id: parseInt("{{ post.post.id }}") + 1,
     author: "{{ post.post.author }}",
-    date: '{{ post.date | date: "%Y-%m-%d" }}',
+    date: new Date().toISOString().split('T')[0] || '{{ post.date | date: "%Y-%m-%d" }}',
     affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
     tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
     categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
@@ -509,8 +512,8 @@ settings:
 
   authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
 
-  // console.log('FIELDS', fields);
-  // console.log('AUTHORS', authors);
+  console.log('FIELDS', fields);
+  console.log('AUTHORS', authors);
 
 </script>
 
@@ -694,15 +697,19 @@ settings:
           markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
           markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
 
-
-          // Clear promos stuff
-          markdown = markdown.replace(/Published by.*every 5 minutes/img, ''); // remove google
+          // Clear promo stuff
+          markdown = markdown
+            .replace(/Published by \[.*\)/img, '') // remove google
+            .replace(/Updated automatically.*every 5 minutes/img, ''); // remove google
 
           // Remove hr breaks
           if (formData.replaceHeadings) {
-            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // remove -
-            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove -
+            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // replace = with #
+            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove - with ##
+            markdown = markdown.replace(/(\n|^)(={3,}).*(={3,})/img, ''); // remove extra =
+            markdown = markdown.replace(/(\n|^)(-{3,}).*(-{3,})/img, ''); // remove extra -
           }
+          markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
 
           var links = [];
           links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
