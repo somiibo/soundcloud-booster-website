@@ -27,15 +27,22 @@ gulp.task('cloudflare:purge', async function (done) {
         'Content-Type': 'application/json',
       }
     })
-    .then(res => res.json())
-    .then(json => {
-      console.log(json);
-      return resolve(json);
+    .then(res => {
+      if (res.status >= 200 && res.status < 300) {
+        res.json()
+        .then(json => {
+          console.log(json);
+        })
+      } else {
+        res.text()
+        .then(text => {
+          console.error(new Error(text));
+        })
+      }
     })
     .catch(e => {
       console.error(e);
-      return resolve(e);
-    })
+    });
   });
 });
 
