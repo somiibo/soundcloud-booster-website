@@ -60,7 +60,7 @@ settings:
       </div>
     </div>
 
-    <div class="col-12 col-lg-6 col-xl">
+    <div class="col-sm-3 col-xs-6">
 
       <!-- Card -->
       <div class="card">
@@ -82,10 +82,7 @@ settings:
 
             </div>
             <div class="col-auto">
-
-              <!-- Icon -->
-              <span class="h2 fe fe-dollar-sign text-muted mb-0"></span>
-
+              <span class="h2 fe fe-user text-muted mb-0"></span>
             </div>
           </div> <!-- / .row -->
 
@@ -93,7 +90,7 @@ settings:
       </div>
 
     </div>
-    <div class="col-12 col-lg-6 col-xl">
+    <div class="col-sm-3 col-xs-6">
 
       <!-- Card -->
       <div class="card">
@@ -115,10 +112,7 @@ settings:
 
             </div>
             <div class="col-auto">
-
-              <!-- Icon -->
-              <span class="h2 fe fe-briefcase text-muted mb-0"></span>
-
+              <span class="h2 fe fe-globe text-muted mb-0"></span>
             </div>
           </div> <!-- / .row -->
 
@@ -126,7 +120,7 @@ settings:
       </div>
 
     </div>
-    <div class="col-12 col-lg-6 col-xl">
+    <div class="col-sm-3 col-xs-6">
 
       <!-- Card -->
       <div class="card">
@@ -134,6 +128,36 @@ settings:
           <div class="row align-items-center">
             <div class="col">
 
+
+              <!-- Title -->
+              <h6 class="card-title text-uppercase text-muted mb-2">
+                Subscribers
+              </h6>
+
+              <!-- Heading -->
+              <span class="h2 mb-0 stats-value" id="stats-notification-subscribers">
+                <div class="spinner-border text-primary spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </span>
+
+            </div>
+            <div class="col-auto">
+              <span class="h2 fe fe-bell text-muted mb-0"></span>
+            </div>
+          </div> <!-- / .row -->
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-3 col-xs-6">
+
+      <!-- Card -->
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
 
               <!-- Title -->
               <h6 class="card-title text-uppercase text-muted mb-2">
@@ -147,41 +171,7 @@ settings:
 
             </div>
             <div class="col-auto">
-
-              <!-- Icon -->
-              <span class="h2 fe fe-clipboard text-muted mb-0"></span>
-
-            </div>
-          </div> <!-- / .row -->
-
-        </div>
-      </div>
-
-    </div>
-    <div class="col-12 col-lg-6 col-xl">
-
-      <!-- Card -->
-      <div class="card">
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col">
-
-              <!-- Title -->
-              <h6 class="card-title text-uppercase text-muted mb-2">
-                Coming soon
-              </h6>
-
-              <!-- Heading -->
-              <span class="h2 mb-0 stats-value">
-                ...
-              </span>
-
-            </div>
-            <div class="col-auto">
-
-              <!-- Chart -->
-              <span class="h2 fe fe-clipboard text-muted mb-0"></span>
-
+              <span class="h2 fe fe-help-circle text-muted mb-0"></span>
             </div>
           </div> <!-- / .row -->
 
@@ -889,7 +879,8 @@ settings:
       user.getIdToken(false)
         .then(function(token) {
           Manager.ajax().request({
-            url: serverProd,
+            // url: serverProd,
+            url: serverDev,
             body: {
               authenticationToken: token,
             },
@@ -899,8 +890,10 @@ settings:
             Manager.dom().select('#stats-error').setInnerHTML(error).show();
           })
           .success(function (response, status, data) {
+            console.log('data', data);
             Manager.dom().select('#stats-users-total').setInnerHTML(data.users.total);
             Manager.dom().select('#stats-users-online').setInnerHTML(data.users.online);
+            Manager.dom().select('#stats-notification-subscribers').setInnerHTML(data.subscriptions.total);
           });
         })
         .catch(function(error) {
