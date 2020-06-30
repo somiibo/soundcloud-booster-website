@@ -27,6 +27,7 @@ gulp.task('browsersync', async function () {
     let settings = {
       port: config.port,
       browser: browser,
+      cors: true,
       server: {
         baseDir: config.jekyll.dest,
         middleware: async function (req, res, next) {
