@@ -16,7 +16,7 @@ let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.brow
 gulp.task('browsersync', async function () {
     await tools.poll(function () {
       // console.log('browsersync polling Global.get(prefillStatus)....', Global.get('prefillStatus'), Global.get('jekyllBuild'));
-      return Global.get('prefillStatus') == 'done';
+      return Global.get('prefillStatus') === 'done';
     }, {timeout: 60000});
 
     if (!fs.exists(`${config.jekyll.dest}/index.html`)) {
@@ -78,7 +78,7 @@ gulp.task('browsersync', async function () {
       // }, {timeout: 60000});
 
       // Launch ngrok if enabled
-      if (!error && argv.ngrokOpen == 'true') {
+      if (!error && argv.ngrokOpen === 'true') {
         const ngrok = require('/usr/local/lib/node_modules/ngrok');
         (async function() {
           const url = await ngrok.connect(instance.options.get('port'));
