@@ -82,7 +82,6 @@ gulp.task('create:cert', async function () {
   await new Promise(async function(resolve, reject) {
     let outputPath = '@output/.temp/certificate';
 
-    fs = fs || require('fs-jetpack');
     let ips = argv.ips || '';
     if (!ips) {
       let browserSyncFile = (fs.read('@output/.temp/_config_browsersync.yml')) || '';
