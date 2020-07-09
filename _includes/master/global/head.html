@@ -196,50 +196,22 @@
   };
 
   Manager$.prototype.ready = function(fn, options) {
-    var This = this;
-    var tryAgain = true;
-    var waitFor = true;
     options = options || {};
-    options.interval = options.interval || 100;
 
-    waitFor = !options.waitFor || (options.waitFor && options.waitFor())
-
-    try {
-      tryAgain = (Manager.get('page.status.ready', false) == false);
-      This = Manager;
-    } catch (e) {
-      tryAgain = true;
-    }
-    if (tryAgain || !waitFor) {
-      setTimeout(function () {
-        This.ready(fn, options);
-      }, options.interval);
-    } else {
-      return fn();
-    }
+    setTimeout(function () {
+      Manager.auth().ready(fn, options);
+    }, options.interval || 100);
   }
 
   Manager$.prototype.auth = function() {
-    var This = this;
     return {
       ready: function (fn, options) {
-        var tryAgain = true;
         options = options || {};
-        options.interval = options.interval || 100;
 
-        try {
-          tryAgain = (Manager.get('page.status.authReady', false) == false);
-          This = Manager;
-        } catch (e) {
-          tryAgain = true;
-        }
-        if (tryAgain) {
-          setTimeout(function () {
-            This.auth().ready(fn, options);
-          }, options.interval);
-        } else {
-          return fn();
-        }
+        setTimeout(function () {
+          Manager.auth().ready(fn, options);
+        }, options.interval || 100);
+
       }
     }
   }
