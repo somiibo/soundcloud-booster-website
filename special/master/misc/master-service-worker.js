@@ -2,7 +2,7 @@
 layout: null
 permalink: /master-service-worker.js
 ---
-
+;
 // self.addEventListener('install', function(event) {
 // });
 var SWManager = {
@@ -35,8 +35,8 @@ try {
 
 // Load Firebase Messaging
 try {
-  importScripts('https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js');
-  importScripts('https://www.gstatic.com/firebasejs/7.6.0/firebase-messaging.js');
+  importScripts('https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js');
+  importScripts('https://www.gstatic.com/firebasejs/7.15.5/firebase-messaging.js');
 
   // if (typeof firebase === 'undefined') {
   //   throw new Error('hosting/init-error: Firebase SDK not detected.');
@@ -118,11 +118,11 @@ try {
 
 // Load other Service Worker
 try {
-  importScripts('assets/js/app/service-workers/app-service-worker.js');
+  importScripts('assets/js/app/service-worker.js');
   SWManager.libraries.app = true;
-  log('master-service-worker.js imported app-service-worker.js');
+  log('master-service-worker.js imported app service-worker.js');
 } catch (e) {
-  log('master-service-worker.js failed to import app-service-worker.js');
+  log('master-service-worker.js failed to import app service-worker.js');
 }
 
 // Send messages: https://stackoverflow.com/questions/35725594/how-do-i-pass-data-like-a-user-id-to-a-web-worker-for-fetching-additional-push

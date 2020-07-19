@@ -26,12 +26,19 @@ module.exports = {
   },
 
   //CUSTOM
+  // entry: {
+  //   'assets/js': './assets/_src/js/master/main.js', // will be  ./build/application/bundle.js,
+  //   'assets/js': './assets/_src/js/app/app.js', // will be  ./build/application/bundle.js,
+  //   // 'build/library/bundle': './src/library' // will be  ./build/library/bundle.js
+  // },
   output: {
     // path: path.resolve(__dirname, 'dist1'),
     // filename: 'foo.bundle.js',
     // chunkFilename: './assets/js/[name].js',
     // chunkFilename: '[name].js',
-    publicPath: "/assets/js/",
+    // path: '/assets/js/',
+    publicPath: '/assets/js/',
+    filename: '[name].js'
   },
 
   optimization: {
@@ -58,7 +65,7 @@ module.exports = {
         },
       }),
     ],
-    minimize: (argv.skipJSMin != 'true'),
+    minimize: (argv.skipJSMin !== 'true'),
   },
 
   /* CRITICAL CSS */

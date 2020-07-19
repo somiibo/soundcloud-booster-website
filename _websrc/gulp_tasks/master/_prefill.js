@@ -67,16 +67,15 @@ gulp.task("_prefill", async () => {
             ''
           )
         }
-
-        await createFile(config.assets + config.assetsSubpath + '/js/app/service-workers/app-service-worker.js',
-          "// app-service-worker.js code" + "\n" +
+        await createFile(config.assets + config.assetsSubpath + '/js/app/service-worker.js',
+          "// app service-worker.js code" + "\n" +
           "if (typeof log === 'undefined') {" + "\n" +
             "  var log = function() {};" + "\n" +
           "}" + "\n" +
-          "log('app-service-worker.js loaded: ', self.location.pathname);" + "\n" +
+          "log('app service-worker.js loaded: ', self.location.pathname);" + "\n" +
           "" + "\n" +
           "// Note: any importScripts(); are relative to the master-service-worker.js location" + "\n" +
-          "// importScripts('../../app/service-workers/app-service-worker.js');" + "\n" +
+          "// importScripts('../../app/service-worker.js');" + "\n" +
           ''
         )
         await createFile('_websrc/gulp_tasks/app/main.js',
