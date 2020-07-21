@@ -228,14 +228,7 @@ settings:
   var buildFile = {};
   var flask;
 
-  var htmlEditor = CodeMirror.fromTextArea(document.getElementById("body"), {
-  	lineNumbers: true,
-  	mode: 'application/ld+json',
-    matchBrackets: true,
-    autoCloseBrackets: true,
-    viewportMargin: Infinity
-  	// theme: 'default',
-  });
+  var htmlEditor;
   // var input = document.getElementById("select");
   // function selectTheme() {
   //   var theme = input.options[input.selectedIndex].textContent;
@@ -256,6 +249,14 @@ settings:
 
 
   Manager.ready(function() {
+    htmlEditor = CodeMirror.fromTextArea(document.getElementById('body'), {
+      lineNumbers: true,
+      mode: 'application/ld+json',
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      viewportMargin: Infinity
+      // theme: 'default',
+    });
     Manager.ajax().request({
       url: '{{ site.url }}/@output/build/build.json',
       method: 'GET',
@@ -375,7 +376,7 @@ settings:
 
   }, {
     waitFor: function () {
-      return typeof window.JSON5 !== 'undefined';
+      return typeof window.JSON5 !== 'undefined' && typeof window.CodeMirror !== 'undefined';
     }
   });
 

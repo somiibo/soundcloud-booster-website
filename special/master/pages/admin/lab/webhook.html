@@ -157,14 +157,15 @@ settings:
     var allowLeave = true;
     var CurrentEditId = 0;
 
-    Manager.auth().ready(function () {
-      dom.select('#send-btn').removeAttribute('disabled')
-    })
-
     Manager.ready(function() {
       window.dom = Manager.dom();
       window.util = Manager.utilities();
       window.ajax = Manager.ajax();
+
+      Manager.auth().ready(function () {
+        dom.select('#send-btn').removeAttribute('disabled')
+      })
+
       dom.select('#webhook-body').setValue(''
         + '{\n'
         + '  "test": "test"\n'
@@ -210,13 +211,10 @@ settings:
           data: JSON5.parse(window.htmlEditor.getDoc().getValue()),
         })
         .success(function (response, status, data) { // This function runs only on success
-          Manager.log('SUCCESS', response, status, data);
-          // setError();
           // window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
           display('success', JSON5.stringify(data))
         })
         .error(function (response, status, error) { // This function runs only on error
-          Manager.log('FAIL', error);
           display('failed', error)
         });
       })
@@ -224,6 +222,15 @@ settings:
         console.log(error);
       });
     }
+
+    function extractContent(s) {
+      var span = document.createElement('span');
+      span.innerHTML = s;
+      return (span.textContent || span.innerText)
+        .replace(/\n\n/g, '\n')
+        .replace(/^\n/g, '')
+        .replace(/\n$/g, '')
+    };
 
     function display(type, message) {
       dom.select('#response #search-preloader').hide()
@@ -233,12 +240,13 @@ settings:
         dom.select('#response .alert-success').hide()
         dom.select('#response .alert-danger').show()
         dom.select('#response #search-preloader').hide()
-        dom.select('#failed-response-code').setInnerHTML(message)
+        dom.select('#failed-response-code').setInnerHTML(extractContent(message))
+        Manager.log('Fail:', extractContent(message));
       } else if (type == 'success') {
         dom.select('#response .alert-success').show()
         dom.select('#response .alert-danger').hide()
         dom.select('#response #search-preloader').hide()
-        dom.select('#success-response-code').setInnerHTML(message)
+        dom.select('#success-response-code').setInnerHTML('message')
       } else if (type == 'waiting') {
         dom.select('#response .alert-danger').hide()
         dom.select('#response .alert-success').hide()
