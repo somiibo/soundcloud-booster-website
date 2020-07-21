@@ -7,6 +7,7 @@ module.exports = {
     eslint:       true,
     // imagemin:     true,
     imageminResponsive: true,
+    copyFontAwesome:   true,
     copyJs:   true,
     copyUncompiled:   true,
     copyCss:   true,
