@@ -144,6 +144,7 @@ gulp.task("_prefill", async () => {
         await createFile(`./_authors/samantha.md`, await readFile('./_websrc/templates/master/authors/example-author.md'));
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
+        await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
 
         // Create directories that get deleted through git
         fs.dir(`./_includes/app/assets`);
@@ -209,6 +210,17 @@ gulp.task("_prefill", async () => {
   });
 });
 
+function generateCommonModules() {
+  let contents = '';
+  if (fs.exists('./node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss')) {
+    contents += `
+      $fa-font-path: '../webfonts';
+      @import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
+      @import 'node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+    `
+  }
+  return contents;
+}
 
 // async function createFile(file, contents) {
 //   var response = {

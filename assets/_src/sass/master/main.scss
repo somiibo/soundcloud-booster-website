@@ -1,14 +1,7 @@
 /*
   CHARSET
 */
-@charset "UTF-8";
-
-/*
-  TEST CLASS
-*/
-.test-class-master {
-  width: 100%;
-}
+@charset 'UTF-8';
 
 /*
   RESPONSIVE CONTENT
@@ -52,12 +45,10 @@
 /*
   MASTER CSS DEPENDENCIES
 */
-/* @import "cookieconsent.scss"; */
-$fa-font-path: "../webfonts";
-@import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import 'node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+/* @import 'cookieconsent.scss'; */
+@import '_websrc/generated/common-modules.scss';
 
 /*
   APP CSS
 */
-@import "../app/app.scss";
+@import '../app/app.scss';

@@ -34,6 +34,7 @@ doc/
 !/assets/_src
 !/assets/_src-uncompiled
 package-lock.json
+_websrc/generated
 # <<<GEN
 
 # Development
