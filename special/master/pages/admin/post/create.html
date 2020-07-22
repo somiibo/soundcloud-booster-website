@@ -458,7 +458,7 @@ settings:
             <div class="custom-control custom-checkbox table-checkbox">
               <input type="checkbox" class="custom-control-input auth-newsletter-input" id="replaceHeadings" name="replaceHeadings" checked="true">
               <label class="custom-control-label" for="replaceHeadings">
-                Replace <code class="highlighter-rouge">---</code> with <code class="highlighter-rouge">#</code>
+                Replace <code class="highlighter-rouge">&#45;&#45;&#45;</code> with <code class="highlighter-rouge">#</code>
               </label>
             </div>
           </div>
@@ -475,7 +475,7 @@ settings:
 
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Import</button>
+          <button type="submit" class="btn btn-primary" id="import-btn">Import</button>
         </div>
       </form>
     </div>
@@ -664,6 +664,8 @@ settings:
 
         console.log('#google-doc-form', formData);
 
+        dom.select('#import-btn').setAttribute('disabled', true);
+
         Manager.ajax().request({
           method: 'GET',
           url: formData.importUrl,
@@ -688,26 +690,29 @@ settings:
           var markdown = turndownService.turndown(body);
 
           // Fix no spaces with links
-          markdown = markdown.replace(/([a-zA-Z0-9])(\[)/g, '$1 $2'); // add space when there are brackets
-          markdown = markdown.replace(/(\))([a-zA-Z0-9])/g, '$1 $2'); // add space when there are parenthesis
+          markdown = markdown
+            .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
+            .replace(/(\))([a-zA-Z0-9])/g, '$1 $2') // add space when there are parenthesis
 
           // Fixes
-          markdown = markdown.replace(/ \. /img, '. '); // fix periods
-          markdown = markdown.replace(/ \, /img, ', '); // fix periods
-          markdown = markdown.replace(/\)\s\s+/img, ') '); // fix double space
-          markdown = markdown.replace(/\s\s+\[/img, ' ['); // fix double space
+          markdown = markdown
+            .replace(/ \. /img, '. ') // fix periods
+            .replace(/ \, /img, ', ') // fix periods
+            .replace(/\)\s\s+/img, ') ') // fix double space
+            .replace(/\s\s+\[/img, ' [') // fix double space
 
           // Clear promo stuff
           markdown = markdown
             .replace(/Published by \[.*\)/img, '') // remove google
-            .replace(/Updated automatically.*every 5 minutes/img, ''); // remove google
+            .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
 
           // Remove hr breaks
           if (formData.replaceHeadings) {
-            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2'); // replace = with #
-            markdown = markdown.replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2'); // remove - with ##
-            markdown = markdown.replace(/(\n|^)(={3,}).*(={3,})/img, ''); // remove extra =
-            markdown = markdown.replace(/(\n|^)(-{3,}).*(-{3,})/img, ''); // remove extra -
+            markdown = markdown
+              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
+              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2') // remove - with ##
+              .replace(/(\n|^)(={3,}).*(={3,})/img, '') // remove extra =
+              .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
           }
           markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
 
@@ -730,14 +735,23 @@ settings:
             }
           }
 
+          // Clean lines
+          markdown = markdown
+            .replace(/^\n/g, '') // fix start line-breaks
+            .replace(/^\n/m, '') // fix start line-breaks stragler
+            .replace(/\n$/g, '') // fix end line-breaks
+            .replace(/\n$/g, '') // fix end line-breaks
+
           dom.select('#body').setValue(markdown);
           dom.select('#google-doc-error').hide();
 
           $('#importGoogleDoc').modal('toggle');
+          dom.select('#import-btn').removeAttribute('disabled');
         })
         .error(function (one,two,error) {
           dom.select('#google-doc-error').show();
           dom.select('#google-response-code').setInnerHTML(error);
+          dom.select('#import-btn').removeAttribute('disabled');
         })
 
       })
