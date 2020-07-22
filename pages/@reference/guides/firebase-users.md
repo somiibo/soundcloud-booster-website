@@ -1,6 +1,8 @@
 ---
 ### ALL PAGES ###
 permalink: /@reference/guides/firebase-users/
+sitemap:
+  include: false
 ---
 
 # Basic Firebase User Skeleton

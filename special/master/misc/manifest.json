@@ -1,6 +1,8 @@
 ---
 layount: null
 permalink: /manifest.json
+sitemap:
+  include: false
 # NOTE: Edit this in _includes/app/misc/manifest.json
 ---
 {%- if site.favicon.path != null and site.favicon.path != '' -%}

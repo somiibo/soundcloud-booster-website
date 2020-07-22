@@ -1,16 +1,19 @@
 ---
 layout: null
 permalink: /sitemap.xml
+sitemap:
+  include: false
 ---
 {%- if site.sitemap.enable != false -%}
   <?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% assign default_time = site.time | date_to_xmlschema %}
     {% for post in site.posts %}
       <url>
         <loc>{{ site.url }}{{ post.url }}</loc>
 
         {%- if post.sitemap.lastmod == null -%}
-          <lastmod>{{ site.sitemap.lastmod }}</lastmod>
+          <lastmod>{{ default_time }}</lastmod>
         {%- else -%}
           <lastmod>{{ post.sitemap.lastmod | date_to_xmlschema }}</lastmod>
         {%- endif -%}
@@ -35,7 +38,7 @@ permalink: /sitemap.xml
         <loc>{{ site.url }}{{ page.url }}</loc>
 
         {%- if page.sitemap.lastmod == null -%}
-        <lastmod>{{ site.sitemap.lastmod }}</lastmod>
+        <lastmod>{{ default_time }}</lastmod>
         {%- else -%}
         <lastmod>{{ page.sitemap.lastmod | date_to_xmlschema }}</lastmod>
         {%- endif -%}

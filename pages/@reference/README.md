@@ -1,3 +1,7 @@
+---
+sitemap:
+  include: false
+---
 # Getting started
 ```shell
 npm run install:pre

@@ -1,6 +1,8 @@
 ---
 layout: null
 permalink: /search/main.json/
+sitemap:
+  include: false
 ---
 [
   {%- if site.search.enable != false -%}

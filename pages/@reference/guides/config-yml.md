@@ -1,6 +1,8 @@
 ---
 ### ALL PAGES ###
 permalink: /@reference/guides/config-yml/
+sitemap:
+  include: false
 ---
 
 # Basic \_config.yml settings

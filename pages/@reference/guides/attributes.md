@@ -1,6 +1,8 @@
 ---
 ### ALL PAGES ###
 permalink: /@reference/guides/attributes/
+sitemap:
+  include: false
 ---
 
 # Attributes

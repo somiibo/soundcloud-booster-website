@@ -1,6 +1,8 @@
 ---
 layount: null
 permalink: /robots.txt
+sitemap:
+  include: false
 # NOTE: Edit this in _includes/app/misc/robots.txt
 ---
 User-agent: *
@@ -9,6 +11,8 @@ User-agent: *
 #
 Disallow: /@reference/
 Noindex: /@reference/
+Disallow: /pages/@reference/
+Noindex: /pages/@reference/
 #
 # Admin Pages
 #

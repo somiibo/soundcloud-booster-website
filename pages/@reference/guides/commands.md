@@ -1,6 +1,8 @@
 ---
 ### ALL PAGES ###
 permalink: /@reference/guides/commands/
+sitemap:
+  include: false
 ---
 
 # Commands

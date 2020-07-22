@@ -95,7 +95,6 @@ search:
 
 sitemap:
   enable: true # true | false
-  lastmod: "2019-01-18T00:20:35+00:00" # string, example: 2019-01-18T00:20:35+00:00
 
 settings:
   include-script-bundle: true # true | false

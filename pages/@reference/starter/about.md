@@ -2,7 +2,9 @@
 ### ALL PAGES ###
 layout: master/global/default
 permalink: /@reference/starter/about/
-
+sitemap:
+  include: false
+  
 ### REGULAR PAGES ###
 meta:
   title: "About"

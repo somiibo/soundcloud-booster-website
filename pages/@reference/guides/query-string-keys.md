@@ -1,6 +1,8 @@
 ---
 ### ALL PAGES ###
 permalink: /@reference/guides/query-string-keys/
+sitemap:
+  include: false
 ---
 
 # Query String Keys

@@ -1,6 +1,8 @@
 ---
 layout: null
 permalink: /master-service-worker.js
+sitemap:
+  include: false
 ---
 ;
 // self.addEventListener('install', function(event) {
