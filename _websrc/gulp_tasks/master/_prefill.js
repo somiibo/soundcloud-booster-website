@@ -56,6 +56,8 @@ gulp.task("_prefill", async () => {
             '### ALL PAGES ###' + '\n' +
             'layout: master/global/default' + '\n' +
             'permalink: /' + '\n' +
+            'sitemap:' + '\n' +
+            '  include: false' + '\n' +
             '' + '\n' +
             '### REGULAR PAGES ###' + '\n' +
             'meta:' + '\n' +
