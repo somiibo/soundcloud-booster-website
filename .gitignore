@@ -10,6 +10,7 @@ _site
 .jekyll-metadata
 /.bundle
 /vendor
+.jekyll-cache
 
 # Node.js
 node_modules/
