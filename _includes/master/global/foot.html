@@ -20,6 +20,9 @@
 </script>
 
 <!-- Script - Bundle -->
+{%- if include.pre-bundle-script != null -%}
+  {{ include.pre-bundle-script }}
+{% endif %}
 {%- if page.settings.include-script-bundle == false -%}
 {% elsif site.settings.include-script-bundle != false %}
 
@@ -31,6 +34,9 @@
 {% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
 {% endif %}
 <script {{ bundle_optimization }} src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" type="text/javascript"></script>
+{% endif %}
+{%- if include.post-bundle-script != null -%}
+  {{ include.post-bundle-script }}
 {% endif %}
 
 <!-- Script - Google Analytics Tracking Script -->

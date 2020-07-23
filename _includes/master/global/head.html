@@ -171,9 +171,15 @@
 {% endif %}
 
 <!-- CSS - Bundle-->
+{%- if include.pre-bundle-css != null -%}
+  {{ include.pre-bundle-css }}
+{% endif %}
 {%- if page.settings.include-css-bundle == false -%}
 {% elsif site.settings.include-css-bundle != false %}
 <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}">
+{% endif %}
+{%- if include.post-bundle-css != null -%}
+  {{ include.post-bundle-css }}
 {% endif %}
 
 <!-- HTML5 Shiv -->
