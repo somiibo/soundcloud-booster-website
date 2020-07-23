@@ -166,6 +166,7 @@ gulp.task("_prefill", async () => {
         fs.dir(`./assets/_src/images/og`);
 
         fs.dir(`./assets/_src/sass/theme`);
+        fs.dir(`./assets/_src/js/theme`);
 
         fs.dir(`./assets/_src-uncompiled`);
 
