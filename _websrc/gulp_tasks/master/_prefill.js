@@ -218,6 +218,7 @@ function generateCommonModules() {
   if (fs.exists('./node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss')) {
     contents += `
       $fa-font-path: '../webfonts';
+      $fa-font-display: swap;
       @import 'node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss';
       @import 'node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
     `
