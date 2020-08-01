@@ -5,7 +5,6 @@ const fs          = require('fs-jetpack');
 const gulp        = require('gulp');
 let tools         = new (require('../../libraries/tools.js'));
 let Global        = require('../../libraries/global.js');
-let createPost;
 
 let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
 
@@ -32,7 +31,7 @@ gulp.task('browsersync', async function () {
         baseDir: config.jekyll.dest,
         middleware: async function (req, res, next) {
           if (/_post.json/.test(req.url)) {
-            createPost = createPost || require('./create-post.js');
+            const createPost = require('./create-post.js');
             let post = new createPost();
             return await post.create({
               req: req,
