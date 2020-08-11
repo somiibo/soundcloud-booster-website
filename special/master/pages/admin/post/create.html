@@ -109,6 +109,8 @@ settings:
                 0
               </span>
             </div>
+
+            <a id="url-format-btn" href="#" class="btn btn-primary ml-3">Format</a>
           </div>
         </div>
       </div>
@@ -552,6 +554,15 @@ settings:
               text: stackEditElement.value // and the Markdown content.
             }
           });
+        } else if (event.target.matches('#url-format-btn')) {
+          event.preventDefault();
+          let urlEl = dom.select('#url');
+          urlEl.setValue(
+            urlEl.getValue()
+            .toLowerCase()
+            .trim()
+            .replace(/\s/g, '-')
+          )
         }
       });
 
@@ -573,7 +584,8 @@ settings:
           token = token;
 
           var data = {};
-          dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea').each(function (i, el) {
+          dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
+          .each(function (i, el) {
             var curField = dom.select(el);
             data[curField.getAttribute('name')] = curField.getValue();
           });
