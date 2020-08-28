@@ -514,9 +514,8 @@ settings:
 
   authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
 
-  console.log('FIELDS', fields);
-  console.log('AUTHORS', authors);
-
+  // console.log('FIELDS', fields);
+  // console.log('AUTHORS', authors);
 </script>
 
 <!-- Exploring the library -->
@@ -528,12 +527,13 @@ settings:
   var stackedit;
   var turndownService;
   var dom;
+  var siteUrl = window.location.protocol + '//' + window.location.host;
 
   var buildFile = {};
 
   Manager.ready(function() {
     Manager.ajax().request({
-      url: '{{ site.url }}/@output/build/build.json',
+      url: siteUrl + '/@output/build/build.json',
       method: 'GET',
     })
     .success(function (one, two, build) {
@@ -808,7 +808,7 @@ settings:
     dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
 
     // special
-    var serverDev = '{{ site.url }}/_post.json';
+    var serverDev = siteUrl + '/_post.json';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
     var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
     var env = buildFile.environment;
