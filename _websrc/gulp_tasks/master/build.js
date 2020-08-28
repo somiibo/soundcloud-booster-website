@@ -120,7 +120,7 @@ gulp.task('jekyll-build', async function (done) {
       // return (cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
       //   .on('close', done));
 
-      return (cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
+      return (cp.spawn(jekyll, ['build', '--config', jekyllConfig, '--incremental'], {stdio: 'inherit', env: process.env})
         .on('close', done));
       // update 1
     }
