@@ -7,10 +7,11 @@ sftp-config.json
 
 # Jekyll
 _site
+.sass-cache/
+.jekyll-cache/
 .jekyll-metadata
 /.bundle
 /vendor
-.jekyll-cache
 
 # Node.js
 node_modules/
