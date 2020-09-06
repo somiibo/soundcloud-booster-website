@@ -6,6 +6,12 @@ sitemap:
   include: false
 
 ### REGULAR PAGES ###
+meta:
+  title: "Delete"
+  description: "Delete your admin account."
+  breadcrumb: "Delete"
+
+### REGULAR PAGES ###
 settings:
   manager-configuration: "
     {
@@ -35,8 +41,13 @@ settings:
 
       <!-- Subheading -->
       <p class="text-muted text-center mb-5">
-        Signing out...
+        Are you sure you want to delete your account?
       </p>
+
+      <!-- Submit -->
+      <a id="delete-account-button" class="btn btn-lg btn-block btn-primary mb-3">
+        Delete
+      </a>
 
       <!-- Form -->
     </div>
@@ -46,7 +57,9 @@ settings:
 <script type="text/javascript">
   Manager.ready(function() {
 
-    Manager.auth().ready(function(user) {
+
+    document.getElementById('delete-account-button').addEventListener('click', function () {
+      var user = firebase.auth().currentUser;
       if (user && user.uid) {
         user.getIdToken(false)
           .then(function(token) {
@@ -70,6 +83,33 @@ settings:
       } else {
         window.location.href = '{{ site.url }}/admin/signin/';
       }
-    });
+    })
+
+
+    // Manager.auth().ready(function(user) {
+    //   if (user && user.uid) {
+    //     user.getIdToken(false)
+    //       .then(function(token) {
+    //         Manager.ajax().request({
+    //           url: 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_deleteUser',
+    //           // url: 'http://localhost:5001/ultimate-jekyll/us-central1/bm_deleteUser',
+    //           body: {
+    //             authenticationToken: token,
+    //           },
+    //           timeout: 20000,
+    //         })
+    //         .always(function (response, status) {
+    //           if (!user || !user.uid) {
+    //             window.location.href = '{{ site.url }}/admin/signin/';
+    //           }
+    //         });
+    //       })
+    //       .catch(function(error) {
+    //         console.error(error);
+    //       });
+    //   } else {
+    //     window.location.href = '{{ site.url }}/admin/signin/';
+    //   }
+    // });
   });
 </script>
