@@ -537,241 +537,279 @@ settings:
   var buildFile = {};
 
   Manager.ready(function() {
-    Manager.ajax().request({
-      url: siteUrl + '/@output/build/build.json',
+    fetch(siteUrl + '/@output/build/build.json', {
       method: 'GET',
     })
-    .success(function (one, two, build) {
-      buildFile = build;
-      dom = Manager.dom();
-      blockNavigation();
-      setupStackedit();
-      setupForm();
-      countChars();
-      // dom.select('#body').setValue()
-      dom.select('body').on('click', function(event) {
-        // allowLeave = false;
-        if (event.target.matches('#stackedit-edit')) {
-          // Open the iframe
-          stackedit.openFile({
-            name: 'Filename', // with an optional filename
-            content: {
-              text: stackEditElement.value // and the Markdown content.
+    .then(function (res) {
+      if (res.status >= 200 && res.status < 300) {
+        res.json()
+        .then(function (data) {
+          console.log('Success', data);
+          // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+
+          buildFile = data;
+          dom = Manager.dom();
+          blockNavigation();
+          setupStackedit();
+          setupForm();
+          countChars();
+          // dom.select('#body').setValue()
+          dom.select('body').on('click', function(event) {
+            // allowLeave = false;
+            if (event.target.matches('#stackedit-edit')) {
+              // Open the iframe
+              stackedit.openFile({
+                name: 'Filename', // with an optional filename
+                content: {
+                  text: stackEditElement.value // and the Markdown content.
+                }
+              });
+            } else if (event.target.matches('#url-format-btn')) {
+              event.preventDefault();
+              let urlEl = dom.select('#url');
+              urlEl.setValue(
+                urlEl.getValue()
+                .toLowerCase()
+                .trim()
+                .replace(/\s/g, '-')
+              )
             }
           });
-        } else if (event.target.matches('#url-format-btn')) {
-          event.preventDefault();
-          let urlEl = dom.select('#url');
-          urlEl.setValue(
-            urlEl.getValue()
-            .toLowerCase()
-            .trim()
-            .replace(/\s/g, '-')
-          )
-        }
-      });
 
-      dom.select('body').on('keyup', function (event) {
-        countChars();
-        allowLeave = false;
-      });
-
-      dom.select('#post-creator-form').on('submit', function (event) {
-        blockNavigation();
-        displayWaiting();
-        // var endpoint = '{{ site.url }}/admin/post/create.json';
-        var endpoint = dom.select('#processingAddy').getValue();
-        // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
-
-        var token = '';
-        firebase.auth().currentUser.getIdToken(true)
-        .then(function(token) {
-          token = token;
-
-          var data = {};
-          dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
-          .each(function (i, el) {
-            var curField = dom.select(el);
-            data[curField.getAttribute('name')] = curField.getValue();
+          dom.select('body').on('keyup', function (event) {
+            countChars();
+            allowLeave = false;
           });
-          data.authenticationToken = token;
 
-          console.log('#post-creator-form', endpoint, data);
+          dom.select('#post-creator-form').on('submit', function (event) {
+            blockNavigation();
+            displayWaiting();
+            // var endpoint = '{{ site.url }}/admin/post/create.json';
+            var endpoint = dom.select('#processingAddy').getValue();
+            // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
 
-          // Check for invalid things
-          if (data.body.indexOf('[](') > -1) {
-            var bodyLines = data.body.split('\n');
-            var lineNum = 0;
-            var colNum = 0;
-            for (var i = 0; i < bodyLines.length; i++) {
-              var tempIndex = bodyLines[i].indexOf('[](');
-              if (tempIndex > -1) {
-                lineNum = i + 1;
-                colNum = tempIndex;
-                break;
+            var token = '';
+            firebase.auth().currentUser.getIdToken(true)
+            .then(function(token) {
+              token = token;
+
+              var data = {};
+              dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
+              .each(function (i, el) {
+                var curField = dom.select(el);
+                data[curField.getAttribute('name')] = curField.getValue();
+              });
+              data.authenticationToken = token;
+
+              Manager.log('#post-creator-form', endpoint, data);
+
+              // Check for invalid things
+              if (data.body.indexOf('[](') > -1) {
+                var bodyLines = data.body.split('\n');
+                var lineNum = 0;
+                var colNum = 0;
+                for (var i = 0; i < bodyLines.length; i++) {
+                  var tempIndex = bodyLines[i].indexOf('[](');
+                  if (tempIndex > -1) {
+                    lineNum = i + 1;
+                    colNum = tempIndex;
+                    break;
+                  }
+                }
+                displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
+                return;
               }
-            }
-            displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
-            return;
+
+              fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+              })
+              .then(function (res) {
+
+                if (res.status >= 200 && res.status < 300) {
+                  res.json()
+                  .then(function (data) {
+                    console.log('Success', data);
+                    // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+
+                    // console.log(one,two,three);
+                    displayError();
+
+                    window.refreshTimer = 2;
+                    allowLeave = true;
+                    setInterval(function () {
+                      Manager.log('Refreshing in...', window.refreshTimer);
+                      dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
+                      window.refreshTimer--;
+                      if (window.refreshTimer <= 0) {
+                        allowLeave = true;
+                        window.location.href = window.location.href;
+                      }
+                    }, 1000);
+                  })
+                } else {
+                  return res.text()
+                  .then(function (data) {
+                    throw new Error(data || res.statusTest || 'Unknown error.')
+                  })
+                }
+              })
+              .catch(function (e) {
+                console.error(e);
+                displayError(e);
+              })
+
+            })
+            .catch(function(error) {
+              console.error(error);
+              displayError('Failed to get firebase token: ' + error);
+            })
+          });
+
+          function displayWaiting() {
+            dom.select('#response .alert-danger').hide()
+            dom.select('#response .alert-success').hide()
+
+            dom.select('#response .alert-info').show()
+            dom.select('#response').show()
+            dom.select('#post-submit-btn').setAttribute('disabled', true);
           }
 
-          Manager.ajax().request({
-            method: 'POST',
-            url: endpoint,
-            data: data,
-          })
-          .success(function (one,two,three) {
-            console.log(one,two,three);
-            displayError();
-
-            window.refreshTimer = 2;
-            allowLeave = true;
-            setInterval(function () {
-              console.log('TIME...', window.refreshTimer);
-              dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
-              window.refreshTimer--;
-              if (window.refreshTimer <= 0) {
-                allowLeave = true;
-                window.location.href = window.location.href;
-              }
-            }, 1000);
-          })
-          .error(function (response, status, error) {
-            console.error(response, status, error);
-            displayError(error);
-          })
-
-        })
-        .catch(function(error) {
-          console.error(error);
-          displayError('Failed to get firebase token: ' + error);
-        })
-      });
-
-      function displayWaiting() {
-        dom.select('#response .alert-danger').hide()
-        dom.select('#response .alert-success').hide()
-
-        dom.select('#response .alert-info').show()
-        dom.select('#response').show()
-        dom.select('#post-submit-btn').setAttribute('disabled', true);
-      }
-
-      function displayError(error) {
-        dom.select('#response .alert-info').hide()
-        dom.select('#post-submit-btn').removeAttribute('disabled');
-        if (error) {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').hide()
-          dom.select('#response .alert-danger').show()
-          dom.select('#main-response-code').setInnerHTML(error)
-        } else {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').show()
-          dom.select('#response .alert-danger').hide()
-        }
-      }
-
-      dom.select('#google-doc-form').on('submit', function (event) {
-        var formData = {};
-        dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
-          var curField = dom.select(el);
-          formData[curField.getAttribute('name')] = curField.getValue();
-        })
-
-        console.log('#google-doc-form', formData);
-
-        dom.select('#import-btn').setAttribute('disabled', true);
-
-        Manager.ajax().request({
-          method: 'GET',
-          url: formData.importUrl,
-          data: {},
-        })
-        .success(function (one,two,data) {
-          //temp
-          // var query = query || {};
-
-          // Clean
-          var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
-          body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
-          body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
-          body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
-
-          // Fix no spaces with links
-          // body = body.replace(/><a/img, '> <a');
-          // body = body.replace(/><\/a/img, '> </a');
-          // body = body.replace(/<\/a></img, ' </a><');
-
-          // https://github.com/domchristie/turndown
-          var markdown = turndownService.turndown(body);
-
-          // Fix no spaces with links
-          markdown = markdown
-            .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
-            .replace(/(\))([a-zA-Z0-9])/g, '$1 $2') // add space when there are parenthesis
-
-          // Fixes
-          markdown = markdown
-            .replace(/ \. /img, '. ') // fix periods
-            .replace(/ \, /img, ', ') // fix periods
-            .replace(/\)\s\s+/img, ') ') // fix double space
-            .replace(/\s\s+\[/img, ' [') // fix double space
-
-          // Clear promo stuff
-          markdown = markdown
-            .replace(/Published by \[.*\)/img, '') // remove google
-            .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
-
-          // Remove hr breaks
-          if (formData.replaceHeadings) {
-            markdown = markdown
-              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
-              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2') // remove - with ##
-              .replace(/(\n|^)(={3,}).*(={3,})/img, '') // remove extra =
-              .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
-          }
-          markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
-
-          var links = [];
-          links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
-          // Fix Google Links
-          for (var i = 0; i < links.length; i++) {
-            if (markdown.indexOf('!' + links[i]) == -1) {
-              var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
-              var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
-              var newLink = false;
-              var needsReplacing = link.indexOf('url?q=') != -1;
-              if (needsReplacing) {
-                newLink = Manager.query().create(link).get('q');
-                console.log('Extracted link:', newLink);
-              }
-              if (needsReplacing) {
-                markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
-              }
+          function displayError(error) {
+            dom.select('#response .alert-info').hide()
+            dom.select('#post-submit-btn').removeAttribute('disabled');
+            if (error) {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').hide()
+              dom.select('#response .alert-danger').show()
+              dom.select('#main-response-code').setInnerHTML(error)
+            } else {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').show()
+              dom.select('#response .alert-danger').hide()
             }
           }
 
-          // Clean lines
-          markdown = markdown
-            .replace(/^\n/g, '') // fix start line-breaks
-            .replace(/^\n/m, '') // fix start line-breaks stragler
-            .replace(/\n$/g, '') // fix end line-breaks
-            .replace(/\n$/g, '') // fix end line-breaks
+          dom.select('#google-doc-form').on('submit', function (event) {
+            var formData = {};
+            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
+              var curField = dom.select(el);
+              formData[curField.getAttribute('name')] = curField.getValue();
+            })
 
-          dom.select('#body').setValue(markdown);
-          dom.select('#google-doc-error').hide();
+            Manager.log('#google-doc-form', formData);
 
-          $('#importGoogleDoc').modal('toggle');
-          dom.select('#import-btn').removeAttribute('disabled');
+            dom.select('#import-btn').setAttribute('disabled', true);
+
+            fetch(formData.importUrl, {
+              method: 'GET',
+            })
+            .then(function (res) {
+              if (res.status >= 200 && res.status < 300) {
+                res.json()
+                .then(function (data) {
+                  console.log('Success', data);
+                  // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                  //temp
+                  // var query = query || {};
+
+                  // Clean
+                  var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+                  body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+                  body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
+                  body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+
+                  // Fix no spaces with links
+                  // body = body.replace(/><a/img, '> <a');
+                  // body = body.replace(/><\/a/img, '> </a');
+                  // body = body.replace(/<\/a></img, ' </a><');
+
+                  // https://github.com/domchristie/turndown
+                  var markdown = turndownService.turndown(body);
+
+                  // Fix no spaces with links
+                  markdown = markdown
+                    .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
+                    .replace(/(\))([a-zA-Z0-9])/g, '$1 $2') // add space when there are parenthesis
+
+                  // Fixes
+                  markdown = markdown
+                    .replace(/ \. /img, '. ') // fix periods
+                    .replace(/ \, /img, ', ') // fix periods
+                    .replace(/\)\s\s+/img, ') ') // fix double space
+                    .replace(/\s\s+\[/img, ' [') // fix double space
+
+                  // Clear promo stuff
+                  markdown = markdown
+                    .replace(/Published by \[.*\)/img, '') // remove google
+                    .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
+
+                  // Remove hr breaks
+                  if (formData.replaceHeadings) {
+                    markdown = markdown
+                      .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
+                      .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2') // replace - with ##
+                      .replace(/(\n|^)(={3,}).*(={3,})/img, '') // remove extra =
+                      .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
+                  }
+                  markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
+
+                  var links = [];
+                  links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
+                  // Fix Google Links
+                  for (var i = 0; i < links.length; i++) {
+                    if (markdown.indexOf('!' + links[i]) == -1) {
+                      var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
+                      var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
+                      var newLink = false;
+                      var needsReplacing = link.indexOf('url?q=') != -1;
+                      if (needsReplacing) {
+                        // newLink = Manager.query().create(link).get('q');
+                        newLink = new URLSearchParams(link.split('?')[1]).get('q');
+                        // console.log('Extracted link:', newLink);
+                      }
+                      if (needsReplacing) {
+                        markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
+                      }
+                    }
+                  }
+
+                  // Clean lines
+                  markdown = markdown
+                    .replace(/^\n/g, '') // fix start line-breaks
+                    .replace(/^\n/m, '') // fix start line-breaks stragler
+                    .replace(/\n$/g, '') // fix end line-breaks
+                    .replace(/\n$/g, '') // fix end line-breaks
+
+                  dom.select('#body').setValue(markdown);
+                  dom.select('#google-doc-error').hide();
+
+                  $('#importGoogleDoc').modal('toggle');
+                  dom.select('#import-btn').removeAttribute('disabled');
+                })
+              } else {
+                return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusTest || 'Unknown error.')
+                })
+              }
+
+            })
+            .catch(function (e) {
+              dom.select('#google-doc-error').show();
+              dom.select('#google-response-code').setInnerHTML(e);
+              dom.select('#import-btn').removeAttribute('disabled');
+            })
+
+          })
         })
-        .error(function (one,two,error) {
-          dom.select('#google-doc-error').show();
-          dom.select('#google-response-code').setInnerHTML(error);
-          dom.select('#import-btn').removeAttribute('disabled');
+      } else {
+        return res.text()
+        .then(function (data) {
+          throw new Error(data || res.statusTest || 'Unknown error.')
         })
-
-      })
+      }
     })
 
   }, {
@@ -852,7 +890,7 @@ settings:
 
 
   function setupStackedit() {
-    console.log('Launched stackedit');
+    Manager.log('Launched stackedit');
     stackedit = new Stackedit({
       url: 'https://stackedit.io/app',
       // url: '{{ site.url }}/admin/post/vendor/stackedit/',
@@ -861,7 +899,7 @@ settings:
     turndownService = new TurndownService();
 
     // Listen to StackEdit events and apply the changes to the textarea.
-    stackedit.on('fileChange', (file) => {
+    stackedit.on('fileChange', function (file) {
       stackEditElement.value = file.content.text;
     });
   }

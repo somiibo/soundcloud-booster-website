@@ -252,6 +252,46 @@ settings:
   //   if (theme) { input.value = theme; selectTheme(); }
   // });
 
+  function setupForm() {
+    dom.select('#path').setValue(fields.path);
+    // dom.select('#body').setValue(fields.body);
+    htmlEditor.getDoc().setValue(fields.body);
+    // flask.updateCode(fields.body);
+    setTimeout(function () {
+      htmlEditor.refresh();
+    }, 1);
+    // special
+    // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
+    // var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
+    // var env = buildFile.environment;
+    // dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
+    // dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
+    // dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
+
+  }
+
+  function display(type, message) {
+    dom.select('#response .alert-info').hide()
+    dom.select('#post-submit-btn').removeAttribute('disabled');
+    if (type == 'failed') {
+      dom.select('#response').show()
+      dom.select('#response .alert-success').hide()
+      dom.select('#response .alert-danger').show()
+      dom.select('#failed-response-code').setInnerHTML(message)
+    } else if (type == 'success') {
+      dom.select('#response').show()
+      dom.select('#response .alert-success').show()
+      dom.select('#response .alert-danger').hide()
+      dom.select('#success-response-code').setInnerHTML(message)
+    } else {
+      dom.select('#response .alert-danger').hide()
+      dom.select('#response .alert-success').hide()
+      dom.select('#response .alert-info').show()
+      dom.select('#response').show()
+      dom.select('#post-submit-btn').setAttribute('disabled', true);
+    }
+  }
+
 
   Manager.ready(function() {
     htmlEditor = CodeMirror.fromTextArea(document.getElementById('body'), {
@@ -262,121 +302,96 @@ settings:
       viewportMargin: Infinity
       // theme: 'default',
     });
-    Manager.ajax().request({
-      url: '{{ site.url }}/@output/build/build.json',
+    fetch('{{ site.url }}/@output/build/build.json', {
       method: 'GET',
     })
-    .success(function (one, two, build) {
-      buildFile = build;
-      dom = Manager.dom();
-      blockNavigation();
-      // flask = new CodeFlask('.body-editor', {
-      //   language: 'js',
-      //   lineNumbers: false
-      // });
+    .then(function (res) {
+      if (res.status >= 200 && res.status < 300) {
+        res.json()
+        .then(function (data) {
+          console.log('Success', data);
 
-      // myCodeMirror = CodeMirror(dom.select('.body-editor').get(0), {
-      //   value: "function myScript(){return 100;}\n",
-      //   mode:  "javascript",
-      //   theme: 'dracula'
-      // });
+          buildFile = data;
+          dom = Manager.dom();
+          blockNavigation();
+          // flask = new CodeFlask('.body-editor', {
+          //   language: 'js',
+          //   lineNumbers: false
+          // });
 
-      setupForm();
-      countChars();
-      dom.select('body').on('click', function(event) {
-        var path = dom.select('*[name="path"]').getValue();
-        try {
-          if (event.target.matches('#firestore-test-get')) {
-            display('waiting');
-            firebase.firestore().doc(path)
-            .get()
-            .then(function (doc) {
+          // myCodeMirror = CodeMirror(dom.select('.body-editor').get(0), {
+          //   value: "function myScript(){return 100;}\n",
+          //   mode:  "javascript",
+          //   theme: 'dracula'
+          // });
+
+          setupForm();
+          countChars();
+          dom.select('body').on('click', function(event) {
+            var path = dom.select('*[name="path"]').getValue();
+            try {
+              if (event.target.matches('#firestore-test-get')) {
+                display('waiting');
+                firebase.firestore().doc(path)
+                .get()
+                .then(function (doc) {
+                  allowLeave = true;
+                  display('success', 'Success: \n' + JSON.stringify(doc.data()))
+                })
+                .catch(function (error) {
+                  allowLeave = true;
+                  display('failed', 'Failed: \n' + JSON.stringify(error) )
+                })
+              } else if (event.target.matches('#firestore-test-set')) {
+                // let body = JSON5.parse(dom.select('*[name="body"]').getValue());
+                // let body = JSON5.parse(flask.getCode());
+                let body = JSON5.parse(htmlEditor.getDoc().getValue())
+                display('waiting');
+                firebase.firestore().doc(path)
+                .set(body,
+                {
+                  merge: true
+                }
+
+                )
+                .then(function (doc) {
+                  allowLeave = true;
+                  display('success', 'Success: \n' + JSON.stringify(body))
+                })
+                .catch(function (error) {
+                  allowLeave = true;
+                  display('failed', 'Failed: \n' + JSON.stringify(error) )
+                })
+              }
+            } catch (e) {
               allowLeave = true;
-              display('success', 'Success: \n' + JSON.stringify(doc.data()))
-            })
-            .catch(function (error) {
-              allowLeave = true;
-              display('failed', 'Failed: \n' + JSON.stringify(error) )
-            })
-          } else if (event.target.matches('#firestore-test-set')) {
-            // let body = JSON5.parse(dom.select('*[name="body"]').getValue());
-            // let body = JSON5.parse(flask.getCode());
-            let body = JSON5.parse(htmlEditor.getDoc().getValue())
-            display('waiting');
-            firebase.firestore().doc(path)
-            .set(body,
-            {
-              merge: true
+              display('failed', 'Failed: \n' + (e) )
             }
+          });
 
-            )
-            .then(function (doc) {
-              allowLeave = true;
-              display('success', 'Success: \n' + JSON.stringify(body))
-            })
-            .catch(function (error) {
-              allowLeave = true;
-              display('failed', 'Failed: \n' + JSON.stringify(error) )
-            })
-          }
-        } catch (e) {
-          allowLeave = true;
-          display('failed', 'Failed: \n' + (e) )
-        }
-      });
+          dom.select('body').on('keyup', function (event) {
+            countChars();
+            allowLeave = false;
+          });
 
-      dom.select('body').on('keyup', function (event) {
-        countChars();
-        allowLeave = false;
-      });
+          // flask.onUpdate((code) => {
+          //   //...
+          //   console.log(code);
+          // });
 
-      // flask.onUpdate((code) => {
-      //   //...
-      //   console.log(code);
-      // });
-
-      function setupForm() {
-        dom.select('#path').setValue(fields.path);
-        // dom.select('#body').setValue(fields.body);
-        htmlEditor.getDoc().setValue(fields.body);
-        // flask.updateCode(fields.body);
-        setTimeout(function () {
-          htmlEditor.refresh();
-        }, 1);
-        // special
-        // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
-        // var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
-        // var env = buildFile.environment;
-        // dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
-        // dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
-        // dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
-
+          dom.select('.loaded-false').hide();
+          dom.select('.loaded-true').show();
+        })
+      } else {
+        return res.text()
+        .then(function (data) {
+          throw new Error(data || res.statusTest || 'Unknown error.')
+        })
       }
 
-      function display(type, message) {
-        dom.select('#response .alert-info').hide()
-        dom.select('#post-submit-btn').removeAttribute('disabled');
-        if (type == 'failed') {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').hide()
-          dom.select('#response .alert-danger').show()
-          dom.select('#failed-response-code').setInnerHTML(message)
-        } else if (type == 'success') {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').show()
-          dom.select('#response .alert-danger').hide()
-          dom.select('#success-response-code').setInnerHTML(message)
-        } else {
-          dom.select('#response .alert-danger').hide()
-          dom.select('#response .alert-success').hide()
-          dom.select('#response .alert-info').show()
-          dom.select('#response').show()
-          dom.select('#post-submit-btn').setAttribute('disabled', true);
-        }
-      }
+    })
+    .catch(function (e) {
 
-      dom.select('.loaded-false').hide();
-      dom.select('.loaded-true').show();
     })
 
   }, {

@@ -24,6 +24,13 @@ settings:
         sentry: {
           enabled: false
         }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
       }
     }
   "
@@ -40,8 +47,13 @@ settings:
 
       <!-- Subheading -->
       <p class="text-muted text-center mb-5">
-        Signing out...
+        Are you sure you want to sign out?
       </p>
+
+      <!-- Submit -->
+      <a id="" class="btn btn-lg btn-block btn-primary mb-3 auth-signout-all-btn">
+        Signout
+      </a>
 
       <!-- Form -->
     </div>
@@ -49,12 +61,5 @@ settings:
 </div> <!-- / .container -->
 
 <script type="text/javascript">
-  Manager.ready(function() {
-    Manager.auth().signOut();
-    Manager.auth().ready(function(user) {
-      if (!user || !user.uid) {
-        window.location.href = '{{ site.url }}/admin/signin/';
-      }
-    })
-  });
+
 </script>

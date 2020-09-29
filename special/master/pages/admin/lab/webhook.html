@@ -165,7 +165,7 @@ settings:
     Manager.ready(function() {
       window.dom = Manager.dom();
       window.util = Manager.utilities();
-      window.ajax = Manager.ajax();
+      // window.ajax = Manager.ajax();
 
       Manager.auth().ready(function () {
         dom.select('#send-btn').removeAttribute('disabled')
@@ -210,18 +210,28 @@ settings:
       .then(function(token) {
         window.token = token;
 
-        ajax.request({
+        fetch(dom.select('#webhook-url').getValue(), {
           method: 'POST',
-          url: dom.select('#webhook-url').getValue(),
-          data: JSON5.parse(window.htmlEditor.getDoc().getValue()),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(JSON5.parse(window.htmlEditor.getDoc().getValue())),
         })
-        .success(function (response, status, data) { // This function runs only on success
-          // window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
-          display('success', JSON5.stringify(data))
+        .then(function (res) { // This function runs only on success
+          if (res.status >= 200 && res.status < 300) {
+            res.json()
+            .then(function (data) {
+              console.log('Success', data);
+              display('success', JSON5.stringify(data))
+            })
+          } else {
+            return res.text()
+            .then(function (data) {
+              throw new Error(data || res.statusTest || 'Unknown error.')
+            })
+          }
         })
-        .error(function (response, status, error) { // This function runs only on error
-          display('failed', error)
-        });
+        .catch(function (e) { // This function runs only on error
+          display('failed', e)
+        })
       })
       .catch(function(error) {
         console.log(error);

@@ -253,131 +253,150 @@ settings:
   var buildFile = {};
 
   Manager.ready(function() {
-    Manager.ajax().request({
-      url: '{{ site.url }}/@output/build/build.json',
+    fetch('{{ site.url }}/@output/build/build.json', {
       method: 'GET',
     })
-    .success(function (one, two, build) {
-      buildFile = build;
-      dom = Manager.dom();
-      blockNavigation();
-      setupForm();
-      countChars();
-      getPreviewIcon();
-      dom.select('body').on('click', function(event) {
-        if (event.target.matches('#stackedit-edit')) {
-        }
-      });
-
-      dom.select('body').on('keyup', function (event) {
-        countChars();
-        getPreviewIcon();
-        allowLeave = false;
-      });
-
-      function getPreviewIcon() {
-        var newPreviewIcon = dom.select('#icon').getValue();
-        if (lastPreviewIcon != newPreviewIcon) {
-          // console.log('NEW', newPreviewIcon);
-          lastPreviewIcon = newPreviewIcon;
-          dom.select('#preview-icon').setAttribute('src', newPreviewIcon);
-        }
-      }
-
-      function setupForm() {
-        dom.select('#title').setValue(fields.title);
-        // dom.select('#click_action').setValue(fields.click_action.replace(/\/(.*?)\//,'').replace(/\//,''));
-        dom.select('#click_action').setValue(fields.click_action);
-        dom.select('#icon').setValue(fields.icon);
-        dom.select('#body').setValue("");
-
-        // special
-        var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
-        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
-        var env = buildFile.environment;
-        dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
-        dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
-        dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
-
-      }
-
-      dom.select('#notification-form').on('submit', function (event) {
-        blockNavigation();
-        displayWaiting();
-        // var endpoint = '{{ site.url }}/admin/post/create.json';
-        var endpoint = dom.select('#processingAddy').getValue();
-        // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
-
-        var token = '';
-        firebase.auth().currentUser.getIdToken(true)
-        .then(function(token) {
-          token = token;
-
-          var data = {};
-          var finalData = {};
-          dom.select('#notification-form input, #notification-form select, #notification-form textarea').each(function (i, el) {
-            var curField = dom.select(el);
-            data[curField.getAttribute('name')] = curField.getValue();
+    .then(function (res) {
+      if (res.status >= 200 && res.status < 300) {
+        res.json()
+        .then(function (data) {
+          console.log('Success', data);
+          buildFile = data;
+          dom = Manager.dom();
+          blockNavigation();
+          setupForm();
+          countChars();
+          getPreviewIcon();
+          dom.select('body').on('click', function(event) {
+            if (event.target.matches('#stackedit-edit')) {
+            }
           });
-          finalData.authenticationToken = token;
-          finalData.payload = {};
-          finalData.payload.title = data.title;
-          finalData.payload.icon = data.icon;
-          finalData.payload.click_action = data.click_action;
-          finalData.payload.body = data.body;
 
-          console.log('#notification-form', endpoint, finalData);
+          dom.select('body').on('keyup', function (event) {
+            countChars();
+            getPreviewIcon();
+            allowLeave = false;
+          });
+
+          function getPreviewIcon() {
+            var newPreviewIcon = dom.select('#icon').getValue();
+            if (lastPreviewIcon != newPreviewIcon) {
+              // console.log('NEW', newPreviewIcon);
+              lastPreviewIcon = newPreviewIcon;
+              dom.select('#preview-icon').setAttribute('src', newPreviewIcon);
+            }
+          }
+
+          function setupForm() {
+            dom.select('#title').setValue(fields.title);
+            // dom.select('#click_action').setValue(fields.click_action.replace(/\/(.*?)\//,'').replace(/\//,''));
+            dom.select('#click_action').setValue(fields.click_action);
+            dom.select('#icon').setValue(fields.icon);
+            dom.select('#body').setValue("");
+
+            // special
+            var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
+            var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
+            var env = buildFile.environment;
+            dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
+            dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
+            dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
+
+          }
+
+          dom.select('#notification-form').on('submit', function (event) {
+            blockNavigation();
+            displayWaiting();
+            // var endpoint = '{{ site.url }}/admin/post/create.json';
+            var endpoint = dom.select('#processingAddy').getValue();
+            // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
+
+            var token = '';
+            firebase.auth().currentUser.getIdToken(true)
+            .then(function(token) {
+              token = token;
+
+              var data = {};
+              var finalData = {};
+              dom.select('#notification-form input, #notification-form select, #notification-form textarea').each(function (i, el) {
+                var curField = dom.select(el);
+                data[curField.getAttribute('name')] = curField.getValue();
+              });
+              finalData.authenticationToken = token;
+              finalData.payload = {};
+              finalData.payload.title = data.title;
+              finalData.payload.icon = data.icon;
+              finalData.payload.click_action = data.click_action;
+              finalData.payload.body = data.body;
+
+              console.log('#notification-form', endpoint, finalData);
 
 
-          Manager.ajax().request({
-            method: 'POST',
-            url: endpoint,
-            data: finalData,
-          })
-          .success(function (one,two,three) {
-            console.log(one,two,three);
-            displayError();
+              fetch(endpoint, {
+                method: 'POST',
+                body: JSON.stringify(finalData),
+              })
+              .then(function (res) {
+                if (res.status >= 200 && res.status < 300) {
+                  res.json()
+                  .then(function (data) {
+                    console.log('Success', data);
+                    displayError();
 
-            allowLeave = true;
+                    allowLeave = true;
+                  })
+                } else {
+                  return res.text()
+                  .then(function (data) {
+                    throw new Error(data || res.statusTest || 'Unknown error.')
+                  })
+                }
+              })
+              .catch(function (e) {
+                console.error(e);
+                displayError(e);
+              })
 
-          })
-          .error(function (response, status, error) {
-            console.error(response, status, error);
-            displayError(error);
-          })
+            })
+            .catch(function(error) {
+              display('Failed to get firebase token: ' + error);
+            })
+          });
 
+          function displayWaiting() {
+            dom.select('#response .alert-danger').hide()
+            dom.select('#response .alert-success').hide()
+
+            dom.select('#response .alert-info').show()
+            dom.select('#response').show()
+            dom.select('#post-submit-btn').setAttribute('disabled', true);
+          }
+
+          function displayError(error) {
+            dom.select('#response .alert-info').hide()
+            dom.select('#post-submit-btn').removeAttribute('disabled');
+            if (error) {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').hide()
+              dom.select('#response .alert-danger').show()
+              dom.select('#main-response-code').setInnerHTML(error)
+            } else {
+              dom.select('#response').show()
+              dom.select('#response .alert-success').show()
+              dom.select('#response .alert-danger').hide()
+            }
+          }
+
+          dom.select('.loaded-false').hide();
+          dom.select('.loaded-true').show();
         })
-        .catch(function(error) {
-          display('Failed to get firebase token: ' + error);
+      } else {
+        return res.text()
+        .then(function (data) {
+          throw new Error(data || res.statusTest || 'Unknown error.')
         })
-      });
-
-      function displayWaiting() {
-        dom.select('#response .alert-danger').hide()
-        dom.select('#response .alert-success').hide()
-
-        dom.select('#response .alert-info').show()
-        dom.select('#response').show()
-        dom.select('#post-submit-btn').setAttribute('disabled', true);
       }
 
-      function displayError(error) {
-        dom.select('#response .alert-info').hide()
-        dom.select('#post-submit-btn').removeAttribute('disabled');
-        if (error) {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').hide()
-          dom.select('#response .alert-danger').show()
-          dom.select('#main-response-code').setInnerHTML(error)
-        } else {
-          dom.select('#response').show()
-          dom.select('#response .alert-success').show()
-          dom.select('#response .alert-danger').hide()
-        }
-      }
-
-      dom.select('.loaded-false').hide();
-      dom.select('.loaded-true').show();
     })
 
   });

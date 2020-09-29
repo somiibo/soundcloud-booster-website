@@ -184,7 +184,7 @@ settings:
           Manager.dom().select('#result').setInnerHTML(message);
         }
 
-        Manager.dom().select('body').on('click', function(event) {
+        document.body.addEventListener('click', function(event) {
           // let project = https://us-central1-' + This.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_signUpHandler
           var projectId = Manager.properties.options.libraries.firebase_app.config.projectId;
           // var authUrl = 'https://us-central1-' + projectId + '.cloudfunctions.net/bm_test_admin';
@@ -192,30 +192,56 @@ settings:
           var authUrl = Manager.dom().select('#server-addy').getValue();
           if (event.target.matches('#auth-check-key')) {
 
-            Manager.ajax().request({
+            fetch(authUrl, {
               method: 'POST',
-              url: authUrl,
-              data: {backendManagerKey: Manager.dom().select('#auth-key-input').getValue()},
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({backendManagerKey: Manager.dom().select('#auth-key-input').getValue()}),
             })
-            .success(function (response, status, data) { // This function runs only on success
-              console.log('Success');
-              console.log(response);
-              console.log(status);
-              console.log(data);
-              Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+            .then(function (res) { // This function runs only on success
+              if (res.status >= 200 && res.status < 300) {
+                res.json()
+                .then(function (data) {
+                  console.log('Success', data);
+                  Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                })
+              } else {
+                return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusTest || 'Unknown error.')
+                })
+              }
             })
-            .error(function (response, status, error) { // This function runs only on error
-              console.log('Fail');
-              console.log(response);
-              console.log(status);
-              console.log(error);
-              Manager.dom().select('#result').setInnerHTML(error); // Set setInnerHTML
+            .catch(function (e) { // This function runs only on error
+              console.log('Fail', e);
+              Manager.dom().select('#result').setInnerHTML(e); // Set setInnerHTML
             })
-            .always(function (response, status) { // This function runs regardless of a success or error
+            .finally(function () { // This function runs regardless of a success or error
               console.log('Always');
-              console.log(response);
-              console.log(status);
             });
+            // Manager.ajax().request({
+            //   method: 'POST',
+            //   url: authUrl,
+            //   data: {backendManagerKey: Manager.dom().select('#auth-key-input').getValue()},
+            // })
+            // .success(function (response, status, data) { // This function runs only on success
+            //   console.log('Success');
+            //   console.log(response);
+            //   console.log(status);
+            //   console.log(data);
+            //   Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+            // })
+            // .error(function (response, status, error) { // This function runs only on error
+            //   console.log('Fail');
+            //   console.log(response);
+            //   console.log(status);
+            //   console.log(error);
+            //   Manager.dom().select('#result').setInnerHTML(error); // Set setInnerHTML
+            // })
+            // .always(function (response, status) { // This function runs regardless of a success or error
+            //   console.log('Always');
+            //   console.log(response);
+            //   console.log(status);
+            // });
           } else if (event.target.matches('#auth-check-token')) {
 
             if (Manager.auth().isAuthenticated()) {
@@ -224,30 +250,57 @@ settings:
                 document.cookie = '__session=' + token + ';max-age=3600';
                 console.log('Got firebase token', token);
 
-                Manager.ajax().request({
+                fetch(authUrl, {
                   method: 'POST',
-                  url: authUrl,
-                  data: {authenticationToken: token},
+                  headers: { 'Content-Type': 'application/json' },
+                  data: JSON.stringify({authenticationToken: token}),
                 })
-                .success(function (response, status, data) { // This function runs only on success
-                  console.log('Success');
-                  console.log(response);
-                  console.log(status);
-                  console.log(data);
-                  Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                .then(function (res) { // This function runs only on success
+                  if (res.status >= 200 && res.status < 300) {
+                    res.json()
+                    .then(function (data) {
+                      console.log('Success', data);
+                      Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                    })
+                  } else {
+                    return res.text()
+                    .then(function (data) {
+                      throw new Error(data || res.statusTest || 'Unknown error.')
+                    })
+                  }
                 })
-                .error(function (response, status, error) { // This function runs only on error
-                  console.log('Fail');
-                  console.log(response);
-                  console.log(status);
-                  console.log(error);
-                  Manager.dom().select('#result').setInnerHTML(error.toString()); // Set setInnerHTML
+                .catch(function (e) { // This function runs only on error
+                  console.log('Fail', e);
+                  Manager.dom().select('#result').setInnerHTML(e); // Set setInnerHTML
                 })
-                .always(function (response, status) { // This function runs regardless of a success or error
+                .finally(function () { // This function runs regardless of a success or error
                   console.log('Always');
-                  console.log(response);
-                  console.log(status);
                 });
+
+                // Manager.ajax().request({
+                //   method: 'POST',
+                //   url: authUrl,
+                //   data: {authenticationToken: token},
+                // })
+                // .success(function (response, status, data) { // This function runs only on success
+                //   console.log('Success');
+                //   console.log(response);
+                //   console.log(status);
+                //   console.log(data);
+                //   Manager.dom().select('#result').setInnerHTML(JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                // })
+                // .error(function (response, status, error) { // This function runs only on error
+                //   console.log('Fail');
+                //   console.log(response);
+                //   console.log(status);
+                //   console.log(error);
+                //   Manager.dom().select('#result').setInnerHTML(error.toString()); // Set setInnerHTML
+                // })
+                // .always(function (response, status) { // This function runs regardless of a success or error
+                //   console.log('Always');
+                //   console.log(response);
+                //   console.log(status);
+                // });
               })
               .catch(function(error) {
                 display('Failed to get firebase token: ' + error);

@@ -70,7 +70,7 @@ sitemap:
   <body class="text-center">
   <div class="form-signin">
     <form class="" onsubmit="return false;">
-      <h1 class="h3 mb-3 font-weight-normal">.ajax() Library</h1>
+      <h1 class="h3 mb-3 font-weight-normal">window.fetch() Library</h1>
       <div class="card mb-3" style="">
         <div class="card-body">
           <pre id="result" class="text-left">waiting...</pre>
@@ -79,11 +79,15 @@ sitemap:
 
       <div class="form-group">
         <label for="address" class="">Address</label>
-        <input type="text" id="address" class="form-control" placeholder="Web address" value="https://httpbin.org/status/200" required autofocus>
+        <input type="text" id="address" class="form-control" placeholder="Web address" value="https://httpbin.org/delay/1" required autofocus>
         <code>
           https://httpbin.org/status/200<br>
           https://httpbin.org/status/400<br>
           https://httpbin.org/delay/5<br>
+          <br>
+          https://api.itwcreativeworks.com/mock-endpoint?status=200<br>
+          <br>
+          https://api.itwcreativeworks.com/mock-endpoint?status=500&responseType=text&responseBody=Test+message<br>
         </code>
       </div>
       <div class="form-group">
@@ -102,28 +106,55 @@ sitemap:
     <!-- Exploring the library -->
     <script type="text/javascript">
       Manager.ready(function() {
-        console.log('--- Exploring the .ajax() API ---');
+        console.log('--- Exploring the window.fetch() API ---');
         Manager.dom().select('body').on('click', function(event) {
           if (event.target.matches('#go')) {
             Manager.dom().select('#result').setInnerHTML('Sending request...'); // Set setInnerHTML
-            console.log("Manager.dom().select('#timeout').getValue()", Manager.dom().select('#timeout').getValue());
-            Manager.ajax().request({
+
+            fetch(Manager.dom().select('#address').getValue(), {
               method: 'POST',
-              url: Manager.dom().select('#address').getValue(),
-              timeout: Manager.dom().select('#timeout').getValue(),
-              data: (Manager.dom().select('#body').getValue()),
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(Manager.dom().select('#body').getValue() || {}),
+              timeout: Manager.dom().select('#timeout').getValue() || 0,
             })
-            .success(function (response, status, data) { // This function runs only on success
-              console.log('Success', response, status, data);
-              Manager.dom().select('#result').setInnerHTML(status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+            .then(function (res) { // This function runs only on success
+              if (res.status >= 200 && res.status < 300) {
+                res.json()
+                .then(function (data) {
+                  console.log('Success', data);
+                  Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+                })
+              } else {
+                return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusTest || 'Unknown error.')
+                })
+              }
             })
-            .error(function (response, status, error) { // This function runs only on error
-              console.log('Fail', response, status, error);
-              Manager.dom().select('#result').setInnerHTML(status + '\n' + error); // Set setInnerHTML
+            .catch(function (e) { // This function runs only on error
+              console.log('Fail', e);
+              Manager.dom().select('#result').setInnerHTML(e); // Set setInnerHTML
             })
-            .always(function (response, status) { // This function runs regardless of a success or error
-              console.log('Always', response, status);
+            .finally(function () { // This function runs regardless of a success or error
+              console.log('Always');
             });
+            // Manager.ajax().request({
+            //   method: 'POST',
+            //   url: Manager.dom().select('#address').getValue(),
+            //   timeout: Manager.dom().select('#timeout').getValue(),
+            //   data: (Manager.dom().select('#body').getValue()),
+            // })
+            // .success(function (response, status, data) { // This function runs only on success
+            //   console.log('Success', response, status, data);
+            //   Manager.dom().select('#result').setInnerHTML(status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+            // })
+            // .error(function (response, status, error) { // This function runs only on error
+            //   console.log('Fail', response, status, error);
+            //   Manager.dom().select('#result').setInnerHTML(status + '\n' + error); // Set setInnerHTML
+            // })
+            // .always(function (response, status) { // This function runs regardless of a success or error
+            //   console.log('Always', response, status);
+            // });
           }
         });
 

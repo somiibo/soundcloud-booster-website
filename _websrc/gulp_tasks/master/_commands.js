@@ -13,7 +13,8 @@ gulp.task('cloudflare:purge', async function (done) {
   await new Promise(function(resolve, reject) {
     // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
     fetch('https://api.itwcreativeworks.com/wrapper/cloudflare', {
-      method: 'post',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         body: {
           purge_everything: true
@@ -23,9 +24,6 @@ gulp.task('cloudflare:purge', async function (done) {
         delay: parseInt(argv.delay) || 1,
       }),
       timeout: parseInt(argv.timeout) || 30000,
-      headers: {
-        'Content-Type': 'application/json',
-      }
     })
     .then(res => {
       if (res.status >= 200 && res.status < 300) {
@@ -48,7 +46,7 @@ gulp.task('cloudflare:purge', async function (done) {
 
 gulp.task('clean:assets', async function (done) {
   await new Promise(async function(resolve, reject) {
-    let deleted = await del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site']);
+    let deleted = await del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata']);
     console.log(`Deleted ${deleted.length} files.`);
     done();
   });

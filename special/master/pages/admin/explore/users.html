@@ -305,10 +305,6 @@ settings:
     var allowLeave = true;
     var CurrentEditId = 0;
 
-    Manager.auth().ready(function () {
-      dom.select('#search-btn, #search-input').removeAttribute('disabled').removeAttribute('readonly')
-    })
-
     Manager.ready(function() {
       window.dom = Manager.dom();
       window.util = Manager.utilities();
@@ -320,6 +316,8 @@ settings:
         viewportMargin: Infinity
         // theme: 'default',
       });
+
+      dom.select('#search-btn, #search-input').removeAttribute('disabled').removeAttribute('readonly')
 
       dom.select('body').on('click', function (event) {
         if (event.target.matches('#search-btn')) {
@@ -399,10 +397,10 @@ settings:
         if (!searchText) {
           return reject(new Error('Please enter a query to search.'))
         } else {
-          Manager.ajax().request({
-            url: serverProd,
+          fetch(serverProd, {
             method: 'POST',
-            data: {
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
               queries: [
                 {
                   collection: 'users',
@@ -416,16 +414,25 @@ settings:
                 },
               ],
               authenticationToken: window.token
+            }),
+          })
+          .then(function (res) {
+            if (res.status >= 200 && res.status < 300) {
+              res.json()
+              .then(function (data) {
+                console.log('Success', data);
+                table_add(data);
+                return resolve();
+              })
+            } else {
+              return res.text()
+              .then(function (data) {
+                throw new Error(data || res.statusTest || 'Unknown error.')
+              })
             }
           })
-          .success(function (o,t,data) {
-            console.log(data);
-            table_add(data);
-            resolve();
-          })
-          .error(function (o,t,e) {
-            console.log(o,t,e);
-            reject(e);
+          .catch(function (e) {
+            return reject(e);
           })
         }
       });
