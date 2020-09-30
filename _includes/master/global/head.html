@@ -44,29 +44,29 @@
 
 <!-- Description -->
 {%- if page.layout == 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
-<meta name="description" content="{{ page.post.excerpt }}">
-<meta name="twitter:description" content="{{ page.post.excerpt }}" />
-<meta property="og:description" content="{{ page.post.excerpt }}" />
+  <meta name="description" content="{{ page.post.excerpt }}">
+  <meta name="twitter:description" content="{{ page.post.excerpt }}" />
+  <meta property="og:description" content="{{ page.post.excerpt }}" />
 {%- elsif page.meta.description != null and page.meta.description != "" -%}
-<meta name="description" content="{{ page.meta.description }}">
-<meta name="twitter:description" content="{{ page.meta.description }}" />
-<meta property="og:description" content="{{ page.meta.description }}" />
+  <meta name="description" content="{{ page.meta.description }}">
+  <meta name="twitter:description" content="{{ page.meta.description }}" />
+  <meta property="og:description" content="{{ page.meta.description }}" />
 {%- else -%}
-<meta name="description" content="{{ site.meta.description }}">
-<meta name="twitter:description" content="{{ site.meta.description }}" />
-<meta property="og:description" content="{{ site.meta.description }}" />
+  <meta name="description" content="{{ site.meta.description }}">
+  <meta name="twitter:description" content="{{ site.meta.description }}" />
+  <meta property="og:description" content="{{ site.meta.description }}" />
 {%- endif -%}
 
 <!-- Image -->
 {%- if page.layout == 'post' and page.post.id != null and page.post.id != '' -%}
-<meta name="twitter:image" content="{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg" />
-<meta property="og:image" content="{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg" />
+  <meta name="twitter:image" content="{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg" />
+  <meta property="og:image" content="{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg" />
 {%- elsif page.meta.og-image != null and page.meta.og-image != "" -%}
-<meta name="twitter:image" content="{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}" />
-<meta property="og:image" content="{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}" />
+  <meta name="twitter:image" content="{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}" />
+  <meta property="og:image" content="{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}" />
 {%- else -%}
-<meta name="twitter:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
-<meta property="og:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
+  <meta name="twitter:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
+  <meta property="og:image" content="{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}" />
 {%- endif -%}
 
 <!-- OG: Twitter -->
@@ -81,17 +81,15 @@
 <!-- Main Feed -->
 <link href="{{ site.url }}/feed.xml" type="application/atom+xml" rel="alternate" title="{{site.brand.name}} Feed">
 
-{%- if page.settings.include-debug-performance == true -%}
+{%- if page.settings.include-debug-performance == false -%}
+{% elsif layout.settings.include-debug-performance == false %}
+{% elsif site.settings.include-debug-performance == false %}
+{% else %}
   <!-- Performance Metrics -->
   <script type="text/javascript">
     {% include /master/assets/scripts/debug/performance-metrics.js %}
   </script>
-{%- elsif site.settings.include-debug-performance == true and page.settings.include-debug-performance != false -%}
-  <!-- Performance Metrics -->
-  <script type="text/javascript">
-    {% include /master/assets/scripts/debug/performance-metrics.js %}
-  </script>
-{%- endif -%}
+{% endif %}
 
 <!-- Configuration -->
 <script type="text/javascript">
@@ -116,7 +114,7 @@
 
 <!-- Redirect -->
 {%- if page.redirect.url != null and page.redirect.url != '' -%}
-<meta http-equiv="refresh" content="0; url={{ page.redirect.url }}">
+  <meta http-equiv="refresh" content="0; url={{ page.redirect.url }}">
 {%- endif -%}
 
 <!-- Favicon -->
@@ -138,19 +136,25 @@
 <!-- CSS - Defaults-->
 <style type="text/css" media="screen">
   {%- if page.settings.include-css-normalize == false -%}
-  {%- elsif site.settings.include-css-normalize != false -%}
+  {% elsif layout.settings.include-css-normalize == false %}
+  {% elsif site.settings.include-css-normalize == false %}
+  {% else %}
     {% include /master/assets/css/normalize.css %}
-  {%- endif -%}
+  {% endif %}
 
   {%- if page.settings.include-css-reset == false -%}
-  {%- elsif site.settings.include-css-reset != false -%}
+  {% elsif layout.settings.include-css-reset == false %}
+  {% elsif site.settings.include-css-reset == false %}
+  {% else %}
     {% include /master/assets/css/reset.css %}
-  {%- endif -%}
+  {% endif %}
 
   {%- if page.settings.include-css-defaults == false -%}
-  {%- elsif site.settings.include-css-defaults != false -%}
-    {% include /master/assets/css/defaults.css %}
-  {%- endif -%}
+  {% elsif layout.settings.include-css-defaults == false %}
+  {% elsif site.settings.include-css-defaults == false %}
+  {% else %}
+  {% include /master/assets/css/defaults.css %}
+  {% endif %}
 
   {% include /master/assets/css/cookieconsent.css %}
 </style>
@@ -160,39 +164,59 @@
 {%- if page.layout contains 'post' -%}
   {%- if page.settings.include-socialsharekit == false -%}
     {% assign include_socialsharekitscript = false %}
+  {%- elsif layout.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- elsif site.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
   {%- else -%}
     {% assign include_socialsharekitscript = true %}
   {%- endif -%}
 {%- else -%}
   {%- if page.settings.include-socialsharekit == true -%}
     {% assign include_socialsharekitscript = true %}
+  {%- elsif layout.settings.include-socialsharekit == true -%}
+    {% assign include_socialsharekitscript = true %}
   {%- endif -%}
 {%- endif -%}
 
 {% if include_socialsharekitscript == true %}
-<style type="text/css" media="screen">
-  {% include /master/assets/css/social-share-kit.css %}
-</style>
+  <style type="text/css" media="screen">
+    {% include /master/assets/css/social-share-kit.css %}
+  </style>
 {% endif %}
 
 <!-- CSS - Bundle-->
 {%- if include.pre-bundle-css != null -%}
   {{ include.pre-bundle-css }}
+{%- elsif page.head.pre-bundle-css != null -%}
+  {{ page.head.pre-bundle-css }}
+{%- elsif layout.head.pre-bundle-css != null -%}
+  {{ layout.head.pre-bundle-css }}
 {% endif %}
+
 {%- if page.settings.include-css-bundle == false -%}
-{% elsif site.settings.include-css-bundle != false %}
-<link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}">
+{% elsif layout.settings.include-css-bundle == false %}
+{% elsif site.settings.include-css-bundle == false %}
+{% else %}
+  <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}">
 {% endif %}
+
 {%- if include.post-bundle-css != null -%}
   {{ include.post-bundle-css }}
+{%- elsif page.head.post-bundle-css != null -%}
+  {{ page.head.post-bundle-css }}
+{%- elsif layout.head.post-bundle-css != null -%}
+  {{ layout.head.post-bundle-css }}
 {% endif %}
 
 <!-- HTML5 Shiv -->
 {%- if page.settings.include-html5shiv == false -%}
-{% elsif site.settings.include-html5shiv != false %}
-<!--[if lt IE 9]>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-<![endif]-->
+{% elsif layout.settings.include-html5shiv == false %}
+{% elsif site.settings.include-html5shiv == false %}
+{% else %}
+  <!--[if lt IE 9]>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
 {% endif %}
 
 <!-- Initialize Manager -->
@@ -322,7 +346,9 @@
 
 <!-- App - Head Content -->
 {%- if page.settings.include-app-head == false -%}
-{% elsif site.settings.include-app-head != false %}
+{% elsif layout.settings.include-app-head == false %}
+{% elsif site.settings.include-app-head == false %}
+{% else %}
   {% include /app/global/head.html %}
 {% endif %}
 

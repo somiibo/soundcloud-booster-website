@@ -11,7 +11,6 @@ meta:
   description: "Delete your admin account."
   breadcrumb: "Delete"
 
-### REGULAR PAGES ###
 settings:
   manager-configuration: "
     {
@@ -36,30 +35,22 @@ settings:
     }
   "
 ---
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-5 col-xl-4 my-5">
 
-      {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
-      <!-- Heading -->
-      <h1 class="display-4 text-center mb-3">
-        Sad to see ya go!
-      </h1>
+{%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+<!-- Heading -->
+<h1 class="display-4 text-center mb-3">
+  Sad to see ya go!
+</h1>
 
-      <!-- Subheading -->
-      <p class="text-muted text-center mb-5">
-        Are you sure you want to delete your account?
-      </p>
+<!-- Subheading -->
+<p class="text-muted text-center mb-5">
+  Are you sure you want to delete your account?
+</p>
 
-      <!-- Submit -->
-      <a id="delete-account-button" class="btn btn-lg btn-block btn-primary mb-3">
-        Delete
-      </a>
-
-      <!-- Form -->
-    </div>
-  </div> <!-- / .row -->
-</div> <!-- / .container -->
+<!-- Submit -->
+<a id="delete-account-button" class="btn btn-lg btn-block btn-primary mb-3">
+  Delete
+</a>
 
 <script type="text/javascript">
   Manager.ready(function() {
@@ -77,27 +68,11 @@ settings:
               }),
             })
             .finally(function () {
-              console.log('----HERE', user);
-              // if (!user || !user.uid) {
-              //   window.location.href = '{{ site.url }}/admin/signin/';
-              // }
+              Manager.log('Account deleted', user);
             });
-            // Manager.ajax().request({
-            //   url: 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_deleteUser',
-            //   // url: 'http://localhost:5001/ultimate-jekyll/us-central1/bm_deleteUser',
-            //   body: {
-            //     authenticationToken: token,
-            //   },
-            //   timeout: 20000,
-            // })
-            // .always(function (response, status) {
-            //   if (!user || !user.uid) {
-            //     window.location.href = '{{ site.url }}/admin/signin/';
-            //   }
-            // });
           })
-          .catch(function(error) {
-            console.error(error);
+          .catch(function(e) {
+            console.error(e);
           });
       } else {
         window.location.href = '{{ site.url }}/admin/signin/';

@@ -241,7 +241,6 @@ settings:
 
     <script type="text/javascript">
       Manager.ready(function() {
-        // setEmail(Manager.query().create(window.location.href).get('auth_email'));
         setEmail(new URLSearchParams(window.location.href.split('?')[1]).get('auth_email'));
       });
 

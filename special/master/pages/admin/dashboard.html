@@ -911,26 +911,9 @@ settings:
             Manager.dom().select('#stats-error').setInnerHTML(e).show();
           });
 
-          // Manager.ajax().request({
-          //   // url: serverDev,
-          //   url: serverProd,
-          //   body: {
-          //     authenticationToken: token,
-          //   },
-          //   timeout: 20000,
-          // })
-          // .error(function (response, status, error) {
-          //   Manager.dom().select('#stats-error').setInnerHTML(error).show();
-          // })
-          // .success(function (response, status, data) {
-          //   console.log('data', data);
-          //   Manager.dom().select('#stats-users-total').setInnerHTML(data.users.total);
-          //   Manager.dom().select('#stats-users-online').setInnerHTML(data.users.online);
-          //   Manager.dom().select('#stats-notification-subscribers').setInnerHTML(data.subscriptions.total);
-          // });
         })
-        .catch(function(error) {
-          Manager.dom().select('#stats-error').setInnerHTML(error).show();
+        .catch(function(e) {
+          Manager.dom().select('#stats-error').setInnerHTML(e).show();
         });
     }
   });

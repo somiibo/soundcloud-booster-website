@@ -100,7 +100,7 @@ settings:
   include-app-head: true # true | false
   include-app-foot: true # true | false
   include-script-bundle: true # true | false
-  include-script-bundle-optimization: "defer" # defer | async | ""
+  include-script-bundle-optimization: "async" # defer | async | ""
   include-css-bundle: true # true | false
   include-css-normalize: false # true | false
   include-css-reset: false # true | false

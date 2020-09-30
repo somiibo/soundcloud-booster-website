@@ -35,99 +35,92 @@ settings:
     }
   "
 ---
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-5 col-xl-4 my-5">
 
-      {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
-      <!-- Heading -->
-      <h1 class="display-4 text-center mb-3">
-        Sign up
-      </h1>
+{%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+<!-- Heading -->
+<h1 class="display-4 text-center mb-3">
+  Sign up
+</h1>
 
-      <!-- Subheading -->
-      <p class="text-muted text-center mb-5">
-        Welcome to the <strong>{{ site.brand.name }}</strong> admin dashboard!
-      </p>
+<!-- Subheading -->
+<p class="text-muted text-center mb-5">
+  Welcome to the <strong>{{ site.brand.name }}</strong> admin dashboard!
+</p>
 
-      <!-- Form -->
-      <form onsubmit="return false;">
-        <!-- Email address -->
-        <div class="form-group">
-          <!-- Label -->
-          <label>Email Address</label>
-          <!-- Input -->
-          <input type="email" class="form-control auth-email-input" placeholder="Your email" required autofocus autocomplete="email">
-        </div>
+<!-- Form -->
+<form onsubmit="return false;">
+  <!-- Email address -->
+  <div class="form-group">
+    <!-- Label -->
+    <label>Email Address</label>
+    <!-- Input -->
+    <input type="email" class="form-control auth-email-input" placeholder="Your email" required autofocus autocomplete="email">
+  </div>
 
-        <!-- Password -->
-        <div class="form-group">
-          <!-- Input group -->
-          <div class="input-group input-group-merge">
-            <!-- Input -->
-            <input type="password" class="form-control form-control-appended auth-password-input" placeholder="Your password" required autocomplete="new-password">
-            <!-- Icon -->
-            <div class="input-group-append">
-              <span class="input-group-text">
-                <i class="fe fe-eye"></i>
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="form-group">
-          <div class="input-group input-group-merge">
-            <!-- Input -->
-            <input type="password" class="form-control form-control-appended auth-password-confirm-input" placeholder="Confirm password" required autocomplete="new-password">
-            <!-- Icon -->
-            <div class="input-group-append">
-              <span class="input-group-text">
-                <i class="fe fe-eye"></i>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="custom-control custom-checkbox table-checkbox">
-            <input type="checkbox" class="custom-control-input auth-terms-input" id="authTermsInput">
-            <label class="custom-control-label" for="authTermsInput">
-              I agree to the Terms and Conditions
-            </label>
-          </div>
-          <div class="custom-control custom-checkbox table-checkbox">
-            <input type="checkbox" class="custom-control-input auth-newsletter-input" id="authNewsletterInput">
-            <label class="custom-control-label" for="authNewsletterInput">
-              Sign up for our newsletter
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-
-        </div>
-
-
-
-        <div class="alert alert-danger auth-error-message-element" role="alert" hidden>
-          Waiting...
-        </div>
-
-        <!-- Submit -->
-        <button class="btn btn-lg btn-block btn-primary mb-3 auth-signup-email-btn">
-          Sign up
-        </button>
-
-        <!-- Link -->
-        <div class="text-center">
-          <small class="text-muted text-center">
-            Already have an account? <a href="{{ site.url }}/admin/signin/">Sign in</a>.
-          </small>
-        </div>
-
-      </form>
-
+  <!-- Password -->
+  <div class="form-group">
+    <!-- Input group -->
+    <div class="input-group input-group-merge">
+      <!-- Input -->
+      <input type="password" class="form-control form-control-appended auth-password-input" placeholder="Your password" required autocomplete="new-password">
+      <!-- Icon -->
+      <div class="input-group-append">
+        <span class="input-group-text">
+          <i class="fe fe-eye"></i>
+        </span>
+      </div>
     </div>
-  </div> <!-- / .row -->
-</div> <!-- / .container -->
+
+  </div>
+
+  <div class="form-group">
+    <div class="input-group input-group-merge">
+      <!-- Input -->
+      <input type="password" class="form-control form-control-appended auth-password-confirm-input" placeholder="Confirm password" required autocomplete="new-password">
+      <!-- Icon -->
+      <div class="input-group-append">
+        <span class="input-group-text">
+          <i class="fe fe-eye"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="custom-control custom-checkbox table-checkbox">
+      <input type="checkbox" class="custom-control-input auth-terms-input" id="authTermsInput">
+      <label class="custom-control-label" for="authTermsInput">
+        I agree to the Terms and Conditions
+      </label>
+    </div>
+    <div class="custom-control custom-checkbox table-checkbox">
+      <input type="checkbox" class="custom-control-input auth-newsletter-input" id="authNewsletterInput">
+      <label class="custom-control-label" for="authNewsletterInput">
+        Sign up for our newsletter
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+
+  </div>
+
+
+
+  <div class="alert alert-danger auth-error-message-element" role="alert" hidden>
+    Waiting...
+  </div>
+
+  <!-- Submit -->
+  <button class="btn btn-lg btn-block btn-primary mb-3 auth-signup-email-btn">
+    Sign up
+  </button>
+
+  <!-- Link -->
+  <div class="text-center">
+    <small class="text-muted text-center">
+      Already have an account? <a href="{{ site.url }}/admin/signin/">Sign in</a>.
+    </small>
+  </div>
+
+</form>

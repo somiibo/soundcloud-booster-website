@@ -661,9 +661,9 @@ settings:
               })
 
             })
-            .catch(function(error) {
-              console.error(error);
-              displayError('Failed to get firebase token: ' + error);
+            .catch(function(e) {
+              console.error(e);
+              displayError('Failed to get firebase token: ' + e);
             })
           });
 
@@ -765,7 +765,6 @@ settings:
                       var newLink = false;
                       var needsReplacing = link.indexOf('url?q=') != -1;
                       if (needsReplacing) {
-                        // newLink = Manager.query().create(link).get('q');
                         newLink = new URLSearchParams(link.split('?')[1]).get('q');
                         // console.log('Extracted link:', newLink);
                       }
@@ -810,6 +809,9 @@ settings:
           throw new Error(data || res.statusTest || 'Unknown error.')
         })
       }
+    })
+    .catch(function (e) {
+      console.error(e);
     })
 
   }, {

@@ -358,8 +358,8 @@ settings:
               })
 
             })
-            .catch(function(error) {
-              display('Failed to get firebase token: ' + error);
+            .catch(function(e) {
+              display('Failed to get firebase token: ' + e);
             })
           });
 
@@ -397,6 +397,9 @@ settings:
         })
       }
 
+    })
+    .catch(function (e) {
+      console.error(e);
     })
 
   });

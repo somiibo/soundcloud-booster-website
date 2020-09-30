@@ -1,15 +1,27 @@
 ---
+### ALL PAGES ###
 layout: master/global/default
+
+### REGULAR PAGES ###
 head:
-  content: '
-    <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/css/theme.min.css" id="stylesheetLight">
+  post-bundle-css: '
+    <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/css/theme.min.css">
   '
 
 foot:
-  content: '
+  post-bundle-script: '
   '
 
 body:
   class: "d-flex align-items-center bg-auth border-top border-top-2 border-primary"
+
+settings:
+  include-app-foot: false
 ---
-{{ content }}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-5 col-xl-4 my-5">
+      {{ content }}
+    </div>
+  </div>
+</div>

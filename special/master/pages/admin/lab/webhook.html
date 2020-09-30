@@ -165,7 +165,6 @@ settings:
     Manager.ready(function() {
       window.dom = Manager.dom();
       window.util = Manager.utilities();
-      // window.ajax = Manager.ajax();
 
       Manager.auth().ready(function () {
         dom.select('#send-btn').removeAttribute('disabled')
@@ -233,8 +232,8 @@ settings:
           display('failed', e)
         })
       })
-      .catch(function(error) {
-        console.log(error);
+      .catch(function(e) {
+        console.log(e);
       });
     }
 

@@ -138,23 +138,6 @@ sitemap:
             .finally(function () { // This function runs regardless of a success or error
               console.log('Always');
             });
-            // Manager.ajax().request({
-            //   method: 'POST',
-            //   url: Manager.dom().select('#address').getValue(),
-            //   timeout: Manager.dom().select('#timeout').getValue(),
-            //   data: (Manager.dom().select('#body').getValue()),
-            // })
-            // .success(function (response, status, data) { // This function runs only on success
-            //   console.log('Success', response, status, data);
-            //   Manager.dom().select('#result').setInnerHTML(status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
-            // })
-            // .error(function (response, status, error) { // This function runs only on error
-            //   console.log('Fail', response, status, error);
-            //   Manager.dom().select('#result').setInnerHTML(status + '\n' + error); // Set setInnerHTML
-            // })
-            // .always(function (response, status) { // This function runs regardless of a success or error
-            //   console.log('Always', response, status);
-            // });
           }
         });
 
