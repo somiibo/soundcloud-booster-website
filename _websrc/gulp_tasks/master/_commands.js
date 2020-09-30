@@ -10,7 +10,7 @@ gulp.task('cloudflare:purge', async function (done) {
   let doc = yaml.safeLoad(fs.read('_config.yml'));
   console.log(`starting cloudflare:purge on zone: ${doc.cloudflare.zone} ...`);
 
-  await new Promise(function(resolve, reject) {
+  return new Promise(function(resolve, reject) {
     // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
     fetch('https://api.itwcreativeworks.com/wrapper/cloudflare', {
       method: 'POST',
@@ -40,24 +40,44 @@ gulp.task('cloudflare:purge', async function (done) {
     })
     .catch(e => {
       console.error(e);
-    });
+    })
+    .finally(r => {
+      return resolve();
+    })
   });
 });
 
 gulp.task('clean:assets', async function (done) {
-  await new Promise(async function(resolve, reject) {
-    let deleted = await del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata']);
-    console.log(`Deleted ${deleted.length} files.`);
-    done();
-  });
+  // let tools        = new (require('../../libraries/tools.js'));
+  // await tools.poll(function () {
+  // }, {timeout: 2000}).catch(e => {})
+
+  return del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata'])
+    .then(deleted => {
+      console.log(`Deleted ${deleted.length} files.`);
+    })
 });
+
+// gulp.task('clean:assets', async function (done) {
+//   return new Promise(async function(resolve, reject) {
+//     let deleted;
+//     let tools        = new (require('../../libraries/tools.js'));
+//     await tools.poll(function () {
+//     }, {timeout: 2000})
+//     .catch(e => {})
+//     deleted = await del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata']);
+//     console.log(`Deleted ${deleted.length} files.`);
+//     return resolve();
+//   });
+//   // done();
+// });
 
 gulp.task('clean:npm', async function () {
   // console.log('\x1b[34m%s\x1b[0m', '******* finished clean:npm *******');  //cyan
 });
 
 gulp.task('template:update', async function () {
-  await asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git merge template -m "Merged from template." && git push origin`)
+  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git merge template -m "Merged from template." && git push origin`)
   .then(data => {
     console.log(data)
   })
@@ -67,7 +87,7 @@ gulp.task('template:update', async function () {
 });
 
 gulp.task('template:setup', async function () {
-  await asyncCmd(`git checkout master && git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git && git remote set-url --push upstream no_push && git fetch upstream template && git merge upstream/template --allow-unrelated-histories -m "Merge from template."`)
+  return asyncCmd(`git checkout master && git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git && git remote set-url --push upstream no_push && git fetch upstream template && git merge upstream/template --allow-unrelated-histories -m "Merge from template."`)
   .then(data => {
     console.log(data)
   })
@@ -77,7 +97,7 @@ gulp.task('template:setup', async function () {
 });
 
 gulp.task('create:cert', async function () {
-  await new Promise(async function(resolve, reject) {
+  return new Promise(async function(resolve, reject) {
     let outputPath = '@output/.temp/certificate';
 
     let ips = argv.ips || '';
@@ -105,11 +125,11 @@ gulp.task('create:cert', async function () {
     await asyncCmd(`(echo US && echo CA && echo Los Angeles && echo _localhost_certificate && echo _localhost_certificate && echo localhost@localhost.com) | openssl req -config ${outputPath}/localhost.conf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout ${outputPath}/localhost.key.pem -days 3650 -out ${outputPath}/localhost.cert.pem`)
     .then(function (result) {
       console.log('-----res', result);
-      resolve(result);
+      return resolve(result);
     })
     .catch(function (e) {
       console.log('-----err', e);
-      reject(e);
+      return reject(e);
     });
 
   });

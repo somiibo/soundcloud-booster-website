@@ -321,7 +321,10 @@
 
 
 <!-- App - Head Content -->
-{% include /app/global/head.html %}
+{%- if page.settings.include-app-head == false -%}
+{% elsif site.settings.include-app-head != false %}
+  {% include /app/global/head.html %}
+{% endif %}
 
 <!-- Page - Injected head -->
 {{ layout.head.content }}

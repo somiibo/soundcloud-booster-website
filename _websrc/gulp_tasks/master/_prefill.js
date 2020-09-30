@@ -7,8 +7,8 @@ let isServer   = (argv.buildLocation == 'server');
 
 let Global = require('../../libraries/global.js');
 
-gulp.task("_prefill", async () => {
-  await new Promise(async (resolve, reject) => {
+gulp.task('_prefill', async () => {
+  return new Promise(async (resolve, reject) => {
 
     const gitignore_ph = await readFile('./_websrc/templates/master/gitignore/all');
     const build_json = await readFile('./_websrc/templates/master/output/build/build.json');
@@ -226,28 +226,6 @@ function generateCommonModules() {
   return contents;
 }
 
-// async function createFile(file, contents) {
-//   var response = {
-//     exists: false,
-//     error: null,
-//   }
-//   return new Promise(function(resolve, reject) {
-//     try {
-//       if (fs.existsSync(file)) {
-//         response.exists = true;
-//         resolve(response)
-//       } else {
-//          fs.writeFile(file, contents, function () {
-//            response.exists = false;
-//            resolve(response);
-//          })
-//       }
-//     } catch (e) {
-//       response.error = e;
-//       reject(response);
-//     }
-//   });
-// }
 async function createFile(file, contents) {
   var response = {
     exists: false,

@@ -196,7 +196,20 @@
 {% endif %}
 
 <!-- App - Foot Content -->
-{% include /app/global/foot.html %}
+<script type="text/javascript">
+  console.log('page.settings.include-app-foot', {{page.settings.include-app-foot}});
+  console.log('site.settings.include-app-foot', {{site.settings.include-app-foot}});
+</script>
+{%- if page.settings.include-app-foot == false -%}
+  <script type="text/javascript">
+    console.log('--------1');
+  </script>
+{% elsif site.settings.include-app-foot != false %}
+  <script type="text/javascript">
+    console.log('--------2');
+  </script>
+  {% include /app/global/foot.html %}
+{% endif %}
 
 <!-- Page - Injected head -->
 {{ layout.foot.content }}

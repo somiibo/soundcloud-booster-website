@@ -13,6 +13,7 @@ let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.brow
  */
 // gulp.task('browsersync', ['jekyll-build'], function () {
 gulp.task('browsersync', async function () {
+  return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
       // console.log('browsersync polling Global.get(prefillStatus)....', Global.get('prefillStatus'), Global.get('jekyllBuild'));
       return Global.get('prefillStatus') === 'done';
@@ -92,11 +93,14 @@ gulp.task('browsersync', async function () {
           // cmd.run(`mkdir -p @output/ngrok/ && echo '<meta http-equiv="Refresh" content="0; url=${url}" />' >@output/ngrok/index.html`);
           fs.write('@output/ngrok/index.html', `<meta http-equiv="Refresh" content="0; url=${url}" />`)
           Global.set('browserSyncStatus', 'done');
+          return resolve();
         })();
       } else {
         Global.set('browserSyncStatus', 'done');
+        return resolve();
       }
     });
+  });
 });
 
 /**

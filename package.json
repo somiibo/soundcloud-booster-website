@@ -6,7 +6,7 @@
   "scripts": {
     "install:pre": "bundle install --path vendor/bundle",
     "start": "npm run _start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='true'",
-    "_start": "bundle exec gulp",
+    "_start": "bundle exec gulp clean:assets && bundle exec gulp",
     "prototype": "npm start",
     "prototype:public": "npm start -- --ngrokOpen='true'",
     "prototype:https": "npm start -- --https='true'",

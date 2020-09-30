@@ -1,48 +1,40 @@
-const argv   = require('yargs').argv;
-let config = require('../../master.config.js');
+const argv       = require('yargs').argv;
+let config       = require('../../master.config.js');
 let appGulpTasks = require('../../app.config.js');
-let yaml = require('js-yaml');
-let fs = require('fs-jetpack');
-let tools = new (require('../../libraries/tools.js'));
-let JSON5 = require('json5');
-let Global = require('../../libraries/global.js');
-
-// let webManager = require('web-manager/package.json').version;
+let yaml         = require('js-yaml');
+let fs           = require('fs-jetpack');
+const cp         = require('child_process');
+const gulp       = require('gulp');
+let tools        = new (require('../../libraries/tools.js'));
+let JSON5        = require('json5');
+let Global       = require('../../libraries/global.js');
 
 config.tasks = Object.assign(config.tasks, appGulpTasks.tasks);
-
-const cp     = require('child_process');
-const gulp   = require('gulp');
 
 const jekyll = process.platform === 'win32' ? 'jekyll.bat' : 'jekyll';
 
 const build  = Object.keys(config.tasks).filter((key) => config.tasks[key] && !['browsersync', 'watch'].includes(key))
 build.push('jekyll-build');
 
-// Display arguments
-console.log('Command line args => ', argv);
-
 /**
  * Build the Jekyll Site
  */
 gulp.task('jekyll-build', async function (done) {
-  await new Promise(async function(resolve, reject) {
-
+  return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
-      // console.log('jekyll-build polling Global.get(prefillStatus)', Global.get('prefillStatus'));
-      return Global.get('prefillStatus') == 'done';
+      return Global.get('prefillStatus') === 'done';
     }, {timeout: 60000});
 
     let jekyllConfig = config.jekyll.config.default;
     jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';
 
-    if (argv.jekyllEnv == 'production') {
+    if (argv.jekyllEnv === 'production') {
       process.env.JEKYLL_ENV = 'production';
       jekyllConfig += config.jekyll.config.production ? ',' + config.jekyll.config.production : '';
     } else {
       await tools.poll(function () {
         // console.log('jekyll-build polling Global.get(browserSyncStatus)....', Global.get('browserSyncStatus'));
-        return Global.get('browserSyncStatus') == 'done';
+        return Global.get('browserSyncStatus') === 'done';
       }, {timeout: 60000});
       jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
       jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
@@ -59,7 +51,7 @@ gulp.task('jekyll-build', async function (done) {
       build['repo'].user = info.user;
       build['repo'].name = info.name;
 
-      build['environment'] = argv.jekyllEnv == 'production' ? 'production' : 'development';
+      build['environment'] = argv.jekyllEnv === 'production' ? 'production' : 'development';
 
       build.packages['web-manager'] = require('web-manager/package.json').version;
 
@@ -87,7 +79,7 @@ gulp.task('jekyll-build', async function (done) {
     // }
     // console.log('----------cloudflare-zone.txt', fs.read('@output/.temp/cloudflare-zone.txt'));
 
-    if (argv.buildLocation == 'server') {
+    if (argv.buildLocation === 'server') {
       // Create CloudFlare Zone File
       // let doc = yaml.safeLoad(fs.read('_config.yml'));
       // cmd.run(`rm -rf @output/.temp && mkdir -p @output/.temp && echo '${doc.cloudflare.zone}' >@output/.temp/cloudflare-zone.txt`);
@@ -108,11 +100,12 @@ gulp.task('jekyll-build', async function (done) {
       // console.log('buildLocation =', 'local');
     }
 
-    if (argv.skipJekyll == 'true') {
+    if (argv.skipJekyll === 'true') {
       // console.log('skipJekyll =', true);
       // return resolve(done());
       // return (done());
-      return done();
+      // return done();
+      return resolve();
     } else {
       // console.log('skipJekyll =', false);
       // return resolve(cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
@@ -120,8 +113,10 @@ gulp.task('jekyll-build', async function (done) {
       // return (cp.spawn(jekyll, ['build', '--config', jekyllConfig], {stdio: 'inherit', env: process.env})
       //   .on('close', done));
 
+      // return (cp.spawn(jekyll, ['build', '--config', jekyllConfig, '--incremental'], {stdio: 'inherit', env: process.env})
+      //   .on('close', done));
       return (cp.spawn(jekyll, ['build', '--config', jekyllConfig, '--incremental'], {stdio: 'inherit', env: process.env})
-        .on('close', done));
+        .on('close', resolve));
       // update 1
     }
   });
