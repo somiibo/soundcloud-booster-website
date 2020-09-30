@@ -48,13 +48,13 @@
   },
   "homepage": "https://template.itwcreativeworks.com",
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
     "autoprefixer": "^9.7.3",
     "browser-sync": "^2.26.7",
-    "del": "^5.1.0",
+    "del": "^6.0.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-loader": "^3.0.3",
+    "eslint-webpack-plugin": "^2.1.0",
     "fs-jetpack": "^3.1.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
@@ -62,25 +62,24 @@
     "gulp-eslint": "^6.0.0",
     "gulp-newer": "^1.4.0",
     "gulp-plumber": "^1.2.1",
-    "gulp-postcss": "^8.0.0",
+    "gulp-postcss": "^9.0.0",
     "gulp-responsive": "^3.0.1",
     "gulp-sass": "^4.0.2",
     "gulp-watch": "^5.0.1",
     "js-yaml": "^3.13.1",
     "json5": "^2.1.3",
-    "mocha": "^6.2.2",
+    "mocha": "^8.1.3",
     "node-fetch": "^2.6.1",
     "require-dir": "^1.2.0",
-    "source-map-loader": "^0.2.4",
-    "terser-webpack-plugin": "^2.3.1",
-    "through2": "^3.0.1",
+    "source-map-loader": "^1.1.0",
+    "terser-webpack-plugin": "^4.2.2",
+    "through2": "^4.0.2",
     "ultimate-jekyll-poster": "0.0.4",
     "vinyl-named": "^1.1.0",
-    "webpack": "^4.41.4",
-    "webpack-stream": "^5.2.1",
-    "yargs": "^15.0.2"
+    "web-manager": "^2.0.0",
+    "webpack": "^4.44.2",
+    "webpack-stream": "^6.1.0",
+    "yargs": "^16.0.3"
   },
-  "dependencies": {
-    "web-manager": "^1.6.4"
-  }
+  "dependencies": {}
 }

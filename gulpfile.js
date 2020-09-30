@@ -3,10 +3,12 @@
 const config     = require('./_websrc/master.config.js');
 const gulp       = require('gulp');
 const requireDir = require('require-dir');
+const tasks = [];
 
 requireDir('./_websrc/gulp_tasks', {recurse: true});
 
-const tasks = [];
+console.log('Using Node.js v', process.versions.node);
+
 Object.keys(config.tasks).forEach(function (key) {
   if (config.tasks[key] && key != 'eslint') {
     tasks.push((key == 'webpack' && config.tasks.watch) ? '_' + key : key);
