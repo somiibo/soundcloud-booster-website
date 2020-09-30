@@ -708,7 +708,7 @@ settings:
               if (res.status >= 200 && res.status < 300) {
                 res.text()
                 .then(function (data) {
-                  console.log('Success', data);
+                  // console.log('Success', data);
                   // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
                   //temp
                   // var query = query || {};
@@ -795,6 +795,7 @@ settings:
 
             })
             .catch(function (e) {
+              console.error(e);
               dom.select('#google-doc-error').show();
               dom.select('#google-response-code').setInnerHTML(e);
               dom.select('#import-btn').removeAttribute('disabled');
