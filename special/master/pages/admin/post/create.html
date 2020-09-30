@@ -626,7 +626,6 @@ settings:
                 body: JSON.stringify(data),
               })
               .then(function (res) {
-
                 if (res.status >= 200 && res.status < 300) {
                   res.json()
                   .then(function (data) {
@@ -707,7 +706,7 @@ settings:
             })
             .then(function (res) {
               if (res.status >= 200 && res.status < 300) {
-                res.json()
+                res.text()
                 .then(function (data) {
                   console.log('Success', data);
                   // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
