@@ -12,7 +12,7 @@ Slapform.prototype.process = function (event) {
   var errorElement = event.target.getElementsByClassName('slapform-validation-error')[0];
   var pass;
 
-  dom.select(idSelector + ' input, ' + idSelector + ' select, ' + idSelector + ' textarea').each(function (i, el) {
+  dom.select(idSelector + ' input, ' + idSelector + ' select, ' + idSelector + ' textarea').each(function (el, i) {
     var elSelected = dom.select(el);
     var type = elSelected.getAttribute('type');
 

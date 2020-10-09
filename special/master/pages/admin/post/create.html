@@ -595,7 +595,7 @@ settings:
 
               var data = {};
               dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
-              .each(function (i, el) {
+              .each(function (el, i) {
                 var curField = dom.select(el);
                 data[curField.getAttribute('name')] = curField.getValue();
               });
@@ -692,7 +692,7 @@ settings:
 
           dom.select('#google-doc-form').on('submit', function (event) {
             var formData = {};
-            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (i, el) {
+            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
               var curField = dom.select(el);
               formData[curField.getAttribute('name')] = curField.getValue();
             })
@@ -824,7 +824,7 @@ settings:
     var charCountFields = ['title', 'url', 'excerpt'];
     for (var i = 0; i < charCountFields.length; i++) {
       var cur = dom.select('*[name="' + charCountFields[i] + '"]').get(0);
-      dom.select(cur.parentNode.childNodes).each(function (i, element) {
+      dom.select(cur.parentNode.childNodes).each(function (element, i) {
         if (element.matches('.input-group-append')) {
           dom.select(element.querySelectorAll('.input-group-append .input-group-text')).setInnerHTML(dom.select(cur).getValue().length);
         }

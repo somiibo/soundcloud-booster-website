@@ -404,7 +404,7 @@ settings:
     var charCountFields = [];
     for (var i = 0; i < charCountFields.length; i++) {
       var cur = dom.select('*[name="' + charCountFields[i] + '"]').get(0);
-      dom.select(cur.parentNode.childNodes).each(function (i, element) {
+      dom.select(cur.parentNode.childNodes).each(function (element, i) {
         if (element.matches('.input-group-append')) {
           dom.select(element.querySelectorAll('.input-group-append .input-group-text')).setInnerHTML(dom.select(cur).getValue().length);
         }
