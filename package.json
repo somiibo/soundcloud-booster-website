@@ -6,7 +6,7 @@
   "scripts": {
     "install:pre": "bundle install --path vendor/bundle",
     "start": "npm run _start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='true'",
-    "_start": "bundle exec gulp clean:assets && bundle exec gulp",
+    "_start": "bundle exec gulp clean:jekyll && bundle exec gulp",
     "prototype": "npm start",
     "prototype:public": "npm start -- --ngrokOpen='true'",
     "prototype:https": "npm start -- --https='true'",
@@ -16,6 +16,7 @@
     "eslint": "bundle exec gulp eslint",
     "imagemin": "bundle exec gulp imagemin",
     "watch": "bundle exec gulp watch",
+    "clean:jekyll": "bundle exec gulp clean:jekyll",
     "clean:assets": "bundle exec gulp clean:assets",
     "clean:npm": "rm -fr node_modules && rm -fr package-lock.json && npm cache clean --force && npm install && npm rb && bundle exec gulp clean:npm",
     "cloudflare:purge": "bundle exec gulp cloudflare:purge",
@@ -76,7 +77,7 @@
     "through2": "^4.0.2",
     "ultimate-jekyll-poster": "0.0.4",
     "vinyl-named": "^1.1.0",
-    "web-manager": "^2.0.1",
+    "web-manager": "^2.0.3",
     "webpack": "^4.44.2",
     "webpack-stream": "^6.1.0",
     "yargs": "^16.0.3"

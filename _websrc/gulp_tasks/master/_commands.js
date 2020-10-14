@@ -47,11 +47,14 @@ gulp.task('cloudflare:purge', async function (done) {
   });
 });
 
-gulp.task('clean:assets', async function (done) {
-  // let tools        = new (require('../../libraries/tools.js'));
-  // await tools.poll(function () {
-  // }, {timeout: 2000}).catch(e => {})
+gulp.task('clean:jekyll', async function (done) {
+  return del(['_site', '.jekyll-cache', '.jekyll-metadata'])
+    .then(deleted => {
+      console.log(`Deleted ${deleted.length} files.`);
+    })
+});
 
+gulp.task('clean:assets', async function (done) {
   return del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata'])
     .then(deleted => {
       console.log(`Deleted ${deleted.length} files.`);
