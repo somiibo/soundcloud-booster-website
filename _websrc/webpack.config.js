@@ -14,7 +14,8 @@ const argv   = require('yargs').argv;
 
 module.exports = {
   mode: 'production',
-  devtool: 'source-map',
+  target: ['web', 'es5'],
+  // devtool: 'source-map',
   module: {
     rules: [
       {
@@ -38,7 +39,7 @@ module.exports = {
     // chunkFilename: '[name].js',
     // path: '/assets/js/',
     publicPath: '/assets/js/',
-    filename: '[name].js'
+    // filename: '[name].js'
   },
 
   optimization: {
