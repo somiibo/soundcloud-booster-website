@@ -154,6 +154,10 @@ admin-dashboard-pages: "{
 escapes:
   underscore: "_"
   asterisk: "*"
+  brace-left: "{"
+  brace-right: "}"
+  bracket-left: "["
+  bracket-right: "]"
 
 # Blog & Pagination
 permalink: /blog/:title/

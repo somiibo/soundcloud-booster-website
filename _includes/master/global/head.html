@@ -93,18 +93,20 @@
 
 <!-- Configuration -->
 <script type="text/javascript">
+  {% assign empty-braces = site.escapes.brace-left | append: site.escapes.brace-right %}
+
   var Configuration = {
     page: {
       code: '{{ page.settings.page-code | default: page.settings.breadcrumb | default: "" }}',
       type: '{%- if page.layout == 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.settings.breadcrumb }}',
-      settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: "{}" }}
+      settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },
     global: {
       version: '{{ site.version }}',
       url: '{{ site.url }}',
       cacheBreaker: '{{ site.time | date: '%s' }}',
-      settings: {{ site.settings.manager-configuration | default: "{}" }},
+      settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
         name: '{{ site.brand.name }}'
       }
