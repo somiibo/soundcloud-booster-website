@@ -31,4 +31,4 @@ Disallow: *?page=
 # App/Custom pages
 #
 {% include /app/misc/robots.txt %}
-Sitemap: {{site.url}}/sitemap.xml
+Sitemap: {{ site.url }}/sitemap.xml

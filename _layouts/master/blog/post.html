@@ -12,7 +12,7 @@ layout: null
     <article class="" itemscope itemtype="http://schema.org/BlogPosting">
 
       <header class="">
-        {% capture path %}{{site.url}}/assets/images/blog/posts/post-{{ page.post.id }}/teaser.jpg{% endcapture %}
+        {% capture path %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/teaser.jpg{% endcapture %}
         {%- include /master/helpers/image.html src=path -%}
         <h1 class="" itemprop="name headline">{{ page.title | escape }}</h1>
         <p class="">

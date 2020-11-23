@@ -12,7 +12,7 @@ layout: null
     <h1 class="">Authors</h1>
     {% for author in site.authors %}
       <article class="">
-        {% capture path %}{{site.url}}/assets/images/blog/authors/author-{{ author.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
+        {% capture path %}{{ site.url }}/assets/images/blog/authors/author-{{ author.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
         {%- include /master/helpers/image.html src=path -%}
         <h2>{{ author.author.name }}</h2>
         <p class="">Joined: {{ author.author.joined }}</p>

@@ -54,13 +54,13 @@
 {% elsif layout.tracking.google-analytics == false %}
 {% elsif site.tracking.google-analytics == false %}
 {% else %}
-  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id={{site.tracking.google-analytics}}" async></script>
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id={{ site.tracking.google-analytics }}" async></script>
   <script type="text/javascript" async>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', '{{site.tracking.google-analytics}}');
+    gtag('config', '{{ site.tracking.google-analytics }}');
   </script>
 {% endif %}
 
@@ -78,12 +78,12 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '{{site.tracking.facebook-pixel}}');
+    fbq('init', '{{ site.tracking.facebook-pixel }}');
     fbq('track', 'PageView');
   </script>
   <noscript>
     <img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id={{site.tracking.facebook-pixel}}&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id={{ site.tracking.facebook-pixel }}&ev=PageView&noscript=1"
     />
   </noscript>
 {% endif %}
@@ -133,16 +133,16 @@
     {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
     {%- for i in (1..forLoopMaxInt) -%}
         {%- assign pos = forloop.index -%}
-        {%- capture current_breadcrumb_url -%}{{next_prepender}}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
-        {%- capture current_breadcrumb_md_url -%}{{next_prepender}}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
-        {%- capture next_prepender -%}{{next_prepender}}/{{ splitted_url_parts[i] }}{%- endcapture -%}
+        {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
+        {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
+        {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
         {%- for breadcrumb_page in site.pages -%}
             {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
             {% assign j = forLoopMaxInt | plus: 0 %}
                 <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{breadcrumb_page_page_url_without_index_html}}" title="Visit {{breadcrumb_page.breadcrumb}}">
-                      <span itemprop="name">{{breadcrumb_page.meta.breadcrumb}}</span>
+                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.breadcrumb }}">
+                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb }}</span>
                       <meta itemprop="position" content="{{ pos | plus: 1 }}" />
                     </a>
                 </li>
@@ -211,7 +211,7 @@
     {
       "@context": "http://schema.org",
       "@type": "WebSite",
-      "url": "{{site.url}}",
+      "url": "{{ site.url }}",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "{{ site.url }}/search/cse?q={search_term_string}",

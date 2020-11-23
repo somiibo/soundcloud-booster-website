@@ -11,7 +11,7 @@ layout: null
     <!-- CONTENT START -->
     <article class="">
 
-      {% capture path %}{{site.url}}/assets/images/blog/authors/author-{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
+      {% capture path %}{{ site.url }}/assets/images/blog/authors/author-{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
       {%- include /master/helpers/image.html src=path -%}
       <header class="">
         <h1 class="">{{ page.author.name }}</h1>
@@ -27,7 +27,7 @@ layout: null
 
       <h3>Socials</h3>
       <ul>
-        <li>{{page.author.instagram }}</li>
+        <li>{{ page.author.instagram }}</li>
       </ul>
 
     </article>
