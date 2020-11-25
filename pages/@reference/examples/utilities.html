@@ -1,144 +1,76 @@
 ---
 ### ALL PAGES ###
+layout: master/reference/main
 permalink: /@reference/examples/utilities/
 sitemap:
   include: false
 ---
-<!doctype html>
-<html lang="en">
-
-  <head>
-    {%- include /master/global/head.html -%}
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-      }
-
-      .form-signin {
-        width: 100%;
-        max-width: 660px;
-        padding: 15px;
-        margin: auto;
-      }
-      .form-signin .checkbox {
-        font-weight: 400;
-      }
-      .form-signin .form-control {
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-      }
-      .form-signin .form-control:focus {
-        z-index: 2;
-      }
-
-    </style>
-  </head>
-
-  <body class="text-center">
-    <div class="form-signin">
-      <form class="" onsubmit="return false;">
-        <h1 class="h3 mb-3 font-weight-normal">.utilities() Library</h1>
-        <div class="card mb-3" style="">
-          <div class="card-body">
-            <pre id="result" class="text-left">
-              waiting...
-            </pre>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="key" class="">Key</label>
-          <input type="text" id="key" class="form-control" placeholder="Key" value="key1" autofocus>
-        </div>
-
-        <div class="form-group">
-          <label for="value" class="">Value</label>
-          <input type="text" id="value" class="form-control" placeholder="Value" value="val1" autofocus>
-        </div>
-
-        <button id="get" class="btn btn-lg btn-primary btn-block" type="button">Get</button>
-        <button id="set" class="btn btn-lg btn-primary btn-block" type="button">Set</button>
-
-        <div class="mb-5"></div>
-        <button id="log" class="btn btn-lg btn-primary btn-block" type="button">Log Object</button>
-      </form>
+<div class="form-signin">
+  <form class="" onsubmit="return false;">
+    <h1 class="h3 mb-3 font-weight-normal">.utilities() Library</h1>
+    <div class="card mb-3" style="">
+      <div class="card-body">
+        <pre id="result" class="text-left">
+          waiting...
+        </pre>
+      </div>
     </div>
 
-    <!-- Exploring the library -->
-    <script type="text/javascript">
-      var object = {
-        key1: 'val1',
-        key2: 'val2',
-        nested: {
-          key4: 'val4'
-        }
-      };
-      Manager.ready(function() {
-        console.log('--- Exploring the .utilities() API ---');
+    <div class="form-group">
+      <label for="key" class="">Key</label>
+      <input type="text" id="key" class="form-control" placeholder="Key" value="key1" autofocus>
+    </div>
 
-        // Button to clear if necessary
-        Manager.dom().select('body').on('click', function(event) {
+    <div class="form-group">
+      <label for="value" class="">Value</label>
+      <input type="text" id="value" class="form-control" placeholder="Value" value="val1" autofocus>
+    </div>
 
-          if (event.target.matches('#log')) {
-            var current = Manager.utilities().get(object);
-            Manager.dom().select('#result').setInnerHTML('Root = ' + JSON.stringify(current, undefined, 2)); // Set setInnerHTML
-            console.log('Root = ', current);
-          } else if (event.target.matches('#set')) {
-            var key = Manager.dom().select('#key').getValue();
-            var value = Manager.dom().select('#value').getValue();
-            Manager.utilities().set(object, key, value);
+    <button id="get" class="btn btn-lg btn-primary btn-block" type="button">Get</button>
+    <button id="set" class="btn btn-lg btn-primary btn-block" type="button">Set</button>
 
-            var current = Manager.utilities().get(object);
+    <div class="mb-5"></div>
+    <button id="log" class="btn btn-lg btn-primary btn-block" type="button">Log Object</button>
+  </form>
+</div>
 
-            Manager.dom().select('#result').setInnerHTML('Root = ' + JSON.stringify(current, undefined, 2)); // Set setInnerHTML
-            console.log(current);
-          } else if (event.target.matches('#get')) {
-            var key = Manager.dom().select('#key').getValue();
-            var value = Manager.utilities().get(object, key);
-            var valueDefault = Manager.utilities().get(object, key, 'default');
+<!-- Exploring the library -->
+<script type="text/javascript">
+  var object = {
+    key1: 'val1',
+    key2: 'val2',
+    nested: {
+      key4: 'val4'
+    }
+  };
+  Manager.ready(function() {
+    console.log('--- Exploring the .utilities() API ---');
 
-            var current = 'Value = ' + value +'\n' + 'Value(default) = ' + valueDefault;
-            Manager.dom().select('#result').setInnerHTML((current)); // Set setInnerHTML
-            console.log(current);
-          }
-        });
-      });
-    </script>
+    // Button to clear if necessary
+    Manager.dom().select('body').on('click', function(event) {
 
-    {%- include /master/global/foot.html -%}
-  </body>
+      if (event.target.matches('#log')) {
+        var current = Manager.utilities().get(object);
+        Manager.dom().select('#result').setInnerHTML('Root = ' + JSON.stringify(current, undefined, 2)); // Set setInnerHTML
+        console.log('Root = ', current);
+      } else if (event.target.matches('#set')) {
+        var key = Manager.dom().select('#key').getValue();
+        var value = Manager.dom().select('#value').getValue();
+        Manager.utilities().set(object, key, value);
 
-</html>
+        var current = Manager.utilities().get(object);
+
+        Manager.dom().select('#result').setInnerHTML('Root = ' + JSON.stringify(current, undefined, 2)); // Set setInnerHTML
+        console.log(current);
+      } else if (event.target.matches('#get')) {
+        var key = Manager.dom().select('#key').getValue();
+        var value = Manager.utilities().get(object, key);
+        var valueDefault = Manager.utilities().get(object, key, 'default');
+
+        var current = 'Value = ' + value +'\n' + 'Value(default) = ' + valueDefault;
+        Manager.dom().select('#result').setInnerHTML((current)); // Set setInnerHTML
+        console.log(current);
+      }
+    });
+  });
+</script>

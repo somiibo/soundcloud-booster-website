@@ -1,132 +1,64 @@
 ---
 ### ALL PAGES ###
+layout: master/reference/main
 permalink: /@reference/examples/general/
 sitemap:
   include: false
 ---
-<!doctype html>
-<html lang="en">
-
-  <head>
-    {%- include /master/global/head.html -%}
-
-    <!-- Bootstrap core CSS -->
-    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      html,
-      body {
-        height: 100%;
-      }
-
-      body {
-        display: -ms-flexbox;
-        display: flex;
-        -ms-flex-align: center;
-        align-items: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
-        background-color: #f5f5f5;
-      }
-
-      .form-signin {
-        width: 100%;
-        max-width: 660px;
-        padding: 15px;
-        margin: auto;
-      }
-      .form-signin .checkbox {
-        font-weight: 400;
-      }
-      .form-signin .form-control {
-        position: relative;
-        box-sizing: border-box;
-        height: auto;
-        padding: 10px;
-        font-size: 16px;
-      }
-      .form-signin .form-control:focus {
-        z-index: 2;
-      }
-
-    </style>
-  </head>
-
-  <body class="text-center">
-    <div class="form-signin">
-      <form class="" onsubmit="return false;">
-        <h1 class="h3 mb-3 font-weight-normal">General Library</h1>
-        <div class="card mb-3" style="">
-          <div class="card-body">
-            <pre id="result" class="text-left">
-              waiting...
-            </pre>
-          </div>
-        </div>
-
-        <button id="get" class="btn btn-lg btn-primary btn-block" type="button">Get</button>
-        <button id="set" class="btn btn-lg btn-primary btn-block" type="button">Set</button>
-      </form>
+<div class="form-signin">
+  <form class="" onsubmit="return false;">
+    <h1 class="h3 mb-3 font-weight-normal">General Library</h1>
+    <div class="card mb-3" style="">
+      <div class="card-body">
+        <pre id="result" class="text-left">
+          waiting...
+        </pre>
+      </div>
     </div>
 
+    <button id="get" class="btn btn-lg btn-primary btn-block" type="button">Get</button>
+    <button id="set" class="btn btn-lg btn-primary btn-block" type="button">Set</button>
+  </form>
+</div>
 
-    <!-- Exploring the library -->
-    <script type="text/javascript">
-      Manager.ready(function() {
-        console.log('--- Exploring the Manager API ---');
-        Manager.dom().select('body').on('click', function(event) {
-          if (event.target.matches('#get')) {
-            var get = Manager.get('key1');
-            Manager.dom().select('#result').setInnerHTML('Get = ' + JSON.stringify(get, undefined, 2)); // Set setInnerHTML
-          } else if (event.target.matches('#set')) {
-            Manager.set('key1', 'val1');
-            var get = Manager.get('key1');
-            Manager.dom().select('#result').setInnerHTML('Set = ' + JSON.stringify(get, undefined, 2)); // Set setInnerHTML
-          }
-        });
 
-      });
-      setTimeout(function () {
-        window.waitForTest4 = true;
-      }, 3000);
-      setTimeout(function () {
-        window.waitForTest5 = 'notUndefined';
-      }, 5000);
+<!-- Exploring the library -->
+<script type="text/javascript">
+  Manager.ready(function() {
+    console.log('--- Exploring the Manager API ---');
+    Manager.dom().select('body').on('click', function(event) {
+      if (event.target.matches('#get')) {
+        var get = Manager.get('key1');
+        Manager.dom().select('#result').setInnerHTML('Get = ' + JSON.stringify(get, undefined, 2)); // Set setInnerHTML
+      } else if (event.target.matches('#set')) {
+        Manager.set('key1', 'val1');
+        var get = Manager.get('key1');
+        Manager.dom().select('#result').setInnerHTML('Set = ' + JSON.stringify(get, undefined, 2)); // Set setInnerHTML
+      }
+    });
 
-      Manager.ready(function() {
-        console.log('waitForTest4 satisfied');
-      }, {
-        waitFor: function () {
-          return window.waitForTest4 === true;
-        }
-      });
+  });
+  setTimeout(function () {
+    window.waitForTest4 = true;
+  }, 3000);
+  setTimeout(function () {
+    window.waitForTest5 = 'notUndefined';
+  }, 5000);
 
-      Manager.ready(function() {
-        console.log('waitForTest5 satisfied');
-      }, {
-        waitFor: function () {
-          return typeof window.waitForTest5 !== 'undefined';
-        }
-      });
+  Manager.ready(function() {
+    console.log('waitForTest4 satisfied');
+  }, {
+    waitFor: function () {
+      return window.waitForTest4 === true;
+    }
+  });
 
-    </script>
+  Manager.ready(function() {
+    console.log('waitForTest5 satisfied');
+  }, {
+    waitFor: function () {
+      return typeof window.waitForTest5 !== 'undefined';
+    }
+  });
 
-    {%- include /master/global/foot.html -%}
-  </body>
-
-</html>
+</script>
