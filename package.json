@@ -75,7 +75,7 @@
     "source-map-loader": "^1.1.2",
     "terser-webpack-plugin": "^5.0.3",
     "through2": "^4.0.2",
-    "ultimate-jekyll-poster": "0.0.4",
+    "ultimate-jekyll-poster": "0.0.6",
     "vinyl-named": "^1.1.0",
     "web-manager": "^2.0.8",
     "webpack": "^5.6.0",
