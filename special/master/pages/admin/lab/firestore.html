@@ -385,7 +385,7 @@ settings:
       } else {
         return res.text()
         .then(function (data) {
-          throw new Error(data || res.statusTest || 'Unknown error.')
+          throw new Error(data || res.statusText || 'Unknown error.')
         })
       }
 
