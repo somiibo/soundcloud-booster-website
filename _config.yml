@@ -183,7 +183,7 @@ defaults:
   values:
     permalink: "/blog/authors/:title/"
 
-# Build settings
+# Build settings 
 markdown: kramdown
 plugins:
   - jekyll-paginate-v2
