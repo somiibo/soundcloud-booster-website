@@ -20,6 +20,9 @@ jobs:
         with:
           ruby-version: '2.7'
           architecture: 'x64'
+      - name: Run bundle install
+        run: |
+          bundle install --path vendor/bundle
       - name: Setup node
         uses: actions/setup-node@v2
         with:
