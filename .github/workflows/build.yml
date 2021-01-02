@@ -48,7 +48,7 @@ jobs:
 
           sed -n '1h;1!H;${;g;s/GEN>>>.*<<<GEN/<REDACTED FOR LIVE PUBLISH>/g;p;}' .gitignore > .gitignore
       - name: Build Jekyll
-        uses: helaili/jekyll-action@2
+        uses: helaili/jekyll-action@latest
         env:
           JEKYLL_PAT: ${{ secrets.ACCESS_TOKEN }}
       - name: Purge CloudFlare Cache
