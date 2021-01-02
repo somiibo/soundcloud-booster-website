@@ -3,10 +3,10 @@ const browsersync = require('browser-sync').create();
 const config      = require('../../master.config.js');
 const fs          = require('fs-jetpack');
 const gulp        = require('gulp');
-let tools         = new (require('../../libraries/tools.js'));
-let Global        = require('../../libraries/global.js');
+const tools         = new (require('../../libraries/tools.js'));
+const Global        = require('../../libraries/global.js');
 
-let browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
+const browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
 
 /**
  * Wait for jekyll-build, then launch the Server

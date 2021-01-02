@@ -1,13 +1,13 @@
-const argv       = require('yargs').argv;
-let config       = require('../../master.config.js');
-let appGulpTasks = require('../../app.config.js');
-let yaml         = require('js-yaml');
-let fs           = require('fs-jetpack');
-const cp         = require('child_process');
-const gulp       = require('gulp');
-let tools        = new (require('../../libraries/tools.js'));
-let JSON5        = require('json5');
-let Global       = require('../../libraries/global.js');
+const argv         = require('yargs').argv;
+const config       = require('../../master.config.js');
+const appGulpTasks = require('../../app.config.js');
+const fs           = require('fs-jetpack');
+const cp           = require('child_process');
+const gulp         = require('gulp');
+const tools        = new (require('../../libraries/tools.js'));
+const JSON5        = require('json5');
+const _configYml   = require('js-yaml').safeLoad(fs.read('_config.yml'));
+const Global       = require('../../libraries/global.js');
 
 config.tasks = Object.assign(config.tasks, appGulpTasks.tasks);
 
@@ -56,7 +56,6 @@ gulp.task('jekyll-build', async function (done) {
       build.packages['web-manager'] = require('web-manager/package.json').version;
 
       // Set _config.yml stuff
-      let _configYml = yaml.safeLoad(fs.read('_config.yml'));
       build.brand = _configYml.brand;
 
       // Set custom admin dashboard pages

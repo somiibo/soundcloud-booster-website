@@ -8,8 +8,8 @@ const plumber        = require('gulp-plumber');
 const webpackStream  = require('webpack-stream');
 const webpack        = require('webpack');
 const path           = require('path');
-let tools            = new (require('../../libraries/tools.js'));
-let Global           = require('../../libraries/global.js');
+const tools          = new (require('../../libraries/tools.js'));
+const Global         = require('../../libraries/global.js');
 
 if (config.tasks.eslint && argv.skipESLint !== 'true') {
   config_webpack.module.rules.push(config.eslintLoader);

@@ -6,7 +6,7 @@ const fetch       = require('node-fetch');
 const Poster      = require('ultimate-jekyll-poster');
 // const Poster      = require('/Users/ianwiedenman/Documents/GitHub/ITW-Creative-Works/ultimate-jekyll-poster');
 
-const fs = require("fs-jetpack");
+const fs = require('fs-jetpack');
 
 function Post() {
 

@@ -1,12 +1,12 @@
-const config   = require('../../master.config.js');
-const gulp     = require('gulp');
-// const imagemin = require('gulp-imagemin');
-const newer    = require('gulp-newer');
-const plumber  = require('gulp-plumber');
-// const pngquant = require('imagemin-pngquant');
+const config     = require('../../master.config.js');
+const gulp       = require('gulp');
+const newer      = require('gulp-newer');
+const plumber    = require('gulp-plumber');
 const responsive = require('gulp-responsive');
-const cached = require('gulp-cached');
-const argv   = require('yargs').argv;
+const cached     = require('gulp-cached');
+const argv       = require('yargs').argv;
+// const pngquant   = require('imagemin-pngquant');
+// const imagemin   = require('gulp-imagemin');
 
 // gulp.task('imagemin', function () {
 //   return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.svg', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])

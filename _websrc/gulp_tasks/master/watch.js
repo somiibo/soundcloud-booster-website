@@ -1,7 +1,7 @@
-const config        = require('../../master.config.js');
-const appConfig        = require('../../app.config.js');
-const gulp          = require('gulp');
-const watch         = require('gulp-watch');
+const config    = require('../../master.config.js');
+const appConfig = require('../../app.config.js');
+const gulp      = require('gulp');
+const watch     = require('gulp-watch');
 
 gulp.task('watch', function () {
   if (config.tasks.imagemin) {

@@ -8,9 +8,14 @@ layout: null
   </head>
 
   <body class="{{ layout.body.class }} {{ page.body.class }}">
+
+    {%- include /app/elements/header.html -%}
+
     <!-- CONTENT START -->
     {{ content }}
     <!-- CONTENT END -->
+
+    {%- include /app/elements/footer.html -%}
 
     {%- include /master/global/foot.html -%}
   </body>

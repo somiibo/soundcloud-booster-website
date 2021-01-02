@@ -1,11 +1,11 @@
-const gulp     = require('gulp');
-const fs       = require('fs-jetpack');
-const argv     = require('yargs').argv;
-let config     = require('../../master.config.js');
-let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
-let isServer   = (argv.buildLocation == 'server');
-
-let Global = require('../../libraries/global.js');
+const gulp       = require('gulp');
+const fs         = require('fs-jetpack');
+const argv       = require('yargs').argv;
+const config     = require('../../master.config.js');
+const isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
+const isServer   = (argv.buildLocation == 'server');
+const _configYml = require('js-yaml').safeLoad(fs.read('_config.yml'));
+const Global     = require('../../libraries/global.js');
 
 gulp.task('_prefill', async () => {
   return new Promise(async (resolve, reject) => {
@@ -32,13 +32,19 @@ gulp.task('_prefill', async () => {
           "*/" + "\n" +
           ""
         )
-        await createFile('./_includes/app/global/foot.html', '<!-- App Foot Content -->')
-        await createFile('./_includes/app/global/head.html', '<!-- App Head Content -->')
+        await createFile('./_includes/app/global/head.html', '<!-- App Head Content -->');
+        await createFile('./_includes/app/global/head-pre-bundle.html', '<!-- App Head Content (pre-bundle) -->');
 
-        await createFile('./_includes/app/misc/ads.txt', '')
-        await createFile('./_includes/app/misc/budget.json', '')
-        await createFile('./_includes/app/misc/manifest.json', '')
-        await createFile('./_includes/app/misc/robots.txt', '')
+        await createFile('./_includes/app/global/foot.html', '<!-- App Foot Content -->');
+        await createFile('./_includes/app/global/foot-pre-bundle.html', '<!-- App Foot Content (pre-bundle) -->');
+
+        await createFile(`./_includes/app/elements/header.html`, '<!-- App Header Content -->');
+        await createFile(`./_includes/app/elements/footer.html`, '<!-- App Footer Content -->');
+
+        await createFile('./_includes/app/misc/ads.txt', '');
+        await createFile('./_includes/app/misc/budget.json', '');
+        await createFile('./_includes/app/misc/manifest.json', '');
+        await createFile('./_includes/app/misc/robots.txt', '');
 
         await createFile(config.assets + config.assetsSubpath + '/js/app/app.js',
           "Manager.ready(function() {" + "\n" +
@@ -98,11 +104,12 @@ gulp.task('_prefill', async () => {
 
 
         // post
-        let posts = await listFiles('./_posts') || [];
-        if (posts.find(function (name) {
-          return name.indexOf('example-post') > -1;
-        })) {
-        } else {
+        // const posts = await listFiles('./_posts') || [];
+
+        // if (posts.find(function (name) {
+        //   return name.indexOf('example-post') > -1;
+        // })) {
+        if ((await listFiles('./_posts') || []).length < 2) {
           for (var i = 1; i < 8; i++) {
             await createFile(`./_posts/2019-01-0${i}-example-post-${i}.md`,
               '---' + '\n' +
@@ -201,8 +208,11 @@ gulp.task('_prefill', async () => {
         await createFile('./_authors/.gitignore', gitignore_ph);
       }
 
+      // Only for non-server environment
       if (!isServer) {
         await createFile('./@output/build/.gitignore', gitignore_ph);
+      } else {
+        await createFile('./CNAME', new URL(_configYml.url).host);
       }
       Global.set('prefillStatus', 'done');
       return resolve();

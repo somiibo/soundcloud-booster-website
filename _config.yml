@@ -161,8 +161,15 @@ escapes:
 
 # Blog & Pagination
 permalink: /blog/:title/
-paginate: 6
-paginate_path: "/blog/page:num/"
+pagination:
+  enabled: true
+  per_page: 6
+  offset: 2
+  permalink: '/blog/page/:num/'
+  title: ':title - page :num'
+  limit: 0
+  sort_field: 'date'
+  sort_reverse: true
 
 # Jekyll Defaults
 collections:
@@ -179,8 +186,8 @@ defaults:
 # Build settings
 markdown: kramdown
 plugins:
-  - jekyll-feed
-  - jekyll-paginate
+  - jekyll-paginate-v2
+  - jekyll-liquify
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

@@ -18,6 +18,14 @@
   } catch (e) {}
 </script>
 
+<!-- App - Foot Content (pre-bundle) -->
+{%- if page.settings.include-app-foot-pre-bundle == false -%}
+{% elsif layout.settings.include-app-foot-pre-bundle == false %}
+{% elsif site.settings.include-app-foot-pre-bundle == false %}
+{% else %}
+  {% include /app/global/foot-pre-bundle.html %}
+{% endif %}
+
 <!-- Script - Bundle -->
 {%- if include.pre-bundle-script != null -%}
   {{ include.pre-bundle-script }}
