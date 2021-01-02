@@ -533,6 +533,7 @@ settings:
   var turndownService;
   var dom;
   var siteUrl = window.location.protocol + '//' + window.location.host;
+  var waitingTimeout;
 
   var buildFile = {};
 
@@ -667,15 +668,20 @@ settings:
           });
 
           function displayWaiting() {
+            clearTimeout(waitingTimeout);
             dom.select('#response .alert-danger').hide()
             dom.select('#response .alert-success').hide()
 
             dom.select('#response .alert-info').show()
             dom.select('#response').show()
             dom.select('#post-submit-btn').setAttribute('disabled', true);
+            waitingTimeout = setTimeout(function () {
+              displayError(new Error('Failed to recieve a response. You can try resubmitting now.'));
+            }, 15000);
           }
 
           function displayError(error) {
+            clearTimeout(waitingTimeout);
             dom.select('#response .alert-info').hide()
             dom.select('#post-submit-btn').removeAttribute('disabled');
             if (error) {
@@ -882,7 +888,7 @@ settings:
         if (allowLeave) {
           event.preventDefault();
         } else {
-          event.returnValue = "Write something clever here..";
+          event.returnValue = 'Write something clever here.';
         }
       };
     } catch (e) {
