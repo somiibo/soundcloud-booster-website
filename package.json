@@ -1,6 +1,6 @@
 {
   "name": "ultimate-jekyll",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "Ultimate Jekyll starter project including full setup for gulp, Sass, Autoprefixer, PostCSS, webpack, imagemin, Browsersync etc.",
   "main": "index.js",
   "scripts": {

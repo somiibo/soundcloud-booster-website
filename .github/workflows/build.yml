@@ -19,7 +19,6 @@ jobs:
         uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.7'
-          architecture: 'x64'
       - name: Run bundle install
         run: |
           bundle install --path vendor/bundle
