@@ -6,7 +6,7 @@ const cp           = require('child_process');
 const gulp         = require('gulp');
 const tools        = new (require('../../libraries/tools.js'));
 const JSON5        = require('json5');
-const _configYml   = require('js-yaml').safeLoad(fs.read('_config.yml'));
+const _configYml   = require('js-yaml').load(fs.read('_config.yml'));
 const Global       = require('../../libraries/global.js');
 
 config.tasks = Object.assign(config.tasks, appGulpTasks.tasks);

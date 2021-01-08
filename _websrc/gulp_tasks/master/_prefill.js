@@ -4,7 +4,7 @@ const argv       = require('yargs').argv;
 const config     = require('../../master.config.js');
 const isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
 const isServer   = (argv.buildLocation == 'server');
-const _configYml = require('js-yaml').safeLoad(fs.read('_config.yml'));
+const _configYml = require('js-yaml').load(fs.read('_config.yml'));
 const Global     = require('../../libraries/global.js');
 
 gulp.task('_prefill', async () => {

@@ -7,7 +7,7 @@ const fs      = require('fs-jetpack');
 const yaml    = require('js-yaml');
 
 gulp.task('cloudflare:purge', async function (done) {
-  let doc = yaml.safeLoad(fs.read('_config.yml'));
+  let doc = yaml.load(fs.read('_config.yml'));
   console.log(`starting cloudflare:purge on zone: ${doc.cloudflare.zone} ...`);
 
   return new Promise(function(resolve, reject) {
