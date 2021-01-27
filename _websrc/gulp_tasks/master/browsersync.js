@@ -7,6 +7,7 @@ const tools         = new (require('../../libraries/tools.js'));
 const Global        = require('../../libraries/global.js');
 
 const browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
+let externalUrl;
 
 /**
  * Wait for jekyll-build, then launch the Server
@@ -63,7 +64,8 @@ gulp.task('browsersync', async function () {
     browsersync.init(settings, function (error, instance) {
       // cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
       if (!error) {
-        fs.write('@output/.temp/_config_browsersync.yml', `url: ${instance.options.get('urls').get('external')}`)
+        externalUrl = instance.options.get('urls').get('external');
+        fs.write('@output/.temp/_config_browsersync.yml', `url: ${externalUrl}`)
       } else {
         console.error('Browsersync error:', error);
       }
@@ -108,5 +110,6 @@ gulp.task('browsersync', async function () {
  */
 gulp.task('browser-reload', ['jekyll-build'], function () {
   browsersync.notify('Rebuilded Jekyll');
+  console.log(`Rebuilding site on: ${externalUrl}`);
   browsersync.reload();
 });
