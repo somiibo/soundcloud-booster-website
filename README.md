@@ -25,7 +25,7 @@
 # Creating & synching new repo from the ultimate-jekyll template
 1. Navigate to [https://github.com/itw-creative-works/ultimate-jekyll/](https://github.com/itw-creative-works/ultimate-jekyll/) and click **Use this template** or just [generate it here](https://github.com/iwiedenm/ultimate-jekyll/generate).
 2. In the next window, name the new repository and choose an organization to host the repository.
-3. Create a branch called `master`, then make `master` the default branch, and finally delete the branch called `template`.
+3. Click **1 Branch** in the middle bar and then the pencil icon next to `template` in the next window. Name it `master`.
 4. Open the newly created repository on GitHub and click **Open in Desktop** then choose location using GitHub desktop.
 5. In the repo's settings add a secret called `ACCESS_TOKEN` and paste a GitHub token that has write permissions for this repo.
 6. Open Terminal and do the following commands or simply `npm run template:setup`    
