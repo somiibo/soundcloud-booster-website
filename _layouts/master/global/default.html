@@ -9,13 +9,23 @@ layout: null
 
   <body class="{{ layout.body.class }} {{ page.body.class }}">
 
-    {%- include /app/elements/header.html -%}
+    {%- if page.settings.include-app-header == false -%}
+    {% elsif layout.settings.include-app-header == false %}
+    {% elsif site.settings.include-app-header == false %}
+    {% else %}
+      {%- include /app/elements/header.html -%}
+    {% endif %}
 
     <!-- CONTENT START -->
     {{ content }}
     <!-- CONTENT END -->
 
-    {%- include /app/elements/footer.html -%}
+    {%- if page.settings.include-app-footer == false -%}
+    {% elsif layout.settings.include-app-footer == false %}
+    {% elsif site.settings.include-app-footer == false %}
+    {% else %}
+      {%- include /app/elements/footer.html -%}
+    {% endif %}
 
     {%- include /master/global/foot.html -%}
   </body>
