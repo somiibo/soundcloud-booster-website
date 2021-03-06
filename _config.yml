@@ -165,7 +165,7 @@ pagination:
   enabled: true
   per_page: 6
   offset: 0
-  permalink: '/blog/page/:num/'
+  permalink: '/page/:num/'
   title: ':title - page :num'
   limit: 0
   sort_field: 'date'
