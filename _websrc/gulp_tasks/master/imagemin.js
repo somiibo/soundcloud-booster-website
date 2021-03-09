@@ -5,8 +5,10 @@ const plumber    = require('gulp-plumber');
 const responsive = require('gulp-responsive');
 const cached     = require('gulp-cached');
 const argv       = require('yargs').argv;
-const Jimp       = require('jimp');
+const sharp      = require('sharp');
 const glob       = require('glob');
+const jetpack    = require('fs-jetpack');
+
 // const pngquant   = require('imagemin-pngquant');
 // const imagemin   = require('gulp-imagemin');
 
@@ -49,15 +51,25 @@ gulp.task('imageminResponsive', async function () {
 
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
+    const imgPathNew = `${imgPath}-new`;
     if (!imgPath.match(/\.jpg|\.jpeg|\.png/img)) { continue }
-    const image = await Jimp.read(imgPath);
-    if (image && image.bitmap && image.bitmap.width < 1024) {
-      console.log('Fixing image', imgPath); 
-      const ratio = (1024 / image.bitmap.width);
-      await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
-      // await image.quality(quality);
-      await image.writeAsync(imgPath);
+    const newImage = await sharp(imgPath);
+    const newImageMeta = await newImage.metadata();
+    if (newImageMeta.width < 1024) {
+      console.log('Fixing image', imgPath);
+      await newImage
+        .resize({ width: 1024 })
+        .toFile()
+
+      jetpack.rename(imgPathNew, imgPath)
     }
+    // if (image && image.bitmap && image.bitmap.width < 1024) {
+    //   console.log('Fixing image', imgPath);
+    //   const ratio = (1024 / image.bitmap.width);
+    //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
+    //   // await image.quality(quality);
+    //   await image.writeAsync(imgPath);
+    // }
   }
 
   return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.{jpg,jpeg,png}', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
