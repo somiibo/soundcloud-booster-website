@@ -52,7 +52,7 @@ gulp.task('imageminResponsive', async function () {
     if (!imgPath.match(/\.jpg|\.jpeg|\.png/img)) { continue }
     const image = await Jimp.read(imgPath);
     if (image && image.bitmap && image.bitmap.width < 1024) {
-      console.log('Fixing image', imgPath);
+      console.log('Fixing image', imgPath); 
       const ratio = (1024 / image.bitmap.width);
       await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
       // await image.quality(quality);
