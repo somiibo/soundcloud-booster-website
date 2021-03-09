@@ -2,8 +2,6 @@
 ### ALL PAGES ###
 layout: master/global/default
 permalink: /@reference/starter/support/
-sitemap:
-  include: false
 
 ### REGULAR PAGES ###
 meta:

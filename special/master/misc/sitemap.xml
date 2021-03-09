@@ -33,7 +33,8 @@ sitemap:
       </url>
     {% endfor %}
     {% for page in site.pages %}
-      {%- if page.sitemap.include != false -%}
+      {%- if page.url contains '/@reference/' -%}
+      {%- elsif page.sitemap.include != false -%}
       <url>
         <loc>{{ site.url }}{{ page.url }}</loc>
 
