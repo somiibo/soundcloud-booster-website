@@ -59,7 +59,7 @@ gulp.task('imageminResponsive', async function () {
       console.log('Fixing image', imgPath);
       await newImage
         .resize({ width: 1024 })
-        .toFile()
+        .toFile(imgPathNew)
 
       jetpack.rename(imgPathNew, imgPath)
     }
