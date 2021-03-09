@@ -48,20 +48,23 @@ gulp.task('imageminResponsive', async function () {
   console.log('Performing imageminResponsive');
 
   let images = await getBlogImages();
+  const regex = /(\.jpg|\.jpeg|\.png)/img;
 
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
-    const imgPathNew = `${imgPath}-new`;
-    if (!imgPath.match(/\.jpg|\.jpeg|\.png/img)) { continue }
+    const imgPathNew = imgPath.replace(regex, '-new$1');
+
+    if (!imgPath.match(regex)) { continue }
     const newImage = await sharp(imgPath);
     const newImageMeta = await newImage.metadata();
     if (newImageMeta.width < 1024) {
       console.log('Fixing image', imgPath);
+      jetpack.remove(imgPathNew);
       await newImage
         .resize({ width: 1024 })
         .toFile(imgPathNew)
-
-      jetpack.rename(imgPathNew, imgPath)
+      jetpack.remove(imgPath);
+      jetpack.rename(imgPathNew, imgPath.split('/').pop())
     }
     // if (image && image.bitmap && image.bitmap.width < 1024) {
     //   console.log('Fixing image', imgPath);
