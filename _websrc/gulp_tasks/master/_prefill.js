@@ -136,19 +136,19 @@ gulp.task('_prefill', async () => {
           }
         }
 
-        await createFile(`blog/index.html`,
-          '---' + '\n' +
-          '### ALL PAGES ###' + '\n' +
-          'layout: master/blog/index' + '\n' +
-          '---' + '\n'
-        );
-
-        await createFile(`./blog/authors/index.html`,
-          '---' + '\n' +
-          '### ALL PAGES ###' + '\n' +
-          'layout: master/authors/index' + '\n' +
-          '---' + '\n'
-        );
+        // await createFile(`blog/index.html`,
+        //   '---' + '\n' +
+        //   '### ALL PAGES ###' + '\n' +
+        //   'layout: master/blog/index' + '\n' +
+        //   '---' + '\n'
+        // );
+        //
+        // await createFile(`./blog/authors/index.html`,
+        //   '---' + '\n' +
+        //   '### ALL PAGES ###' + '\n' +
+        //   'layout: master/authors/index' + '\n' +
+        //   '---' + '\n'
+        // );
 
         await createFile(`./_authors/samantha.md`, await readFile('./_websrc/templates/master/authors/example-author.md'));
 
