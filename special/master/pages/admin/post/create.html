@@ -513,7 +513,7 @@ settings:
     affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
     tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
     categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
-    replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html src="{url}" alt="{alt}" -%}{% endraw %}',
+    replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html name="{name}" alt="{alt}" -%}{% endraw %}',
   }
   {% endfor %}
 
