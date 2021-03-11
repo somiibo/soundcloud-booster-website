@@ -1,5 +1,5 @@
 Manager = new (require('web-manager'));
 
 Manager.init(Configuration, function() {
-  Manager.log('Init admin.js');
+  Manager.log('Init master.js');
 });
