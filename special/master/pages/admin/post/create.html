@@ -12,8 +12,6 @@ meta:
   breadcrumb: "Post"
 
 settings:
-  include-app-header: false
-  include-app-footer: false
   manager-configuration: "
     {
       libraries: {
@@ -296,7 +294,7 @@ settings:
             Replace image markdown with liquid tag
           </label>
           <small class="form-text text-muted">
-            Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code>
+            Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/blog-image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code>
           </small>
         </div>
       </div>
@@ -515,7 +513,7 @@ settings:
     affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
     tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
     categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
-    replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/image.html src="{url}" alt="{alt}" -%}{% endraw %}',
+    replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html src="{url}" alt="{alt}" -%}{% endraw %}',
   }
   {% endfor %}
 
