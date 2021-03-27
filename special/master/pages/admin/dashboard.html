@@ -880,6 +880,11 @@ settings:
     var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_getStats';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_getStats';
 
+    // https://stackoverflow.com/a/2901298/7305269
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     if (user && user.uid) {
       user.getIdToken(false)
         .then(function(token) {
@@ -896,9 +901,9 @@ settings:
               res.json()
               .then(function (data) {
                 console.log('Success', data);
-                Manager.dom().select('#stats-users-total').setInnerHTML(data.users.total);
-                Manager.dom().select('#stats-users-online').setInnerHTML(data.users.online);
-                Manager.dom().select('#stats-notification-subscribers').setInnerHTML(data.subscriptions.total);
+                Manager.dom().select('#stats-users-total').setInnerHTML(numberWithCommas(data.users.total));
+                Manager.dom().select('#stats-users-online').setInnerHTML(numberWithCommas(data.users.online));
+                Manager.dom().select('#stats-notification-subscribers').setInnerHTML(numberWithCommas(data.subscriptions.total));
               })
             } else {
               return res.text()
