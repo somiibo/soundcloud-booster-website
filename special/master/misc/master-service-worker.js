@@ -37,8 +37,8 @@ try {
 
 // Load Firebase Messaging
 try {
-  importScripts('https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js');
-  importScripts('https://www.gstatic.com/firebasejs/8.2.7/firebase-messaging.js');
+  importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js');
+  importScripts('https://www.gstatic.com/firebasejs/8.3.1/firebase-messaging.js');
 
   // if (typeof firebase === 'undefined') {
   //   throw new Error('hosting/init-error: Firebase SDK not detected.');

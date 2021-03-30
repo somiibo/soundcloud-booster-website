@@ -49,7 +49,7 @@
   },
   "homepage": "https://template.itwcreativeworks.com",
   "devDependencies": {
-    "@babel/core": "^7.13.13",
+    "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
     "autoprefixer": "^9.7.3",
     "browser-sync": "^2.26.14",
@@ -79,7 +79,7 @@
     "through2": "^4.0.2",
     "ultimate-jekyll-poster": "0.0.7",
     "vinyl-named": "^1.1.0",
-    "web-manager": "^2.0.16",
+    "web-manager": "^2.0.18",
     "webpack": "^5.28.0",
     "webpack-stream": "^6.1.2",
     "yargs": "^16.2.0"
