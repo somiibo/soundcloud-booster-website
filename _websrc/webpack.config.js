@@ -39,6 +39,12 @@ module.exports = {
     // chunkFilename: '[name].js',
     // path: '/assets/js/',
     publicPath: '/assets/js/',
+
+    // https://github.com/webpack/webpack/issues/959
+    chunkFilename: (pathData) => {
+      return pathData.chunk.name === 'main' ? '[name].js' : 'chunk.[name].[chunkhash].js';
+    },
+    umdNamedDefine: false,
     // filename: '[name].js'
   },
 
@@ -67,6 +73,11 @@ module.exports = {
       }),
     ],
     minimize: (argv.skipJSMin !== 'true'),
+
+    // https://github.com/webpack/webpack/issues/959
+    concatenateModules: false,
+    providedExports: false,
+    usedExports: false,
   },
 
   /* CRITICAL CSS */
