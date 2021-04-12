@@ -5,6 +5,7 @@ const config     = require('../../master.config.js');
 const isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
 const isServer   = (argv.buildLocation == 'server');
 const _configYml = require('js-yaml').load(fs.read('_config.yml'));
+const del        = require('del');
 const Global     = require('../../libraries/global.js');
 
 gulp.task('_prefill', async () => {
@@ -13,6 +14,11 @@ gulp.task('_prefill', async () => {
     const gitignore_ph = await readFile('./_websrc/templates/master/gitignore/all');
     const build_json = await readFile('./_websrc/templates/master/output/build/build.json');
     try {
+
+      await del(['assets/js', 'assets/css'])
+        .then(deleted => {
+          console.log(`Deleted ${deleted.length} files.`);
+        })
 
       // all versions need these files to run properly
       {

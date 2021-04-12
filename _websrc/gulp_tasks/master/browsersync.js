@@ -3,8 +3,8 @@ const browsersync = require('browser-sync').create();
 const config      = require('../../master.config.js');
 const fs          = require('fs-jetpack');
 const gulp        = require('gulp');
-const tools         = new (require('../../libraries/tools.js'));
-const Global        = require('../../libraries/global.js');
+const tools       = new (require('../../libraries/tools.js'));
+const Global      = require('../../libraries/global.js');
 
 const browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
 let externalUrl;
@@ -16,9 +16,8 @@ let externalUrl;
 gulp.task('browsersync', async function () {
   return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
-      // console.log('browsersync polling Global.get(prefillStatus)....', Global.get('prefillStatus'), Global.get('jekyllBuild'));
       return Global.get('prefillStatus') === 'done';
-    }, {timeout: 60000});
+    }, {timeout: 120000});
 
     if (!fs.exists(`${config.jekyll.dest}/index.html`)) {
       fs.write(`${config.jekyll.dest}/index.html`, `<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <title>Initializing...</title> <meta name="description" content="Initializing..."> </head> <body> Initializing... <a href="#" onclick="window.location.href = window.location.href">refresh</a></body> </html>`)

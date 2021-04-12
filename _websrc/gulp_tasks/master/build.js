@@ -23,7 +23,7 @@ gulp.task('jekyll-build', async function (done) {
   return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
       return Global.get('prefillStatus') === 'done';
-    }, {timeout: 60000});
+    }, {timeout: 120000});
 
     let jekyllConfig = config.jekyll.config.default;
     jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';
@@ -33,9 +33,8 @@ gulp.task('jekyll-build', async function (done) {
       jekyllConfig += config.jekyll.config.production ? ',' + config.jekyll.config.production : '';
     } else {
       await tools.poll(function () {
-        // console.log('jekyll-build polling Global.get(browserSyncStatus)....', Global.get('browserSyncStatus'));
         return Global.get('browserSyncStatus') === 'done';
-      }, {timeout: 60000});
+      }, {timeout: 120000});
       jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
       jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
     }
