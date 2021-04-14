@@ -165,7 +165,7 @@ head:
     document.getElementById('checkout-step-status-success-url').setAttribute('href', qsUrl);
 
     try {
-      var storageKey = '_orders.' + qsProductId + '.' + qsOrderId;
+      var storageKey = '_orders.' + qsOrderId;
       if (Manager.properties.meta.environment === 'development') {
         Manager.storage().set(storageKey, false);
       }
