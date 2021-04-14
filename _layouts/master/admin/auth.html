@@ -23,6 +23,28 @@ settings:
   include-app-header: false
   include-script-bundle: false
   include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'prohibited',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "  
 ---
 <div class="container">
   <div class="row justify-content-center">

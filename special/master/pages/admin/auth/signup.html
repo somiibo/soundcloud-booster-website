@@ -10,30 +10,6 @@ meta:
   title: "Signup"
   description: "Signup for an admin account."
   breadcrumb: "Signup"
-
-settings:
-  manager-configuration: "
-    {
-      libraries: {
-        cookieconsent: {
-          enabled: false
-        },
-        tawk: {
-          enabled: false
-        },
-        sentry: {
-          enabled: false
-        }
-      },
-      auth: {
-        state: 'prohibited',
-        sends: {
-          required: '/admin/signin/',
-          prohibited: '/admin/dashboard/'
-        }
-      }
-    }
-  "
 ---
 
 {%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
