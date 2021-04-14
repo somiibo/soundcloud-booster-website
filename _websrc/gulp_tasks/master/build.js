@@ -16,6 +16,25 @@ const jekyll = process.platform === 'win32' ? 'jekyll.bat' : 'jekyll';
 const build  = Object.keys(config.tasks).filter((key) => config.tasks[key] && !['browsersync', 'watch'].includes(key))
 build.push('jekyll-build');
 
+let firstBuild = true;
+
+function areTasksCompleted() {
+  let completed = true;
+  const tasks = Object.keys(Global.get(`completed`, {_faketask: new Date()}));
+
+  for (var i = 0, l = tasks.length; i < l; i++) {
+    const task = tasks[i];
+    const time = Global.get(`completed.${task}`, new Date(0));
+    const diff = new Date().getTime() - time.getTime();
+    if (diff < 10000) {
+      completed = false;
+      break;
+    }
+  }
+  firstBuild = false;
+  return completed;
+}
+
 /**
  * Build the Jekyll Site
  */
@@ -23,7 +42,12 @@ gulp.task('jekyll-build', async function (done) {
   return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
       return Global.get('prefillStatus') === 'done';
-    }, {timeout: 120000});
+    }, {timeout: 120000, interval: 1000});
+
+    // Other build tasks
+    await tools.poll(function () {
+      return areTasksCompleted();
+    }, {timeout: 1000 * 60 * 3, interval: 1000});
 
     let jekyllConfig = config.jekyll.config.default;
     jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';

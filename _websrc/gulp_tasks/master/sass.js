@@ -33,4 +33,6 @@ gulp.task('sass', async function () {
       ]))
       .pipe(gulp.dest(`${config.assets}/${config.sass.dest}`)),
   )
+  .pipe(tools.complete('sass'))
+
 });

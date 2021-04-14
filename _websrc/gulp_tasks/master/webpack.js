@@ -30,7 +30,8 @@ gulp.task('webpack', async function () {
     .pipe(named())
     .pipe(babel(config.babel))
     .pipe(webpackStream(config_webpack, webpack))
-    .pipe(gulp.dest(`${config.assets}/${config.js.dest}`));
+    .pipe(gulp.dest(`${config.assets}/${config.js.dest}`))
+    .pipe(tools.complete('webpack'))
 
 });
 

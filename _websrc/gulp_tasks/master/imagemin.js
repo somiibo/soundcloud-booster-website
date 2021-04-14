@@ -8,6 +8,7 @@ const argv       = require('yargs').argv;
 const sharp      = require('sharp');
 const glob       = require('glob');
 const jetpack    = require('fs-jetpack');
+const tools      = new (require('../../libraries/tools.js'));
 
 // const pngquant   = require('imagemin-pngquant');
 // const imagemin   = require('gulp-imagemin');
@@ -40,8 +41,8 @@ function getBlogImages() {
   });
 }
 
-gulp.task('imageminResponsive', async function () {
-  if (argv.skipImageMin == 'true') {
+gulp.task('imageminResponsive', async function (done) {
+  if (argv.skipImageMin === 'true') {
     console.log('Skipping imageminResponsive');
     return;
   }
@@ -206,5 +207,6 @@ gulp.task('imageminResponsive', async function () {
     {
       errorOnUnusedConfig: false
     }))
-    .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest));
+    .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest))
+    .pipe(tools.complete('imageminResponsive'))
 });

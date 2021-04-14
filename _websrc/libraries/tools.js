@@ -1,5 +1,19 @@
+const through  = require('through2');
+const Global   = require('./global.js');
+
 function Tools() {
 
+}
+
+Tools.prototype.complete = (name) => {
+  return through.obj((file, enc, done) => {
+    // let transformedFile = file.clone();
+    // transformedFile.contents = new Buffer(JSON.stringify(JSON5.parse(transformedFile.contents.toString())));
+    // return done(null, transformedFile);
+    // console.log('-----COMPLETE', name);
+    Global.set(`completed.${name}`, new Date());
+    return done(null);
+  });
 }
 
 Tools.prototype.wait = function (ms) {

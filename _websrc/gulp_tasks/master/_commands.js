@@ -75,8 +75,9 @@ gulp.task('clean:assets', async function (done) {
 //   // done();
 // });
 
-gulp.task('clean:npm', async function () {
+gulp.task('clean:npm', async function (done) {
   // console.log('\x1b[34m%s\x1b[0m', '******* finished clean:npm *******');  //cyan
+  return done();
 });
 
 gulp.task('template:update', async function () {
