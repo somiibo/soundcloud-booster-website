@@ -190,11 +190,11 @@
 
 <!-- CSS - Bundle-->
 {%- if include.pre-bundle-css != null -%}
-  {{ include.pre-bundle-css }}
+  {{ include.pre-bundle-css | liquify }}
 {%- elsif page.head.pre-bundle-css != null -%}
-  {{ page.head.pre-bundle-css }}
+  {{ page.head.pre-bundle-css | liquify }}
 {%- elsif layout.head.pre-bundle-css != null -%}
-  {{ layout.head.pre-bundle-css }}
+  {{ layout.head.pre-bundle-css | liquify }}
 {% endif %}
 
 {%- if page.settings.include-css-bundle == false -%}
@@ -205,11 +205,11 @@
 {% endif %}
 
 {%- if include.post-bundle-css != null -%}
-  {{ include.post-bundle-css }}
+  {{ include.post-bundle-css | liquify }}
 {%- elsif page.head.post-bundle-css != null -%}
-  {{ page.head.post-bundle-css }}
+  {{ page.head.post-bundle-css | liquify }}
 {%- elsif layout.head.post-bundle-css != null -%}
-  {{ layout.head.post-bundle-css }}
+  {{ layout.head.post-bundle-css | liquify }}
 {% endif %}
 
 <!-- HTML5 Shiv -->

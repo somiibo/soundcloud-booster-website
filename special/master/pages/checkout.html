@@ -13,7 +13,7 @@ meta:
 
 foot:
   post-bundle-script: '
-    <script type="text/javascript" src="/assets/js/master.js" async defer></script>
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
   '
 
 settings:
@@ -109,6 +109,12 @@ head:
     searchParams.forEach(function (value, key) {
       newURL.searchParams.set(key, value)
     })
+
+    // Development
+    if (searchParams.get('development')) {
+      return console.log('Not navigating because in development: ', newURL.toString());
+    }
+
     window.location.href = newURL.toString();
   });
 </script>

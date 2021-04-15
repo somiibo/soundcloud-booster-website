@@ -10,7 +10,7 @@ head:
 
 foot:
   post-bundle-script: '
-    <script type="text/javascript" src="/assets/js/master.js" async defer></script>
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
   '
 
 body:
@@ -44,7 +44,7 @@ settings:
         }
       }
     }
-  "  
+  "
 ---
 <div class="container">
   <div class="row justify-content-center">

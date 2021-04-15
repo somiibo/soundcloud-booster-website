@@ -28,11 +28,11 @@
 
 <!-- Script - Bundle -->
 {%- if include.pre-bundle-script != null -%}
-  {{ include.pre-bundle-script }}
+  {{ include.pre-bundle-script | liquify }}
 {%- elsif page.foot.pre-bundle-script != null -%}
-  {{ page.foot.pre-bundle-script }}
+  {{ page.foot.pre-bundle-script | liquify }}
 {%- elsif layout.foot.pre-bundle-script != null -%}
-  {{ layout.foot.pre-bundle-script }}
+  {{ layout.foot.pre-bundle-script | liquify }}
 {% endif %}
 
 {%- if page.settings.include-script-bundle == false -%}
@@ -50,11 +50,11 @@
 {% endif %}
 
 {%- if include.post-bundle-script != null -%}
-  {{ include.post-bundle-script }}
+  {{ include.post-bundle-script | liquify }}
 {%- elsif page.foot.post-bundle-script != null -%}
-  {{ page.foot.post-bundle-script }}
+  {{ page.foot.post-bundle-script | liquify }}
 {%- elsif layout.foot.post-bundle-script != null -%}
-  {{ layout.foot.post-bundle-script }}
+  {{ layout.foot.post-bundle-script | liquify }}
 {% endif %}
 
 <!-- Script - Google Analytics Tracking Script -->
