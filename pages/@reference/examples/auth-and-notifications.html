@@ -52,7 +52,6 @@ settings:
       <button class="btn btn-lg btn-primary btn-block auth-signin-email-btn" type="submit" name="button">Sign in</button>
       <button class="btn btn-lg btn-primary btn-block auth-signup-email-btn" type="submit" name="button">Sign up</button>
       <button class="btn btn-lg btn-primary btn-block auth-forgot-email-btn" type="submit" name="button">Forgot</button>
-
     </div>
 
     <div class="auth-signedin-true-element" hidden>
@@ -65,7 +64,11 @@ settings:
           <div class="mb-3">
             Email: <span class="auth-email-element">...</span> <br>
             UserId: <span class="auth-uid-element">...</span> <br>
+            <div class="text-left">
+              <pre id="resolve-account-result">(resolve account)</pre>
+            </div>
           </div>
+          <button id="resolve-account" class="btn btn-lg btn-primary btn-block">Resolve Account</button>
           <button class="btn btn-lg btn-primary btn-block auth-signout-all-btn" type="button" name="button">Sign out</button>
         </div>
       </div>
@@ -119,9 +122,7 @@ settings:
       } else {
         Manager.dom().select('#notification-address').setValue('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification');
       }
-
     });
-
 
     function display(message) {
       Manager.log(message);
@@ -228,6 +229,35 @@ settings:
 
           })
 
+        } else if (event.target.matches('#resolve-account')) {
+          console.log('--- Exploring the .account() API ---');
+          var user = firebase.auth().currentUser;
+          var accountResultEl = Manager.dom().select('#resolve-account-result');
+          accountResultEl.setInnerHTML('Waiting...');
+
+          if (!user) {
+            accountResultEl.setInnerHTML('No user :(');
+          } else {
+            firebase.firestore().doc('users/' + user.uid)
+            .get()
+            .then(function (doc) {
+              Manager.account().import()
+              .then(function (Account) {
+                var account = new Account();
+                account.resolve(doc.data(), {})
+                .then(function (properties) {
+                  console.log('.account().resolve()', properties);
+                  accountResultEl.setInnerHTML(JSON.stringify(properties, null, 2));
+                })
+              })
+              .catch(function (e) {
+                accountResultEl.setInnerHTML(e);
+              })
+            })
+            .catch(function (e) {
+              accountResultEl.setInnerHTML(e);
+            })
+          }
         }
 
     })

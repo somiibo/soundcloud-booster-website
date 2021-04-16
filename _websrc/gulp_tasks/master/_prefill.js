@@ -191,6 +191,14 @@ gulp.task('_prefill', async () => {
         fs.dir('./@output/lighthouse');
         fs.remove('./@output/build/build.json');
         await createFile('./@output/build/build.json', build_json);
+
+        // Create the master service worker
+        await fs.writeAsync('./special/master/misc/master-service-worker.js',
+          (await readFile('./_websrc/templates/master/js/master-service-worker.js')).replace(/{firebase-version}/img,
+            require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '')
+          )
+        );
+
       }
 
       // only create these files if NOT on template
@@ -217,6 +225,7 @@ gulp.task('_prefill', async () => {
       // Only for non-server environment
       if (!isServer) {
         await createFile('./@output/build/.gitignore', gitignore_ph);
+        await createFile('./special/master/misc/.gitignore', '/master-service-worker.js'+'\n'+'.gitignore'+'\n');
       } else {
         await createFile('./CNAME', new URL(_configYml.url).host);
       }
