@@ -6,7 +6,7 @@ const exec    = require('child_process').exec;
 const fs      = require('fs-jetpack');
 const yaml    = require('js-yaml');
 
-gulp.task('cloudflare:purge', async function (done) {
+gulp.task('cloudflare:purge', async function () {
   let doc = yaml.load(fs.read('_config.yml'));
   console.log(`starting cloudflare:purge on zone: ${doc.cloudflare.zone} ...`);
 
@@ -47,14 +47,14 @@ gulp.task('cloudflare:purge', async function (done) {
   });
 });
 
-gulp.task('clean:jekyll', async function (done) {
+gulp.task('clean:jekyll', async function () {
   return del(['_site', '.jekyll-cache', '.jekyll-metadata'])
     .then(deleted => {
       console.log(`Deleted ${deleted.length} files.`);
     })
 });
 
-gulp.task('clean:assets', async function (done) {
+gulp.task('clean:assets', async function () {
   return del(['assets/**/*', '!assets/_src', '!assets/_src-uncompiled', '_site', '.jekyll-cache', '.jekyll-metadata'])
     .then(deleted => {
       console.log(`Deleted ${deleted.length} files.`);
@@ -75,9 +75,9 @@ gulp.task('clean:assets', async function (done) {
 //   // done();
 // });
 
-gulp.task('clean:npm', async function (done) {
+gulp.task('clean:npm', async function () {
   // console.log('\x1b[34m%s\x1b[0m', '******* finished clean:npm *******');  //cyan
-  return done();
+  return Promise.resolve();
 });
 
 gulp.task('template:update', async function () {

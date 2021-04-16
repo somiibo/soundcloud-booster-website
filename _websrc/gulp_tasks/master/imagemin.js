@@ -41,14 +41,14 @@ function getBlogImages() {
   });
 }
 
-gulp.task('imageminResponsive', async function (done) {
+gulp.task('imageminResponsive', async function () {
   if (argv.skipImageMin === 'true') {
     console.log('Skipping imageminResponsive');
-    return;
+    return Promise.resolve();
   }
 
   tools.startTask('imageminResponsive');
-  
+
   console.log('Performing imageminResponsive');
 
   let images = await getBlogImages();

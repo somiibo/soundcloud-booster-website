@@ -37,7 +37,7 @@ function areTasksCompleted() {
 /**
  * Build the Jekyll Site
  */
-gulp.task('jekyll-build', async function (done) {
+gulp.task('jekyll-build', async function () {
   return new Promise(async function(resolve, reject) {
     await tools.poll(function () {
       return Global.get('prefillStatus') === 'done';

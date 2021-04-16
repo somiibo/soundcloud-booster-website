@@ -22,10 +22,10 @@ function doImagesExist(imgPath) {
   });
 }
 
-gulp.task('copyCss', async function (done) {
+gulp.task('copyCss', async function () {
   if (argv.skipCopyCss === 'true') {
     console.log('Skipping copyCss');
-    return done();
+    return Promise.resolve();
   }
 
   tools.startTask('copyCss');
@@ -52,7 +52,6 @@ gulp.task('copyCss', async function (done) {
 
 gulp.task('copyImages', async function () {
   const imgPath = config.assets + config.assetsSubpath + '/images/favicon/**/*';
-
   const imgsExist = (await doImagesExist(imgPath)).length > 0;
 
   tools.startTask('copyImages');
@@ -72,10 +71,10 @@ gulp.task('copyImages', async function () {
 
 });
 
-gulp.task('copyJs', async function (done) {
+gulp.task('copyJs', async function () {
   if (argv.skipCopyJs === 'true') {
     console.log('Skipping copyJs');
-    return done();
+    return Promise.resolve();
   }
 
   tools.startTask('copyJs');
@@ -95,10 +94,10 @@ gulp.task('copyJs', async function (done) {
 
 });
 
-gulp.task('copyUncompiled', async function (done) {
+gulp.task('copyUncompiled', async function () {
   if (argv.skipCopyUncompiled === 'true') {
     console.log('Skipping copyUncompiled');
-    return done();
+    return Promise.resolve();
   }
 
   tools.startTask('copyUncompiled');

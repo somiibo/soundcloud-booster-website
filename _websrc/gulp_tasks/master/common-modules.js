@@ -8,6 +8,6 @@ gulp.task('copyFontAwesome', function () {
   tools.startTask('copyFontAwesome');
 
   return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
-      .pipe(gulp.dest(`${config.assets}/webfonts`))
-      .pipe(tools.completeTask('copyFontAwesome'))
+    .pipe(gulp.dest(`${config.assets}/webfonts`))
+    .pipe(tools.completeTask('copyFontAwesome'))
 });
