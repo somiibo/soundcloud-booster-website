@@ -6,12 +6,29 @@ const es       = require('event-stream');
 const through  = require('through2');
 const tools    = new (require('../../libraries/tools.js'));
 const Global   = require('../../libraries/global.js');
+const glob     = require('glob');
+
+
+function doImagesExist(imgPath) {
+  return new Promise(function(resolve, reject) {
+    glob(imgPath, function (err, res) {
+      if (err) {
+        console.log('Error', err);
+        return reject(err);
+      } else {
+        return resolve(res);
+      }
+    });
+  });
+}
 
 gulp.task('copyCss', async function (done) {
   if (argv.skipCopyCss === 'true') {
     console.log('Skipping copyCss');
     return done();
   }
+
+  tools.startTask('copyCss');
 
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
@@ -30,19 +47,28 @@ gulp.task('copyCss', async function (done) {
       .pipe(newer(config.assets + '/css/master'))
       .pipe(gulp.dest(config.assets + '/css/master')),
   )
-  .pipe(tools.complete('copyCss'))
+  .pipe(tools.completeTask('copyCss'))
 });
 
 gulp.task('copyImages', async function () {
+  const imgPath = config.assets + config.assetsSubpath + '/images/favicon/**/*';
+
+  const imgsExist = (await doImagesExist(imgPath)).length > 0;
+
+  tools.startTask('copyImages');
 
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
 
-  return gulp.src([config.assets + config.assetsSubpath + '/images/favicon/**/*'])
+  if (!imgsExist) {
+    tools.completeTask('copyImages')
+  }
+
+  return gulp.src([imgPath])
     .pipe(newer(config.assets + '/images/favicon'))
     .pipe(gulp.dest(config.assets + '/images/favicon'))
-    .pipe(tools.complete('copyImages'))
+    .pipe(tools.completeTask('copyImages'))
 
 });
 
@@ -51,6 +77,8 @@ gulp.task('copyJs', async function (done) {
     console.log('Skipping copyJs');
     return done();
   }
+
+  tools.startTask('copyJs');
 
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
@@ -63,7 +91,7 @@ gulp.task('copyJs', async function (done) {
   return gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
     .pipe(newer(config.assets + '/js/theme'))
     .pipe(gulp.dest(config.assets + '/js/theme'))
-    .pipe(tools.complete('copyJs'))
+    .pipe(tools.completeTask('copyJs'))
 
 });
 
@@ -73,6 +101,8 @@ gulp.task('copyUncompiled', async function (done) {
     return done();
   }
 
+  tools.startTask('copyUncompiled');
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
@@ -80,6 +110,6 @@ gulp.task('copyUncompiled', async function (done) {
   return gulp.src([config.assets + config.assetsSubpathUncompiled + '/**/*'])
     .pipe(newer(config.assets))
     .pipe(gulp.dest(config.assets))
-    .pipe(tools.complete('copyUncompiled'))
+    .pipe(tools.completeTask('copyUncompiled'))
 
 });

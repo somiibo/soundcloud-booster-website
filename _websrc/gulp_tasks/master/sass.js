@@ -10,6 +10,8 @@ const Global       = require('../../libraries/global.js');
 gulp.task('sass', async function () {
   const prePath = config.assets + config.assetsSubpath + '/' + config.sass.src;
 
+  tools.startTask('sass');
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
@@ -33,6 +35,6 @@ gulp.task('sass', async function () {
       ]))
       .pipe(gulp.dest(`${config.assets}/${config.sass.dest}`)),
   )
-  .pipe(tools.complete('sass'))
+  .pipe(tools.completeTask('sass'))
 
 });

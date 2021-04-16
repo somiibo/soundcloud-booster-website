@@ -21,6 +21,8 @@ config_webpack.mode = argv.mode || config_webpack.mode;
 gulp.task('webpack', async function () {
   const prePath = `${config.assets + config.assetsSubpath}/${config.js.src}`;
 
+  tools.startTask('webpack');
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 60000});
@@ -31,7 +33,7 @@ gulp.task('webpack', async function () {
     .pipe(babel(config.babel))
     .pipe(webpackStream(config_webpack, webpack))
     .pipe(gulp.dest(`${config.assets}/${config.js.dest}`))
-    .pipe(tools.complete('webpack'))
+    .pipe(tools.completeTask('webpack'))
 
 });
 

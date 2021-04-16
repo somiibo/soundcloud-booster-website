@@ -5,13 +5,16 @@ function Tools() {
 
 }
 
-Tools.prototype.complete = (name) => {
+Tools.prototype.startTask = (name, timeout) => {
+  const now = new Date();
+  timeout = timeout || 2;
+  Global.set(`completed.${name}`, new Date(now.setTime(now.getTime() + (timeout * 60 * 1000))));
+}
+
+Tools.prototype.completeTask = (name) => {
+  Global.set(`completed.${name}`, new Date());
+
   return through.obj((file, enc, done) => {
-    // let transformedFile = file.clone();
-    // transformedFile.contents = new Buffer(JSON.stringify(JSON5.parse(transformedFile.contents.toString())));
-    // return done(null, transformedFile);
-    // console.log('-----COMPLETE', name);
-    Global.set(`completed.${name}`, new Date());
     return done(null);
   });
 }

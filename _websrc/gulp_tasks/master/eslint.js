@@ -7,11 +7,13 @@ const tools     = new (require('../../libraries/tools.js'));
 
 gulp.task('eslint', function(done) {
   if (argv.skipESLint !== 'true') {
+    tools.startTask('eslint');
+
     return gulp.src([config.assets + config.assetsSubpath + '/' + config.js.src + '/**/*.js', '!node_modules/**'])
       .pipe(eslint())
       .pipe(eslint.format())
       .pipe(eslint.failOnError())
-      .pipe(tools.complete('eslint'))
+      .pipe(tools.completeTask('eslint'))
   } else {
     return done();
   }

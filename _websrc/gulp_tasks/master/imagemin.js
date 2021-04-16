@@ -46,6 +46,9 @@ gulp.task('imageminResponsive', async function (done) {
     console.log('Skipping imageminResponsive');
     return;
   }
+
+  tools.startTask('imageminResponsive');
+  
   console.log('Performing imageminResponsive');
 
   let images = await getBlogImages();
@@ -208,5 +211,5 @@ gulp.task('imageminResponsive', async function (done) {
       errorOnUnusedConfig: false
     }))
     .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest))
-    .pipe(tools.complete('imageminResponsive'))
+    .pipe(tools.completeTask('imageminResponsive'))
 });
