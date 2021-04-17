@@ -22,6 +22,82 @@ settings:
         Not signed in
       </div>
 
+
+      <div class="accordion card" id="accordionExample">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#auth-providers-panel" aria-expanded="true" aria-controls="auth-providers-panel">
+                Sign in / Sign up using third-party providers
+              </button>
+            </h2>
+          </div>
+
+          <div id="auth-providers-panel" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="google.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" class="lazyload" alt="Google Logo" width="24em">
+                    Sign in with Google
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="facebook.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" class="lazyload" alt="Facebook Logo" width="24em">
+                    Sign in with Facebook
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="twitter.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" class="lazyload" alt="Twitter Logo" width="24em">
+                    Sign in with Twitter
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="github.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" class="lazyload" alt="GitHub Logo" width="24em">
+                    Sign in with GitHub
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="microsoft.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" class="lazyload" alt="Microsoft Logo" width="24em">
+                    Sign in with Microsoft
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="yahoo.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" class="lazyload" alt="Yahoo Logo" width="24em">
+                    Sign in with Yahoo
+                  </a>
+                </div>
+                <div class="col-12 mb-1">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="apple.com">
+                    <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" class="lazyload" alt="Apple Logo" width="24em">
+                    Sign in with Apple
+                  </a>
+                </div>
+                <div class="col-12">
+                  <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn" data-provider="noexist.com">
+                    Sign in with a non-existant service
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+
+
+      <div class="my-3 text-center text-muted">
+        <small>— or —</small>
+      </div>
+
       <div class="form-group">
         <label for="email-input" class="sr-only">Email</label>
         <input type="email" id="email-input" class="form-control auth-email-input" placeholder="Email" required autofocus autocomplete="email">
