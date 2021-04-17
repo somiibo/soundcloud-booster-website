@@ -87,11 +87,17 @@ gulp.task('copyJs', async function () {
   //   .pipe(newer(config.assets + '/js/app'))
   //   .pipe(gulp.dest(config.assets + '/js/app'));
 
-  return gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
-    .pipe(newer(config.assets + '/js/theme'))
-    .pipe(gulp.dest(config.assets + '/js/theme'))
-    .pipe(tools.completeTask('copyJs'))
+  return es.merge(
+    gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
+      .pipe(newer(config.assets + '/js/theme'))
+      .pipe(gulp.dest(config.assets + '/js/theme')),
 
+    gulp.src([config.assets + config.assetsSubpath + '/js/app/**/*'])
+      .pipe(newer(config.assets + '/js/app'))
+      .pipe(gulp.dest(config.assets + '/js/app')),
+
+  )
+  .pipe(tools.completeTask('copyJs'))
 });
 
 gulp.task('copyUncompiled', async function () {

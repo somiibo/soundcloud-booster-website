@@ -1,11 +1,9 @@
 const gulp       = require('gulp');
 const fs         = require('fs-jetpack');
-const argv       = require('yargs').argv;
 const config     = require('../../master.config.js');
-const isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
-const isServer   = (argv.buildLocation == 'server');
 const _configYml = require('js-yaml').load(fs.read('_config.yml'));
 const del        = require('del');
+const tools      = new (require('../../libraries/tools.js'));
 const Global     = require('../../libraries/global.js');
 
 gulp.task('_prefill', async () => {
@@ -98,8 +96,7 @@ gulp.task('_prefill', async () => {
           "const through  = require('through2');" + "\n" +
           "const argv     = require('yargs').argv;" + "\n" +
           "const fetch    = require('node-fetch');" + "\n" +
-          "let isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;" + "\n" +
-          "let isServer   = (argv.buildLocation == 'server');" + "\n" +
+          "const tools    = new (require('../../libraries/tools.js'));" + "\n" +
           "" + "\n" +
           "gulp.task('sample', function() {" + "\n" +
             "  // write your first task here!" + "\n" +
@@ -202,12 +199,12 @@ gulp.task('_prefill', async () => {
       }
 
       // only create these files if NOT on template
-      if (!isTemplate) {
+      if (!tools.isTemplate) {
 
       }
 
       // only create these files if IS ON template and IS NOT server
-      if (isTemplate && !isServer) {
+      if (tools.isTemplate && !tools.isServer) {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/images/blog/.gitignore', gitignore_ph);
@@ -223,7 +220,7 @@ gulp.task('_prefill', async () => {
       }
 
       // Only for non-server environment
-      if (!isServer) {
+      if (!tools.isServer) {
         await createFile('./@output/build/.gitignore', gitignore_ph);
         await createFile('./special/master/misc/.gitignore', '/master-service-worker.js'+'\n'+'.gitignore'+'\n');
       } else {

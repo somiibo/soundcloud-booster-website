@@ -202,7 +202,7 @@ self.addEventListener('message', function(event) {
 
 });
 
-function log(msg) {
+function log() {
   try {
     if (SWManager.environment == 'development') {
       var args = Array.prototype.slice.call(arguments);

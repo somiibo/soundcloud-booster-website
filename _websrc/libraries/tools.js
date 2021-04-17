@@ -1,8 +1,11 @@
 const through  = require('through2');
 const Global   = require('./global.js');
+const argv     = require('yargs').argv;
 
 function Tools() {
-
+  const self = this;
+  self.isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
+  self.isServer = argv.buildLocation === 'server';
 }
 
 Tools.prototype.startTask = (name, timeout) => {

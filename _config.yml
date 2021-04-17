@@ -213,3 +213,7 @@ exclude:
   # MASTER
   - .placeholder
   # APP
+
+include:
+  # MASTER
+  - .well-known
