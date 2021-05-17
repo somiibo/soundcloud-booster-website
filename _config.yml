@@ -132,6 +132,7 @@ settings:
         tawk: {
           enabled: true,
           config: {
+            widgetId: '',
             chatId: '5df1636b43be710e1d21af38'
           }
         },
