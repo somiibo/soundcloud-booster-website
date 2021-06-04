@@ -17,6 +17,10 @@
 
 <link rel="canonical" href="{{ site.url }}{{ page.url }}">
 
+{%- if page.meta.index == false or layout.meta.index == false or site.meta.index == false -%}
+  <meta name="robots" content="noindex">
+{% endif %}
+
 {%- if page.meta.keywords != null and page.meta.keywords != "" -%}
   <meta name="keywords" content="{{ page.meta.keywords }}">
 {%- elsif site.meta.keywords != null and site.meta.keywords != "" -%}
