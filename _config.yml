@@ -132,8 +132,9 @@ settings:
         tawk: {
           enabled: true,
           config: {
+            chatId: '5df1636b43be710e1d21af38',
             widgetId: '',
-            chatId: '5df1636b43be710e1d21af38'
+            prechatColor: ''
           }
         },
         sentry: {
