@@ -84,5 +84,8 @@
     "webpack": "^5.39.0",
     "webpack-stream": "^6.1.2",
     "yargs": "^16.2.0"
+  },
+  "dependencies": {
+
   }
 }
