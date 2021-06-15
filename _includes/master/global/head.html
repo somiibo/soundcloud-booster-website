@@ -106,6 +106,10 @@
       settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
         name: '{{ site.brand.name }}'
+      },
+      contact: {
+        emailSupport: '{{ site.contact.email-support }}',
+        emailBusiness: '{{ site.contact.email-business }}'
       }
     }
   };
