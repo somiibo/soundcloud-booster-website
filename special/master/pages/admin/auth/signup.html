@@ -35,47 +35,30 @@ meta:
 
   <!-- Password -->
   <div class="form-group">
-    <!-- Input group -->
-    <div class="input-group input-group-merge">
-      <!-- Input -->
-      <input type="password" class="form-control form-control-appended auth-password-input" placeholder="Your password" required autocomplete="new-password">
-      <!-- Icon -->
-      <div class="input-group-append">
-        <span class="input-group-text">
-          <i class="fe fe-eye"></i>
-        </span>
-      </div>
-    </div>
-
+    <!-- Label -->
+    <label>Password</label>
+    <!-- Input -->
+    <input type="password" class="form-control auth-password-input" placeholder="Your password" required autocomplete="current-password">
   </div>
 
   <div class="form-group">
-    <div class="input-group input-group-merge">
-      <!-- Input -->
-      <input type="password" class="form-control form-control-appended auth-password-confirm-input" placeholder="Confirm password" required autocomplete="new-password">
-      <!-- Icon -->
-      <div class="input-group-append">
-        <span class="input-group-text">
-          <i class="fe fe-eye"></i>
-        </span>
-      </div>
+    <!-- Label -->
+    <label>Password confirmation</label>
+    <!-- Input -->
+    <input type="password" class="form-control auth-password-confirm-input" placeholder="Confirm password" required autocomplete="new-password">
+  </div>
+
+  <div class="checklist">
+    <div class="form-check">
+      <input class="form-check-input auth-terms-input" type="checkbox">
+      <label class="form-check-label">I agree to the Terms and Conditions</label>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input auth-newsletter-input" type="checkbox">
+      <label class="form-check-label">Sign up for our newsletter.</label>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="custom-control custom-checkbox table-checkbox">
-      <input type="checkbox" class="custom-control-input auth-terms-input" id="authTermsInput">
-      <label class="custom-control-label" for="authTermsInput">
-        I agree to the Terms and Conditions
-      </label>
-    </div>
-    <div class="custom-control custom-checkbox table-checkbox">
-      <input type="checkbox" class="custom-control-input auth-newsletter-input" id="authNewsletterInput">
-      <label class="custom-control-label" for="authNewsletterInput">
-        Sign up for our newsletter
-      </label>
-    </div>
-  </div>
 
   <div class="form-group">
 
@@ -88,7 +71,7 @@ meta:
   </div>
 
   <!-- Submit -->
-  <button class="btn btn-lg btn-block btn-primary mb-3 auth-signup-email-btn">
+  <button class="btn btn-lg w-100 btn-primary mb-3 auth-signup-email-btn">
     Sign up
   </button>
 

@@ -28,6 +28,10 @@ meta:
         </h1>
 
         <p class="text-muted mb-0">Create blog posts with ease, including the beautiful markdown editor <strong>StackEdit</strong>!</p>
+
+      </div>
+      <div class="col col-auto">
+        <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
       </div>
     </div> <!-- / .row -->
   </div>
@@ -62,12 +66,10 @@ meta:
             The title of the post: <code class="ml-1">My Post Title</code>
           </small>
           <div class="input-group input-group-merge mb-3">
-            <input type="text" class="form-control form-control-appended" id="title" name="title">
-            <div class="input-group-append">
-              <span class="input-group-text">
-                0
-              </span>
-            </div>
+            <input type="text" class="form-control" id="title" name="title">
+            <span class="input-group-text">
+              0
+            </span>
           </div>
         </div>
       </div>
@@ -81,12 +83,10 @@ meta:
             The URL of the post: <code class="ml-1">my-post-url</code>
           </small>
           <div class="input-group input-group-merge mb-3">
-            <input type="text" class="form-control form-control-appended" id="url" name="url">
-            <div class="input-group-append">
-              <span class="input-group-text">
-                0
-              </span>
-            </div>
+            <input type="text" class="form-control" id="url" name="url">
+            <span class="input-group-text">
+              0
+            </span>
 
             <a id="url-format-btn" href="#" class="btn btn-primary ml-3">Format</a>
           </div>
@@ -101,7 +101,7 @@ meta:
           <small class="form-text text-muted">
             Usually <code class="highlighter-rouge">app/blog/post</code> or <code class="highlighter-rouge">master/blog/post</code>
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
           </div>
         </div>
@@ -115,7 +115,7 @@ meta:
           <small class="form-text text-muted">
             The date of the post
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="date" class="form-control" id="date" name="date" placeholder="2019-12-04">
           </div>
         </div>
@@ -129,7 +129,7 @@ meta:
           <small class="form-text text-muted">
             The id of the post
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="number" class="form-control" id="id" name="id" placeholder="0">
           </div>
         </div>
@@ -143,8 +143,8 @@ meta:
           <small class="form-text text-muted">
             Who wrote this beautiful piece of work?
           </small>
-          <div class="input-group input-group-merge mb-3">
-            <select class="custom-select" id="author" name="author" required>
+          <div class="input-group mb-3">
+            <select class="form-select" id="author" name="author">
               <option value="">Select an author</option>
             </select>
           </div>
@@ -159,7 +159,7 @@ meta:
           <small class="form-text text-muted">
             This term is automatically applied to some ads
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="affiliate" name="affiliate" placeholder="Search term">
           </div>
         </div>
@@ -173,7 +173,7 @@ meta:
           <small class="form-text text-muted">
             Comma separated tags
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag 1, Tag 2">
           </div>
         </div>
@@ -187,7 +187,7 @@ meta:
           <small class="form-text text-muted">
             Comma separated categories
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="categories" name="categories" placeholder="Category 1, Category 2">
           </div>
         </div>
@@ -201,7 +201,7 @@ meta:
           <small class="form-text text-muted">
             Text preview of the post
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <textarea class="form-control" id="excerpt" name="excerpt"rows="2"></textarea>
           </div>
         </div>
@@ -215,7 +215,7 @@ meta:
           <small class="form-text text-muted">
             Image preview of the post. Will be named the same as the title of the post
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image" required>
           </div>
         </div>
@@ -236,19 +236,15 @@ meta:
           <small class="form-text text-muted">
             The content of the post
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <textarea class="form-control" id="body" name="body"rows="9"></textarea>
           </div>
         </div>
       </div>
       <div class="col-12">
-        <div class="row mt-3">
-          <div class="col-6">
-            <a href="" onclick="return false;" class="btn btn-lg btn-secondary btn-block" id="stackedit-edit">Edit in StackEdit</a>
-          </div>
-          <div class="col-6">
-            <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary btn-block" id="import-google-docs" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
-          </div>
+        <div class="d-flex justify-content-between mt-3">
+          <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100" id="stackedit-edit">Edit in StackEdit</a>
+          <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
         </div>
       </div>
     </div>
@@ -280,7 +276,7 @@ meta:
           <small class="form-text text-muted">
             Which one to use? Blank = default.
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="replaceImagesIncludeTag" name="replaceImagesIncludeTag" placeholder="">
           </div>
         </div>
@@ -306,7 +302,7 @@ meta:
           <small class="form-text text-muted">
             The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code>
           </small>
-          <div class="input-group input-group-merge mb-3">
+          <div class="input-group mb-3">
             <input type="text" class="form-control" id="path" name="path" placeholder="./_posts/" value="./_posts/">
           </div>
         </div>
@@ -320,8 +316,8 @@ meta:
           <small class="form-text text-muted">
             What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.
           </small>
-          <div class="input-group input-group-merge mb-3">
-            <select class="custom-select" id="processingAddy" name="processingAddy" required>
+          <div class="input-group mb-3">
+            <select class="form-select" id="processingAddy" name="processingAddy" required>
               <option id="processingAddy_none" value="">Select an address</option>
               <option id="processingAddy_dev" value="">Development</option>
               <option id="processingAddy_prod" value="">Production</option>
@@ -367,7 +363,7 @@ meta:
       </div>
 
       <div class="col-12">
-        <button class="btn btn-primary btn-lg btn-block" id="post-submit-btn" type="submit">Post!</button>
+        <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post!</button>
       </div>
 
     </div>
@@ -403,11 +399,7 @@ meta:
             <div class="col-auto">
 
               <!-- Close -->
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">
-                  ×
-                </span>
-              </button>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 
             </div>
           </div> <!-- / .row -->
@@ -804,8 +796,9 @@ meta:
     for (var i = 0; i < charCountFields.length; i++) {
       var cur = dom.select('*[name="' + charCountFields[i] + '"]').get(0);
       dom.select(cur.parentNode.childNodes).each(function (element, i) {
-        if (element.matches('.input-group-append')) {
-          dom.select(element.querySelectorAll('.input-group-append .input-group-text')).setInnerHTML(dom.select(cur).getValue().length);
+        console.log('----', element);
+        if (element.matches('.input-group-text')) {
+          dom.select(element).setInnerHTML(dom.select(cur).getValue().length);
         }
       })
     }
@@ -820,16 +813,16 @@ meta:
       select.appendChild(opt);
     }
 
-    dom.select('#title').setValue(fields.title);
-    dom.select('#url').setValue(fields.url.replace(/\/(.*?)\//,'').replace(/\//,''));
-    dom.select('#date').setValue(fields.date);
-    dom.select('#id').setValue(fields.id);
-    dom.select('#author').setValue(fields.author);
-    dom.select('#affiliate').setValue(fields.affiliateSearchTerm);
-    dom.select('#tags').setValue(fields.tags.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
-    dom.select('#categories').setValue(fields.categories.toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
-    dom.select('#excerpt').setValue(fields.excerpt);
-    dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag);
+    dom.select('#title').setValue(fields.title || '');
+    dom.select('#url').setValue((fields.url || '').replace(/\/(.*?)\//,'').replace(/\//,''));
+    dom.select('#date').setValue(fields.date || new Date());
+    dom.select('#id').setValue(fields.id || 1);
+    dom.select('#author').setValue(fields.author || '');
+    dom.select('#affiliate').setValue(fields.affiliateSearchTerm || '');
+    dom.select('#tags').setValue((fields.tags || '').toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
+    dom.select('#categories').setValue((fields.categories || '').toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
+    dom.select('#excerpt').setValue(fields.excerpt || '');
+    dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag || '');
 
     // special
     var serverDev = siteUrl + '/_post.json';
