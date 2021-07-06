@@ -197,9 +197,13 @@ meta:
           <label>
             Excerpt
           </label>
-          <small class="form-text text-muted">
-            Text preview of the post
-          </small>
+          <div class="d-flex justify-content-between">
+            <small class="form-text text-muted">
+              Text preview of the post
+            </small>
+            <small class="form-text text-muted word-and-character-count" data-count-source="#excerpt"></small>
+          </div>
+
           <div class="input-group mb-3">
             <textarea class="form-control" id="excerpt" name="excerpt"rows="2"></textarea>
           </div>
@@ -232,9 +236,12 @@ meta:
           <label>
             Body
           </label>
-          <small class="form-text text-muted">
-            The content of the post
-          </small>
+          <div class="d-flex justify-content-between">
+            <small class="form-text text-muted">
+              The content of the post
+            </small>
+            <small class="form-text text-muted word-and-character-count" data-count-source="#body"></small>
+          </div>
           <div class="input-group mb-3">
             <textarea class="form-control" id="body" name="body"rows="9"></textarea>
           </div>
@@ -519,6 +526,7 @@ meta:
           setupStackedit();
           setupForm();
           countChars();
+          countCharactersAndWords();
           // dom.select('#body').setValue()
           dom.select('body').on('click', function(event) {
             // allowLeave = false;
@@ -536,8 +544,35 @@ meta:
             }
           });
 
-          dom.select('body').on('keyup', function (event) {
-            countChars();
+          dom.select('body').on('change', function (event) {
+            setTimeout(function () {
+              countChars();
+              countCharactersAndWords();
+            }, 1);
+            allowLeave = false;
+          });
+
+          dom.select('body').on('keydown', function (event) {
+            setTimeout(function () {
+              countChars();
+              countCharactersAndWords();
+            }, 1);
+            allowLeave = false;
+          });
+
+          dom.select('body').on('paste', function (event) {
+            setTimeout(function () {
+              countChars();
+              countCharactersAndWords();
+            }, 1);
+            allowLeave = false;
+          });
+
+          dom.select('body').on('cut', function (event) {
+            setTimeout(function () {
+              countChars();
+              countCharactersAndWords();
+            }, 1);
             allowLeave = false;
           });
 
@@ -838,6 +873,18 @@ meta:
         }
       })
     }
+  }
+
+  function countCharactersAndWords() {
+    dom.select('.word-and-character-count').each(function (el, i) {
+      var source = dom.select(el.dataset.countSource);
+      var el = dom.select(el);
+      var value = source.getValue() || ''
+      var chars = value.length;
+      var words = value.split(' ').length;
+
+      el.setInnerHTML('(' + chars + ' characters, ' + words + ' words' + ')')
+    })
   }
 
   function setupForm() {
