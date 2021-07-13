@@ -80,8 +80,8 @@
     "through2": "^4.0.2",
     "ultimate-jekyll-poster": "^0.0.9",
     "vinyl-named": "^1.1.0",
-    "web-manager": "^2.1.11",
-    "webpack": "^5.42.1",
+    "web-manager": "^2.1.12",
+    "webpack": "^5.44.0",
     "webpack-stream": "^6.1.2",
     "yargs": "^16.2.0"
   }
