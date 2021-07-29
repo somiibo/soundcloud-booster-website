@@ -671,6 +671,7 @@ meta:
               .toLowerCase()
               .trim()
               .replace(/\s/g, '-')
+              .replace(/'|"|:|;/g, '')
             )
           }
 
