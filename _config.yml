@@ -20,6 +20,7 @@ baseurl: "" # the subpath of your site, e.g. /blog
 
 # Custom Configuration
 version: '1.0.0'
+app: 'itw-creative-works'
 meta:
   title: "Default title"
   description: "Default description"
