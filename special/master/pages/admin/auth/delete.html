@@ -47,6 +47,10 @@ settings:
   Are you sure you want to delete your account?
 </p>
 
+<div id="status" class="alert" role="alert" hidden>
+  Waiting...
+</div>
+
 <!-- Submit -->
 <a id="delete-account-button" class="btn btn-lg w-100 btn-primary mb-3">
   Delete
@@ -54,13 +58,19 @@ settings:
 
 <script type="text/javascript">
   Manager.ready(function() {
+    var statusEl = Manager.dom().select('#status');
 
     document.getElementById('delete-account-button').addEventListener('click', function () {
       var user = firebase.auth().currentUser;
       if (user && user.uid) {
+        statusEl.removeClass('alert-primary').removeClass('alert-error').removeClass('alert-success');
+        statusEl.addClass('alert-primary').setInnerHTML('Loading...');
+        statusEl.removeAttribute('hidden');
+
         user.getIdToken(false)
           .then(function(token) {
-            fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
+            // fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
+            fetch('http://localhost:5001/itw-creative-works/us-central1/bm_api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -69,8 +79,23 @@ settings:
                 payload: {},
               }),
             })
-            .finally(function () {
-              Manager.log('Account deleted', user);
+            .then(function (res) {
+              if (res.ok) {
+                res.json()
+                .then(function (data) {
+                  Manager.log('Account deleted', data);
+                  statusEl.addClass('alert-primary').setInnerHTML('Account deleted');
+                })
+              } else {
+                return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusText || 'Unknown error.')
+                })
+              }
+            })
+            .catch(function (e) {
+              Manager.log('Account delete error', e);
+              statusEl.addClass('alert-danger').setInnerHTML(e);
             });
           })
           .catch(function(e) {
