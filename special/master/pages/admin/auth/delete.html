@@ -69,8 +69,8 @@ settings:
 
         user.getIdToken(false)
           .then(function(token) {
-            // fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
-            fetch('http://localhost:5001/itw-creative-works/us-central1/bm_api', {
+            fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
+            // fetch('http://localhost:5001/itw-creative-works/us-central1/bm_api', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
