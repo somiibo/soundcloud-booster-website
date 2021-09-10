@@ -598,6 +598,11 @@ meta:
 
               Manager.log('#post-creator-form', endpoint, data);
 
+              if (data.url !== encodeURIComponent(data.url)) {
+                displayError('There is an unsafe character in your url: ' + data.url);
+                return;
+              }
+
               // Check for invalid things
               if (data.body.indexOf('[](') > -1) {
                 var bodyLines = data.body.split('\n');
