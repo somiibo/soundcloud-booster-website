@@ -1,0 +1,108 @@
+---
+### ALL PAGES ###
+layout: null
+permalink: /@reference/guides/kitchen-sink-page/
+sitemap:
+  include: false # default is true
+  priority: 0.5
+
+### REGULAR PAGES ###
+meta:
+  title: "Page Title"
+  description: "Page description."
+  breadcrumb: "default"
+  index: true # default is true
+
+head:
+  content: "
+    <!-- Inject code right before closing </head> tag -->
+  "
+
+foot:
+  content: "
+    <!-- Inject code right before closing </body> tag -->
+  "
+
+tracking:
+  google-analytics: true
+  facebook-pixel: true
+
+advertising:
+  google-adsense: "ca-pub-123456789"
+
+settings:
+  page-code: "login" # anything
+  page-type: "general" # defaults to "general", used by search
+  include-app-foot: true # true | false
+  include-app-head: true # true | false
+  include-app-footer: true # true | false
+  include-app-header: true # true | false
+  include-script-bundle: true # true | false
+  include-script-bundle-optimization: "defer" # defer | async
+  include-css-bundle: true # true | false
+  include-css-normalize: true # true | false
+  include-css-reset: false # true | false
+  include-css-defaults: true # true | false
+  include-html5shiv: true
+  include-socialsharekit: true
+  include-debug-performance: false
+  manager-configuration: "
+    {
+      auth: {
+        state: 'default', /* default | required | prohibited */
+      },
+      pushNotifications: {
+        autoRequest: 60, /* 60, 0 or false to disable */
+      }
+    }
+  "
+
+schema:
+  breadcrumbs: true
+  brand: true
+  sitelinks: true
+
+search:
+  include: true
+
+redirect:
+  url: "" # false | URL
+
+### POST ONLY ###
+post:
+  title: "Page Title"
+  description: "Page description."
+  excerpt: "Page description."
+  author: samantha
+  id: 1
+  categories: [marketing, business]
+  tags: [tag, tag2, tag3]
+  affiliate-search-term: Marketing
+
+### AUTHOR ONLY ###
+author:
+  name: Samantha Raeburn
+  position: Social Media Manager
+  excerpt: "Sam is an experienced social media expert from Beverly Hills, CA and is a major contributor to Somiibo's blog."
+
+  location: Beverly Hills, CA
+  skills: Writing, Blog Management
+  hobbies: Instagram
+  joined: 2017-10-20
+  instagram: _samraeburn
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+  </head>
+
+  <body>
+    <!-- CONTENT START -->
+
+    <!-- CONTENT END -->
+
+    {%- include /master/global/foot.html -%}
+  </body>
+
+</html>

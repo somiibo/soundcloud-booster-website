@@ -1,0 +1,6 @@
+### MASTER ###
+**/web-manager/**/*.js
+**/theme/**/*.js
+**/vendor/**/*.js
+
+### APP ###

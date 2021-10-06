@@ -1,0 +1,120 @@
+---
+### ALL PAGES ###
+layout: master/global/default
+permalink: /checkout/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Checkout"
+  description: "Checkout with our product."
+  breadcrumb: "Checkout"
+
+foot:
+  post-bundle-script: '
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+  '
+
+settings:
+  include-app-foot: false
+  include-app-head: false
+  include-app-footer: false
+  include-app-header: false
+  include-script-bundle: false
+  include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        }
+      }
+    }
+  "
+
+head:
+  content: '
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style media="screen">
+      body,html{
+          height:100%;
+      }
+
+    </style>
+
+  '
+---
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-12 text-center align-self-end">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <h1 id="" class="h2 font-weight-normal">Redirecting you to secure checkout...</h1>
+      <!-- <p id="ui-submission-subtitle" class="text-muted"></p> -->
+      <!-- <p id="ui-submission-titleerror" class="text-danger"></p> -->
+      <!-- <a class="btn btn-primary btn-lg transition-3d-hover" href="{{ site.url }}" id="ui-submission-return">Return home</a> -->
+    </div>
+    <div class="col-12 text-left align-self-end pb-3">
+      <footer class="mt-md-3 mb-md-2 pt-md-3 border-top">
+        <div class="row">
+          <div class="col-4 offset-4 text-center">
+            {%- include /master/helpers/svg.html src=site.brand.logo-image-svg class="mb-2" alt="Company logo" style="height: 45px; width: 45px;" -%}
+            <small class="d-block mb-3 text-muted">© {{ "now" | date: "%Y" }} {{ site.brand.name }}</small>
+            <ul class="list-unstyled list-inline text-small">
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}">Home</a></li>
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}/terms/">Terms</a></li>
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  Manager.auth().ready(function(user) {
+    var searchParams = Manager.properties.page.queryString;
+    var qsDestination = searchParams.get('destination');
+    var qsAuthRequired = searchParams.get('authRequired');
+
+    var currentUser = firebase.auth().currentUser;
+
+    var newURL;
+
+    if (!currentUser && qsAuthRequired !== 'false') {
+      return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
+    } else if (!qsDestination) {
+      // return window.history.back();
+      return window.location.href = '{{ site.url }}';
+    }
+
+    // Delete parameters used just on this page
+    searchParams.delete('destination');
+    searchParams.delete('authRequired');
+
+    // Add the paramaters needed for some checkouts
+    searchParams.set('uid', currentUser.uid);
+    searchParams.set('email', encodeURIComponent(currentUser.email));
+
+    // Set up and navigate to the actual destination checkout page
+    newURL = new URL(qsDestination);
+    searchParams.forEach(function (value, key) {
+      newURL.searchParams.set(key, value)
+    })
+
+    // Development
+    if (searchParams.get('development')) {
+      return console.log('Not navigating because in development: ', newURL.toString());
+    }
+
+    window.location.href = newURL.toString();
+  });
+</script>

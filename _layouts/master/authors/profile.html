@@ -1,0 +1,38 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+  </head>
+
+  <body>
+    <!-- CONTENT START -->
+    <article class="">
+
+      {% capture path %}{{ site.url }}/assets/images/blog/authors/author-{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
+      {%- include /master/helpers/image.html src=path -%}
+      <header class="">
+        <h1 class="">{{ page.author.name }}</h1>
+        <p class="">Joined: {{ page.author.joined }}</p>
+        <p class="">Skills: {{ page.author.skills }}</p>
+        <p class="">Location: {{ page.author.location }}</p>
+        <p class="">{{ page.author.excerpt }}</p>
+      </header>
+
+      <div class="" itemprop="articleBody">
+        {{ content }}
+      </div>
+
+      <h3>Socials</h3>
+      <ul>
+        <li>{{ page.author.instagram }}</li>
+      </ul>
+
+    </article>
+
+    <!-- CONTENT END -->
+    {%- include /master/global/foot.html -%}
+  </body>
+</html>

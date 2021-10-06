@@ -1,0 +1,13 @@
+/*! defaults.css v1.0.0 | MIT License | ITW Creative Works */
+@font-face {
+  font-display: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}

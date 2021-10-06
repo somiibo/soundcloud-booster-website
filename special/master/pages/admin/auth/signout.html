@@ -1,0 +1,53 @@
+---
+### ALL PAGES ###
+layout: master/admin/auth
+permalink: /admin/signout/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Signout"
+  description: "Signout of your admin account."
+  breadcrumb: "Signout"
+
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+---
+
+{%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+<!-- Heading -->
+<h1 class="display-4 text-center mb-3">
+  Sad to see ya go!
+</h1>
+
+<!-- Subheading -->
+<p class="text-muted text-center mb-5">
+  Are you sure you want to sign out?
+</p>
+
+<!-- Submit -->
+<a id="" class="btn btn-lg w-100 btn-primary mb-3 auth-signout-all-btn">
+  Signout
+</a>

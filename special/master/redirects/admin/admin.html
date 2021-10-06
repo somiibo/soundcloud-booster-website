@@ -1,0 +1,9 @@
+---
+layout: null
+permalink: /admin/
+
+sitemap:
+  include: false
+---
+{% capture redirect-url %}{{ site.url }}/admin/dashboard/{% endcapture %}
+{% include /master/misc/redirect.html url=redirect-url %}

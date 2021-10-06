@@ -1,0 +1,57 @@
+---
+### ALL PAGES ###
+layout: master/global/default
+
+### REGULAR PAGES ###
+head:
+  post-bundle-css: '
+    <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/css/libs.bundle.css">
+    <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/css/theme.bundle.css" id="stylesheetLight">
+    <!-- <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/fonts/feather/feather.css" id="stylesheetLight"> -->
+  '
+
+foot:
+  post-bundle-script: '
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+  '
+
+body:
+  class: "d-flex align-items-center bg-auth border-top border-top-2 border-primary"
+
+settings:
+  include-app-foot: false
+  include-app-head: false
+  include-app-footer: false
+  include-app-header: false
+  include-script-bundle: false
+  include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'prohibited',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+---
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-5 col-xl-4 my-5">
+      {{ content }}
+    </div>
+  </div>
+</div>

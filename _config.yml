@@ -1,0 +1,222 @@
+# Welcome to Ultimate Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+# Site configurations
+url: "https://template.itwcreativeworks.com" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+
+# Custom Configuration
+version: '1.0.0'
+app: 'itw-creative-works'
+meta:
+  title: "Default title"
+  description: "Default description"
+  og-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1024x1024.png"
+  keywords: "" # false or blank to disable, comma separated kws
+  viewport: "" # string, leave blank to use default
+
+cloudflare:
+  zone: '282d4b5b8f71a0cb5f9ccae85b905a48'
+
+socials:
+  facebook: "" # string, example: somiibo
+  twitter: "" # string, example: somiibo
+  linkedin: "" # string, example: somiibo
+  youtube: "" # string, example: somiibo
+  instagram: "" # string, example: somiibo
+  tumblr: "" # string, example: somiibo
+  slack: "" # string, example: https://somiibo.slack.com
+  discord-invite: "" # string, example: https://discord.gg/vkeZEqb
+
+comments:
+  disqus: "" # string, example: somiibo
+
+tracking:
+  google-analytics: false # false to disable, example: UA-123456789
+  facebook-pixel: false # false to disable, example: fbp-123456789
+
+advertising:
+  google-adsense: "ca-pub-7372939085773564" # false to disable, example: ca-pub-7372999999999999
+  cse-site-id: "" # example: partner-pub-7372939085773564:2814939217 (create on: https://www.google.com/adsense/new/u/5/pub-7372939085773564/main/myads-viewall-adunits?product=SELF_SERVICE_SEARCH_ADS)
+
+email-marketing: # Get this information from Mailchimp > Audience > Manage Audience > Signup forms > Embedded forms > Then look at code
+  mailchimp-user-id: "06dd652b8c707fdf51ebcff20" # string, example: 06dd652b8c707fdf51ebcff20
+  mailchimp-list-name: "" # string, example: somiibo
+  mailchimp-list-id: "" # string, example: b3456e5ffd
+
+contact:
+  email-support: "support@example.com" #string, example: support@example.com
+  email-business: "hello@example.com" #string, example: hello@example.com
+
+brand:
+  name: "Ultimate Jekyll" # example: Google
+  type: "Corporation" # example: Corporation
+  description: "Default description." # example: A search engine company.
+  logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1024x1024.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
+  logo-image-svg: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.svg
+  address-locality: "Los Angeles" # String | example: Los Angeles
+  address-country: "United States" # String | example: United States
+
+manifest:
+  name: "" # example: Google Maps
+  short-name: "" # example: Maps
+  theme-color: "#ffffff" # example: #ffffff
+  background-color: "#ffffff" # example: #ffffff
+  display: "standalone" # example: standalone
+  start-url: "index.html" # example: index.html, /maps/?source=pwa
+  scope: "/" # example: /maps/, /
+  orientation: "portrait" # example: portrait,
+
+schema:
+  breadcrumbs: true # true | false
+  brand: true # true | false
+  sitelinks: true # true | false
+
+favicon:
+  path: "" # example: /assets/images/favicon
+  safari-pinned-tab: "#5bbad5" # example: #5bbad5
+  msapp-tile-color: "#da532c" # example: #da532c"
+  theme-color: "#ffffff" # example: #ffffff
+
+search:
+  enable: true # true | false
+
+sitemap:
+  enable: true # true | false
+
+settings:
+  include-app-head: true # true | false
+  include-app-foot: true # true | false
+  include-script-bundle: true # true | false
+  include-script-bundle-optimization: "async" # defer | async | ""
+  include-css-bundle: true # true | false
+  include-css-normalize: false # true | false
+  include-css-reset: false # true | false
+  include-css-defaults: true # true | false
+  include-html5shiv: true # true | false
+  include-socialsharekit: true # true | false
+  include-debug-performance: false # true | false
+  blog-post-image-class: "" # class will be applied to all blog post images using the master include
+  manager-configuration: "
+    {
+      libraries: {
+        firebase_app: {
+          enabled: true,
+          config: {
+            apiKey: 'AIzaSyDzy5BG9-i9RmymyFx6mfwSgaRioyfa0Cc',
+            authDomain: 'ultimate-jekyll.firebaseapp.com',
+            databaseURL: 'https://ultimate-jekyll.firebaseio.com',
+            projectId: 'ultimate-jekyll',
+            storageBucket: 'ultimate-jekyll.appspot.com',
+            messagingSenderId: '837186164890',
+            appId: '1:837186164890:web:f1f59569d661078c',
+            measurementId: ''
+          }
+        },
+        cookieconsent: {
+          enabled: true,
+          config: {}
+        },
+        tawk: {
+          enabled: true,
+          config: {
+            chatId: '5df1636b43be710e1d21af38',
+            widgetId: '',
+            prechatColor: ''
+          }
+        },
+        sentry: {
+          enabled: true,
+          config: {
+            dsn: '',
+            release: 'ultimate-jekyll-website'
+          }
+        }
+      }
+    }
+  " # javascript object to set the Configuration object for Web Manager
+
+# Custom admin dashboard pages
+admin-dashboard-pages: "{
+  'pages': []
+}"
+
+# Escape shortcuts
+escapes:
+  underscore: "_"
+  asterisk: "*"
+  brace-left: "{"
+  brace-right: "}"
+  bracket-left: "["
+  bracket-right: "]"
+
+# Blog & Pagination
+permalink: /blog/:title/
+pagination:
+  enabled: true
+  per_page: 6
+  offset: 0
+  permalink: '/page/:num/'
+  title: ':title - page :num'
+  limit: 0
+  sort_field: 'date'
+  sort_reverse: true
+
+# Jekyll Defaults
+collections:
+  authors:
+    title: Authors
+    output: true
+defaults:
+- scope:
+    path: ''
+    type: authors
+  values:
+    permalink: "/blog/authors/:title/"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-paginate-v2
+  - jekyll-liquify
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+exclude:
+  # DEFAULT
+  - Gemfile
+  - Gemfile.lock
+  - gulp_tasks
+  - gulpfile.js
+  - LICENSE
+  - node_modules
+  - npm-debug.log
+  - package.json
+  - package-lock.json
+  - README.md
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - yarn.lock
+  # MASTER
+  - .placeholder
+  # APP
+
+include:
+  # MASTER
+  - .well-known

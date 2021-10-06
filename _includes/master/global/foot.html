@@ -1,0 +1,250 @@
+<!-- Master - Alert Box -->
+<div class="master-alert master-alert-outdated">
+  <span class="master-alert-close" onclick="this.parentElement.style.display='none';">&times;</span>
+  You are using an outdated browser that our site <strong>DOES NOT</strong> support. Please <a href="https://www.google.com/chrome/" rel="nofollow" target="_blank">click here</a> to update your browser.
+</div>
+
+<!-- Master - Chat Opener -->
+<a href="#" onclick="return false;" id="prechat-btn" style="display: none;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <path fill="#ffffff" d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 7.1 5.8 12 12 12 2.4 0 4.9-.7 7.1-2.4L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm16 352c0 8.8-7.2 16-16 16H288l-12.8 9.6L208 428v-60H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h384c8.8 0 16 7.2 16 16v288z"/>
+  </svg>
+</a>
+
+<!-- Performance -->
+<script type="text/javascript">
+  try {
+    window.performance.mark('manager_preBundle');
+  } catch (e) {}
+</script>
+
+<!-- App - Foot Content (pre-bundle) -->
+{%- if page.settings.include-app-foot-pre-bundle == false -%}
+{% elsif layout.settings.include-app-foot-pre-bundle == false %}
+{% elsif site.settings.include-app-foot-pre-bundle == false %}
+{% else %}
+  {% include /app/global/foot-pre-bundle.html %}
+{% endif %}
+
+<!-- Script - Bundle -->
+{%- if include.pre-bundle-script != null -%}
+  {{ include.pre-bundle-script | liquify }}
+{%- elsif page.foot.pre-bundle-script != null -%}
+  {{ page.foot.pre-bundle-script | liquify }}
+{%- elsif layout.foot.pre-bundle-script != null -%}
+  {{ layout.foot.pre-bundle-script | liquify }}
+{% endif %}
+
+{%- if page.settings.include-script-bundle == false -%}
+{% elsif layout.settings.include-script-bundle == false %}
+{% elsif site.settings.include-script-bundle == false %}
+{% else %}
+  {%- if page.settings.include-script-bundle-optimization != null -%}
+    {% assign bundle_optimization = page.settings.include-script-bundle-optimization %}
+  {%- elsif site.settings.include-script-bundle-optimization == null -%}
+    {% assign bundle_optimization = 'async' %}
+  {%- else -%}
+    {% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
+  {% endif %}
+  <script type="text/javascript" src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
+{% endif %}
+
+{%- if include.post-bundle-script != null -%}
+  {{ include.post-bundle-script | liquify }}
+{%- elsif page.foot.post-bundle-script != null -%}
+  {{ page.foot.post-bundle-script | liquify }}
+{%- elsif layout.foot.post-bundle-script != null -%}
+  {{ layout.foot.post-bundle-script | liquify }}
+{% endif %}
+
+<!-- Script - Google Analytics Tracking Script -->
+{%- if page.tracking.google-analytics == false -%}
+{% elsif layout.tracking.google-analytics == false %}
+{% elsif site.tracking.google-analytics == false %}
+{% else %}
+  <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id={{ site.tracking.google-analytics }}" async></script>
+  <script type="text/javascript" async>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', '{{ site.tracking.google-analytics }}');
+  </script>
+{% endif %}
+
+<!-- Script - Facebook Pixel Tracking Script -->
+{%- if page.tracking.facebook-pixel == false -%}
+{% elsif layout.tracking.facebook-pixel == false %}
+{% elsif site.tracking.facebook-pixel == false %}
+{% else %}
+  <script type="text/javascript" async>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '{{ site.tracking.facebook-pixel }}');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id={{ site.tracking.facebook-pixel }}&ev=PageView&noscript=1"
+    />
+  </noscript>
+{% endif %}
+
+<!-- Script - Social Share Kit Script -->
+{% assign include_socialsharekitscript = false %}
+{%- if page.layout contains 'post' -%}
+  {%- if page.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- elsif layout.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- elsif site.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- else -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- endif -%}
+{%- else -%}
+  {%- if page.settings.include-socialsharekit == true -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- elsif layout.settings.include-socialsharekit == true -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- endif -%}
+{%- endif -%}
+
+{% if include_socialsharekitscript == true %}
+  <script defer type="text/javascript">
+    {% include /master/assets/scripts/social-share-kit.js %}
+
+    SocialShareKit.init();
+  </script>
+{% endif %}
+
+<!-- Script - Google Adsense -->
+{%- if page.advertising.google-adsense == false -%}
+{% elsif layout.advertising.google-adsense == false %}
+{% elsif site.advertising.google-adsense == false %}
+{% else %}
+  <script data-ad-client="{{ site.advertising.google-adsense }}" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{% endif %}
+
+<!-- Schema - Breadcrumbs -->
+{%- if page.schema.breadcrumbs == false -%}
+{% elsif layout.schema.breadcrumbs == false %}
+{% elsif site.schema.breadcrumbs == false %}
+{% else %}
+  <div class="hidden" hidden>
+    <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+      <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}/" title="Return home">
+        <span itemprop="name">Home</span>
+      </a><meta itemprop="position" content="1" />
+    </li>
+    {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
+    {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
+    {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
+    {%- for i in (1..forLoopMaxInt) -%}
+        {%- assign pos = forloop.index -%}
+        {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
+        {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
+        {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
+        {%- for breadcrumb_page in site.pages -%}
+            {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
+            {% assign j = forLoopMaxInt | plus: 0 %}
+                <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
+                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.breadcrumb }}">
+                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb }}</span>
+                      <meta itemprop="position" content="{{ pos | plus: 1 }}" />
+                    </a>
+                </li>
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endfor -%}
+    </ol>
+  </div>
+{% endif %}
+
+<!-- Schema - Brand -->
+{%- if page.schema.brand == false -%}
+{% elsif layout.schema.brand == false %}
+{% elsif site.schema.brand == false %}
+{% else %}
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "{{ site.brand.type }}",
+    "name": "{{ site.brand.name }}",
+    "description": "{{ site.brand.description }}",
+    "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
+    "url": "{{ site.url }}",
+    "sameAs": [
+      {%- if site.socials.linkedin != null -%}
+      "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
+      {%- endif -%}
+
+      {%- if site.socials.youtube != null -%}
+      "https://www.youtube.com/channel/{{ site.socials.youtube }}",
+      {%- endif -%}
+
+      {%- if site.socials.twitter != null -%}
+      "https://twitter.com/{{ site.socials.twitter }}",
+      {%- endif -%}
+
+      {%- if site.socials.instagram != null -%}
+      "https://www.instagram.com/{{ site.socials.instagram }}/",
+      {%- endif -%}
+
+      {%- if site.socials.tumblr != null -%}
+      "https://{{ site.socials.tumblr }}.tumblr.com/",
+      {%- endif -%}
+
+      {%- if site.socials.facebook != null -%}
+      "https://www.facebook.com/{{ site.socials.facebook }}/",
+      {%- endif -%}
+
+      ""
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "{{ site.brand.address-locality }}",
+      "addressCountry": "{{ site.brand.address-country }}"
+    }
+  }
+  </script>
+{% endif %}
+
+<!-- Schema - Sitelinks -->
+{%- if page.schema.sitelinks == false -%}
+{% elsif layout.schema.sitelinks == false %}
+{% elsif site.schema.sitelinks == false %}
+{% else %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "{{ site.url }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ site.url }}/search/cse?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+{% endif %}
+
+<!-- App - Foot Content -->
+{%- if page.settings.include-app-foot == false -%}
+{% elsif layout.settings.include-app-foot == false %}
+{% elsif site.settings.include-app-foot == false %}
+{% else %}
+  {% include /app/global/foot.html %}
+{% endif %}
+
+<!-- Page - Injected head -->
+{{ layout.foot.content }}
+{{ page.foot.content }}

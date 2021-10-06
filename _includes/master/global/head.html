@@ -1,0 +1,369 @@
+<!-- Prefetch -->
+<link rel="dns-prefetch" href="https://fonts.gstatic.com/" >
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net/" >
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/" >
+
+<!-- Meta -->
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+{% if site.meta.viewport != '' and site.meta.viewport != false and site.meta.viewport != null %}
+  <meta name="viewport" content="{{ site.meta.viewport }}">
+{% else %}
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=5">
+{% endif %}
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+
+{%- if page.meta.index == false or layout.meta.index == false or site.meta.index == false -%}
+  <meta name="robots" content="noindex">
+{% endif %}
+
+{%- if page.meta.keywords != null and page.meta.keywords != "" -%}
+  <meta name="keywords" content="{{ page.meta.keywords }}">
+{%- elsif site.meta.keywords != null and site.meta.keywords != "" -%}
+  <meta name="keywords" content="{{ site.meta.keywords }}">
+{%- else -%}
+{%- endif -%}
+
+<!-- Manifest.json -->
+<link rel="manifest" href="{{ site.url }}/manifest.json">
+
+<!-- Title -->
+{%- if page.layout == 'post' and page.post.title != null and page.post.title != '' -%}
+  {% assign page-title = page.post.title | liquify %}
+{%- elsif page.meta.title != null and page.meta.title != "" -%}
+  {% assign page-title = page.meta.title | liquify %}
+{%- else -%}
+  {% assign page-title = site.meta.title | liquify %}
+{%- endif -%}
+<title>{{ page-title }}</title>
+<meta name="twitter:title" content="{{ page-title }}" />
+<meta property="og:title" content="{{ page-title }}" />
+
+<!-- Description -->
+{%- if page.layout == 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
+  {% assign page-description = page.post.excerpt | liquify %}
+{%- elsif page.meta.description != null and page.meta.description != "" -%}
+  {% assign page-description = page.meta.description | liquify %}
+{%- else -%}
+  {% assign page-description = site.meta.description | liquify %}
+{%- endif -%}
+<meta name="description" content="{{ page-description }}">
+<meta name="twitter:description" content="{{ page-description }}" />
+<meta property="og:description" content="{{ page-description }}" />
+
+<!-- Image -->
+{%- if page.layout == 'post' and page.post.id != null and page.post.id != '' -%}
+  {% capture page-image %}{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg{% endcapture %}
+{%- elsif page.meta.og-image != null and page.meta.og-image != "" -%}
+  {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
+{%- else -%}
+  {% capture page-image %}{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}{% endcapture %}
+{%- endif -%}
+<meta name="twitter:image" content="{{ page-image }}" />
+<meta property="og:image" content="{{ page-image }}" />
+
+<!-- OG: Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="{{ site.socials.twitter }}" />
+<meta name="twitter:widgets:theme" content="light">
+
+<!-- OG: Facebook / Open Graph -->
+<meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+<meta property="og:type" content="article" />
+
+<!-- Main Feed -->
+<link href="{{ site.url }}/feed.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
+
+{%- if page.settings.include-debug-performance == false -%}
+{% elsif layout.settings.include-debug-performance == false %}
+{% elsif site.settings.include-debug-performance == false %}
+{% else %}
+  <!-- Performance Metrics -->
+  <script type="text/javascript">
+    {% include /master/assets/scripts/debug/performance-metrics.js %}
+  </script>
+{% endif %}
+
+<!-- Configuration -->
+<script type="text/javascript">
+  {% assign empty-braces = site.escapes.brace-left | append: site.escapes.brace-right %}
+
+  var Configuration = {
+    page: {
+      code: '{{ page.settings.page-code | default: page.settings.breadcrumb | default: "" }}',
+      type: '{%- if page.layout == 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
+      breadcrumb: '{{ page.settings.breadcrumb }}',
+      settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
+    },
+    global: {
+      app: '{{ site.app }}',
+      version: '{{ site.version }}',
+      url: '{{ site.url }}',
+      cacheBreaker: '{{ site.time | date: '%s' }}',
+      settings: {{ site.settings.manager-configuration | default: empty-braces }},
+      brand: {
+        name: '{{ site.brand.name }}'
+      },
+      contact: {
+        emailSupport: '{{ site.contact.email-support }}',
+        emailBusiness: '{{ site.contact.email-business }}'
+      }
+    }
+  };
+</script>
+
+<!-- Redirect -->
+{%- if page.redirect.url != null and page.redirect.url != '' -%}
+  <meta http-equiv="refresh" content="0; url={{ page.redirect.url }}">
+{%- endif -%}
+
+<!-- Favicon -->
+{%- if site.favicon.path != null and site.favicon.path != '' -%}
+{% assign favicon_path = site.favicon.path %}
+{%- else -%}
+{% assign favicon_path = '/assets/images/favicon' %}
+{%- endif -%}
+
+<link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ favicon_path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ favicon_path }}/favicon-16x16.png?cb={{ site.time | date: '%s' }}">
+<link rel="mask-icon" href="{{ favicon_path }}/safari-pinned-tab.svg" color="{{ site.favicon.safari-pinned-tab }}">
+<link rel="shortcut icon" href="{{ favicon_path }}/favicon.ico?cb={{ site.time | date: '%s' }}">
+<meta name="msapplication-TileColor" content="{{ site.favicon.msapp-tile-color }}">
+<meta name="msapplication-config" content="{{ favicon_path }}/browserconfig.xml?cb={{ site.time | date: '%s' }}">
+<meta name="theme-color" content="{{ site.favicon.theme-color }}">
+
+<!-- CSS - Defaults-->
+<style type="text/css" media="screen">
+  {%- if page.settings.include-css-normalize == false -%}
+  {% elsif layout.settings.include-css-normalize == false %}
+  {% elsif site.settings.include-css-normalize == false %}
+  {% else %}
+    {% include /master/assets/css/normalize.css %}
+  {% endif %}
+
+  {%- if page.settings.include-css-reset == false -%}
+  {% elsif layout.settings.include-css-reset == false %}
+  {% elsif site.settings.include-css-reset == false %}
+  {% else %}
+    {% include /master/assets/css/reset.css %}
+  {% endif %}
+
+  {%- if page.settings.include-css-defaults == false -%}
+  {% elsif layout.settings.include-css-defaults == false %}
+  {% elsif site.settings.include-css-defaults == false %}
+  {% else %}
+  {% include /master/assets/css/defaults.css %}
+  {% endif %}
+
+  {% include /master/assets/css/cookieconsent.css %}
+</style>
+
+<!-- CSS - Social Share Kit Style -->
+{% assign include_socialsharekitscript = false %}
+{%- if page.layout contains 'post' -%}
+  {%- if page.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- elsif layout.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- elsif site.settings.include-socialsharekit == false -%}
+    {% assign include_socialsharekitscript = false %}
+  {%- else -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- endif -%}
+{%- else -%}
+  {%- if page.settings.include-socialsharekit == true -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- elsif layout.settings.include-socialsharekit == true -%}
+    {% assign include_socialsharekitscript = true %}
+  {%- endif -%}
+{%- endif -%}
+
+{% if include_socialsharekitscript == true %}
+  <style type="text/css" media="screen">
+    {% include /master/assets/css/social-share-kit.css %}
+  </style>
+{% endif %}
+
+<!-- App - Head Content (pre-bundle) -->
+{%- if page.settings.include-app-head-pre-bundle == false -%}
+{% elsif layout.settings.include-app-head-pre-bundle == false %}
+{% elsif site.settings.include-app-head-pre-bundle == false %}
+{% else %}
+  {% include /app/global/head-pre-bundle.html %}
+{% endif %}
+
+<!-- CSS - Bundle-->
+{%- if include.pre-bundle-css != null -%}
+  {{ include.pre-bundle-css | liquify }}
+{%- elsif page.head.pre-bundle-css != null -%}
+  {{ page.head.pre-bundle-css | liquify }}
+{%- elsif layout.head.pre-bundle-css != null -%}
+  {{ layout.head.pre-bundle-css | liquify }}
+{% endif %}
+
+{%- if page.settings.include-css-bundle == false -%}
+{% elsif layout.settings.include-css-bundle == false %}
+{% elsif site.settings.include-css-bundle == false %}
+{% else %}
+  <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}">
+{% endif %}
+
+{%- if include.post-bundle-css != null -%}
+  {{ include.post-bundle-css | liquify }}
+{%- elsif page.head.post-bundle-css != null -%}
+  {{ page.head.post-bundle-css | liquify }}
+{%- elsif layout.head.post-bundle-css != null -%}
+  {{ layout.head.post-bundle-css | liquify }}
+{% endif %}
+
+<!-- HTML5 Shiv -->
+{%- if page.settings.include-html5shiv == false -%}
+{% elsif layout.settings.include-html5shiv == false %}
+{% elsif site.settings.include-html5shiv == false %}
+{% else %}
+  <!--[if lt IE 9]>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <![endif]-->
+{% endif %}
+
+<!-- Initialize Manager -->
+<script type="text/javascript">
+  // Performance
+  try {
+    window.performance.mark('manager_start');
+  } catch (e) {}
+
+  function Manager$() {
+    this.properties = {};
+  };
+
+  Manager$.prototype.ready = function(fn, options) {
+    options = options || {};
+
+    setTimeout(function () {
+      Manager.auth().ready(fn, options);
+    }, options.interval || 100);
+  }
+
+  Manager$.prototype.auth = function() {
+    return {
+      ready: function (fn, options) {
+        options = options || {};
+
+        setTimeout(function () {
+          Manager.auth().ready(fn, options);
+        }, options.interval || 100);
+
+      }
+    }
+  }
+
+  // Initialize globals
+  var Manager = new Manager$();
+  // var firebase;
+  var Libraries = {
+    // app: undefined,
+    // lazysizes: undefined,
+    // cookieconsent: undefined,
+  };
+
+</script>
+
+<!-- Master - Styles -->
+<style media="screen">
+  /* Alert box */
+  .master-alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    bottom:0;
+    left:0;
+    position:fixed;
+    z-index:9999;
+    width: 100%;
+  }
+
+  .master-alert a {
+    color: white;
+    text-decoration: underline;
+  }
+  .master-alert a:hover {
+    color: black;
+  }
+
+  .master-alert-close {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .master-alert-close:hover {
+    color: black;
+  }
+
+  .master-alert-outdated {
+    display: none;
+  }
+
+  /* Chat box opener */
+  #prechat-btn {
+    position: fixed;
+    background: #237AFC;
+    color: #fff;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 1;
+    border-radius: 50%;
+    right: 20px;
+    bottom: 20px;
+    transition: background 0.5s;
+    z-index: 11;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 10px 0px;
+  }
+
+  #prechat-btn svg {
+    padding-top: 25%;
+    color: #fff;
+    width: 50%;
+    opacity: 1.0;
+    pointer-events: none;
+  }
+  #prechat-btn:hover {
+    opacity: 0.9;
+  }
+
+  @media (max-width: 768px) {
+    #prechat-btn {
+      bottom: 15px;
+    }
+  }
+</style>
+
+<!-- Style - IE 8 and Below Only -->
+<!--[if lte IE 8]>
+<link rel="stylesheet" type="text/css" href="/assets/css/master/lte-ie8.css?cb={{ site.time | date: '%s' }}">
+<![endif]-->
+
+
+<!-- App - Head Content -->
+{%- if page.settings.include-app-head == false -%}
+{% elsif layout.settings.include-app-head == false %}
+{% elsif site.settings.include-app-head == false %}
+{% else %}
+  {% include /app/global/head.html %}
+{% endif %}
+
+<!-- Page - Injected head -->
+{{ layout.head.content }}
+{{ page.head.content }}

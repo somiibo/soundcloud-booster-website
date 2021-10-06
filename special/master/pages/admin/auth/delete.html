@@ -1,0 +1,110 @@
+---
+### ALL PAGES ###
+layout: master/admin/auth
+permalink: /admin/delete/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Delete"
+  description: "Delete your admin account."
+  breadcrumb: "Delete"
+
+settings:
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/admin/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+---
+
+{%- include /master/helpers/svg.html src=site.brand.logo-image-svg width="144" height="144" class="d-block mx-auto" -%}
+<!-- Heading -->
+<h1 class="display-4 text-center mb-3">
+  Sad to see ya go!
+</h1>
+
+<!-- Subheading -->
+<p class="text-muted text-center mb-5">
+  Are you sure you want to delete your account?
+</p>
+
+<div id="status" class="alert" role="alert" hidden>
+  Waiting...
+</div>
+
+<!-- Submit -->
+<a id="delete-account-button" class="btn btn-lg w-100 btn-primary mb-3">
+  Delete
+</a>
+
+<script type="text/javascript">
+  Manager.ready(function() {
+    var statusEl = Manager.dom().select('#status');
+
+    document.getElementById('delete-account-button').addEventListener('click', function () {
+      var user = firebase.auth().currentUser;
+      if (user && user.uid) {
+        statusEl.removeClass('alert-primary').removeClass('alert-error').removeClass('alert-success');
+        statusEl.addClass('alert-primary').setInnerHTML('Loading...');
+        statusEl.removeAttribute('hidden');
+
+        user.getIdToken(false)
+          .then(function(token) {
+            fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
+            // fetch('http://localhost:5001/itw-creative-works/us-central1/bm_api', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                authenticationToken: token,
+                command: 'delete-user',
+                payload: {},
+              }),
+            })
+            .then(function (res) {
+              if (res.ok) {
+                res.json()
+                .then(function (data) {
+                  Manager.log('Account deleted', data);
+                  statusEl.addClass('alert-primary').setInnerHTML('Account deleted');
+                })
+              } else {
+                return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusText || 'Unknown error.')
+                })
+              }
+            })
+            .catch(function (e) {
+              Manager.log('Account delete error', e);
+              statusEl.addClass('alert-danger').setInnerHTML(e);
+            });
+          })
+          .catch(function(e) {
+            console.error(e);
+          });
+      } else {
+        window.location.href = '{{ site.url }}/admin/signin/';
+      }
+    })
+
+  });
+</script>

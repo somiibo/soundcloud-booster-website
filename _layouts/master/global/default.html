@@ -1,0 +1,32 @@
+---
+layout: null
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {%- include /master/global/head.html -%}
+  </head>
+
+  <body class="{{ layout.body.class }} {{ page.body.class }}">
+
+    {%- if page.settings.include-app-header == false -%}
+    {% elsif layout.settings.include-app-header == false %}
+    {% elsif site.settings.include-app-header == false %}
+    {% else %}
+      {%- include /app/elements/header.html -%}
+    {% endif %}
+
+    <!-- CONTENT START -->
+    {{ content }}
+    <!-- CONTENT END -->
+
+    {%- if page.settings.include-app-footer == false -%}
+    {% elsif layout.settings.include-app-footer == false %}
+    {% elsif site.settings.include-app-footer == false %}
+    {% else %}
+      {%- include /app/elements/footer.html -%}
+    {% endif %}
+
+    {%- include /master/global/foot.html -%}
+  </body>
+</html>

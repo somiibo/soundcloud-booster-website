@@ -1,0 +1,7 @@
+---
+layount: null
+permalink: /ads.txt
+# NOTE: Edit this in _includes/app/misc/ads.txt
+---
+google.com, pub-7372939085773564, DIRECT, f08c47fec0942fa0
+{% include /app/misc/ads.txt %}
