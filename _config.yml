@@ -48,7 +48,7 @@ comments:
   disqus: "" # string, example: somiibo
 
 tracking:
-  google-analytics: false # false to disable, example: UA-123456789
+  google-analytics: UA-104885300-28 # false to disable, example: UA-123456789
   facebook-pixel: false # false to disable, example: fbp-123456789
 
 advertising:
