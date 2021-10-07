@@ -1,0 +1,24 @@
+/*------------------------------------
+  Hero v1
+------------------------------------*/
+
+.hero-v1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  z-index: -1;
+  @include background-cover(cover, no-repeat, top, center);
+  
+  &::before {
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    width: 80%;
+    height: 80%;
+    @include gradient-y-three-colors($start-color: $gradient-transparent, $mid-color: rgba($gradient-primary, .075), $end-color: $gradient-transparent);
+    content: "";
+    @include content-centered(false, true);
+  }
+}

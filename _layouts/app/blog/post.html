@@ -1,0 +1,160 @@
+---
+layout: master/global/default
+---
+<!-- ========== MAIN ========== -->
+<main id="content" role="main">
+  <!-- Article Description Section -->
+  <div class="container space-top-3 space-bottom-2">
+    <div class="w-lg-60 mx-lg-auto">
+      <div class="mb-4">
+        <h1 class="h2">{{ page.post.title }}</h1>
+      </div>
+
+      <div class="my-4 my-sm-8">
+        {%- include /master/helpers/blog-image.html class="img-fluid rounded-lg" -%}
+        <!-- <img class="img-fluid rounded-lg" src="{{ post-header-path }}" alt="{{ page.title }}"> -->
+      </div>
+
+      <!-- Author -->
+      <!-- <div class="border-top border-bottom py-4 mb-5">
+        <div class="row align-items-md-center">
+          <div class="col-md-7 mb-5 mb-md-0">
+            <div class="media align-items-center">
+              <div class="avatar avatar-circle">
+                <img class="avatar-img" src="/assets/img/100x100/img11.jpg" alt="Image Description">
+              </div>
+              <div class="media-body font-size-1 ml-3">
+                <span class="h6"><a href="blog-profile.html">Hanna Wolfe</a> <button type="button" class="btn btn-xs btn-soft-primary font-weight-bold transition-3d-hover py-1 px-2 ml-1">Follow</button></span>
+                <span class="d-block text-muted">{{ page.date | date_to_string }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="d-flex justify-content-md-end align-items-center">
+              <span class="d-block small font-weight-bold text-cap mr-2">Share:</span>
+
+              <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle ml-2" href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle ml-2" href="#">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle ml-2" href="#">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle ml-2" href="#">
+                <i class="fab fa-telegram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <!-- End Author -->
+
+    </div>
+
+
+    <div class="w-lg-60 mx-lg-auto">
+      {{ content }}
+
+
+      <div class="card bg-img-hero bg-dark text-white text-center p-4 my-4" style="background-image: url(./assets/svg/components/abstract-shapes-1.svg);">
+        <h4 class="text-white mb-3">Like what you're reading? Subscribe to our top stories.</h4>
+        <!-- Form -->
+        <form class="js-validate w-md-75 mx-md-auto" action="{{ site.url }}/email-subscription/">
+          <div class="js-form-message">
+            <div class="d-flex align-items-center">
+              <label class="sr-only" for="subscribeSrArticle">Subscribe</label>
+              <div class="input-group">
+                <input type="email" name="auth_email" class="form-control" id="subscribeSrArticle" placeholder="Your email" aria-label="Your email">
+              </div>
+              <button type="submit" class="btn btn-light ml-3">Submit</button>
+            </div>
+          </div>
+        </form>
+        <!-- End Form -->
+
+      </div>
+
+
+    </div>
+
+    <div class="w-lg-60 mx-lg-auto">
+
+
+      <p>We are continuously putting out relevant content. If you have any questions or suggestions, please contact us!</p>
+
+      <p>Follow us on <a href="https://twitter.com/{{ site.socials.twitter }}">Twitter</a>, <a href="https://facebook.com/{{ site.socials.facebook }}">Facebook</a>, <a href="https://instagram.com/{{ site.socials.instagram }}">Instagram</a>, <a href="https://youtube.com/{{ site.socials.twitter }}">YouTube</a></p>
+
+      <!-- Badges -->
+      <!-- <div class="mt-5">
+        <a class="btn btn-xs btn-soft-secondary mb-1" href="#">Ecommerce</a>
+        <a class="btn btn-xs btn-soft-secondary mb-1" href="#">Website</a>
+        <a class="btn btn-xs btn-soft-secondary mb-1" href="#">Bootstrap</a>
+        <a class="btn btn-xs btn-soft-secondary mb-1" href="#">Startup</a>
+        <a class="btn btn-xs btn-soft-secondary mb-1" href="#">Free</a>
+      </div> -->
+      <!-- End Badges -->
+
+      <!-- Share -->
+      <!-- <div class="row justify-content-sm-between align-items-sm-center mt-5">
+        <div class="col-sm-6 mb-2 mb-sm-0">
+          <div class="d-flex align-items-center">
+            <span class="d-block small font-weight-bold text-cap mr-2">Share:</span>
+
+            <a class="btn btn-xs btn-icon btn-ghost-secondary rounded-circle mr-2" href="#">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a class="btn btn-xs btn-icon btn-ghost-secondary rounded-circle mr-2" href="#">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a class="btn btn-xs btn-icon btn-ghost-secondary rounded-circle mr-2" href="#">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a class="btn btn-xs btn-icon btn-ghost-secondary rounded-circle mr-2" href="#">
+              <i class="fab fa-telegram"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-sm-6 text-sm-right">
+          <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle mr-2" href="#" data-toggle="tooltip" data-placement="top" title="Bookmark story">
+            <i class="far fa-bookmark"></i>
+          </a>
+          <a class="btn btn-xs btn-icon btn-soft-secondary rounded-circle" href="#" data-toggle="tooltip" data-placement="top" title="Report story">
+            <i class="far fa-flag"></i>
+          </a>
+        </div>
+      </div> -->
+      <!-- End Share -->
+
+      <!-- Author -->
+      <!-- <div class="media align-items-center border-top border-bottom py-5 my-8">
+        <div class="avatar avatar-circle avatar-xl">
+          <img class="avatar-img" src="/assets/img/100x100/img11.jpg" alt="Image Description">
+        </div>
+        <div class="media-body ml-3">
+          <small class="d-block small font-weight-bold text-cap">Written by</small>
+          <h3 class="mb-0"><a href="blog-profile.html">Hanna Wolfe</a> <button type="button" class="btn btn-xs btn-soft-primary font-weight-bold transition-3d-hover py-1 px-2 ml-1">Follow</button></h3>
+          <p class="mb-0">I create advanced website builders made exclusively for web developers.</p>
+        </div>
+      </div> -->
+      <!-- End Author -->
+
+      <div class="pt-2 mb-11">
+        <!-- COMMENTS -->
+
+
+      </div>
+
+    </div>
+
+    <div class="container">
+      {%- include /app/modules/call-to-action.html -%}
+    </div>
+
+  </div>
+  <!-- End Article Description Section -->
+
+</main>
+<!-- ========== END MAIN ========== -->

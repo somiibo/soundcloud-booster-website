@@ -1,0 +1,47 @@
+// Front Default Color Variables
+// =========================================================
+
+$root-path:                                                 "../";
+
+
+
+// Grays
+$gray-100:                                                  #f7faff;
+$gray-200:                                                  #f8fafd;
+$gray-300:                                                  #e7eaf3;
+$gray-400:                                                  #bdc5d1;
+$gray-500:                                                  #97a4af;
+$gray-600:                                                  #8c98a4;
+$gray-700:                                                  #677788;
+$gray-800:                                                  #71869d;
+$gray-900:                                                  #1e2022;
+
+// Colors
+$white:                                                     #fff;
+$dark:                                                      #21325b;
+$blue:                                                      #377dff;
+$teal:                                                      #00c9a7;
+$cyan:                                                      #09a5be;
+$yellow:                                                    #f5ca99;
+$red:                                                       #ed4c78;
+$indigo:                                                    #2d1582;
+$facebook:                                                  #3b5998;
+$google:                                                    #d14130;
+$twitter:                                                   #1da1f2;
+$instagram:                                                 #3f729b;
+$github:                                                    #24292e;
+
+// Theme Colors
+$primary:                                                   $blue;
+$secondary:                                                 $gray-800;
+$success:                                                   $teal;
+$info:                                                      $cyan;
+$warning:                                                   $yellow;
+$danger:                                                    $red;
+
+// Theme Colors
+$theme-colors: () !default;
+$theme-colors: map-merge((
+  "indigo":                                                 $indigo
+), $theme-colors);
+// stylelint-enable

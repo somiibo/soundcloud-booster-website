@@ -15,21 +15,24 @@
 # in the templates via {{ site.myvariable }}.
 
 # Site configurations
-url: "https://template.itwcreativeworks.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://soundcloudbooster.com" # the base hostname & protocol for your site, e.g. http://example.com
 baseurl: "" # the subpath of your site, e.g. /blog
+
+compartment-site:
+  site: 'SoundCloud'
 
 # Custom Configuration
 version: '1.0.0'
-app: 'itw-creative-works'
+app: 'soundcloudbooster'
 meta:
-  title: "Default title"
-  description: "Default description"
+  title: "SoundCloud Bot - Get real followers, plays, likes, reposts, and comments - SoundCloudBooster"
+  description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!"
   og-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1024x1024.png"
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
 
 cloudflare:
-  zone: '282d4b5b8f71a0cb5f9ccae85b905a48'
+  zone: '03cbb630b3cb2c0b97abcf9d30570e3a'
 
 socials:
   facebook: "" # string, example: somiibo
@@ -58,13 +61,13 @@ email-marketing: # Get this information from Mailchimp > Audience > Manage Audie
   mailchimp-list-id: "" # string, example: b3456e5ffd
 
 contact:
-  email-support: "support@example.com" #string, example: support@example.com
-  email-business: "hello@example.com" #string, example: hello@example.com
+  email-support: "support@somiibo.com" #string, example: support@example.com
+  email-business: "support@somiibo.com" #string, example: hello@example.com
 
 brand:
-  name: "Ultimate Jekyll" # example: Google
+  name: "SoundCloudBooster" # example: Google
   type: "Corporation" # example: Corporation
-  description: "Default description." # example: A search engine company.
+  description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!" # example: A search engine company.
   logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1024x1024.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
   logo-image-svg: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.svg
   address-locality: "Los Angeles" # String | example: Los Angeles
@@ -86,7 +89,7 @@ schema:
   sitelinks: true # true | false
 
 favicon:
-  path: "" # example: /assets/images/favicon
+  path: "https://cdn.itwcreativeworks.com/assets/somiibo/images/favicon" # example: /assets/images/favicon
   safari-pinned-tab: "#5bbad5" # example: #5bbad5
   msapp-tile-color: "#da532c" # example: #da532c"
   theme-color: "#ffffff" # example: #ffffff
@@ -116,26 +119,37 @@ settings:
         firebase_app: {
           enabled: true,
           config: {
-            apiKey: 'AIzaSyDzy5BG9-i9RmymyFx6mfwSgaRioyfa0Cc',
-            authDomain: 'ultimate-jekyll.firebaseapp.com',
-            databaseURL: 'https://ultimate-jekyll.firebaseio.com',
-            projectId: 'ultimate-jekyll',
-            storageBucket: 'ultimate-jekyll.appspot.com',
-            messagingSenderId: '837186164890',
-            appId: '1:837186164890:web:f1f59569d661078c',
-            measurementId: ''
+            apiKey: 'AIzaSyA3-YBkywbzpstijvMqUwn_a0GQTi3EZQc',
+            authDomain: 'somiibo-91d13.firebaseapp.com',
+            databaseURL: 'https://somiibo-91d13.firebaseio.com',
+            projectId: 'somiibo-91d13',
+            storageBucket: 'somiibo-91d13.appspot.com',
+            messagingSenderId: '605660972329',
+            appId: '1:605660972329:web:4860b3b7afb8591f',
+            measurementId: 'G-PM3ZKCHLMS'
           }
         },
         cookieconsent: {
           enabled: true,
-          config: {}
+          config: {
+            palette: {
+              popup: {
+                background: '#1FB7F2',
+                text: '#fff'
+              },
+              button: {
+                background: '#fff',
+                text: '#1FB7F2'
+              }
+            }
+          }
         },
         tawk: {
           enabled: true,
           config: {
-            chatId: '5df1636b43be710e1d21af38',
-            widgetId: '',
-            prechatColor: ''
+            chatId: '5c885bdec37db86fcfcd71ed',
+            widgetId: 'default',
+            prechatColor: '#1FB7F2'
           }
         },
         sentry: {

@@ -1,0 +1,51 @@
+/*------------------------------------
+  Checkbox Bookmark
+------------------------------------*/
+
+.custom-checkbox-bookmark {
+  padding-left: 0;
+}
+
+.custom-checkbox-bookmark-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: $custom-checkbox-bookmark-label-color;
+  font-size: $custom-checkbox-bookmark-label-font-size;
+  margin-bottom: 0;
+}
+
+.custom-checkbox-bookmark-default,
+.custom-checkbox-bookmark-active {
+  margin-top: -1px;
+}
+
+.custom-checkbox-bookmark-active {
+  color: $custom-checkbox-bookmark-label-active-color;
+}
+
+.custom-checkbox-bookmark-input ~ .custom-checkbox-bookmark-label {
+  .custom-checkbox-bookmark-default {
+    display: block;
+  }
+
+  .custom-checkbox-bookmark-active {
+    display: none;
+  }
+}
+
+// Checked
+.custom-checkbox-bookmark-input:checked ~ .custom-checkbox-bookmark-label {
+  .custom-checkbox-bookmark-default {
+    display: none;
+  }
+
+  .custom-checkbox-bookmark-active {
+    display: block;
+  }
+}
+
+// Disabled
+.custom-checkbox-bookmark-input:disabled ~ .custom-checkbox-bookmark-label {
+  color: $custom-checkbox-bookmark-label-disabled-color;
+}

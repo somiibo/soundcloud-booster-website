@@ -1,0 +1,24 @@
+/*------------------------------------
+  Divider
+------------------------------------*/
+
+.divider {
+  display: flex;
+  align-items: center;
+
+  &::before,
+  &::after {
+    flex: 1 1 0%;
+    border-top: $divider-border-width $divider-border-type $divider-border-color;
+    content: "";
+    margin-top: $divider-border-width;
+  }
+
+  &::before {
+    margin-right: $divider-margin-x;
+  }
+
+  &::after {
+    margin-left: $divider-margin-x;
+  }
+}
