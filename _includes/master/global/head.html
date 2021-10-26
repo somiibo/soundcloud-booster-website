@@ -32,7 +32,7 @@
 <link rel="manifest" href="{{ site.url }}/manifest.json">
 
 <!-- Title -->
-{%- if page.layout == 'post' and page.post.title != null and page.post.title != '' -%}
+{%- if page.layout contains 'post' and page.post.title != null and page.post.title != '' -%}
   {% assign page-title = page.post.title | liquify %}
 {%- elsif page.meta.title != null and page.meta.title != "" -%}
   {% assign page-title = page.meta.title | liquify %}
@@ -44,7 +44,7 @@
 <meta property="og:title" content="{{ page-title }}" />
 
 <!-- Description -->
-{%- if page.layout == 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
+{%- if page.layout contains 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
   {% assign page-description = page.post.excerpt | liquify %}
 {%- elsif page.meta.description != null and page.meta.description != "" -%}
   {% assign page-description = page.meta.description | liquify %}
@@ -56,7 +56,7 @@
 <meta property="og:description" content="{{ page-description }}" />
 
 <!-- Image -->
-{%- if page.layout == 'post' and page.post.id != null and page.post.id != '' -%}
+{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
   {% capture page-image %}{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg{% endcapture %}
 {%- elsif page.meta.og-image != null and page.meta.og-image != "" -%}
   {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
@@ -95,7 +95,7 @@
   var Configuration = {
     page: {
       code: '{{ page.settings.page-code | default: page.settings.breadcrumb | default: "" }}',
-      type: '{%- if page.layout == 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
+      type: '{%- if page.layout contains 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.settings.breadcrumb }}',
       settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },

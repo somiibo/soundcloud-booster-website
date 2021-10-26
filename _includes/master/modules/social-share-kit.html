@@ -1,7 +1,7 @@
 <!-- Module - Social Share Kit -->
-{%- if page.layout == 'post' and page.settings.include-socialsharekit == false -%}
+{%- if page.layout contains 'post' and page.settings.include-socialsharekit == false -%}
 {% assign include_socialsharekitscript = false %}
-{%- elsif page.layout == 'post' or page.settings.include-socialsharekit != false -%}
+{%- elsif page.layout contains 'post' or page.settings.include-socialsharekit != false -%}
 {% assign include_socialsharekitscript = true %}
 {%- else -%}
 {% assign include_socialsharekitscript = false %}
