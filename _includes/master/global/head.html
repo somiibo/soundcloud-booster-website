@@ -94,9 +94,9 @@
 
   var Configuration = {
     page: {
-      code: '{{ page.settings.page-code | default: page.settings.breadcrumb | default: "" }}',
+      code: '{{ page.settings.page-code | default: page.meta.breadcrumb | default: page.post.breadcrumb | default: "" | liquify }}',
       type: '{%- if page.layout contains 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
-      breadcrumb: '{{ page.settings.breadcrumb }}',
+      breadcrumb: '{{ page.meta.breadcrumb | default: page.post.breadcrumb | liquify }}',
       settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },
     global: {
