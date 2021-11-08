@@ -3,6 +3,9 @@ layout: null
 permalink: /search/main.json/
 sitemap:
   include: false
+
+meta:
+  index: false    
 ---
 [
   {%- if site.search.enable != false -%}

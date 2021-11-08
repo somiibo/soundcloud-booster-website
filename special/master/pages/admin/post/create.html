@@ -10,6 +10,11 @@ meta:
   title: "Post"
   description: "Create blog posts with ease, including the beautiful markdown editor StackEdit."
   breadcrumb: "Post"
+  index: false
+
+post-vars:
+  ad: '{% include /master/modules/adunits/adsense-in-article.html index="1" %}'
+
 ---
 <!-- Header -->
 <div class="header mt-md-5">
@@ -676,7 +681,7 @@ meta:
               .toLowerCase()
               .trim()
               .replace(/\s/g, '-')
-              .replace(/'|"|:|;|\./g, '')
+              .replace(/[^ \w-]/igm, '')
             )
           }
 
@@ -763,15 +768,24 @@ meta:
                   // var query = query || {};
 
                   // Clean
-                  var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
-                  body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+                  var body = data.match(/<div id="contents"[^>]*>((.|[\n\r])*)<\/div>/im)[1]; // extract body
+                  // var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+                  // body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
                   body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
-                  body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+                  // body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+
+                  var title = data.match(/<div id="title"[^>]*>((.|[\n\r])*?)<\/div>/im)[1]; // extract title
+
+                  var titleEl = dom.select('#title');
 
                   // Fix no spaces with links
                   // body = body.replace(/><a/img, '> <a');
                   // body = body.replace(/><\/a/img, '> </a');
                   // body = body.replace(/<\/a></img, ' </a><');
+                  titleEl.setValue(turndownService.turndown(title))
+                  // setTimeout(function () {
+                  triggerTitleChange('title')
+                  // }, 300);
 
                   // https://github.com/domchristie/turndown
                   var markdown = turndownService.turndown(body);
@@ -789,9 +803,9 @@ meta:
                     .replace(/\s\s+\[/img, ' [') // fix double space
 
                   // Clear promo stuff
-                  markdown = markdown
-                    .replace(/Published by \[.*\)/img, '') // remove google
-                    .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
+                  // markdown = markdown
+                    // .replace(/Published using Google Docs \[.*\)/img, '') // remove google
+                    // .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
 
                   // Remove hr breaks
                   if (formData.replaceHeadings) {
@@ -829,11 +843,36 @@ meta:
                     .replace(/\n$/g, '') // fix end line-breaks
                     .replace(/\n$/g, '') // fix end line-breaks
 
+                  // Remove header if its first
+                  markdown = markdown.replace(/^#(.*?)\n/im, '')
+
+                  // remove first image and set it to the main image field
+                  var imageMatchingRegex = /!\[\]\((.*?)\)/im
+                  var firstImage = markdown.match(imageMatchingRegex)[1]
+                  markdown = markdown.replace(imageMatchingRegex, '');
+
+                  dom.select('#headerImageURL').setValue(firstImage || '');
+
+                  // Get rid of source images
+                  markdown = markdown.replace(/Image source: (.*?)\s/img, '\n');
+
+                  // Insert ads
+                  markdown = splice(markdown, getPos(markdown, '\n', 1, false), 0, '\n\n{{ page.post-vars.ad }}\n\n')
+                  markdown = splice(markdown, getPos(markdown, '\n', 5, true), 0, '\n\n{{ page.post-vars.ad }}\n\n')
+
+                  markdown = markdown.trim()
+
+                  // Set exceprt
+                  dom.select('#excerpt').setValue(markdown.match(/(?:.*?\.){2}/, ''))[0];
+
                   dom.select('#body').setValue(markdown);
                   dom.select('#google-doc-error').hide();
 
                   $('#importGoogleDoc').modal('toggle');
                   dom.select('#import-btn').removeAttribute('disabled');
+
+                  countChars();
+                  countCharactersAndWords();
                 })
               } else {
                 return res.text()
@@ -966,6 +1005,31 @@ meta:
       stackEditElement.value = file.content.text;
     });
   }
+
+  function getPos(str, char, index, backwards) {
+    var split = str.split(char);
+    var result = 0;
+    var done = false;
+
+    split.forEach(function (item, i) {
+      if (done) {return}
+      result += item.length
+      if (!backwards && i === index) {
+        done = true
+        return
+      } else if (backwards && i === split.length - index - 2) {
+        done = true
+        return
+      }
+      result += char.length
+    })
+    return result
+  }
+
+  function splice(source, idx, rem, str) {
+    return source.slice(0, idx) + str + source.slice(idx + Math.abs(rem));
+  };
+
 </script>
 
 <!-- https://benweet.github.io/stackedit.js/ -->

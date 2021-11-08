@@ -4,6 +4,9 @@ permalink: /admin/
 
 sitemap:
   include: false
+
+meta:
+  index: false  
 ---
 {% capture redirect-url %}{{ site.url }}/admin/dashboard/{% endcapture %}
 {% include /master/misc/redirect.html url=redirect-url %}
