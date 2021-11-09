@@ -157,8 +157,8 @@
             {% assign j = forLoopMaxInt | plus: 0 %}
                 <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.breadcrumb }}">
-                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb | liquify}}</span>
+                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.meta.breadcrumb | liquify }}">
+                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb | liquify }}</span>
                       <meta itemprop="position" content="{{ pos | plus: 1 }}" />
                     </a>
                 </li>
