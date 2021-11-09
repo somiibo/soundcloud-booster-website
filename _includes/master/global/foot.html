@@ -137,6 +137,7 @@
 {% elsif layout.schema.breadcrumbs == false %}
 {% elsif site.schema.breadcrumbs == false %}
 {% else %}
+  {% comment %}
   <div class="hidden" hidden>
     <ol itemscope itemtype="http://schema.org/BreadcrumbList">
     <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
@@ -157,8 +158,8 @@
             {% assign j = forLoopMaxInt | plus: 0 %}
                 <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.meta.breadcrumb | liquify }}">
-                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb | liquify }}</span>
+                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.breadcrumb }}">
+                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb | liquify}}</span>
                       <meta itemprop="position" content="{{ pos | plus: 1 }}" />
                     </a>
                 </li>
@@ -167,6 +168,47 @@
     {%- endfor -%}
     </ol>
   </div>
+  {% endcomment %}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ site.url }}"
+        },
+
+        {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
+        {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
+        {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
+        {%- for i in (1..forLoopMaxInt) -%}
+            {%- assign pos = forloop.index -%}
+            {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
+            {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
+            {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
+            {%- for breadcrumb_page in site.pages -%}
+                {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
+                {% assign j = forLoopMaxInt | plus: 0 %}
+                  {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
+                  {% capture comma %}{% if i != j %},{% endif %}{% endcapture %}
+                  {
+                    "@type": "ListItem",
+                    "position": {{ pos | plus: 1 }},
+                    "name": "{{ breadcrumb_page.meta.breadcrumb | liquify}}"{{ comma }}
+                    {% if i != j %}
+                      "item": "{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}"
+                    {% endif %}
+                  }{{ comma }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
 {% endif %}
 
 <!-- Schema - Brand -->
