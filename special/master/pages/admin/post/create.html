@@ -862,6 +862,10 @@ post-vars:
                   markdown = splice(markdown, getPos(markdown, '\n', 1, false), 0, '\n\n{{ page.post-vars.ad }}\n\n')
                   markdown = splice(markdown, getPos(markdown, '\n', 5, true), 0, '\n\n{{ page.post-vars.ad }}\n\n')
 
+                  // Replace extra line breaks to make it look nice
+                  markdown = markdown.replace(/\n{3,}/g,'\n\n')
+
+                  // Trim
                   markdown = markdown.trim()
 
                   // Set exceprt
