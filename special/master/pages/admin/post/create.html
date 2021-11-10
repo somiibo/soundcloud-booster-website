@@ -848,7 +848,7 @@ post-vars:
 
                   // remove first image and set it to the main image field
                   var imageMatchingRegex = /!\[\]\((.*?)\)/im
-                  var firstImage = markdown.match(imageMatchingRegex)[1]
+                  var firstImage = (markdown.match(imageMatchingRegex) || [])[1]
                   markdown = markdown.replace(imageMatchingRegex, '');
 
                   dom.select('#headerImageURL').setValue(firstImage || '');
@@ -863,7 +863,7 @@ post-vars:
                   markdown = markdown.trim()
 
                   // Set exceprt
-                  dom.select('#excerpt').setValue(markdown.match(/(?:.*?\.){2}/, ''))[0];
+                  dom.select('#excerpt').setValue((markdown.match(/(?:.*?\.){2}/, '') || [])[0]);
 
                   dom.select('#body').setValue(markdown);
                   dom.select('#google-doc-error').hide();
