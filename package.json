@@ -4,7 +4,7 @@
   "description": "Ultimate Jekyll starter project including full setup for gulp, Sass, Autoprefixer, PostCSS, webpack, imagemin, Browsersync etc.",
   "main": "index.js",
   "scripts": {
-    "install:pre": "bundle update",
+    "install:pre": "bundle update && bundle install",
     "start": "npm run _start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='true'",
     "_start": "bundle exec gulp clean:jekyll && bundle exec gulp",
     "prototype": "npm start",
