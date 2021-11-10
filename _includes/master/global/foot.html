@@ -180,7 +180,7 @@
           "position": 1,
           "name": "Home",
           "item": "{{ site.url }}"
-        },
+        }
 
         {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
         {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
@@ -195,14 +195,14 @@
                 {% assign j = forLoopMaxInt | plus: 0 %}
                   {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
                   {% capture comma %}{% if i != j %},{% endif %}{% endcapture %}
-                  {
+                  ,{
                     "@type": "ListItem",
                     "position": {{ pos | plus: 1 }},
                     "name": "{{ breadcrumb_page.meta.breadcrumb | liquify}}"{{ comma }}
                     {% if i != j %}
                       "item": "{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}"
                     {% endif %}
-                  }{{ comma }}
+                  }
                 {%- endif -%}
             {%- endfor -%}
         {%- endfor -%}
