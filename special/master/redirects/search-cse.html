@@ -20,7 +20,7 @@ meta:
       function getQueryStringValue (key) {
         return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
       }
-      window.location.href = "https://cse.google.com/cse?cx={{ site.advertising.cse-site-id }}&ie=UTF-8&q=" + getQueryStringValue("q");
+      window.location.href = "https://cse.google.com/cse?cx=partner-{{ site.advertising.google-adsense }}-{{ site.advertising.cse-site-id }}&ie=UTF-8&q=" + getQueryStringValue("q");
     </script>
   </body>
 </html>
