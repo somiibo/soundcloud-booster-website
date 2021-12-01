@@ -5,7 +5,7 @@
 <ins class="adsbygoogle"
      style="display:block; {{ include.style }}"
      data-ad-client="{{ site.advertising.google-adsense }}"
-     data-ad-slot="{{ include.slot }}"
+     data-ad-slot="{{ include.slot | default: page.advertising.google-adsense-display-slot | default: layout.advertising.google-adsense-display-slot | default: site.advertising.google-adsense-display-slot }}"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>
