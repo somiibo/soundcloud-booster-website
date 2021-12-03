@@ -365,5 +365,5 @@
 {% endif %}
 
 <!-- Page - Injected head -->
-{{ layout.head.content }}
-{{ page.head.content }}
+{{ layout.head.content | liquify }}
+{{ page.head.content | liquify }}
