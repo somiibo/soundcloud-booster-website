@@ -1,7 +1,9 @@
 {%- if page.advertising.google-adsense == false -%}
 {%- elsif site.advertising.google-adsense != false -%}
 <!-- Adunit - Adsense Display Ad-->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{%- if include.include-adsense-script == true -%}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{%- endif -%}
 <ins class="adsbygoogle"
      style="display:block; {{ include.style }}"
      data-ad-client="ca-{{ site.advertising.google-adsense }}"
