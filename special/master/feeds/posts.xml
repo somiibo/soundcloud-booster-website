@@ -16,18 +16,28 @@ permalink: /feeds/posts.xml
 
   {% assign sortedFeed = site.posts | limit:10 | sort: 'date' | reverse %}
   {% for post in sortedFeed %}
+  {%- capture post-title -%}
+    {%- if post.meta.title -%}
+      {{ post.meta.title }}
+    {%- else -%}
+      {{ post.post.title }}
+    {%- endif -%}
+  {%- endcapture -%}
 
     <entry>
-      <title type="html">{{ post.meta.title }}</title>
-      <link href="{{ site.url }}{{ post.url }}" rel="alternate" type="text/html" title="{{ post.meta.title }}" />
+      <title type="html">{{ post-title }}</title>
+      <link href="{{ site.url }}{{ post.url }}" rel="alternate" type="text/html" title="{{- post-title -}}" />
       <published>{{ post.date | date_to_xmlschema }}</published>
       <updated>{{ post.date | date_to_xmlschema }}</updated>
       <id>
         {{ site.url }}{{ post.url }}
       </id>
-      <icon>{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg</icon>
-      <logo>{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg</logo>
+      <icon>{{ site.url }}/assets/images/blog/posts/post-{{ post.post.id }}/{{ post.url | split: "/" | last }}.jpg</icon>
+      <logo>{{ site.url }}/assets/images/blog/posts/post-{{ post.post.id }}/{{ post.url | split: "/" | last }}.jpg</logo>
       <content type="html" xml:base="{{ site.url }}{{ post.url }}">
+        {% comment %}
+        {{ post.content | liquify }}
+        {% endcomment %}
         {{ post.content }}
       </content>
       <author>
@@ -35,7 +45,11 @@ permalink: /feeds/posts.xml
       </author>
       <category term="{{ post.post.category }}" />
       <summary type="html">
-        {{ post.meta.description }}
+        {% if post.meta.description %}
+          {{ post.meta.description }}
+        {% else %}
+          {{ post.post.excerpt }}
+        {% endif %}
       </summary>
     </entry>
 

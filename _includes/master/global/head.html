@@ -57,7 +57,7 @@
 
 <!-- Image -->
 {%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
-  {% capture page-image %}{{ site.url }}/blog/posts/{{ page.post.id }}/teaser.jpg{% endcapture %}
+  {% capture page-image %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page.url | split: "/" | last }}.jpg{% endcapture %}
 {%- elsif page.meta.og-image != null and page.meta.og-image != "" -%}
   {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
 {%- else -%}
