@@ -30,4 +30,4 @@
 
 {% capture _header-path %}/assets/images/blog/posts/post-{{ _header-id }}/{{ _header-path | replace: "/blog/", "" | replace: "/", "" | replace: ".jpg", "" | replace: ".jpeg", "" | replace: ".png", "" }}.jpg{% endcapture %}
 
-{%- include /master/helpers/image.html src=_header-path class=_header-class alt=_header-alt style=_header-style max_width="1024" -%}
+{%- include /master/helpers/image.html src=_header-path class=_header-class alt=_header-alt style=_header-style max_width="1024" width=include.width height=include.height -%}
