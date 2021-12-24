@@ -7,6 +7,8 @@ Slapform.prototype.process = function (event) {
   var dom = Manager.dom();
   var formData = {};
   var idSelector = '#' + event.target.id;
+  var slapType = event.target.dataset.slapType || 'form';
+  var action = event.target.getAttribute('action');
   setDisabled(true);
   var checkboxNames = [];
   var errorElement = event.target.getElementsByClassName('slapform-validation-error')[0];
@@ -30,22 +32,44 @@ Slapform.prototype.process = function (event) {
       return false;
     }
   });
+
+  formData._source = 'ultimate-jekyll';
+  formData._version = '';
+  formData._referrer = window.location.href;
+
+  try {
+    var currentUser = firebase.auth().currentUser;
+    formData.uid = currentUser.uid;
+    if (!formData.email && !formData.slap_replyto) {
+      formData.slap_replyto = currentUser.email;
+    }
+  } catch (e) {}
+
   Manager.log(formData);
 
   if (pass) {
-    fetch(dom.select(idSelector).getAttribute('action'), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
-    .then(function (res) {
-      setError();
-      window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
-    })
-    .catch(function (e) {
-      setError(e);
-      setDisabled(false);
-    });
+    if (slapType === 'form') {
+      var newURL = new URL(action)
+      Object.keys(formData)
+      .forEach((key, i) => {
+        newURL.searchParams.set(key, formData[key])
+      });
+      window.location.href = newURL.toString();
+    } else {
+      fetch(action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      .then(function (res) {
+        setError();
+        window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
+      })
+      .catch(function (e) {
+        setError(e);
+        setDisabled(false);
+      });
+    }
   } else {
     setDisabled(false);
   }
