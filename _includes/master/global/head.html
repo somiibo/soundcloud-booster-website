@@ -36,6 +36,8 @@
   {% assign page-title = page.post.title | liquify %}
 {%- elsif page.meta.title != null and page.meta.title != "" -%}
   {% assign page-title = page.meta.title | liquify %}
+{%- elsif layout.meta.title != null and layout.meta.title != "" -%}
+  {% assign page-title = layout.meta.title | liquify %}
 {%- else -%}
   {% assign page-title = site.meta.title | liquify %}
 {%- endif -%}
@@ -48,6 +50,8 @@
   {% assign page-description = page.post.excerpt | liquify %}
 {%- elsif page.meta.description != null and page.meta.description != "" -%}
   {% assign page-description = page.meta.description | liquify %}
+{%- elsif layout.meta.description != null and layout.meta.description != "" -%}
+  {% assign page-description = layout.meta.description | liquify %}
 {%- else -%}
   {% assign page-description = site.meta.description | liquify %}
 {%- endif -%}
