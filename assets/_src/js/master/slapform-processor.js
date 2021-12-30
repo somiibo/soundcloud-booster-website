@@ -11,7 +11,6 @@ Slapform.prototype.process = function (event) {
   var action = event.target.getAttribute('action');
   setDisabled(true);
   var checkboxNames = [];
-  var errorElement = event.target.getElementsByClassName('slapform-validation-error')[0];
   var pass;
 
   dom.select(idSelector + ' input, ' + idSelector + ' select, ' + idSelector + ' textarea').each(function (el, i) {
@@ -28,7 +27,7 @@ Slapform.prototype.process = function (event) {
     pass = (!required || (required && !!valToCheck));
     console.log(name, formData[name], 'required = ' + required, 'pass = ' + pass);
     if (!pass) {
-      setError('Please fill out all of the required fields.');
+      setStatus(new Error('Please fill out all of the required fields.'));
       return false;
     }
   });
@@ -62,26 +61,30 @@ Slapform.prototype.process = function (event) {
         body: JSON.stringify(formData),
       })
       .then(function (res) {
-        setError();
+        setStatus('success');
         window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
       })
       .catch(function (e) {
-        setError(e);
+        setStatus(e);
         setDisabled(false);
       });
     }
   } else {
     setDisabled(false);
   }
-  function setError(e) {
-    var errorSelector = dom.select(errorElement);
-    Manager.log('FAIL', e);
-    if (e) {
-      errorSelector.show().setInnerHTML(e);
-    } else {
-      errorSelector.hide();
+
+  function setStatus(status, message) {
+    var errorElement = dom.select(event.target.getElementsByClassName('slapform-error')[0]);
+    var successElement = dom.select(event.target.getElementsByClassName('slapform-success')[0]);
+    errorElement.setAttribute('hidden', true)
+    successElement.setAttribute('hidden', true)
+    if (status instanceof Error) {
+      errorElement.removeAttribute('hidden').setInnerHTML(status);
+    } else if (status === 'success') {
+      successElement.removeAttribute('hidden').setInnerHTML(message || 'Success! Please allow a few business days for our team to get back to you.');
     }
   }
+
   function setDisabled(status) {
     Manager.log('setting disalbed = ', status);
     var btn = dom.select(idSelector + ' button[type=\'submit\']');
