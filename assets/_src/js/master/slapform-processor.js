@@ -62,7 +62,7 @@ Slapform.prototype.process = function (event) {
       })
       .then(function (res) {
         setStatus('success');
-        window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
+        // window.location.href = 'https://slapform.com/submission?meta=' + encodeURIComponent('{"status":"success","referrer":"' + (formData['slap_redirect'] || window.location.href) + '"}');
       })
       .catch(function (e) {
         setStatus(e);
