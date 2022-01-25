@@ -21,7 +21,7 @@ gulp.task('cloudflare:purge', async function () {
         },
         zone: doc.cloudflare.zone,
         command: 'purge_cache',
-        delay: parseInt(argv.delay) || 500,
+        delay: parseInt(argv.delay) || (500 * 1000),
       }),
       timeout: parseInt(argv.timeout) || 30000,
     })
