@@ -55,6 +55,23 @@ post-vars:
 <div class="loaded-true" hidden>
   <form class="mb-4" onsubmit="return false;" id="post-creator-form">
 
+    <div id="previous-post-container" hidden>
+      <h2 class="header-title my-3">
+        Previos post
+      </h2>
+
+      <div class="row">
+        <div class="col-12">
+          Details
+          <div class="alert alert-secondary">
+            <div><strong>ID:</strong> <span id="previous-post-id"></span> </div>
+            <div><strong>Slug:</strong> <span id="previous-post-slug"></span> </div>
+            <div><strong>URL:</strong> <span id="previous-post-url"></span> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <h2 class="header-title my-3">
       Post details
     </h2>
@@ -475,6 +492,8 @@ post-vars:
   // fields
   var fields = {};
   var authors = [];
+  var publicSiteUrl = '{{ site.url }}';
+
   {% for post in site.posts limit:1 %}
   fields = {
     // title: "{{ post.post.title }}",
@@ -514,6 +533,16 @@ post-vars:
   var buildFile = {};
 
   Manager.ready(function() {
+
+    var lastPost = Manager.storage().get('admin.post');
+
+    if (lastPost.lastId) {
+      fields.id = lastPost.lastId + 1;
+      Manager.dom().select('#previous-post-container').removeAttribute('hidden');
+      Manager.dom().select('#previous-post-id').setInnerHTML(lastPost.lastId);
+      Manager.dom().select('#previous-post-slug').setInnerHTML(lastPost.lastSlug);
+      Manager.dom().select('#previous-post-url').setInnerHTML(lastPost.lastUrl);
+    }
 
     fetch(siteUrl + '/@output/build/build.json', {
       method: 'GET',
@@ -624,6 +653,11 @@ post-vars:
                 displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
                 return;
               }
+
+              var lastUrl = 'blog/' + data.url;
+              Manager.storage().set('admin.post.lastId', data.id)
+              Manager.storage().set('admin.post.lastSlug', lastUrl)
+              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
 
               fetch(endpoint, {
                 method: 'POST',
