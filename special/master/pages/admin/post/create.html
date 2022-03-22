@@ -534,7 +534,7 @@ post-vars:
 
   Manager.ready(function() {
 
-    var lastPost = Manager.storage().get('admin.post');
+    var lastPost = Manager.storage().get('admin.post') || {};
 
     if (lastPost.lastId) {
       fields.id = lastPost.lastId + 1;
