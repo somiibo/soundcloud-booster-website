@@ -85,6 +85,6 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
-    "ultimate-jekyll-poster": "file:../ultimate-jekyll-poster"
+    "ultimate-jekyll-poster": "^0.0.10"
   }
 }
