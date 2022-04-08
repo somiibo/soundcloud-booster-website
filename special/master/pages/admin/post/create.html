@@ -65,8 +65,9 @@ post-vars:
           Details
           <div class="alert alert-secondary">
             <div><strong>ID:</strong> <span id="previous-post-id"></span> </div>
-            <div><strong>Slug:</strong> <span id="previous-post-slug"></span> </div>
             <div><strong>URL:</strong> <span id="previous-post-url"></span> </div>
+            <div><strong>Slug:</strong> <span id="previous-post-slug"></span> </div>
+            <div><strong>Invoice:</strong> <span id="previous-post-invoice"></span> </div>
           </div>
         </div>
       </div>
@@ -357,6 +358,53 @@ post-vars:
 
     </div>
 
+    <hr class="mt-4 mb-5">
+
+    <h2 class="header-title my-3">
+      Invoice options
+    </h2>
+    <div class="row">
+
+      <div class="col-12">
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="enableInvoice" name="enableInvoice" checked>
+          <label class="form-check-label" for="enableInvoice">Enable invoice options</label>
+        </div>
+      </div>
+
+      <div class="col-12" id="invoiceOptions">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label>
+                Invoice email
+              </label>
+              <small class="form-text text-muted">
+                Email that the invoice will be sent to
+              </small>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label>
+                Invoice price
+              </label>
+              <small class="form-text text-muted">
+                Price of the invoice
+              </small>
+              <div class="input-group mb-3">
+                <input type="number" class="form-control" id="invoicePrice" name="invoicePrice" placeholder="30" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <!-- Divider -->
     <hr class="mt-4 mb-5">
 
@@ -541,6 +589,7 @@ post-vars:
       Manager.dom().select('#previous-post-container').removeAttribute('hidden');
       Manager.dom().select('#previous-post-id').setInnerHTML(lastPost.lastId);
       Manager.dom().select('#previous-post-slug').setInnerHTML(lastPost.lastSlug);
+      Manager.dom().select('#previous-post-invoice').setInnerHTML(lastPost.lastInvoice);
       Manager.dom().select('#previous-post-url').setInnerHTML(lastPost.lastUrl);
     }
 
@@ -561,6 +610,7 @@ post-vars:
           setupForm();
           countChars();
           countCharactersAndWords();
+          handleChangeEvent();
           // dom.select('#body').setValue()
           dom.select('body').on('click', function(event) {
             // allowLeave = false;
@@ -582,6 +632,7 @@ post-vars:
             setTimeout(function () {
               countChars();
               countCharactersAndWords();
+              handleChangeEvent()
             }, 1);
             allowLeave = false;
           });
@@ -615,22 +666,27 @@ post-vars:
             displayWaiting();
             // var endpoint = '{{ site.url }}/admin/post/create.json';
             var endpoint = dom.select('#processingAddy').getValue();
+            var postHandlerEndpoint = 'https://us-central1-{projectId}.cloudfunctions.net/bm_api'
+              .replace(/{projectId}/igm, Manager.properties.options.libraries.firebase_app.config.projectId)
             // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
 
             var token = '';
             firebase.auth().currentUser.getIdToken(true)
-            .then(function(token) {
-              token = token;
+            .then(function(tkn) {
+              token = tkn;
 
-              var data = {};
-              dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
-              .each(function (el, i) {
-                var curField = dom.select(el);
-                data[curField.getAttribute('name')] = curField.getValue();
-              });
-              data.authenticationToken = token;
+              var data = getFormData();
+
+              data.postHandlerEndpoint = postHandlerEndpoint;
 
               Manager.log('#post-creator-form', endpoint, data);
+
+              if (data.enableInvoice && (!data.invoiceEmail || !data.invoicePrice)) {
+                displayError('If invoice is enabled then email and price must also be filled');
+                return;
+              }
+
+              data.invoicePrice = parseInt(data.invoicePrice) + '.00';
 
               if (data.url !== encodeURIComponent(data.url)) {
                 displayError('There is an unsafe character in your url: ' + data.url);
@@ -654,21 +710,38 @@ post-vars:
                 return;
               }
 
+              if (data.excerpt.match(/\[*.\]\(/)) {
+                displayError('There is a link or image in the excerpt');
+                return;
+              }
+
               var lastUrl = 'blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
               Manager.storage().set('admin.post.lastSlug', lastUrl)
               Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
+              Manager.storage().set('admin.post.lastInvoice', 'Manual')
 
               fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                  authenticationToken: token,
+                  command: 'admin:create-post',
+                  payload: data,
+                }),
               })
               .then(function (res) {
                 if (res.status >= 200 && res.status < 300) {
                   res.json()
                   .then(function (data) {
                     console.log('Success', data);
+
+                    if (data.data.postHandler.success) {
+                      Manager.storage().set('admin.post.lastInvoice', data.data.postHandler.data.href)
+                    } else {
+                      Manager.storage().set('admin.post.lastInvoice', data.data.postHandler.data)
+                    }
+
                     // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
 
                     // console.log(one,two,three);
@@ -782,7 +855,7 @@ post-vars:
             var formData = {};
             dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
               var curField = dom.select(el);
-              formData[curField.getAttribute('name')] = curField.getValue();
+              formData[curFhield.getAttribute('name')] = curField.getValue();
             })
 
             Manager.log('#google-doc-form', formData);
@@ -948,6 +1021,26 @@ post-vars:
     }
   });
 
+  function getFormData() {
+    var data = {}
+    dom.select('#post-creator-form input, #post-creator-form select, #post-creator-form textarea')
+    .each(function (el, i) {
+      var curField = dom.select(el);
+      data[curField.getAttribute('name')] = curField.getValue();
+    });
+    return data;
+  }
+
+  function handleChangeEvent() {
+    var data = getFormData();
+    var invoiceOptions = dom.select('#invoiceOptions');
+    if (data.enableInvoice) {
+      invoiceOptions.removeAttribute('hidden')
+    } else {
+      invoiceOptions.setAttribute('hidden', true)
+    }
+  }
+
   function countChars() {
     var charCountFields = ['title', 'url', 'excerpt'];
     for (var i = 0; i < charCountFields.length; i++) {
@@ -980,10 +1073,11 @@ post-vars:
       opt.innerHTML = authors[i];
       select.appendChild(opt);
     }
+    var date = new Date();
 
     dom.select('#title').setValue(fields.title || '');
     dom.select('#url').setValue((fields.url || '').replace(/\/(.*?)\//,'').replace(/\//,''));
-    dom.select('#date').setValue(fields.date || new Date());
+    dom.select('#date').setValue(fields.date || date);
     dom.select('#id').setValue(fields.id || 1);
     dom.select('#author').setValue(fields.author || '');
     dom.select('#affiliate').setValue(fields.affiliateSearchTerm || '');
@@ -991,11 +1085,12 @@ post-vars:
     dom.select('#categories').setValue((fields.categories || '').toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
     dom.select('#excerpt').setValue(fields.excerpt || '');
     dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag || '');
+    dom.select('#path').setValue('./_posts/guest/' + date.getFullYear());
 
     // special
     var serverDev = siteUrl + '/_post.json';
-    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_createPost';
-    var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_createPost';
+    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
+    var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
     var env = buildFile.environment;
     dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
     dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);

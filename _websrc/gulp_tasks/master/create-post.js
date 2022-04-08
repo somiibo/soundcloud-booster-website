@@ -50,6 +50,7 @@ Post.prototype.create = async function (options) {
           resolve();
         });
       }
+      // console.log('----body 1', body);
       let finalPost = await poster.create(JSON.parse(body))
       .catch(function (e) {
         response.status = 500;
@@ -72,6 +73,7 @@ Post.prototype.create = async function (options) {
 
       if (response.status == 200) {
         poster.write(finalPost.path, finalPost.content);
+        response.data = finalPost;
       }
 
       res.statusCode = response.status;
