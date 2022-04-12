@@ -82,7 +82,7 @@ Post.prototype.create = async function (options) {
       const responseBody = { headers, method, url, body };
 
       // console.log('------response', response);
-      res.write(JSON.stringify(response));
+      res.write(JSON.stringify(response.data));
       return resolve(res.end());
     });
   });

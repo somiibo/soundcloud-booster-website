@@ -736,10 +736,10 @@ post-vars:
                   .then(function (data) {
                     console.log('Success', data);
 
-                    if (data.data.postHandler.success) {
-                      Manager.storage().set('admin.post.lastInvoice', data.data.postHandler.data.href)
+                    if (data.postHandler.success) {
+                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.href)
                     } else {
-                      Manager.storage().set('admin.post.lastInvoice', data.data.postHandler.data)
+                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
                     }
 
                     // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
