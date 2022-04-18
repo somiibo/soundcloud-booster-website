@@ -194,9 +194,9 @@ settings:
       })
 
       if (Manager.properties.meta.environment === 'development') {
-        Manager.dom().select('#notification-address').setValue('http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification');
+        Manager.dom().select('#notification-address').setValue('http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api');
       } else {
-        Manager.dom().select('#notification-address').setValue('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification');
+        Manager.dom().select('#notification-address').setValue('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api');
       }
     });
 
@@ -273,6 +273,7 @@ settings:
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 authenticationToken: token,
+                command: 'admin:send-notification'
                 payload: {
                   icon: '{{ site.brand.logo-image }}',
                   click_action: '{{ site.url }}',

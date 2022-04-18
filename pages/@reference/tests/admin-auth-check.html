@@ -109,8 +109,8 @@ settings:
 <script type="text/javascript">
   Manager.ready(function() {
 
-    var serverAddyDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_test_authorize';
-    var serverAddyProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_test_authorize';
+    var serverAddyDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+    var serverAddyProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
 
     Manager.dom().select('#server-addy').setValue(serverAddyDev);
     Manager.dom().select('#server-addy-dev').setValue(serverAddyDev);
@@ -122,17 +122,18 @@ settings:
     }
 
     document.body.addEventListener('click', function(event) {
-      // let project = https://us-central1-' + This.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_signUpHandler
       var projectId = Manager.properties.options.libraries.firebase_app.config.projectId;
-      // var authUrl = 'https://us-central1-' + projectId + '.cloudfunctions.net/bm_test_admin';
-      // var authUrl = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_test_admin';
       var authUrl = Manager.dom().select('#server-addy').getValue();
       if (event.target.matches('#auth-check-key')) {
 
         fetch(authUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({backendManagerKey: Manager.dom().select('#auth-key-input').getValue()}),
+          body: JSON.stringify({
+            backendManagerKey: Manager.dom().select('#auth-key-input').getValue(),
+            command: 'test:authenticate',
+            payload: {},
+          }),
         })
         .then(function (res) { // This function runs only on success
           if (res.status >= 200 && res.status < 300) {

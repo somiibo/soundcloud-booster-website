@@ -63,7 +63,7 @@ sitemap:
     referrals: {
       // TIMESTAMPS for referrals as KEYS
     },
-    referredBy: "",
+    referrer: "",
     prizeRedemptions: {
 
     }

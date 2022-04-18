@@ -352,8 +352,8 @@ meta:
 
     function runQuery(field) {
       var searchText = dom.select('#search-input').getValue();
-      var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_query';
-      var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_query';
+      var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+      var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
 
       return new Promise(function(resolve, reject) {
         if (!searchText) {
@@ -363,19 +363,22 @@ meta:
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              queries: [
-                {
-                  collection: 'users',
-                  orderBy: [
-                    { field: 'activity.created.timestampUNIX', order: 'desc' },
-                    // { field: 'auth.uid', order: 'asc' },
-                  ],
-                  filter: [
-                    { field: 'auth.email || auth.uid', matches: '/' + searchText + '/i' },
-                  ],
-                },
-              ],
-              authenticationToken: window.token
+              authenticationToken: window.token,
+              command: 'admin:firestore-query',
+              payload: {
+                queries: [
+                  {
+                    collection: 'users',
+                    orderBy: [
+                      { field: 'activity.created.timestampUNIX', order: 'desc' },
+                      // { field: 'auth.uid', order: 'asc' },
+                    ],
+                    filter: [
+                      { field: 'auth.email || auth.uid', matches: '/' + searchText + '/i' },
+                    ],
+                  },
+                ],
+              }
             }),
           })
           .then(function (res) {

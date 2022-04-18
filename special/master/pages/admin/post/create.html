@@ -668,7 +668,6 @@ post-vars:
             var endpoint = dom.select('#processingAddy').getValue();
             var postHandlerEndpoint = 'https://us-central1-{projectId}.cloudfunctions.net/bm_api'
               .replace(/{projectId}/igm, Manager.properties.options.libraries.firebase_app.config.projectId)
-            // endpoint = 'http://localhost:5001/ultimate-jekyll/us-central1/bm_createPost';
 
             var token = '';
             firebase.auth().currentUser.getIdToken(true)

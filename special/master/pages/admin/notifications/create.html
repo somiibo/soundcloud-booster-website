@@ -269,8 +269,8 @@ meta:
             dom.select('#body').setValue("");
 
             // special
-            var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
-            var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
+            var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+            var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
             var env = buildFile.environment;
             dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
             dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
@@ -297,6 +297,7 @@ meta:
                 data[curField.getAttribute('name')] = curField.getValue();
               });
               finalData.authenticationToken = token;
+              finalData.command = 'admin:send-notification';
               finalData.payload = {};
               finalData.payload.title = data.title;
               finalData.payload.icon = data.icon;

@@ -854,8 +854,8 @@ meta:
 <script type="text/javascript">
 
   Manager.auth().ready(function(user) {
-    var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_getStats';
-    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_getStats';
+    var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
 
     // https://stackoverflow.com/a/2901298/7305269
     function numberWithCommas(x) {
@@ -870,6 +870,8 @@ meta:
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               authenticationToken: token,
+              command: 'admin:get-stats',
+              payload: {},
             }),
             timeout: 20000,
           })
