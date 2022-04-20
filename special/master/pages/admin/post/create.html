@@ -272,7 +272,7 @@ post-vars:
       </div>
       <div class="col-12">
         <div class="d-flex justify-content-between mt-3">
-          <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100" id="stackedit-edit">Edit in StackEdit</a>
+          <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100 me-3" id="stackedit-edit">Edit in StackEdit</a>
           <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-toggle="modal" data-target="#importGoogleDoc">Import from Google Docs</a>
         </div>
       </div>
@@ -382,9 +382,42 @@ post-vars:
               <small class="form-text text-muted">
                 Email that the invoice will be sent to
               </small>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
+              <div class="d-flex">
+                <div class="flex-grow-1">
+                  <div class="input-group mb-3">
+                    <input type="email" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
+                  </div>
+                </div>
+                <div class="ms-3">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="invoiceEmailDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Insert
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="invoiceEmailDropdownButton" id="invoiceEmailDropdownList">
+                    </div>
+                  </div>
+                </div>
               </div>
+              <!-- <div class="row">
+                <div class="col">
+                  <div class="input-group mb-3">
+                    <input type="email" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="dropdown mb-2 me-2">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="invoiceEmailDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Dropdown button
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="invoiceEmailDropdownButton" style="">
+                      <a class="dropdown-item" href="#!">Action</a>
+                      <a class="dropdown-item" href="#!">Another action</a>
+                      <a class="dropdown-item" href="#!">Something else here</a>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
             </div>
           </div>
           <div class="col-6">
@@ -600,6 +633,7 @@ post-vars:
       if (res.status >= 200 && res.status < 300) {
         res.json()
         .then(function (data) {
+          var invoiceEmailEl = document.getElementById('invoiceEmail')
           console.log('Success', data);
           // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
 
@@ -612,6 +646,17 @@ post-vars:
           countCharactersAndWords();
           handleChangeEvent();
           // dom.select('#body').setValue()
+
+          var newDropdownHTML = '<a class="dropdown-item disabled" href="#" disabled>None</a>';
+          Manager.storage().get('admin.post.invoiceEmails', [])
+          .forEach((item, i) => {
+            if (item) {
+              newDropdownHTML = '<a class="dropdown-item insert-invoice-email" href="#" data-invoice-email="' + item + '">' + item + '</a>';
+            }
+          });
+
+          document.getElementById('invoiceEmailDropdownList').insertAdjacentHTML('beforeend', newDropdownHTML)
+
           dom.select('body').on('click', function(event) {
             // allowLeave = false;
             if (event.target.matches('#stackedit-edit')) {
@@ -625,6 +670,9 @@ post-vars:
             } else if (event.target.matches('#url-format-btn')) {
               event.preventDefault();
               triggerTitleChange('url')
+            } else if (event.target.matches('.insert-invoice-email')) {
+              event.preventDefault();
+              invoiceEmailEl.value = event.target.dataset.invoiceEmail
             }
           });
 
@@ -719,6 +767,10 @@ post-vars:
               Manager.storage().set('admin.post.lastSlug', lastUrl)
               Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
               Manager.storage().set('admin.post.lastInvoice', 'Manual')
+
+              var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
+              existingInvoiceEmails.unshift(data.invoiceEmail);
+              Manager.storage().set('admin.post.invoiceEmails', existingInvoiceEmails)
 
               fetch(endpoint, {
                 method: 'POST',
