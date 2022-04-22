@@ -83,8 +83,5 @@
     "webpack": "^5.72.0",
     "webpack-stream": "^6.1.2",
     "yargs": "^16.2.0"
-  },
-  "dependencies": {
-    "ultimate-jekyll-poster": "^0.0.10"
   }
 }
