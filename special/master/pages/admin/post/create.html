@@ -906,7 +906,7 @@ post-vars:
             var formData = {};
             dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
               var curField = dom.select(el);
-              formData[curFhield.getAttribute('name')] = curField.getValue();
+              formData[curField.getAttribute('name')] = curField.getValue();
             })
 
             Manager.log('#google-doc-form', formData);
