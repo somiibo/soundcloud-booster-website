@@ -37,7 +37,6 @@ gulp.task('browsersync', async function () {
             return await post.create({
               req: req,
               res: res,
-              test: {test: 'test'},
             })
             // res.write(JSON.stringify({test: 'penis'}));
             // return res.end();
