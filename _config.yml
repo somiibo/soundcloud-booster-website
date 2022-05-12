@@ -47,6 +47,7 @@ comments:
 tracking:
   google-analytics: false # false to disable, example: UA-123456789
   facebook-pixel: false # false to disable, example: fbp-123456789
+  tiktok-pixel: false # false to disable, example: D4829D83H38929384H48
 
 advertising:
   google-adsense: "pub-7372939085773564" # false to disable, example: ca-pub-7372999999999999

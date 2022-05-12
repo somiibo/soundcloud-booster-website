@@ -8,20 +8,24 @@ sitemap:
 
 // self.addEventListener('install', function(event) {
 // });
+var window = self;
 var SWManager = {
   config: {},
-  version: '{{ site.version }}',
+  version: '',
   brand: {
-    name: 'default',
+    name: 'Default',
   },
+  app: 'default',
   environment: 'production',
   libraries: {
     main: true,
     app: false,
+    firebase: false,
+    promoServer: false,
     cachePolyfill: false,
   },
   cache: {
-    breaker: '{{ site.time | date: "%s" }}',
+    breaker: '',
     name: ''
   }
 };
@@ -32,15 +36,22 @@ try {
   SWManager.version = SWManager.config.v;
   SWManager.environment = SWManager.config.env;
   SWManager.brand.name = SWManager.config.name;
-  log('master-service-worker.js setup: ', self.location.pathname, SWManager)
+  SWManager.app = SWManager.config.id || (SWManager.brand.name.toLowerCase().replace(' ', '-') || 'default');
+  SWManager.cache.breaker = SWManager.config.cb;
+  SWManager.cache.name = SWManager.app + '-' + SWManager.cache.breaker;
+  log('master-service-worker.js setup: ', self.location.pathname, SWManager.cache.name, SWManager)
 } catch (e) {
-  log('master-service-worker.js failed setup.')
+  console.error('master-service-worker.js failed setup.', e)
 }
 
 // Load Firebase Messaging
 try {
+  // NEED TO POLYFILL XMLHttpRequest in order to use promo-server
+  // importScripts('https://gist.githubusercontent.com/lemonhall/3120320/raw/af9113b06ead851159cd643a686881e577920ed1/gistfile1.js');
   importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-app.js');
   importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-messaging.js');
+  // importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-database.js');
+  // importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-firestore.js');
 
   // if (typeof firebase === 'undefined') {
   //   throw new Error('hosting/init-error: Firebase SDK not detected.');
@@ -48,85 +59,100 @@ try {
 
   firebase.initializeApp(SWManager.config.firebase);
   var messaging = firebase.messaging();
+  SWManager.libraries.firebase = firebase;
   log('master-service-worker.js initialized Firebase.');
 } catch (e) {
-  log('master-service-worker.js failed to initialize Firebase.');
+  console.error('master-service-worker.js failed to initialize Firebase.', e);
 }
 
 // Cache
 try {
-  // importScripts('libraries/serviceworker-cache-polyfill.js');
-  SWManager.libraries.cachePolyfill = true;
-  SWManager.cache.name = (SWManager.brand.name.toLowerCase().replace(' ', '') || 'default') + '-' + SWManager.cache.breaker;
-  log('master-service-worker.js cache name = ' + SWManager.cache.name);
-  // Refresh button breaks: https://redfin.engineering/how-to-fix-the-refresh-button-when-using-service-workers-a8e27af6df68
-  // - https://redfin.engineering/service-workers-break-the-browsers-refresh-button-by-default-here-s-why-56f9417694
-  // example of apparently well-working service worker with OFFLINE shit: https://github.com/nolanlawson/serviceworker-update-demo/blob/master/sw.js
-
-  // self.addEventListener('install', function (e){
-  //   e.waitUntil(
-  //     caches.open(SWManager.cache.name).then(function (cache){
-  //       return cache.addAll([
-  //         '/',
-  //         '/index.html',
-  //         /* '/?homescreen=1', */
-  //         '/assets/css/main.css',
-  //         '/assets/js/main.js',
-  //       ])
-  //       .then(function() {
-  //         log('master-service-worker.js cached resources.');
-  //         self.skipWaiting();
-  //       })
-  //       .catch(function() { log('master-service-worker.js failed to cache resources.') });
-  //     })
-  //   );
-  // });
+  // // importScripts('libraries/serviceworker-cache-polyfill.js');
+  // SWManager.libraries.cachePolyfill = true;
+  // log('master-service-worker.js cache name = ' + SWManager.cache.name);
   //
-  // self.addEventListener('activate', function(event) {
-  //   event.waitUntil(self.clients.claim());
-  // });
-
-  // self.addEventListener('fetch', function(event) {
-  //   event.respondWith(
-  //     caches.open(SWManager.cache.name)
-  //       .then(function(cache) { cache.match(event.request, {ignoreSearch: true}) })
-  //       .then(function(response) {
-  //       return response || fetch(event.request);
-  //     })
-  //   );
-  // });
-
-  // DAN'S CODE
-  // self.addEventListener('message', messageEvent => {
-  //   if (messageEvent.data === 'skipWaiting') return skipWaiting();
-  // });
-
-  // self.addEventListener('fetch', event => {
-  //   event.respondWith((async () => {
-  //     if (event.request.mode === "navigate" &&
-  //       event.request.method === "GET" &&
-  //       registration.waiting &&
-  //       (await clients.matchAll()).length < 2
-  //     ) {
-  //       registration.waiting.postMessage({command: 'skipWaiting'});
-  //       return new Response("", {headers: {"Refresh": "0"}});
-  //     }
-  //     return await caches.match(event.request) ||
-  //       fetch(event.request);
-  //   })());
-  // });
+  // // Refresh button breaks: https://redfin.engineering/how-to-fix-the-refresh-button-when-using-service-workers-a8e27af6df68
+  // // - https://redfin.engineering/service-workers-break-the-browsers-refresh-button-by-default-here-s-why-56f9417694
+  // // example of apparently well-working service worker with OFFLINE shit: https://github.com/nolanlawson/serviceworker-update-demo/blob/master/sw.js
+  //
+  // // self.addEventListener('install', function (e){
+  // //   e.waitUntil(
+  // //     caches.open(SWManager.cache.name).then(function (cache){
+  // //       return cache.addAll([
+  // //         '/',
+  // //         '/index.html',
+  // //         /* '/?homescreen=1', */
+  // //         '/assets/css/main.css',
+  // //         '/assets/js/main.js',
+  // //       ])
+  // //       .then(function() {
+  // //         log('master-service-worker.js cached resources.');
+  // //         self.skipWaiting();
+  // //       })
+  // //       .catch(function() { log('master-service-worker.js failed to cache resources.') });
+  // //     })
+  // //   );
+  // // });
+  // //
+  // // self.addEventListener('activate', function(event) {
+  // //   event.waitUntil(self.clients.claim());
+  // // });
+  //
+  // // self.addEventListener('fetch', function(event) {
+  // //   event.respondWith(
+  // //     caches.open(SWManager.cache.name)
+  // //       .then(function(cache) { cache.match(event.request, {ignoreSearch: true}) })
+  // //       .then(function(response) {
+  // //       return response || fetch(event.request);
+  // //     })
+  // //   );
+  // // });
+  //
+  // // DAN'S CODE
+  // // self.addEventListener('message', messageEvent => {
+  // //   if (messageEvent.data === 'skipWaiting') return skipWaiting();
+  // // });
+  //
+  // // self.addEventListener('fetch', event => {
+  // //   event.respondWith((async () => {
+  // //     if (event.request.mode === "navigate" &&
+  // //       event.request.method === "GET" &&
+  // //       registration.waiting &&
+  // //       (await clients.matchAll()).length < 2
+  // //     ) {
+  // //       registration.waiting.postMessage({command: 'skipWaiting'});
+  // //       return new Response("", {headers: {"Refresh": "0"}});
+  // //     }
+  // //     return await caches.match(event.request) ||
+  // //       fetch(event.request);
+  // //   })());
+  // // });
 
 } catch (e) {
-  log('master-service-worker.js failed to cache resources.');
+  console.error('master-service-worker.js failed to cache resources.', e);
 }
 
-// Load other Service Worker
+// Load PromoServer
 try {
-  importScripts('assets/js/app/service-worker.js');
-  SWManager.libraries.app = true;
-  log('master-service-worker.js imported app service-worker.js');
+  // importScripts('https://cdn.jsdelivr.net/npm/promo-server@latest/dist/index.min.js');
+  //
+  // setTimeout(function () {
+  //   SWManager.libraries.promoServer = new PromoServer({
+  //     app: SWManager.app, // <any string>
+  //     platform: 'web', // web | electron | extension
+  //     log: true, // true | false
+  //     firebase: firebase, // reference to firebase (one will be implied if not provided)
+  //     alwaysRun: true,
+  //   });
+  //   SWManager.libraries.promoServer.handle(function (item) {
+  //     console.log('---PS', item);
+  //     if (item) {
+  //
+  //     }
+  //   });
+  // }, SWManager.environment == 'development' ? 1000 : 60000);
 } catch (e) {
-  log('master-service-worker.js failed to import app service-worker.js');
+  console.error('master-service-worker.js failed to import promo-server.js', e);
 }
 
 // Send messages: https://stackoverflow.com/questions/35725594/how-do-i-pass-data-like-a-user-id-to-a-web-worker-for-fetching-additional-push
@@ -226,4 +252,14 @@ function arrayUnique(array) {
     }
 
     return a;
+}
+
+
+// Load other Service Worker
+try {
+  importScripts('assets/js/app/service-worker.js');
+  SWManager.libraries.app = true;
+  log('master-service-worker.js imported app/service-worker.js');
+} catch (e) {
+  console.error('master-service-worker.js failed to import app/service-worker.js', e);
 }

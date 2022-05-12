@@ -141,7 +141,7 @@ settings:
             Email: <span class="auth-email-element">...</span> <br>
             UserId: <span class="auth-uid-element">...</span> <br>
             <div class="text-left">
-              <pre id="resolve-account-result">(resolve account)</pre>
+              <pre id="resolve-account-result">Click "Resolve Account" to get Firebase account data</pre>
             </div>
           </div>
           <button id="resolve-account" class="btn btn-lg btn-primary btn-block">Resolve Account</button>
@@ -273,7 +273,7 @@ settings:
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 authenticationToken: token,
-                command: 'admin:send-notification'
+                command: 'admin:send-notification',
                 payload: {
                   icon: '{{ site.brand.logo-image }}',
                   click_action: '{{ site.url }}',

@@ -28,3 +28,9 @@ Manager.init(Configuration, function() {
     .removeClass('disabled');
   })
 });
+
+// require('./tracking/google-analytics.js')
+// window.gtag = function(){dataLayer.push(arguments);}
+// window.gtag('js', new Date());
+// window.gtag('config', 'UA-139422427-6');
+// console.log('----2', Configuration);

@@ -1,3 +1,4 @@
+# MAIM>>>
 # Sass
 .sass-cache
 *.scssc
@@ -32,9 +33,11 @@ doc/
 .idea
 .secret
 
-# Generated Files GEN>>>
+# Generated Files
+# GEN>>>
 /assets/*
 !/assets/_src
+/assets/_src/js/master/tracking
 !/assets/_src-uncompiled
 package-lock.json
 _websrc/generated
@@ -44,6 +47,8 @@ _websrc/generated
 /@output/lighthouse/*lighthouse*
 /@output/ngrok/
 /@output/.temp/
+
+# <<<MAIN
 
 # App
 # ... include ignored files here
