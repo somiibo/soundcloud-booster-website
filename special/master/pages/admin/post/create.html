@@ -787,8 +787,8 @@ post-vars:
                   .then(function (data) {
                     console.log('Success', data);
 
-                    if (data.postHandler.success) {
-                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.href)
+                    if (data.postHandler.success && data.postHandler.invoice && data.postHandler.invoice.success) {
+                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.invoice.data.href)
                     } else {
                       Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
                     }

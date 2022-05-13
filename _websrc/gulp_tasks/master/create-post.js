@@ -37,6 +37,7 @@ Post.prototype.create = async function (options) {
         environment: 'development'
       });
 
+
       // Save to disk OR commit
       // poster.onDownload = async function (req, filepath, filename, ext) {
       poster.onDownload = async function (meta) {
@@ -50,6 +51,7 @@ Post.prototype.create = async function (options) {
           resolve();
         });
       }
+
       // console.log('----body 1', body);
       let finalPost = await poster.create(JSON.parse(body))
       .catch(function (e) {
@@ -69,7 +71,6 @@ Post.prototype.create = async function (options) {
         response.error = err.toString();
         // console.log('----------err', err);
       });
-
 
       if (response.status == 200) {
         poster.write(finalPost.path, finalPost.content);
