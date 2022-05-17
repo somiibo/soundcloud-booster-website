@@ -47,13 +47,20 @@ head:
     </style>
   '
 ---
+{% assign is-sign-up-page = false %}
+{% assign subtitle-text = 'to an existing' %}
+{%- if page.meta.breadcrumb == 'Sign up' -%}
+  {% assign is-sign-up-page = true %}
+  {% assign subtitle-text = 'for a new' %}
+{%- else -%}
+
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <!-- <div class="col-md-6 col-12 text-center align-self-end"> -->
     <div class="col-md-6 col-12 text-center">
       <!-- <div class="spinner-border text-primary mb-3" role="status"></div> -->
       <h1 id="" class="h2 font-weight-normal">{{ page.meta.breadcrumb }}</h1>
-      <p id="" class="text-muted">{{ page.meta.breadcrumb }} to an existing {{ site.brand.name }} account</p>
+      <p id="" class="text-muted">{{ page.meta.breadcrumb }} {{ subtitle-text }} {{ site.brand.name }} account</p>
       <!-- <p id="ui-submission-titleerror" class="text-danger"></p> -->
       <!-- <a class="btn btn-primary btn-lg transition-3d-hover" href="{{ site.url }}" id="ui-submission-return">Return home</a> -->
 
@@ -144,7 +151,7 @@ head:
               <input type="password" class="form-control auth-password-input" id="exampleInputPassword1" placeholder="********">
             </div>
 
-            {%- if page.meta.breadcrumb == 'Sign up' -%}
+            {%- if is-sign-up-page == true -%}
               <div class="form-group text-left">
                 <label for="exampleInputPassword2">Confirm password</label>
                 <input type="password" class="form-control auth-password-confirm-input" id="exampleInputPassword2" placeholder="********">
@@ -158,10 +165,10 @@ head:
                 <label class="form-check-label" for="exampleCheck2">I agree to the <a href="{{ site.url }}/terms">Terms & Conditions</a>.</label>
               </div>
               <button type="submit" class="btn btn-primary btn-block auth-signup-email-btn">Sign up</button>
-              <small>Already have an account? <a href="{{ site.url }}/authentication/signin">Sign in</a> </small>
+              <small>Already have an account? <a class="" href="{{ site.url }}/authentication/signin">Sign in</a> </small>
             {% else %}
               <button type="submit" class="btn btn-primary btn-block auth-signin-email-btn">Sign in</button>
-              <small>Don't have an account? <a href="{{ site.url }}/authentication/signup">Sign up</a> </small>
+              <small>Don't have an account? <a class="" href="{{ site.url }}/authentication/signup">Sign up</a> </small>
             {% endif %}
           </form>
         </div>
