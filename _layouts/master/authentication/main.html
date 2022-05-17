@@ -1,0 +1,510 @@
+---
+### ALL PAGES ###
+layout: master/global/default
+
+### REGULAR PAGES ###
+foot:
+  post-bundle-script: '
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+  '
+
+settings:
+  include-app-foot: false
+  include-app-head: false
+  include-app-footer: false
+  include-app-header: false
+  include-script-bundle: false
+  include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        lazysizes: {
+          enabled: false,
+        },
+      }
+    }
+  "
+
+head:
+  content: '
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style media="screen">
+      body,html {
+        height:100%;
+      }
+      a[data-provider] {
+        cursor: pointer;
+      }
+
+    </style>
+  '
+---
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <!-- <div class="col-md-6 col-12 text-center align-self-end"> -->
+    <div class="col-md-6 col-12 text-center">
+      <!-- <div class="spinner-border text-primary mb-3" role="status"></div> -->
+      <h1 id="" class="h2 font-weight-normal">{{ page.meta.breadcrumb }}</h1>
+      <p id="" class="text-muted">{{ page.meta.breadcrumb }} to an existing {{ site.brand.name }} account</p>
+      <!-- <p id="ui-submission-titleerror" class="text-danger"></p> -->
+      <!-- <a class="btn btn-primary btn-lg transition-3d-hover" href="{{ site.url }}" id="ui-submission-return">Return home</a> -->
+
+      <div id="spinner" class="spinner-border text-primary mb-3" role="status"></div>
+      <div class="row">
+        <div class="col-12">
+          <div id="result" class="alert" role="alert" hidden> </div>
+        </div>
+        <div class="col-12">
+          <div id="" class="alert alert-danger auth-error-message-element" role="alert" hidden> </div>
+        </div>
+        <div class="col-12">
+          <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
+        </div>
+      </div>
+
+      <!-- <div class="row">
+        <div class="col-12">
+          <div id="result" class="alert" role="alert" hidden> </div>
+          <div id="" class="alert alert-danger auth-error-message-element" role="alert" hidden> </div>
+          <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to Somiibo app</a>
+        </div>
+      </div> -->
+
+      <!-- AUTH CONTAINER -->
+      <div id="auth-container" hidden>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="google.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" class="lazyload" alt="Google Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Google
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="facebook.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" class="lazyload" alt="Facebook Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Facebook
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="twitter.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" class="lazyload" alt="Twitter Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Twitter
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="github.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" class="lazyload" alt="GitHub Logo" width="24em">
+            {{ page.meta.breadcrumb }} with GitHub
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="microsoft.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" class="lazyload" alt="Microsoft Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Microsoft
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="yahoo.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" class="lazyload" alt="Yahoo Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Yahoo
+          </a>
+        </div>
+        <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="apple.com" hidden>
+            <img src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" class="lazyload" alt="Apple Logo" width="24em">
+            {{ page.meta.breadcrumb }} with Apple
+          </a>
+        </div>
+        <!-- <div class="col-12">
+          <a class="btn btn-sm btn-light transition-3d-hover btn-block auth-signin-provider-btn mb-1" data-provider="noexist.com" hidden>
+            {{ page.meta.breadcrumb }} with a non-existant service
+          </a>
+        </div> -->
+        <div class="col-12">
+          <div id="auth-or-separator" class="my-3 text-center text-muted">
+            <small>— or —</small>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <form id="email-and-password-form" class="mb-1" onsubmit="return false;" hidden>
+            <div class="form-group text-left">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" class="form-control auth-email-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="jonsnow@gmail.com">
+            </div>
+            <div class="form-group text-left">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control auth-password-input" id="exampleInputPassword1" placeholder="********">
+            </div>
+
+            {%- if page.meta.breadcrumb == 'Sign up' -%}
+              <div class="form-group text-left">
+                <label for="exampleInputPassword2">Confirm password</label>
+                <input type="password" class="form-control auth-password-confirm-input" id="exampleInputPassword2" placeholder="********">
+              </div>
+              <div class="form-check text-left text-muted">
+                <input type="checkbox" class="form-check-input auth-newsletter-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.</label>
+              </div>
+              <div class="form-check text-left text-muted mb-3">
+                <input type="checkbox" class="form-check-input auth-newsletter-input" id="exampleCheck2">
+                <label class="form-check-label" for="exampleCheck2">I agree to the <a href="{{ site.url }}/terms">Terms & Conditions</a>.</label>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block auth-signup-email-btn">Sign up</button>
+              <small>Already have an account? <a href="{{ site.url }}/authentication/signin">Sign in</a> </small>
+            {% else %}
+              <button type="submit" class="btn btn-primary btn-block auth-signin-email-btn">Sign in</button>
+              <small>Don't have an account? <a href="{{ site.url }}/authentication/signup">Sign up</a> </small>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-12 text-left align-self-end pb-3" hidden>
+      <footer class="mt-md-3 mb-md-2 pt-md-3 border-top">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            {%- include /master/helpers/svg.html src=site.brand.logo-image-svg class="mb-2" alt="Company logo" style="height: 45px; width: 45px;" -%}
+            <small class="d-block mb-3 text-muted">© {{ "now" | date: "%Y" }} {{ site.brand.name }}</small>
+            <ul class="list-unstyled list-inline text-small">
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}">Home</a></li>
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}/terms/">Terms</a></li>
+              <li class="list-inline-item"><a class="text-muted" href="{{ site.url }}/privacy/">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  var dom;
+  var url;
+  var serverApiURL;
+  var providerDetails = {}
+  var redirectIsValid = false;
+  var redirectUrl;
+
+  Manager.auth().ready(function () {
+    dom = Manager.dom();
+    var user = firebase.auth().currentUser;
+    url = new URL(window.location.href);
+    var action = false;
+    // var serverApiURL = Manager.properties.meta.environment === 'development'
+    serverApiURL = url.searchParams.get('development')
+      ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
+      : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
+
+    redirectUrl = decodeURIComponent(url.searchParams.get('destination')) || '{{ site.url }}'
+    serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
+    redirectIsValid = Manager.isValidRedirectUrl(redirectUrl)
+
+    // console.log('---redirect', redirectIsValid, redirectUrl);
+
+    firebase.auth()
+      .getRedirectResult()
+      .then(function (result) {
+        console.log('----result', result);
+        display();
+        if (!action) {
+          if (url.searchParams.get('signout')) {
+            console.log('----SIGNOUT');
+            action = true;
+            firebase.auth().signOut()
+            .catch(function (e) {
+              console.error('Error signing out', e);
+              display(e);
+            })
+            .finally(function () {
+              url.searchParams.delete('signout')
+              console.log('----nav to', url.toString());
+              window.location.href = url.toString();
+            })
+          } else {
+            if (result && result.user) {
+              createCustomToken({user: result.user})
+            } else {
+              action = true;
+              console.log('----READY');
+              firebase.auth().signOut()
+              .catch(function (e) {
+                console.error('Error signing out', e);
+                display(e);
+              })
+              .finally(function () {
+                var prodiver = url.searchParams.get('provider');
+                if (prodiver) {
+                  firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
+                  .catch(function (e) {
+                    display(e);
+                  })
+                } else {
+
+                  // Get provider details
+                  fetch(serverApiURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      command: 'firebase:get-providers',
+                      payload: {
+                        firebaseApiKey: Manager.properties.options.libraries.firebase_app.config.apiKey,
+                      },
+                    }),
+                  })
+                  .then(function (res) { // This function runs only on success
+                    if (res.ok) {
+                      res.json()
+                      .then(function (data) {
+                        console.log('Success', data);
+                        providerDetails = data;
+                        firebase.auth().onAuthStateChanged(function (user) {
+                          if (user) {
+                            display('hide');
+                            createCustomToken({user: user})
+                          }
+                        })
+                        display('waiting')
+                      })
+                    } else {
+                      return res.text()
+                      .then(function (data) {
+                        throw new Error(data || res.statusText || 'Unknown error.')
+                      })
+                    }
+                  })
+                  .catch(function (e) { // This function runs only on error
+                    console.error('Fail', e);
+                    display(e);
+                  })
+
+                }
+              })
+            }
+          }
+        }
+      })
+      .catch(function (e) {
+        console.error('----e', e);
+        display(e);
+      });
+
+
+
+    console.log('----FIRST', url.toString());
+    console.log('----user', user);
+
+
+
+
+    /*
+      firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider('google.com'))
+      http://localhost:4000/authentication/oauth/?provider=google.com&signout=true&development=true
+    */
+
+    document.addEventListener('click', function (event) {
+      if (event.target.matches('#relaunch-btn')) {
+        display('hidden');
+        launch();
+      }
+    })
+
+
+  })
+
+  function signUpHandler(token) {
+    return new Promise(function(resolve, reject) {
+      setTimeout(function () {
+        return resolve();
+      }, 3000);
+      if (url.searchParams.get('isSignup') !== 'true') {
+        return resolve();
+      }
+      fetch(serverApiURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          authenticationToken: token,
+          command: 'user:sign-up',
+          payload: {
+            newsletterSignUp: url.searchParams.get('newsletter') === 'true',
+            affiliateCode: url.searchParams.get('affiliateCode'),
+          }
+        }),
+      })
+      .catch(function (e) {
+        console.log('Fail', e);
+      })
+      .finally(function () {
+        return resolve();
+      })
+    });
+  }
+
+  function launch() {
+    // if (url.searchParams.get('inApp') === 'true' && window.electronManager) {
+    if (window.electronManager) {
+      window.electronManager().processCustomToken(window.tokenResult);
+    } else {
+      // console.log('--window.tokenResult', window.tokenResult);
+      redirectUrl = new URL(redirectUrl);
+      redirectUrl.searchParams.set('payload', JSON.stringify({
+        token: window.tokenResult
+      }))
+      redirectUrl = redirectUrl.toString();
+
+      if (!redirectIsValid) {
+        var invalidError = new Error('This URL is not valid: ' + redirectUrl)
+        if (Manager.properties.meta.environment === 'development') {
+          console.error(invalidError);
+        } else {
+          display(invalidError)
+          return
+        }
+      }
+
+      setTimeout(function () {
+        display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
+      }, 1000);
+      // console.log('----redirectUrl', redirectUrl);
+      // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
+      window.location.href = redirectUrl;
+    }
+  }
+
+  function createCustomToken(payload) {
+    payload.user.getIdToken(false)
+    .then(function (token) {
+      console.log('---token', token);
+      signUpHandler(token)
+      .then(function () {
+        fetch(serverApiURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            command: 'user:create-custom-token',
+            authenticationToken: token,
+          }),
+        })
+        .then(function (res) { // This function runs only on success
+          if (res.status >= 200 && res.status < 300) {
+            res.json()
+            .then(function (data) {
+              console.log('Success', data);
+              window.tokenResult = data.token;
+              launch();
+            })
+          } else {
+            return res.text()
+            .then(function (data) {
+              throw new Error(data || res.statusText || 'Unknown error.')
+            })
+          }
+        })
+        .catch(function (e) { // This function runs only on error
+          console.error('Fail', e);
+          display(e);
+        })
+      })
+    })
+  }
+  window.createCustomToken = createCustomToken;
+
+  function display(type, msg) {
+    var alertEl = dom.select('#result')
+    var spinnerEl = dom.select('#spinner')
+    var resendBtn = dom.select('#relaunch-btn')
+    var authContainer = dom.select('#auth-container')
+    var providerBtnEl = dom.select('a[data-provider]')
+    var emailAndPassForm = dom.select('#email-and-password-form')
+    var authOrSeparatorEl = dom.select('#auth-or-separator')
+
+    alertEl
+      .setAttribute('hidden', true)
+      .removeClass('alert-danger')
+      .removeClass('alert-success')
+    spinnerEl
+      .removeAttribute('hidden')
+    resendBtn
+      .setAttribute('hidden', true)
+    authContainer
+      .removeAttribute('hidden')
+
+    if (type && type !== 'hidden') {
+      alertEl.removeAttribute('hidden')
+    }
+
+    providerBtnEl
+      .setAttribute('hidden', true)
+      .setAttribute('disabled', true)
+      .removeClass('disabled')
+
+    emailAndPassForm
+      .setAttribute('hidden', true)
+      .setAttribute('disabled', true)
+      .removeClass('disabled')
+
+    authOrSeparatorEl
+      .setAttribute('hidden', true)
+
+    if (type === 'waiting') {
+      spinnerEl
+        .setAttribute('hidden', true)
+
+      providerBtnEl
+      .each(function (el) {
+        var provider = el.dataset.provider;
+        // console.log('===provider', provider, providerDetails[provider]);
+        if (providerDetails[provider]) {
+          el.removeAttribute('hidden');
+          el.removeAttribute('disabled');
+          el.classList.remove('disabled');
+        } else {
+          el.setAttribute('hidden', true);
+          el.setAttribute('disabled', true);
+          el.classList.add('disabled');
+        }
+      })
+
+      emailAndPassForm
+        .removeAttribute('hidden')
+        .removeAttribute('disabled')
+        .removeClass('disabled')
+
+      authOrSeparatorEl
+        .removeAttribute('hidden');
+
+    } else if (type instanceof Error) {
+      alertEl
+        .addClass('alert-danger')
+        .setInnerHTML('Failed to sign you in. Please try again: <br><br>' + type)
+      spinnerEl
+        .setAttribute('hidden', true)
+      // console.error(type);
+    } else if (type === 'success' || type === 'hide') {
+      if (type === 'success') {
+        alertEl
+          .addClass('alert-success')
+          .setInnerHTML(msg || 'Success! Redirecting you...')
+        spinnerEl
+          .setAttribute('hidden', true)
+        resendBtn
+          .removeAttribute('hidden')
+      }
+
+      authContainer
+        .setAttribute('hidden', true)
+    }
+  }
+
+</script>
