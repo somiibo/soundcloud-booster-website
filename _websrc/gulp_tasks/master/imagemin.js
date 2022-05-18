@@ -33,7 +33,7 @@ function getBlogImages() {
 
     getDirectories('assets/_src/images/blog/posts', function (err, res) {
       if (err) {
-        console.log('Error', err);
+        tools.error('Could not getBlogImages', err);
       } else {
         return resolve(res);
       }
@@ -49,12 +49,10 @@ gulp.task('imageminResponsive', async function () {
 
   tools.startTask('imageminResponsive');
 
-  console.log('Performing imageminResponsive');
-
   let images = await getBlogImages();
   const regex = /(\.jpg|\.jpeg|\.png)/img;
 
-  console.log('Fixing undersized images');
+  tools.log('Fixing undersized images...');
 
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
@@ -68,7 +66,7 @@ gulp.task('imageminResponsive', async function () {
     .then(async (newImageMeta) => {
 
       if (newImageMeta.width < 1024) {
-        console.log('Fixing image', imgPath);
+        tools.log('Fixing image', imgPath);
         jetpack.remove(imgPathNew);
         await newImage
           .resize({ width: 1024 })
@@ -78,7 +76,7 @@ gulp.task('imageminResponsive', async function () {
             jetpack.rename(imgPathNew, imgPath.split('/').pop())
           })
           .catch(e => {
-            console.error('Failed to fix image (resize):', imgPath, e);
+            tools.error('Failed to fix image (resize)', imgPath, e);
           })
       }
       // if (image && image.bitmap && image.bitmap.width < 1024) {
@@ -90,14 +88,14 @@ gulp.task('imageminResponsive', async function () {
       // }
     })
     .catch(e => {
-      console.error('Failed to fix image (meta):', imgPath, e);
+      tools.error('Failed to fix image (meta)', imgPath, e);
     })
 
   }
 
-  console.log('Finished fixing undersized images');
+  tools.log('Finished fixing undersized images');
 
-  return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.{jpg,jpeg,png}', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
+  return gulp.src([`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/**/*.{jpg,jpeg,png}`, '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
     .pipe(cached('images'))
     .pipe(responsive({
       '**/*.{jpg,jpeg}': [
@@ -228,6 +226,6 @@ gulp.task('imageminResponsive', async function () {
     {
       errorOnUnusedConfig: false
     }))
-    .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest))
+    .pipe(gulp.dest(`${config.assets}/${config.imagemin.dest}`))
     .pipe(tools.completeTask('imageminResponsive'))
 });
