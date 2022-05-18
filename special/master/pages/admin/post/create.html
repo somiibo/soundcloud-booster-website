@@ -785,7 +785,7 @@ post-vars:
                 if (res.status >= 200 && res.status < 300) {
                   res.json()
                   .then(function (data) {
-                    console.log('Success', data, JSON.stringify(data));              
+                    console.log('Success', data, JSON.stringify(data));
 
                     if (data.postHandler.success && data.postHandler.data.invoice && data.postHandler.data.invoice.success) {
                       Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.invoice.data.href)
@@ -1124,11 +1124,12 @@ post-vars:
       opt.innerHTML = authors[i];
       select.appendChild(opt);
     }
-    var date = new Date();
+    // var date = new Date();
+    var date = new Date(new Date().setDate(new Date().getDate() - 1));
 
     dom.select('#title').setValue(fields.title || '');
     dom.select('#url').setValue((fields.url || '').replace(/\/(.*?)\//,'').replace(/\//,''));
-    dom.select('#date').setValue(fields.date || date);
+    dom.select('#date').setValue(date);
     dom.select('#id').setValue(fields.id || 1);
     dom.select('#author').setValue(fields.author || '');
     dom.select('#affiliate').setValue(fields.affiliateSearchTerm || '');
