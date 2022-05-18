@@ -54,30 +54,48 @@ gulp.task('imageminResponsive', async function () {
   let images = await getBlogImages();
   const regex = /(\.jpg|\.jpeg|\.png)/img;
 
+  console.log('Fixing undersized images');
+
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
     const imgPathNew = imgPath.replace(regex, '-new$1');
 
     if (!imgPath.match(regex)) { continue }
-    const newImage = await sharp(imgPath);
-    const newImageMeta = await newImage.metadata();
-    if (newImageMeta.width < 1024) {
-      console.log('Fixing image', imgPath);
-      jetpack.remove(imgPathNew);
-      await newImage
-        .resize({ width: 1024 })
-        .toFile(imgPathNew)
-      jetpack.remove(imgPath);
-      jetpack.rename(imgPathNew, imgPath.split('/').pop())
-    }
-    // if (image && image.bitmap && image.bitmap.width < 1024) {
-    //   console.log('Fixing image', imgPath);
-    //   const ratio = (1024 / image.bitmap.width);
-    //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
-    //   // await image.quality(quality);
-    //   await image.writeAsync(imgPath);
-    // }
+
+    const newImage = sharp(imgPath)
+
+    await newImage.metadata()
+    .then(async (newImageMeta) => {
+
+      if (newImageMeta.width < 1024) {
+        console.log('Fixing image', imgPath);
+        jetpack.remove(imgPathNew);
+        await newImage
+          .resize({ width: 1024 })
+          .toFile(imgPathNew)
+          .then(() => {
+            jetpack.remove(imgPath);
+            jetpack.rename(imgPathNew, imgPath.split('/').pop())
+          })
+          .catch(e => {
+            console.error('Failed to fix image (resize):', imgPath, e);
+          })
+      }
+      // if (image && image.bitmap && image.bitmap.width < 1024) {
+      //   console.log('Fixing image', imgPath);
+      //   const ratio = (1024 / image.bitmap.width);
+      //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
+      //   // await image.quality(quality);
+      //   await image.writeAsync(imgPath);
+      // }
+    })
+    .catch(e => {
+      console.error('Failed to fix image (meta):', imgPath, e);
+    })
+
   }
+
+  console.log('Finished fixing undersized images');
 
   return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.{jpg,jpeg,png}', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
     .pipe(cached('images'))
