@@ -49,6 +49,21 @@
   <script type="text/javascript" src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
 {% endif %}
 
+<!-- TODO: FIX THIS -->
+{%- if page.settings.include-script-core == false -%}
+{% elsif layout.settings.include-script-core == false %}
+{% elsif site.settings.include-script-core == false %}
+{% else %}
+  {%- if page.settings.include-script-core-optimization != null -%}
+    {% assign core_optimization = page.settings.include-script-core-optimization %}
+  {%- elsif site.settings.include-script-core-optimization == null -%}
+    {% assign core_optimization = 'async' %}
+  {%- else -%}
+    {% assign core_optimization = site.settings.include-script-core-optimization %}
+  {% endif %}
+  <!-- <script type="text/javascript" src="{{ '/assets/js/master.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ core_optimization }}></script> -->
+{% endif %}
+
 {%- if include.post-bundle-script != null -%}
   {{ include.post-bundle-script | liquify }}
 {%- elsif page.foot.post-bundle-script != null -%}
