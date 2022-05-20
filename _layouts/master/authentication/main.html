@@ -318,14 +318,14 @@ settings:
             <div class="form-check mb-4">
               <input class="form-check-input auth-newsletter-input" type="checkbox" value="" id="newsletterCheckbox">
               <label class="form-check-label" for="newsletterCheckbox">
-                I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>
+                I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.
               </label>
               <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
             </div>
             <div class="form-check mb-4">
               <input class="form-check-input auth-terms-input" type="checkbox" value="" id="termsCheckbox" required>
               <label class="form-check-label" for="termsCheckbox">
-                I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>
+                I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>.
               </label>
               <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
             </div>
@@ -440,6 +440,7 @@ settings:
             // console.log('----qsToken', qsToken);
             // qsToken can be set on its own to simply sign in with it
             if (qsToken) {
+              console.log('signInWithCustomToken(qsToken)', qsToken);
               firebase.auth().signInWithCustomToken(qsToken)
               .then(function (r) {
                 redirect(redirectUrl)
@@ -560,8 +561,8 @@ settings:
   }
 
   function redirect(url) {
-    console.log('Redirecting to', redirectUrl);
-    window.location.href = redirectUrl;
+    console.log('Redirecting to', url);
+    window.location.href = url;
   }
 
   function launch() {
