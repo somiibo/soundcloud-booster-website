@@ -74,10 +74,15 @@ settings:
   "
 ---
 {% assign is-sign-up-page = false %}
-{% assign subtitle-text = 'to' %}
-{%- if page.meta.breadcrumb == 'Sign up' -%}
+{% assign is-sign-in-page = false %}
+{% assign subtitle-text = 'for' %}
+
+{%- if page.permalink == '/authentication/signup/' -%}
   {% assign is-sign-up-page = true %}
   {% assign subtitle-text = 'for' %}
+{%- elsif page.permalink == '/authentication/signin/' -%}
+  {% assign is-sign-in-page = true %}
+  {% assign subtitle-text = 'to' %}
 {%- endif -%}
 
 <script>
@@ -181,7 +186,7 @@ settings:
   <!-- Content -->
   <div class="container py-5 py-sm-7">
     <a class="d-flex justify-content-center mb-5" href="{{ site.url }}">
-      <img class="zi-2" src="{{ site.brand.logo-image-svg }}" alt="{{ site.brand.name }}" style="max-width: 3rem;">
+      <img class="zi-2" src="{{ site.brand.logo-image-svg }}" alt="{{ site.brand.name }}" style="width: 8rem;">
     </a>
 
     <div class="mx-auto" style="max-width: 30rem;">
@@ -200,6 +205,7 @@ settings:
           </div>
 
           <!-- Form -->
+          {%- if is-sign-up-page == true or is-sign-in-page == true -%}
           <form id="auth-container" onsubmit="return false;" hidden>
             <div class="text-center">
               <div class="mb-5">
@@ -312,14 +318,14 @@ settings:
             <div class="form-check mb-4">
               <input class="form-check-input auth-newsletter-input" type="checkbox" value="" id="newsletterCheckbox">
               <label class="form-check-label" for="newsletterCheckbox">
-                I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.
+                I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>
               </label>
               <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
             </div>
             <div class="form-check mb-4">
               <input class="form-check-input auth-terms-input" type="checkbox" value="" id="termsCheckbox" required>
               <label class="form-check-label" for="termsCheckbox">
-                I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>.
+                I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>
               </label>
               <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
             </div>
@@ -341,6 +347,18 @@ settings:
 
 
           </form>
+          {%- else -%}
+          <div class="d-flex justify-content-center">
+            <!-- <div id="" class="spinner-border text-primary mb-3" role="status"></div> -->
+          </div>
+          <div class="d-grid">
+            <div class="mb-3 text-center">
+              An account is required for <strong>{{ site.brand.name }}</strong>.
+            </div>
+            <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Signup for an account</a>
+          </div>
+          {%- endif -%}
+
           <!-- End Form -->
         </div>
       </div>
