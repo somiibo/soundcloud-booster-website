@@ -348,14 +348,11 @@ settings:
 
           </form>
           {%- else -%}
-          <div class="d-flex justify-content-center">
-            <!-- <div id="" class="spinner-border text-primary mb-3" role="status"></div> -->
-          </div>
           <div class="d-grid">
             <div class="mb-3 text-center">
               An account is required for <strong>{{ site.brand.name }}</strong>.
             </div>
-            <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Signup for an account</a>
+            <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
           </div>
           {%- endif -%}
 
@@ -401,6 +398,7 @@ settings:
   var providerDetails = {}
   var redirectIsValid = false;
   var redirectUrl;
+  var qsToken;
 
   Manager.auth().ready(function () {
     dom = Manager.dom();
@@ -413,6 +411,7 @@ settings:
       : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
 
     redirectUrl = decodeURIComponent(url.searchParams.get('destination') || '{{ site.url }}');
+    qsToken = decodeURIComponent(url.searchParams.get('token') || '');
     // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
     redirectIsValid = Manager.isValidRedirectUrl(redirectUrl)
@@ -439,7 +438,17 @@ settings:
               window.location.href = url.toString();
             })
           } else {
-            if (result && result.user) {
+            // console.log('----qsToken', qsToken);
+            // qsToken can be set on its own to simply sign in with it
+            if (qsToken) {
+              firebase.auth().signInWithCustomToken(qsToken)
+              .then(function (r) {
+                window.location.href = redirectUrl;
+              })
+              .catch(function (e) {
+                display(e);
+              })
+            } else if (result && result.user) {
               createCustomToken({user: result.user})
             } else {
               action = true;
@@ -600,7 +609,7 @@ settings:
           if (res.status >= 200 && res.status < 300) {
             res.json()
             .then(function (data) {
-              console.log('Success', data);
+              console.log('Custom token', data.token);
               window.tokenResult = data.token;
               launch();
             })
