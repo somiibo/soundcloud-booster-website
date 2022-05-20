@@ -443,6 +443,7 @@ settings:
             if (qsToken) {
               firebase.auth().signInWithCustomToken(qsToken)
               .then(function (r) {
+                console.log('Redirecting to', redirectUrl);
                 window.location.href = redirectUrl;
               })
               .catch(function (e) {
@@ -587,6 +588,7 @@ settings:
       }, 1000);
       // console.log('----redirectUrl', redirectUrl);
       // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
+      console.log('Redirecting to', redirectUrl);
       window.location.href = redirectUrl;
     }
   }
