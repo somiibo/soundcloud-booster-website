@@ -434,8 +434,7 @@ settings:
             })
             .finally(function () {
               url.searchParams.delete('signout')
-              console.log('----nav to', url.toString());
-              window.location.href = url.toString();
+              redirect(url.toString())
             })
           } else {
             // console.log('----qsToken', qsToken);
@@ -443,8 +442,7 @@ settings:
             if (qsToken) {
               firebase.auth().signInWithCustomToken(qsToken)
               .then(function (r) {
-                console.log('Redirecting to', redirectUrl);
-                window.location.href = redirectUrl;
+                redirect(redirectUrl)
               })
               .catch(function (e) {
                 display(e);
@@ -561,6 +559,11 @@ settings:
     });
   }
 
+  function redirect(url) {
+    console.log('Redirecting to', redirectUrl);
+    window.location.href = redirectUrl;
+  }
+
   function launch() {
     // if (url.searchParams.get('inApp') === 'true' && window.electronManager) {
     if (window.electronManager) {
@@ -588,8 +591,7 @@ settings:
       }, 1000);
       // console.log('----redirectUrl', redirectUrl);
       // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
-      console.log('Redirecting to', redirectUrl);
-      window.location.href = redirectUrl;
+      redirect(redirectUrl)
     }
   }
 
