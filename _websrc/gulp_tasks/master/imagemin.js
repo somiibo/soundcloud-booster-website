@@ -95,7 +95,14 @@ gulp.task('imageminResponsive', async function () {
 
   tools.log('Finished fixing undersized images');
 
-  return gulp.src([`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/**/*.{jpg,jpeg,png}`, '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
+  const imageminGlobs = [`!${config.assets}${config.assetsSubpath}/${config.imagemin.src}/favicon/**/*`]
+  if (argv.imageMinPostId) {
+    imageminGlobs.unshift(`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/blog/posts/post-${argv.imageMinPostId}/*.{jpg,jpeg,png}`)
+  } else {
+    imageminGlobs.unshift(`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/**/*.{jpg,jpeg,png}`)
+  }
+
+  return gulp.src(imageminGlobs)
     .pipe(cached('images'))
     .pipe(responsive({
       '**/*.{jpg,jpeg}': [
