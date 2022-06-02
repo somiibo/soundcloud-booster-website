@@ -279,10 +279,10 @@ settings:
               {%- if is-sign-up-page == true -%}
                 <label class="form-label" for="signupSrPassword">Password</label>
               {%- else -%}
-                <label class="form-label w-100" for="signupSrPassword" tabindex="0">
+                <label class="form-label w-100" for="signupSrPassword" tabindex="-1">
                   <span class="d-flex justify-content-between align-items-center">
                     <span>Password</span>
-                    <a class="form-label-link mb-0" href="{{ site.url }}/forgot">Forgot Password?</a>
+                    <a class="form-label-link mb-0" href="{{ site.url }}/forgot" tabindex="-1">Forgot Password?</a>
                   </span>
                 </label>
               {%- endif -%}
