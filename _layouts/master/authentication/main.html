@@ -424,6 +424,7 @@ settings:
         console.log('----result', result);
         display();
         if (!action) {
+          display('hidden');
           if (url.searchParams.get('signout')) {
             console.log('----SIGNOUT');
             action = true;
@@ -480,7 +481,7 @@ settings:
                       providerDetails = data;
                       firebase.auth().onAuthStateChanged(function (user) {
                         if (user) {
-                          display('hide');
+                          display('hidden');
                           createCustomToken({user: user})
                         }
                       })
@@ -643,6 +644,8 @@ settings:
     var emailAndPassForm = dom.select('#email-and-password-form')
     var authOrSeparatorEl = dom.select('#auth-or-separator')
 
+    console.log('display()', type, msg);
+
     alertEl
       .setAttribute('hidden', true)
       .removeClass('alert-danger')
@@ -708,7 +711,7 @@ settings:
       spinnerEl
         .setAttribute('hidden', true)
       // console.error(type);
-    } else if (type === 'success' || type === 'hide') {
+    } else if (type === 'success' || type === 'hidden') {
       if (type === 'success') {
         alertEl
           .addClass('alert-success')
