@@ -204,157 +204,184 @@ settings:
             <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
           </div>
 
-          <!-- Form -->
-          {%- if is-sign-up-page == true or is-sign-in-page == true -%}
-          <form id="auth-container" onsubmit="return false;" hidden>
-            <div class="text-center">
-              <div class="mb-5">
-                <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-text }} {{ site.brand.name }}</h1>
+          <div id="auth-container" hidden>
+            <!-- Form -->
+            {%- if is-sign-up-page == true or is-sign-in-page == true -%}
+            <form class="" onsubmit="return false;">
+              <div class="text-center">
+                <div class="mb-5">
+                  <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-text }} {{ site.brand.name }}</h1>
+                  {%- if is-sign-up-page == true -%}
+                    <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in here</a></p>
+                  {% else %}
+                    <p>Need an account? <a class="link" href="{{ site.url }}/authentication/signup">Sign up here</a></p>
+                  {% endif %}
+                </div>
+
+                <div class="d-grid mb-4">
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="google.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" alt="Google Logo">
+                      {{ page.meta.breadcrumb }} with Google
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="facebook.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" alt="Facebook Logo">
+                      {{ page.meta.breadcrumb }} with Facebook
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="twitter.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" alt="Twitter Logo">
+                      {{ page.meta.breadcrumb }} with Twitter
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="github.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" alt="GitHub Logo">
+                      {{ page.meta.breadcrumb }} with GitHub
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="apple.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" alt="Apple Logo">
+                      {{ page.meta.breadcrumb }} with Apple
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="microsoft.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" alt="Microsoft Logo">
+                      {{ page.meta.breadcrumb }} with Microsoft
+                    </span>
+                  </a>
+                  <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="yahoo.com" hidden>
+                    <span class="d-flex justify-content-center align-items-center">
+                      <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" alt="Yahoo Logo">
+                      {{ page.meta.breadcrumb }} with Yahoo
+                    </span>
+                  </a>
+
+                </div>
+
+                <span class="divider-center text-muted mb-4">OR</span>
+              </div>
+
+              <!-- Form -->
+              <div class="mb-4">
+                <label class="form-label" for="signupSrEmail">Your email</label>
+                <input type="email" class="form-control form-control-lg auth-email-input" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
+              </div>
+              <!-- End Form -->
+
+              <!-- Form -->
+              <div class="mb-4">
                 {%- if is-sign-up-page == true -%}
-                  <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in here</a></p>
-                {% else %}
-                  <p>Need an account? <a class="link" href="{{ site.url }}/authentication/signup">Sign up here</a></p>
-                {% endif %}
+                  <label class="form-label" for="signupSrPassword">Password</label>
+                {%- else -%}
+                  <label class="form-label w-100" for="signupSrPassword" tabindex="-1">
+                    <span class="d-flex justify-content-between align-items-center">
+                      <span>Password</span>
+                      <a class="form-label-link mb-0" href="{{ site.url }}/forgot" tabindex="-1">Forgot Password?</a>
+                    </span>
+                  </label>
+                {%- endif -%}
+
+                <div class="input-group input-group-merge">
+                  <input type="password" class="js-toggle-password form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
+                  <a class="js-toggle-password-target-1 input-group-append input-group-text" href="javascript:;">
+                    <i class="js-toggle-password-show-icon-1 bi-eye"></i>
+                  </a>
+                </div>
+
+                <!-- <span class="invalid-feedback">Your password is invalid. Please try again.</span> -->
               </div>
+              <!-- End Form -->
 
-              <div class="d-grid mb-4">
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="google.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" alt="Google Logo">
-                    {{ page.meta.breadcrumb }} with Google
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="facebook.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" alt="Facebook Logo">
-                    {{ page.meta.breadcrumb }} with Facebook
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="twitter.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" alt="Twitter Logo">
-                    {{ page.meta.breadcrumb }} with Twitter
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="github.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" alt="GitHub Logo">
-                    {{ page.meta.breadcrumb }} with GitHub
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="apple.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" alt="Apple Logo">
-                    {{ page.meta.breadcrumb }} with Apple
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="microsoft.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" alt="Microsoft Logo">
-                    {{ page.meta.breadcrumb }} with Microsoft
-                  </span>
-                </a>
-                <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="yahoo.com" hidden>
-                  <span class="d-flex justify-content-center align-items-center">
-                    <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" alt="Yahoo Logo">
-                    {{ page.meta.breadcrumb }} with Yahoo
-                  </span>
-                </a>
-
-              </div>
-
-              <span class="divider-center text-muted mb-4">OR</span>
-            </div>
-
-            <!-- Form -->
-            <div class="mb-4">
-              <label class="form-label" for="signupSrEmail">Your email</label>
-              <input type="email" class="form-control form-control-lg auth-email-input" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
-              <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
-            </div>
-            <!-- End Form -->
-
-            <!-- Form -->
-            <div class="mb-4">
               {%- if is-sign-up-page == true -%}
-                <label class="form-label" for="signupSrPassword">Password</label>
-              {%- else -%}
-                <label class="form-label w-100" for="signupSrPassword" tabindex="-1">
-                  <span class="d-flex justify-content-between align-items-center">
-                    <span>Password</span>
-                    <a class="form-label-link mb-0" href="{{ site.url }}/forgot" tabindex="-1">Forgot Password?</a>
-                  </span>
+              <!-- Form -->
+              <div class="mb-4">
+                <label class="form-label" for="signupSrConfirmPassword">Confirm password</label>
+
+                <div class="input-group input-group-merge">
+                  <input type="password" class="js-toggle-password form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
+                  <a class="js-toggle-password-target-2 input-group-append input-group-text" href="javascript:;">
+                    <i class="js-toggle-password-show-icon-2 bi-eye"></i>
+                  </a>
+                </div>
+
+                <!-- <span class="invalid-feedback">Password does not match the confirm password.</span> -->
+              </div>
+              <!-- End Form -->
+
+              <!-- Form Check -->
+              <div class="form-check mb-4">
+                <input class="form-check-input auth-newsletter-input" type="checkbox" value="" id="newsletterCheckbox">
+                <label class="form-check-label" for="newsletterCheckbox">
+                  I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.
                 </label>
-              {%- endif -%}
+                <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
+              </div>
+              <div class="form-check mb-4">
+                <input class="form-check-input auth-terms-input" type="checkbox" value="" id="termsCheckbox" required>
+                <label class="form-check-label" for="termsCheckbox">
+                  I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>.
+                </label>
+                <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
+              </div>
+              <!-- End Form Check -->
 
-              <div class="input-group input-group-merge">
-                <input type="password" class="js-toggle-password form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
-                <a class="js-toggle-password-target-1 input-group-append input-group-text" href="javascript:;">
-                  <i class="js-toggle-password-show-icon-1 bi-eye"></i>
-                </a>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg auth-signup-email-btn">Create an account</button>
+
+                <!-- <button type="submit" class="btn btn-link">
+                  or Start your 30-day trial <i class="bu-chevron-right"></i>
+                </button> -->
               </div>
 
-              <!-- <span class="invalid-feedback">Your password is invalid. Please try again.</span> -->
-            </div>
-            <!-- End Form -->
-
-            {%- if is-sign-up-page == true -%}
-            <!-- Form -->
-            <div class="mb-4">
-              <label class="form-label" for="signupSrConfirmPassword">Confirm password</label>
-
-              <div class="input-group input-group-merge">
-                <input type="password" class="js-toggle-password form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
-                <a class="js-toggle-password-target-2 input-group-append input-group-text" href="javascript:;">
-                  <i class="js-toggle-password-show-icon-2 bi-eye"></i>
-                </a>
+              {% else %}
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg auth-signin-email-btn">Sign in</button>
               </div>
+              {% endif %}
 
-              <!-- <span class="invalid-feedback">Password does not match the confirm password.</span> -->
+
+            </form>
+            {%- else -%}
+            <div>
+              <!-- <div class="d-grid">
+                <div class="mb-3 text-center">
+                  An account is required for <strong>{{ site.brand.name }}</strong>.
+                </div>
+                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signin">Sign in </a>
+              </div> -->
+              <div class="text-center">
+                <div class="mb-5">
+                  <h1 class="display-5">Account required</h1>
+                  An account is required for <strong>{{ site.brand.name }}</strong>.
+                </div>
+              </div>
+              <div class="d-grid gap-2 mb-4">
+                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
+              </div>
+              <div class="text-center">
+                <span class="divider-center text-muted mb-4">OR</span>
+                <div class="">
+                  <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                </div>
+              </div>
+              <!-- <div class="d-grid gap-2 mb-2">
+                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
+              </div>
+              <div class="text-center">
+                <div class="">
+                  <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                </div>
+              </div> -->
             </div>
-            <!-- End Form -->
-
-            <!-- Form Check -->
-            <div class="form-check mb-4">
-              <input class="form-check-input auth-newsletter-input" type="checkbox" value="" id="newsletterCheckbox">
-              <label class="form-check-label" for="newsletterCheckbox">
-                I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.
-              </label>
-              <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
-            </div>
-            <div class="form-check mb-4">
-              <input class="form-check-input auth-terms-input" type="checkbox" value="" id="termsCheckbox" required>
-              <label class="form-check-label" for="termsCheckbox">
-                I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>.
-              </label>
-              <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
-            </div>
-            <!-- End Form Check -->
-
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg auth-signup-email-btn">Create an account</button>
-
-              <!-- <button type="submit" class="btn btn-link">
-                or Start your 30-day trial <i class="bu-chevron-right"></i>
-              </button> -->
-            </div>
-
-            {% else %}
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg auth-signin-email-btn">Sign in</button>
-            </div>
-            {% endif %}
-
-
-          </form>
-          {%- else -%}
-          <div class="d-grid">
-            <div class="mb-3 text-center">
-              An account is required for <strong>{{ site.brand.name }}</strong>.
-            </div>
-            <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
+            {%- endif -%}
           </div>
-          {%- endif -%}
 
           <!-- End Form -->
         </div>
@@ -598,6 +625,7 @@ settings:
   }
 
   function createCustomToken(payload) {
+    console.log('---createCustomToken', payload);
     payload.user.getIdToken(false)
     .then(function (token) {
       console.log('---token', token);
