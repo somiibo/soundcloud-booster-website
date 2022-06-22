@@ -29,7 +29,7 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/admin/signin/',
+          required: '/authentication/signin/',
           prohibited: '/admin/dashboard/'
         }
       }
@@ -102,7 +102,7 @@ settings:
             console.error(e);
           });
       } else {
-        window.location.href = '{{ site.url }}/admin/signin/';
+        window.location.href = '{{ site.url }}/authentication/signin/';
       }
     })
 
