@@ -76,14 +76,32 @@ settings:
 ---
 {% assign is-sign-up-page = false %}
 {% assign is-sign-in-page = false %}
-{% assign subtitle-text = 'for' %}
+{% assign is-forgot-page = false %}
+{% assign is-sign-out-page = false %}
+{% assign is-other-page = false %}
+
+{% assign subtitle-middle-word = 'for' %}
+{% assign secondary-title = 'Account required' %}
+{% assign secondary-subtitle = 'An account is required ' %}
 
 {%- if page.permalink == '/authentication/signup/' -%}
   {% assign is-sign-up-page = true %}
-  {% assign subtitle-text = 'for' %}
+  {% assign subtitle-middle-word = 'for' %}
 {%- elsif page.permalink == '/authentication/signin/' -%}
   {% assign is-sign-in-page = true %}
-  {% assign subtitle-text = 'to' %}
+  {% assign subtitle-middle-word = 'to' %}
+{%- elsif page.permalink == '/authentication/signout/' -%}
+  {% assign is-sign-out-page = true %}
+  {% assign secondary-title = 'Sign out' %}
+  {% capture secondary-subtitle %}Sign out of <strong>{{ site.brand.name }}</strong>{% endcapture %}
+{%- elsif page.permalink == '/authentication/forgot/' -%}
+  {% assign is-forgot-page = true %}
+  {% assign secondary-title = 'Recover your account' %}
+  {% capture secondary-subtitle %}Reset your password for <strong>{{ site.brand.name }}</strong>{% endcapture %}
+{%- else -%}
+  {% assign is-other-page = true %}
+  {% assign secondary-title = 'Account required' %}
+  {% capture secondary-subtitle %}An account is required for <strong>{{ site.brand.name }}</strong>{% endcapture %}
 {%- endif -%}
 
 
@@ -126,7 +144,7 @@ settings:
             <form class="" onsubmit="return false;">
               <div class="text-center">
                 <div class="mb-5">
-                  <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-text }} {{ site.brand.name }}</h1>
+                  <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-middle-word }} {{ site.brand.name }}</h1>
                   {%- if is-sign-up-page == true -%}
                     <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in here</a></p>
                   {% else %}
@@ -199,14 +217,14 @@ settings:
                   <label class="form-label w-100" for="signupSrPassword" tabindex="-1">
                     <span class="d-flex justify-content-between align-items-center">
                       <span>Password</span>
-                      <a class="form-label-link mb-0" href="{{ site.url }}/forgot" tabindex="-1">Forgot Password?</a>
+                      <a class="form-label-link mb-0" href="{{ site.url }}/authentication/forgot" tabindex="-1">Forgot Password?</a>
                     </span>
                   </label>
                 {%- endif -%}
 
                 <div class="input-group input-group-merge">
                   <input type="password" class="js-toggle-password form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
-                  <a class="js-toggle-password-target-1 input-group-append input-group-text" href="javascript:;">
+                  <a class="js-toggle-password-target-1 input-group-append input-group-text" href="javascript:;" tabindex="-1">
                     <i class="js-toggle-password-show-icon-1 bi-eye"></i>
                   </a>
                 </div>
@@ -222,7 +240,7 @@ settings:
 
                 <div class="input-group input-group-merge">
                   <input type="password" class="js-toggle-password form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
-                  <a class="js-toggle-password-target-2 input-group-append input-group-text" href="javascript:;">
+                  <a class="js-toggle-password-target-2 input-group-append input-group-text" href="javascript:;" tabindex="-1">
                     <i class="js-toggle-password-show-icon-2 bi-eye"></i>
                   </a>
                 </div>
@@ -266,35 +284,47 @@ settings:
             </form>
             {%- else -%}
             <div>
-              <!-- <div class="d-grid">
-                <div class="mb-3 text-center">
-                  An account is required for <strong>{{ site.brand.name }}</strong>.
-                </div>
-                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signin">Sign in </a>
-              </div> -->
               <div class="text-center">
                 <div class="mb-5">
-                  <h1 class="display-5">Account required</h1>
-                  An account is required for <strong>{{ site.brand.name }}</strong>.
+                  <h1 class="display-5">{{ secondary-title }}</h1>
+                  {{ secondary-subtitle }}
                 </div>
               </div>
-              <div class="d-grid gap-2 mb-4">
-                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
-              </div>
-              <div class="text-center">
-                <span class="divider-center text-muted mb-4">OR</span>
-                <div class="">
-                  <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+
+
+              {%- if is-sign-out-page -%}
+                <div class="d-grid">
+                  <a id="" class="btn btn-primary auth-signout-all-btn" href="#">Sign out</a>
                 </div>
-              </div>
-              <!-- <div class="d-grid gap-2 mb-2">
-                <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
-              </div>
-              <div class="text-center">
-                <div class="">
-                  <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+              {%- elsif is-forgot-page -%}
+                <form class="" onsubmit="return false;">
+                  <div class="d-grid mb-4">
+                    <div class="mb-4">
+                      <label class="form-label" for="forgotSrEmail">Your email</label>
+                      <input type="email" class="form-control form-control-lg auth-email-input" id="forgotSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                      <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
+                    </div>
+                    <button id="" class="btn btn-primary auth-forgot-email-btn" type="submit">Reset password</button>
+                  </div>
+                </form>
+                <div class="text-center">
+                  <span class="divider-center text-muted mb-4">OR</span>
+                  <div class="">
+                    <p>Ready to log in? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                  </div>
                 </div>
-              </div> -->
+              {%- else -%}
+                <div class="d-grid gap-2 mb-4">
+                  <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
+                </div>
+                <div class="text-center">
+                  <span class="divider-center text-muted mb-4">OR</span>
+                  <div class="">
+                    <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                  </div>
+                </div>
+              {%- endif -%}
+
             </div>
             {%- endif -%}
           </div>
