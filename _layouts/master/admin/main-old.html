@@ -1,0 +1,77 @@
+---
+### ALL PAGES ###
+layout: master/global/default
+
+### REGULAR PAGES ###
+head:
+  post-bundle-css: '
+    <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/css/libs.bundle.css">
+    <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/css/theme.bundle.css" id="stylesheetLight">
+    <!-- <link rel="stylesheet" href="https://dashkit.goodthemes.co/assets/fonts/feather/feather.css" id="stylesheetLight"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/codemirror.css">
+    <style media="screen">
+      .CodeMirror {
+        border-radius: 5px;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+        height: auto;
+        min-height: 90px;
+      }
+    </style>
+  '
+
+foot:
+  post-bundle-script: '
+    <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/js/vendor.bundle.js"></script>
+    <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/dashkit/js/theme.bundle.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/json5@2.1.1/dist/index.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/codemirror.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/mode/javascript/javascript.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/addon/edit/matchbrackets.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.13.4/addon/edit/closebrackets.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+  '
+
+body:
+  class: ""
+
+settings:
+  include-app-foot: false
+  include-app-head: false
+  include-app-footer: false
+  include-app-header: false
+  include-script-bundle: false
+  include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false
+        },
+        tawk: {
+          enabled: false
+        },
+        sentry: {
+          enabled: false
+        }
+      },
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/authentication/signin/',
+          prohibited: '/admin/dashboard/'
+        }
+      }
+    }
+  "
+---
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10 col-xl-8">
+        {{ content }}
+      </div>
+    </div>
+  </div>
+</div>

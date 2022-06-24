@@ -24,7 +24,7 @@ Post.prototype.create = async function (options) {
   }
   const { headers, method, url } = req;
   let body = [];
-  console.log('Creating post...');
+  let parsedBody = {}
 
   return new Promise(function(resolve, reject) {
 
@@ -33,10 +33,13 @@ Post.prototype.create = async function (options) {
     });
     req.on('end', async function() {
       body = body.join('');
+      parsedBody = JSON.parse(body);
       let poster = new Poster({
         environment: 'development'
       });
 
+
+      console.log('Creating post...', parsedBody);
 
       // Save to disk OR commit
       // poster.onDownload = async function (req, filepath, filename, ext) {
@@ -53,7 +56,7 @@ Post.prototype.create = async function (options) {
       }
 
       // console.log('----body 1', body);
-      let finalPost = await poster.create(JSON.parse(body))
+      let finalPost = await poster.create(parsedBody)
       .catch(function (e) {
         response.status = 500;
         response.error = e.toString();

@@ -205,7 +205,7 @@
   </div>
   {% endcomment %}
 
-  <script type="application/ld+json">
+  <script id="uj-breadcrumbs-json" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -251,7 +251,7 @@
 {% elsif layout.schema.brand == false %}
 {% elsif site.schema.brand == false %}
 {% else %}
-  <script type="application/ld+json">
+  <script id="uj-brand-json" type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "{{ site.brand.type }}",
@@ -300,7 +300,7 @@
 {% elsif layout.schema.sitelinks == false %}
 {% elsif site.schema.sitelinks == false %}
 {% else %}
-  <script type="application/ld+json">
+  <script id="uj-sitelinks-json" type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "WebSite",

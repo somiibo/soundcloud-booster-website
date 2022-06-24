@@ -1,46 +1,27 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/main
-permalink: /admin/post/
+permalink: /admin/posts/create/
 sitemap:
   include: false
 
 ### REGULAR PAGES ###
 meta:
-  title: "Post"
+  title: "Create Post"
   description: "Create blog posts with ease, including the beautiful markdown editor StackEdit."
-  breadcrumb: "Post"
+  breadcrumb: "Create"
   index: false
 
 post-vars:
   ad: '{% include /master/modules/adunits/adsense-in-article.html index="1" %}'
 
+admin:
+  header: '
+    <a class="btn btn-soft-primary" href="#" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">
+      <i class="bi-cloud-download me-1"></i> Import from Google Docs
+    </a>
+  '
 ---
-<!-- Header -->
-<div class="header mt-md-5">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-
-        <!-- Pretitle -->
-        <h6 class="header-pretitle">
-          Post
-        </h6>
-
-        <!-- Title -->
-        <h1 class="header-title">
-          New
-        </h1>
-
-        <p class="text-muted mb-0">Create blog posts with ease, including the beautiful markdown editor <strong>StackEdit</strong>!</p>
-
-      </div>
-      <div class="col col-auto">
-        <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">Import from Google Docs</a>
-      </div>
-    </div> <!-- / .row -->
-  </div>
-</div>
 
 <div class="row loaded-false">
   <div class="col-lg-8 offset-lg-2">
@@ -51,397 +32,448 @@ post-vars:
   </div>
 </div>
 
-<!-- Form -->
 <div class="loaded-true" hidden>
-  <form class="mb-4" onsubmit="return false;" id="post-creator-form">
+  <form class="" onsubmit="return false;" id="post-creator-form">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div id="previous-post-container">
+          <h3 class="header-title mb-3">
+            Previous post
+          </h3>
 
-    <div id="previous-post-container" hidden>
-      <h2 class="header-title my-3">
-        Previos post
-      </h2>
-
-      <div class="row">
-        <div class="col-12">
-          Details
-          <div class="alert alert-secondary">
-            <div><strong>ID:</strong> <span id="previous-post-id"></span> </div>
-            <div><strong>URL:</strong> <span id="previous-post-url"></span> </div>
-            <div><strong>Slug:</strong> <span id="previous-post-slug"></span> </div>
-            <div><strong>Invoice:</strong> <span id="previous-post-invoice"></span> </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="alert alert-soft-secondary">
+                <div><strong>ID:</strong> <span id="previous-post-id">318</span> </div>
+                <div><strong>URL:</strong> <span id="previous-post-url">http://192.168.1.215:4000/blog/effective-ways-of-earning-money-to-push-your-business-forward</span> </div>
+                <div><strong>Slug:</strong> <span id="previous-post-slug">blog/effective-ways-of-earning-money-to-push-your-business-forward</span> </div>
+                <div><strong>Invoice:</strong> <span id="previous-post-invoice">Manual</span> </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <h2 class="header-title my-3">
-      Post details
-    </h2>
+    <hr class="">
 
-    <div class="row">
-
+    <div class="row mb-3">
       <div class="col-12">
-        <div class="form-group">
-          <label>
-            Title
-          </label>
-          <small class="form-text text-muted">
-            The title of the post: <code class="ml-1">My Post Title</code>
-          </small>
-          <div class="input-group input-group-merge mb-3">
-            <input type="text" class="form-control" id="title" name="title">
-            <span class="input-group-text">
-              0
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            URL
-          </label>
-          <small class="form-text text-muted">
-            The URL of the post: <code class="ml-1">my-post-url</code>
-          </small>
-          <div class="input-group input-group-merge mb-3">
-            <input type="text" class="form-control" id="url" name="url">
-            <span class="input-group-text">
-              0
-            </span>
-
-            <!-- <a id="url-format-btn" href="#" class="btn btn-primary ml-3">Format</a> -->
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Layout
-          </label>
-          <small class="form-text text-muted">
-            Usually <code class="highlighter-rouge">app/blog/post</code> or <code class="highlighter-rouge">master/blog/post</code>
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="layout" name="layout" placeholder="app/blog/post" value="app/blog/post">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            Date
-          </label>
-          <small class="form-text text-muted">
-            The date of the post
-          </small>
-          <div class="input-group mb-3">
-            <input type="date" class="form-control" id="date" name="date" placeholder="2019-12-04" required>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            ID
-          </label>
-          <small class="form-text text-muted">
-            The id of the post
-          </small>
-          <div class="input-group mb-3">
-            <input type="number" class="form-control" id="id" name="id" placeholder="0">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            Author
-          </label>
-          <small class="form-text text-muted">
-            Who wrote this beautiful piece of work?
-          </small>
-          <div class="input-group mb-3">
-            <select class="form-select" id="author" name="author">
-              <option value="">Select an author</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            Affiliate search term
-          </label>
-          <small class="form-text text-muted">
-            This term is automatically applied to some ads
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="affiliate" name="affiliate" placeholder="Search term">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            Tags
-          </label>
-          <small class="form-text text-muted">
-            Comma separated tags
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="tags" name="tags" placeholder="Tag 1, Tag 2">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="form-group">
-          <label>
-            Categories
-          </label>
-          <small class="form-text text-muted">
-            Comma separated categories
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="categories" name="categories" placeholder="Category 1, Category 2">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Excerpt
-          </label>
-          <div class="d-flex justify-content-between">
-            <small class="form-text text-muted">
-              Text preview of the post
-            </small>
-            <small class="form-text text-muted word-and-character-count" data-count-source="#excerpt"></small>
-          </div>
-
-          <div class="input-group mb-3">
-            <textarea class="form-control" id="excerpt" name="excerpt"rows="2"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Header Image URL
-          </label>
-          <small class="form-text text-muted">
-            Image preview of the post. Will be named the same as the title of the post
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="headerImageURL" name="headerImageURL" placeholder="https://unsplash.com/your-image" required>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <hr class="mt-4 mb-5">
-
-    <h2 class="header-title my-3">
-      Post content
-    </h2>
-    <div class="row">
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Body
-          </label>
-          <div class="d-flex justify-content-between">
-            <small class="form-text text-muted">
-              The content of the post
-            </small>
-            <small class="form-text text-muted word-and-character-count" data-count-source="#body"></small>
-          </div>
-          <div class="input-group mb-3">
-            <textarea class="form-control" id="body" name="body"rows="9"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="d-flex justify-content-between mt-3">
-          <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100 me-3" id="stackedit-edit">Edit in StackEdit</a>
-          <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">Import from Google Docs</a>
-        </div>
-      </div>
-    </div>
-
-    <hr class="mt-5 mb-5">
-
-    <h2 class="header-title my-3">
-      Advanced options
-    </h2>
-    <div class="row">
-
-      <div class="col-12">
-        <div class="custom-control custom-checkbox table-checkbox">
-          <input type="checkbox" class="custom-control-input auth-newsletter-input" id="enableReplaceImagesMarkdown" name="enableReplaceImagesMarkdown" checked="true">
-          <label class="custom-control-label" for="enableReplaceImagesMarkdown">
-            Replace image markdown with liquid tag
-          </label>
-          <small class="form-text text-muted">
-            Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/blog-image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code>
-          </small>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Tags to replace with
-          </label>
-          <small class="form-text text-muted">
-            Which one to use? Blank = default.
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="replaceImagesIncludeTag" name="replaceImagesIncludeTag" placeholder="">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="custom-control custom-checkbox table-checkbox">
-          <input type="checkbox" class="custom-control-input auth-newsletter-input" id="includeLocalImagePath" name="includeLocalImagePath" checked="true">
-          <label class="custom-control-label" for="includeLocalImagePath">
-            Include image path before image tags
-          </label>
-          <small class="form-text text-muted">
-            Include the standard local image path <code class="highlighter-rouge">/assets/images/blog/posts/post-${id}/</code> in image tags
-          </small>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Save path
-          </label>
-          <small class="form-text text-muted">
-            The Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code>
-          </small>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" id="path" name="path" placeholder="./_posts/" value="./_posts/">
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <div class="form-group">
-          <label>
-            Processing Address
-          </label>
-          <small class="form-text text-muted">
-            What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.
-          </small>
-          <div class="input-group mb-3">
-            <select class="form-select" id="processingAddy" name="processingAddy" required>
-              <option id="processingAddy_none" value="">Select an address</option>
-              <option id="processingAddy_dev" value="">Development</option>
-              <option id="processingAddy_prod" value="">Production</option>
-              <option id="processingAddy_prodDev" value="">Production (dev)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <hr class="mt-4 mb-5">
-
-    <h2 class="header-title my-3">
-      Invoice options
-    </h2>
-    <div class="row">
-
-      <div class="col-12">
-        <div class="form-check form-switch mb-3">
-          <input class="form-check-input" type="checkbox" id="enableInvoice" name="enableInvoice" checked>
-          <label class="form-check-label" for="enableInvoice">Enable invoice options</label>
-        </div>
-      </div>
-
-      <div class="col-12" id="invoiceOptions">
         <div class="row">
-          <div class="col-6">
-            <div class="form-group">
-              <label>
-                Invoice email
+          <div class="col-12">
+            <h3 class="header-title mb-3">
+              Post details
+            </h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="title" class="_form-label text-dark">Title</label>
+              <small class="d-block _form-text text-muted">
+                The title of the post: <code class="ml-1">My Post Title</code>
+              </small>
+              <div class="input-group">
+                <input type="text" class="form-control" name="title" id="title" placeholder="My post title" aria-label="My post title">
+                <span class="input-group-text">0</span>
+              </div>
+
+            </div>
+            <!-- End Form -->
+          </div>
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="url" class="_form-label text-dark">URL Path</label>
+              <small class="d-block _form-text text-muted">
+                The URL of the post: <code class="ml-1">my-post-url</code>
+              </small>
+              <div class="input-group">
+                <input type="text" class="form-control" name="url" id="url" placeholder="my-post-title" aria-label="my-post-title">
+                <span class="input-group-text">0</span>
+              </div>
+
+            </div>
+            <!-- End Form -->
+          </div>
+        </div>
+        <!-- End Row -->
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="layout" class="_form-label text-dark">Layout</label>
+              <small class="d-block _form-text text-muted">
+                Usually <code class="highlighter-rouge">app/blog/post</code> or <code class="highlighter-rouge">master/blog/post</code>
+              </small>
+              <input type="text" class="form-control" name="layout" id="layout" placeholder="app/blog/post" aria-label="app/blog/post" value="app/blog/post">
+            </div>
+            <!-- End Form -->
+          </div>
+        </div>
+        <!-- End Row -->
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="date" class="_form-label text-dark">Date</label>
+              <small class="d-block _form-text text-muted">
+                The date of the post
+              </small>
+              <input type="date" class="form-control" name="date" id="date" placeholder="2019-12-04" aria-label="2019-12-04" required>
+            </div>
+            <!-- End Form -->
+          </div>
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="id" class="_form-label text-dark">ID</label>
+              <small class="d-block _form-text text-muted">
+                The id of the post
+              </small>
+              <input type="number" class="form-control" name="id" id="id" placeholder="10" aria-label="10">
+            </div>
+            <!-- End Form -->
+          </div>
+        </div>
+        <!-- End Row -->
+
+        <div class="row">
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="author" class="_form-label text-dark">Author</label>
+              <small class="d-block _form-text text-muted">
+                Who wrote this beautiful piece of work?
+              </small>
+
+              <!-- Select -->
+              <div class="tom-select-custom">
+                <select class="js-select form-select" id="author" name="author">
+                  <option value="">Select an author</option>
+                </select>
+              </div>
+              <!-- End Select -->
+            </div>
+            <!-- End Form -->
+
+          </div>
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="affiliate" class="_form-label text-dark">Affiliate search term</label>
+              <small class="d-block _form-text text-muted">
+                This term is automatically applied to some ads
+              </small>
+              <input type="text" class="form-control" name="affiliate" id="affiliate" placeholder="Search term" aria-label="Search term">
+            </div>
+            <!-- End Form -->
+          </div>
+
+        </div>
+
+
+        <div class="row">
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="tags" class="_form-label text-dark">Tags</label>
+              <small class="d-block _form-text text-muted">
+                Comma separated tags
+              </small>
+              <input type="text" class="form-control" name="tags" id="tags" placeholder="Tag 1, Tag 2" aria-label="Tag 1, Tag 2">
+            </div>
+            <!-- End Form -->
+          </div>
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="categories" class="_form-label text-dark">Categories</label>
+              <small class="d-block _form-text text-muted">
+                Comma separated categories
+              </small>
+              <input type="text" class="form-control" name="categories" id="categories" placeholder="Category 1, Category 2" aria-label="Category 1, Category 2">
+            </div>
+            <!-- End Form -->
+          </div>
+        </div>
+        <!-- End Row -->
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="excerpt" class="text-dark">Excerpt</label>
+
+              <div class="d-flex justify-content-between">
+                <small class="text-muted">
+                  Text preview of the post
+                </small>
+                <small class="text-muted word-and-character-count" data-count-source="#excerpt">(0 characters, 1 words)</small>
+              </div>
+
+              <textarea id="excerpt" name="excerpt" class="form-control" placeholder="My post preview" rows="2" spellcheck="true"></textarea>
+            </div>
+            <!-- End Form -->
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="headerImageURL" class="_form-label text-dark">Header Image URL</label>
+              <small class="d-block _form-text text-muted">
+                Image preview of the post. Will be named the same as the title of the post
+              </small>
+              <input type="url" class="form-control" name="headerImageURL" id="headerImageURL" placeholder="https://unsplash.com/your-image" aria-label="https://unsplash.com/your-image" required>
+            </div>
+            <!-- End Form -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="">
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="header-title mb-3">
+              Post content
+            </h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="body" class="text-dark">Body</label>
+
+              <div class="d-flex justify-content-between">
+                <small class="text-muted">
+                Text preview of the post
+                </small>
+                <small class="text-muted word-and-character-count" data-count-source="#body">(0 characters, 1 words)</small>
+              </div>
+
+              <textarea id="body" name="body" class="form-control" placeholder="My post content" rows="9" spellcheck="true"></textarea>
+            </div>
+            <!-- End Form -->
+          </div>
+
+          <div class="col-sm-12">
+            <div class="d-flex justify-content-between mt-3">
+              <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100 me-3" id="stackedit-edit">Edit in StackEdit</a>
+              <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">Import from Google Docs</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <hr class="">
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="header-title mb-3">
+              Advanced options
+            </h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+
+              <label class="row form-check form-switch" for="enableReplaceImagesMarkdown">
+                <span class="col-8 col-sm-9 ms-0">
+                  <span class="text-dark">Replace image markdown with liquid tag</span>
+                </span>
+                <span class="col-4 col-sm-3 text-end">
+                  <input type="checkbox" class="form-check-input" id="enableReplaceImagesMarkdown" name="enableReplaceImagesMarkdown" checked="true">
+                </span>
               </label>
-              <small class="form-text text-muted">
+
+              <small class="d-block _form-text text-muted">
+                Replace <code class="highlighter-rouge">[alt](url)</code> with <code class="highlighter-rouge">&#123;%- include /master/helpers/blog-image.html src="&#123;&#123;url&#125;&#125;" -%&#125;</code>
+              </small>
+
+            </div>
+            <!-- End Form -->
+
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="replaceImagesIncludeTag" class="text-dark">Tags to replace with</label>
+
+              <small class="d-block _form-text text-muted">
+                Enter the tags to replace with. Blank = default.
+              </small>
+              <input type="text" class="form-control" name="replaceImagesIncludeTag" id="replaceImagesIncludeTag" placeholder="" aria-label="">
+            </div>
+            <!-- End Form -->
+
+          </div>
+
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+
+              <label class="row form-check form-switch" for="includeLocalImagePath">
+                <span class="col-8 col-sm-9 ms-0">
+                  <span class="text-dark">Include image path before image tags</span>
+                </span>
+                <span class="col-4 col-sm-3 text-end">
+                  <input type="checkbox" class="form-check-input" id="includeLocalImagePath" name="includeLocalImagePath" checked="true">
+                </span>
+              </label>
+
+              <small class="d-block _form-text text-muted">
+                Include the standard local image path <code class="highlighter-rouge">/assets/images/blog/posts/post-${id}/</code> in image tags
+              </small>
+
+            </div>
+
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="path" class="text-dark">Save path</label>
+
+              <small class="d-block _form-text text-muted">
+                Enter the Path of the post. Usually <code class="highlighter-rouge">./_posts/</code> or <code class="highlighter-rouge">./_posts/sub/dir/</code>
+              </small>
+              <input type="text" class="form-control" name="path" id="path" placeholder="./_posts/" aria-label="" value="./_posts/">
+            </div>
+            <!-- End Form -->
+
+            <!-- End Form -->
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="processingAddy" class="text-dark">Processing Address</label>
+              <small class="d-block _form-text text-muted">
+                What address to process the post at? If live, it will be comitted live. If local, it will be saved as a file locally.
+              </small>
+
+              <!-- Select -->
+              <div class="tom-select-custom">
+                <select class="js-select form-select" id="processingAddy" name="processingAddy" required>
+                  <option id="processingAddy_none" value="">Select an address</option>
+                  <option id="processingAddy_dev" value="">Development</option>
+                  <option id="processingAddy_prod" value="">Production</option>
+                  <option id="processingAddy_prodDev" value="">Production (dev)</option>
+                </select>
+              </div>
+              <!-- End Select -->
+            </div>
+            <!-- End Form -->
+
+          </div>
+        </div>
+
+      <!-- Body -->
+
+      </div>
+    </div>
+
+
+    <hr class="">
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="header-title mb-3">
+              Invoice options
+            </h3>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Form -->
+            <div class="mb-4">
+
+              <label class="row form-check form-switch" for="enableInvoice">
+                <span class="col-8 col-sm-9 ms-0">
+                  <span class="text-dark">Enable invoice options</span>
+                </span>
+                <span class="col-4 col-sm-3 text-end">
+                  <input type="checkbox" class="form-check-input" id="enableInvoice" name="enableInvoice" checked="true">
+                </span>
+              </label>
+
+              <small class="d-block _form-text text-muted">
+                Automatically charge a PayPal invoice to any email
+              </small>
+
+            </div>
+            <!-- End Form -->
+
+          </div>
+
+        </div>
+
+        <div class="row" id="invoiceOptions">
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="invoiceEmail" class="_form-label text-dark">Invoice email</label>
+              <small class="d-block _form-text text-muted">
                 Email that the invoice will be sent to
               </small>
-              <div class="d-flex">
-                <div class="flex-grow-1">
-                  <div class="input-group mb-3">
-                    <input type="email" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
-                  </div>
-                </div>
-                <div class="ms-3">
-                  <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="invoiceEmailDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Insert
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="invoiceEmailDropdownButton" id="invoiceEmailDropdownList">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="row">
-                <div class="col">
-                  <div class="input-group mb-3">
-                    <input type="email" class="form-control" id="invoiceEmail" name="invoiceEmail" placeholder="payer@gmail.com">
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="dropdown mb-2 me-2">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="invoiceEmailDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Dropdown button
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="invoiceEmailDropdownButton" style="">
-                      <a class="dropdown-item" href="#!">Action</a>
-                      <a class="dropdown-item" href="#!">Another action</a>
-                      <a class="dropdown-item" href="#!">Something else here</a>
-                    </div>
-                  </div>
-                </div>
-              </div> -->
+
+              <input type="email" class="form-control" name="invoiceEmail" id="invoiceEmail" placeholder="payer@gmail.com" aria-label="payer@gmail.com">
 
             </div>
+            <!-- End Form -->
           </div>
-          <div class="col-6">
-            <div class="form-group">
-              <label>
-                Invoice price
-              </label>
-              <small class="form-text text-muted">
+
+          <div class="col-sm-6">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="invoicePrice" class="_form-label text-dark">Invoice price</label>
+              <small class="d-block _form-text text-muted">
                 Price of the invoice
               </small>
-              <div class="input-group mb-3">
-                <input type="number" class="form-control" id="invoicePrice" name="invoicePrice" placeholder="30" min="0">
-              </div>
+
+              <input type="number" class="form-control" name="invoicePrice" id="invoicePrice" placeholder="30" aria-label="30" min="5">
+
             </div>
+            <!-- End Form -->
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
 
-    <!-- Divider -->
-    <hr class="mt-4 mb-5">
+
+    <hr class="">
 
     <div class="row">
+
       <div class="col-12">
 
         <div id="response" hidden>
@@ -474,16 +506,11 @@ post-vars:
       <div class="col-12">
         <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post!</button>
       </div>
-
     </div>
-
-
   </form>
 </div>
 
 
-
-<!-- MODAL -->
 <div class="modal fade" id="importGoogleDoc" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content bg-lighter">
@@ -526,7 +553,7 @@ post-vars:
               <label>
                 Doc URL
               </label>
-              <small class="form-text text-muted">
+              <small class="d-block _form-text text-muted">
                 Remember, the Doc must be published!
               </small>
               <div class="input-group input-group-merge mb-3">
@@ -564,10 +591,9 @@ post-vars:
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
+<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
 
 <script type="text/javascript">
   // fields
@@ -648,6 +674,7 @@ post-vars:
           // dom.select('#body').setValue()
 
           var newDropdownHTML = '<a class="dropdown-item disabled" href="#" disabled>None</a>';
+          var invoiceDropdownEl = document.getElementById('invoiceEmailDropdownList');
           Manager.storage().get('admin.post.invoiceEmails', [])
           .forEach((item, i) => {
             if (item) {
@@ -655,7 +682,9 @@ post-vars:
             }
           });
 
-          document.getElementById('invoiceEmailDropdownList').insertAdjacentHTML('beforeend', newDropdownHTML)
+          if (invoiceDropdownEl) {
+            invoiceDropdownEl.insertAdjacentHTML('beforeend', newDropdownHTML)
+          }
 
           dom.select('body').on('click', function(event) {
             // allowLeave = false;
@@ -1222,6 +1251,6 @@ post-vars:
 <!-- https://benweet.github.io/stackedit.js/ -->
 <script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script>
 <!-- <script src="https://unpkg.com/turndown/dist/turndown.js" async></script> -->
-<script src="/special/master/pages/admin/post/vendor/turndown.js" type="text/javascript"></script>
+<script src="/special/master/pages/admin/posts/vendor/turndown.js" type="text/javascript"></script>
 <!-- <script src="https://cdn.jsdelivr.net/npm/stackedit-js@1.0.7/docs/lib/stackedit.min.js" async></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/turndown@5.0.3/lib/turndown.cjs.min.js" async></script> -->
