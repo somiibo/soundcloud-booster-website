@@ -120,7 +120,7 @@ settings:
   <!-- Content -->
   <div class="container py-5 py-sm-7">
     <a class="d-flex justify-content-center mb-5" href="{{ site.url }}" target="_blank">
-      <img class="zi-2" src="{{ site.brand.logo-image-svg }}" alt="{{ site.brand.name }}" style="width: 8rem;">
+      <img class="zi-2" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
     </a>
 
     <div class="mx-auto" style="max-width: 30rem;">
