@@ -1,0 +1,36 @@
+<script type="text/javascript">
+  if (window.parent) {
+    var adminDashboard = {{ site.admin-dashboard }} || { pages: [] };
+    adminDashboard.pages = adminDashboard.pages || [];
+
+    function _sendParentMessage(message) {
+      window.parent.postMessage(message, '*')
+    }
+
+    _sendParentMessage({
+      command: 'embed-manager:update',
+      payload: {
+        type: 'init',
+        url: window.location.href,
+        pages: adminDashboard.pages
+      },
+    })
+
+    Manager.auth().ready(function () {
+      var user = firebase.auth().currentUser || {};
+      _sendParentMessage({
+        command: 'embed-manager:update',
+        payload: {
+          type: 'auth',
+          user: {
+            authenticated: !!user.uid,
+            uid: user.uid,
+            email: user.email,
+          },
+
+        }
+      })
+    })
+
+  }
+</script>
