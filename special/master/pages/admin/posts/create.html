@@ -23,6 +23,8 @@ admin:
   '
 ---
 
+<textarea id="markdown-holder" name="name" rows="8" cols="80" hidden></textarea>
+
 <div class="row loaded-false">
   <div class="col-lg-8 offset-lg-2">
     <div class="d-flex justify-content-center">
@@ -979,6 +981,12 @@ admin:
                   // https://github.com/domchristie/turndown
                   var markdown = turndownService.turndown(body);
 
+                  document.getElementById('markdown-holder').value = markdown; // just to see what it looks like before processing
+
+                  // Remove whitespace
+                  // markdown = markdown
+                  //   .replace(/^\n\s*/gm, '');
+
                   // Fix no spaces with links
                   markdown = markdown
                     .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
@@ -997,6 +1005,7 @@ admin:
                     // .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
 
                   // Remove hr breaks
+                  // console.log('---formData.replaceHeadings', formData.replaceHeadings);
                   if (formData.replaceHeadings) {
                     markdown = markdown
                       .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
