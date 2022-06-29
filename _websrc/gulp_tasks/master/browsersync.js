@@ -52,6 +52,9 @@ gulp.task('browsersync', async function () {
     };
     if (argv.https) {
       if (!fs.exists('./@output/.temp/certificate/localhost.key.pem') || !fs.exists('./@output/.temp/certificate/localhost.cert.pem')) {
+        setTimeout(function () {
+          process.exit(1)
+        }, 1);
         return reject(new Error("To run the site on HTTPS you first need to execute: npm run create:cert"));
       }
       settings.https = {
