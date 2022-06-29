@@ -85,8 +85,7 @@ gulp.task('jekyll-build', async function () {
       build.brand = _configYml.brand;
 
       // Set custom admin dashboard pages
-      build['admin-dashboard-pages'] = JSON5.parse(_configYml['admin-dashboard-pages']);
-      // build['admin-dashboard-pages'] = 'asd'
+      build['admin-dashboard'] = JSON5.parse(_configYml['admin-dashboard']);
 
       fs.write('@output/build/build.json', JSON.stringify(build, null, 2));
     } catch (e) {
