@@ -46,10 +46,10 @@ admin:
           <div class="row">
             <div class="col-12">
               <div class="alert alert-soft-secondary">
-                <div><strong>ID:</strong> <span id="previous-post-id">318</span> </div>
-                <div><strong>URL:</strong> <span id="previous-post-url">http://192.168.1.215:4000/blog/effective-ways-of-earning-money-to-push-your-business-forward</span> </div>
-                <div><strong>Slug:</strong> <span id="previous-post-slug">blog/effective-ways-of-earning-money-to-push-your-business-forward</span> </div>
-                <div><strong>Invoice:</strong> <span id="previous-post-invoice">Manual</span> </div>
+                <div><strong>ID:</strong> <span id="previous-post-id">...</span> </div>
+                <div><strong>URL:</strong> <span id="previous-post-url">...</span> </div>
+                <div><strong>Slug:</strong> <span id="previous-post-slug">...</span> </div>
+                <div><strong>Invoice:</strong> <span id="previous-post-invoice">...</span> </div>
               </div>
             </div>
           </div>
@@ -604,6 +604,8 @@ admin:
   var publicSiteUrl = '{{ site.url }}';
 
   {% for post in site.posts limit:1 %}
+  // console.log('----LOOP TITLE', '{{ post.post.title }}');
+  // console.log('----LOOP ID', '{{ post.post.id }}');
   fields = {
     // title: "{{ post.post.title }}",
     title: "",
@@ -620,6 +622,10 @@ admin:
     replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html name="{name}" alt="{alt}" -%}{% endraw %}',
   }
   {% endfor %}
+
+  {% assign post-test = site.posts.first %}
+
+  // console.log('----post-test', '{{ post-test.post.id }}');
 
   authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
 
@@ -645,14 +651,21 @@ admin:
 
     var lastPost = Manager.storage().get('admin.post') || {};
 
+    // console.log('----lastPost.lastId', lastPost.lastId);
+
     if (lastPost.lastId) {
-      fields.id = lastPost.lastId + 1;
+      if (fields.id <= lastPost.lastId) {
+        fields.id = lastPost.lastId + 1;
+      }
       Manager.dom().select('#previous-post-container').removeAttribute('hidden');
       Manager.dom().select('#previous-post-id').setInnerHTML(lastPost.lastId);
       Manager.dom().select('#previous-post-slug').setInnerHTML(lastPost.lastSlug);
       Manager.dom().select('#previous-post-invoice').setInnerHTML(lastPost.lastInvoice);
       Manager.dom().select('#previous-post-url').setInnerHTML(lastPost.lastUrl);
     }
+
+    // console.log('----FINAL', fields.id);
+
 
     fetch(siteUrl + '/@output/build/build.json', {
       method: 'GET',
