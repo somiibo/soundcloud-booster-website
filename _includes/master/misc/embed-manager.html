@@ -37,7 +37,9 @@
       }
     })
     .catch(function (e) {
-      alert('Failed to fetch build.json: ' + e)
+      var error = new Error('Failed to fetch build.json: ' + e)
+      console.error(error);
+      alert(error)
     })
 
     // Fetch auth

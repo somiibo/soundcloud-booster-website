@@ -31,13 +31,13 @@ Post.prototype.create = async function (options) {
     req.on('data', function(chunk) {
       body.push(chunk.toString());
     });
+    
     req.on('end', async function() {
       body = body.join('');
       parsedBody = JSON.parse(body);
       let poster = new Poster({
         environment: 'development'
       });
-
 
       console.log('Creating post...', parsedBody);
 
