@@ -1,3 +1,9 @@
+<style media="screen">
+  body[data-theme="dark"] #main-logo {
+    filter: brightness(0) invert(1);
+  }
+</style>
+
 <script type="text/javascript">
   // https://stackoverflow.com/questions/326069/how-to-identify-if-a-webpage-is-being-loaded-inside-an-iframe-or-directly-into-t
   var inIframe = false;
@@ -11,6 +17,34 @@
     function _sendParentMessage(message) {
       window.parent.postMessage(message, '*')
     }
+
+    function messageHandler() {
+      var message = event.data || {};
+      var command = message.command || '';
+      var payload = message.payload || {};
+
+      console.log('Message', command, payload.type, message);
+
+      if (command === 'embed-manager:update') {
+        if (payload.type === 'theme-change') {
+          setTheme(payload.theme)
+        }
+      }
+    }
+
+    function setTheme(theme) {
+      try {
+        theme = theme || HSThemeAppearance.getAppearance();
+        HSThemeAppearance.setAppearance(theme)
+        document.body.setAttribute('data-theme', theme);
+      } catch (e) {
+        console.error('Cannot set appearance', e);
+      }
+    }
+
+    setTheme();
+
+    window.addEventListener('message', messageHandler, false);
 
     // Fetch build.json
     fetch('{{ site.url }}/@output/build/build.json?cb=' + new Date().getTime(), {
