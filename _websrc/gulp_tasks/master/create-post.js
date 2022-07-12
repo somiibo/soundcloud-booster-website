@@ -31,7 +31,7 @@ Post.prototype.create = async function (options) {
     req.on('data', function(chunk) {
       body.push(chunk.toString());
     });
-    
+
     req.on('end', async function() {
       body = body.join('');
       parsedBody = JSON.parse(body);
@@ -42,16 +42,16 @@ Post.prototype.create = async function (options) {
       console.log('Creating post...', parsedBody);
 
       // Save to disk OR commit
-      // poster.onDownload = async function (req, filepath, filename, ext) {
-      poster.onDownload = async function (meta) {
+      poster.onDownload = function (meta) {
         return new Promise(async function(resolve, reject) {
           // let path = `${filepath}${filename}.${ext}`;
           // console.log('onDownload', meta.tempPath);
           // req.pipe(fs.createWriteStream(path));
           // req.pipe(poster.createWriteStream(path));
-          await poster.saveImage(meta.finalPath)
-          // console.log('...done');
-          resolve();
+
+          poster.saveImage(meta.finalPath)
+            .then(() => {resolve()})
+            .catch((e) => {reject(e)})
         });
       }
 
@@ -86,7 +86,12 @@ Post.prototype.create = async function (options) {
       const responseBody = { headers, method, url, body };
 
       // console.log('------response', response);
-      res.write(JSON.stringify(response.data));
+
+      if (response.status >= 200 && response.status <= 299) {
+        res.write(JSON.stringify(response.data));
+      } else {
+        res.write(response.error);
+      }
       return resolve(res.end());
     });
   });
