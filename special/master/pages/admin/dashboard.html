@@ -734,7 +734,7 @@ meta:
                 var count = total[subscription.planId] || {};
                 count.total = count.total || 0;
                 count.monthly = count.monthly || 0;
-                count.annually = count.monthly || 0;
+                count.annually = count.annually || 0;
 
                 var percentMonthly = ((count.monthly / count.total) * 100 || 0);
                 var percentAnnually = ((count.annually / count.total) * 100 || 0);
