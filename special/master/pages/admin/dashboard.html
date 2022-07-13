@@ -12,6 +12,11 @@ meta:
   breadcrumb: "Dashboard"
   index: false
 ---
+<div id="admin-result-error" class="alert alert-soft-danger" role="alert" hidden>
+  <h4 class="alert-heading">Error!</h4>
+  <p class="mb-0 admin-result-message">There was an error completing your request.</p>
+</div>
+
 <!-- Card -->
 <div class="card card-body mb-3 mb-lg-5">
   <div class="row col-md-divider gx-lg-6">
@@ -111,6 +116,33 @@ meta:
   <!-- End Row -->
 </div>
 <!-- End Card -->
+
+<div class="card mb-3 mb-lg-5">
+  <div class="card-header border-bottom">
+    <h4 class="card-header-title">Subscription breakdown</h4>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
+    <div class="mb-4">
+      <p>Breakdown of each plan.</p>
+    </div>
+
+    <div id="subscription-breakdown-spinner" class="">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    </div>
+
+    <!-- List Group -->
+    <ul id="subscription-breakdown-parent" class="list-group" hidden>
+
+    </ul>
+    <!-- End List Group -->
+  </div>
+  <!-- End Body -->
+</div>
+
 
 <!-- Card -->
 <div class="card mb-3 mb-lg-5" hidden>
@@ -517,10 +549,54 @@ meta:
 <!-- End Row -->
 <script type="text/javascript">
 
+  var subscriptionPlanTemplate = `
+    <li class="list-group-item">
+      <div class="mb-2">
+        <h5>{name} <span class="badge bg-primary ms-1">Plan</span></h5>
+      </div>
+
+      <div class="d-flex align-items-md-center">
+        <div class="flex-shrink-0">
+          <span class="display-3 text-dark">{countTotal}</span>
+        </div>
+
+        <div class="flex-grow-1 ms-3">
+          <div class="row mx-md-n3">
+            <div class="col-md px-md-4">
+              <span class="d-block">Total</span>
+              <span class="badge bg-soft-primary text-primary p-1">
+                <i class="bi-graph-up"></i> +0 subscribers
+              </span>
+            </div>
+
+            <div class="col-md-9 col-lg-10 column-md-divider px-md-4">
+              <div class="row justify-content-start mb-2">
+                <div class="col-auto">
+                  <span class="legend-indicator bg-primary"></span>
+                  Monthly ({countMonthly})
+                </div>
+
+                <div class="col-auto">
+                  <span class="legend-indicator bg-success"></span>
+                  Annually ({countAnnually})
+                </div>
+
+              </div>
+
+              <div class="progress rounded-pill" style="height: 0.75rem;">
+                <div class="progress-bar" role="progressbar" style="width: {percentMonthly}%" aria-valuenow="{percentMonthly}" aria-valuemin="0" aria-valuemax="100">{percentMonthlyVisual}</div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: {percentAnnually}%" aria-valuenow="{percentAnnually}" aria-valuemin="0" aria-valuemax="100">{percentAnnuallyVisual}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  `
+
   Manager.auth().ready(function(user) {
     var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
-
 
     var statsUsersTotalCurrentEl = document.getElementById('stats-users-total-current');
     var statsUsersTotalPreviousEl = document.getElementById('stats-users-total-previous');
@@ -537,6 +613,9 @@ meta:
     var statsPremiumSubscribersCurrentEl = document.getElementById('stats-premium-subscribers-current');
     var statsPremiumSubscribersPreviousEl = document.getElementById('stats-premium-subscribers-previous');
     var statsPremiumSubscribersIconEl = Manager.dom().select('#stats-premium-subscribers-icon');
+
+    var subscriptionBreakdownParentEl = document.getElementById('subscription-breakdown-parent');
+    var subscriptionBreakdownSpinnerEl = document.getElementById('subscription-breakdown-spinner');
 
     // https://stackoverflow.com/a/2901298/7305269
     function numberWithCommas(x) {
@@ -561,7 +640,6 @@ meta:
     }
 
     if (user && user.uid) {
-
       var statsUsersTotalPrevious = Manager.storage().get('admin.stats-users-total', 0);
       var statsUsersOnlinePrevious = Manager.storage().get('admin.stats-users-online', 0);
       var statsNotificationSubscribersPrevious = Manager.storage().get('admin.stats-notification-subscribers', 0);
@@ -574,59 +652,127 @@ meta:
 
       user.getIdToken(false)
         .then(function(token) {
-          fetch(serverProd, {
+
+          // Get stats
+          WonderfulFetch(serverProd, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+            timeout: 30000,
+            response: 'json',
+            body: {
               authenticationToken: token,
               command: 'admin:get-stats',
               payload: {},
-            }),
-            timeout: 20000,
+            },
           })
-          .then(function (res) {
-            if (res.ok) {
-              res.json()
-              .then(function (data) {
-                console.log('Success', data);
+          .then(function (data) {
+            console.log('Success', data);
 
-                var statsUsersTotalDifference = calculateDifference(data.users.total, statsUsersTotalPrevious)
-                var statsUsersOnlineDifference = calculateDifference(data.users.online, statsUsersOnlinePrevious)
-                var statsNotificationSubscribersDifference = calculateDifference(data.notifications.total, statsNotificationSubscribersPrevious)
-                var statsPremiumSubscribersDifference = calculateDifference(data.subscriptions.total, statsPremiumSubscribersPrevious)
+            var statsUsersTotalDifference = calculateDifference(data.users.total, statsUsersTotalPrevious)
+            var statsUsersOnlineDifference = calculateDifference(data.users.online, statsUsersOnlinePrevious)
+            var statsNotificationSubscribersDifference = calculateDifference(data.notifications.total, statsNotificationSubscribersPrevious)
+            var statsPremiumSubscribersDifference = calculateDifference(data.subscriptions.total, statsPremiumSubscribersPrevious)
 
-                statsUsersTotalCurrentEl.innerHTML = numberWithCommas(data.users.total)
-                statsUsersOnlineCurrentEl.innerHTML = numberWithCommas(data.users.online)
-                statsNotificationSubscribersCurrentEl.innerHTML = numberWithCommas(data.notifications.total)
-                statsPremiumSubscribersCurrentEl.innerHTML = numberWithCommas(data.subscriptions.total)
+            statsUsersTotalCurrentEl.innerHTML = numberWithCommas(data.users.total)
+            statsUsersOnlineCurrentEl.innerHTML = numberWithCommas(data.users.online)
+            statsNotificationSubscribersCurrentEl.innerHTML = numberWithCommas(data.notifications.total)
+            statsPremiumSubscribersCurrentEl.innerHTML = numberWithCommas(data.subscriptions.total)
 
-                setDifferenceHTML(statsUsersTotalIconEl, statsUsersTotalDifference)
-                setDifferenceHTML(statsUsersOnlineIconEl, statsUsersOnlineDifference)
-                setDifferenceHTML(statsNotificationSubscribersIconEl, statsNotificationSubscribersDifference)
-                setDifferenceHTML(statsPremiumSubscribersIconEl, statsPremiumSubscribersDifference)
+            setDifferenceHTML(statsUsersTotalIconEl, statsUsersTotalDifference)
+            setDifferenceHTML(statsUsersOnlineIconEl, statsUsersOnlineDifference)
+            setDifferenceHTML(statsNotificationSubscribersIconEl, statsNotificationSubscribersDifference)
+            setDifferenceHTML(statsPremiumSubscribersIconEl, statsPremiumSubscribersDifference)
 
-                Manager.storage().set('admin.stats-users-total', data.users.total);
-                Manager.storage().set('admin.stats-users-online', data.users.online);
-                Manager.storage().set('admin.stats-notification-subscribers', data.notifications.total);
-                Manager.storage().set('admin.stats-premium-subscribers', data.subscriptions.total);
-              })
-            } else {
-              return res.text()
-              .then(function (data) {
-                throw new Error(data || res.statusText || 'Unknown error.')
-              })
-            }
+            Manager.storage().set('admin.stats-users-total', data.users.total);
+            Manager.storage().set('admin.stats-users-online', data.users.online);
+            Manager.storage().set('admin.stats-notification-subscribers', data.notifications.total);
+            Manager.storage().set('admin.stats-premium-subscribers', data.subscriptions.total);
           })
           .catch(function (e) {
-            console.error('Failed', e);
-            Manager.dom().select('#stats-error').setInnerHTML(e).show();
+            Admin().display(e);
           });
+
+          // Get sub data
+          WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getApp', {
+            method: 'POST',
+            timeout: 30000,
+            response: 'json',
+            body: {
+              id: Manager.properties.global.app,
+            },
+          })
+          .then(function (app) {
+            console.log('App', app);
+
+            WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getSubscriptionTotals', {
+              method: 'POST',
+              timeout: 30000,
+              response: 'json',
+              body: {
+                id: Manager.properties.global.app,
+              },
+            })
+            .then(function (total) {
+              var subscriptions = [];
+              var html = '';
+              Object.keys(app.products)
+              .forEach((key, i) => {
+                var product = app.products[key];
+                if (product.type === 'subscription' && product.monthly && product.monthly.price > 0) {
+                  subscriptions = subscriptions.concat(product)
+                }
+              });
+
+              subscriptions.sort(function (one, two) {
+                if (one.monthly.price > two.monthly.price) {
+                  return 1;
+                } else if (one.monthly.price < two.monthly.price) {
+                  return -1;
+                } else  {
+                  return 0;
+                }
+              })
+
+              subscriptions.forEach((subscription, i) => {
+                var count = total[subscription.planId] || {};
+                count.total = count.total || 0;
+                count.monthly = count.monthly || 0;
+                count.annually = count.monthly || 0;
+
+                var percentMonthly = ((count.monthly / count.total) * 100 || 0);
+                var percentAnnually = ((count.annually / count.total) * 100 || 0);
+
+                html += subscriptionPlanTemplate
+                  .replace(/{name}/img, subscription.name)
+                  .replace(/{countTotal}/img, count.total)
+                  .replace(/{countMonthly}/img, count.monthly)
+                  .replace(/{countAnnually}/img, count.annually)
+                  .replace(/{percentMonthly}/img, percentMonthly)
+                  .replace(/{percentAnnually}/img, percentAnnually)
+                  .replace(/{percentMonthlyVisual}/img, percentMonthly.toFixed(2))
+                  .replace(/{percentAnnuallyVisual}/img, percentAnnually.toFixed(2))
+              });
+
+              subscriptionBreakdownParentEl.innerHTML = html;
+              subscriptionBreakdownParentEl.removeAttribute('hidden')
+              subscriptionBreakdownSpinnerEl.setAttribute('hidden', true)
+
+            })
+            .catch(function (e) {
+              Admin().display(e);
+            });
+
+          })
+          .catch(function (e) {
+            Admin().display(e);
+          });
+
 
         })
         .catch(function(e) {
-          console.error('Failed', e);
-          Manager.dom().select('#stats-error').setInnerHTML(e).show();
+          Admin().display(e);
         });
+
+
     }
   });
 

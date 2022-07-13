@@ -51,6 +51,7 @@ foot:
     <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/js/theme.min.js"></script>
 
     <!-- ITW CW -->
+    <script src="https://cdn.jsdelivr.net/npm/wonderful-fetch@0.0.14/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
     <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
     {%- include /master/misc/embed-manager.html -%}
   '
@@ -150,8 +151,24 @@ settings:
         var searchForm = document.getElementById('datatable-search-form')
         var spinner = document.getElementById('datatable-spinner')
 
+        var adminResultError = document.getElementById('admin-result-error');
+        var adminResultSuccess = document.getElementById('admin-result-success');
+
         status = status || 'ready';
         message = message || 'Success';
+
+        if (status instanceof Error) {
+          console.error('Display', status, message);
+        } else {
+          console.log('Display', status, message);
+        }
+
+        if (adminResultError) {
+          adminResultError.setAttribute('hidden', true);
+        }
+        if (adminResultSuccess) {
+          adminResultSuccess.setAttribute('hidden', true);
+        }
 
         if (status === 'ready') {
           if (searchInput) { searchInput.removeAttribute('readonly') }
@@ -166,13 +183,31 @@ settings:
         if (status instanceof Error) {
           if (searchInput) { searchInput.removeAttribute('readonly') }
           if (spinner) { spinner.setAttribute('hidden', true) }
-          alert(status)
+
+          if (adminResultError) {
+            adminResultError.removeAttribute('hidden');
+            var messageEl = adminResultError.querySelector('.admin-result-message');
+            if (messageEl) {
+              messageEl.innerHTML = status;
+            }
+          } else {
+            alert(status)
+          }
         }
 
         if (status === 'success') {
           if (searchInput) { searchInput.removeAttribute('readonly') }
           if (spinner) { spinner.setAttribute('hidden', true) }
-          alert(message)
+
+          if (adminResultSuccess) {
+            adminResultSuccess.removeAttribute('hidden');
+            var messageEl = adminResultSuccess.querySelector('.admin-result-message');
+            if (messageEl) {
+              messageEl.innerHTML = message;
+            }
+          } else {
+            alert(message || 'Successfully completed action')
+          }
         }
       }
       // addTableRow: function (options) {
