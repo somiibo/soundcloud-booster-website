@@ -652,7 +652,7 @@ meta:
           // Get stats
           WonderfulFetch(serverProd, {
             method: 'POST',
-            timeout: 30000,
+            timeout: 60000,
             response: 'json',
             body: {
               authenticationToken: token,
@@ -690,7 +690,7 @@ meta:
           // Get sub data
           WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getApp', {
             method: 'POST',
-            timeout: 30000,
+            timeout: 60000,
             response: 'json',
             body: {
               id: Manager.properties.global.app,
@@ -701,7 +701,7 @@ meta:
 
             WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getSubscriptionTotals', {
               method: 'POST',
-              timeout: 30000,
+              timeout: 60000,
               response: 'json',
               body: {
                 id: Manager.properties.global.app,
