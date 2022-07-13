@@ -293,7 +293,7 @@ meta:
 <!-- End Card -->
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 mb-3">
     <a class="card card-hover-shadow" href="{{ site.url }}/admin/notifications/create">
       <div class="card-body">
         <div class="d-flex align-items-center">
@@ -315,7 +315,7 @@ meta:
     </a>
   </div>
 
-  <div class="col-md-6">
+  <div class="col-md-6 mb-3">
     <a class="card card-hover-shadow" href="{{ site.url }}/admin/posts/create">
       <div class="card-body">
         <div class="d-flex align-items-center">
@@ -558,8 +558,8 @@ meta:
 
         <div class="flex-grow-1 ms-3">
           <div class="row mx-md-n3">
-            <div class="col-md px-md-4">
-              <span class="d-block">Total</span>
+            <div class="col-md px-md-4 align-items-center">
+              <!-- <span class="d-block">Total</span> -->
               <span class="badge bg-soft-primary text-primary p-1">
                 <i class="bi-graph-up"></i> +0 subscribers
               </span>
@@ -580,8 +580,8 @@ meta:
               </div>
 
               <div class="progress rounded-pill" style="height: 0.75rem;">
-                <div class="progress-bar" role="progressbar" style="width: {percentMonthly}%" aria-valuenow="{percentMonthly}" aria-valuemin="0" aria-valuemax="100">{percentMonthlyVisual}</div>
-                <div class="progress-bar bg-success" role="progressbar" style="width: {percentAnnually}%" aria-valuenow="{percentAnnually}" aria-valuemin="0" aria-valuemax="100">{percentAnnuallyVisual}</div>
+                <div class="progress-bar" role="progressbar" style="width: {percentMonthly}%" aria-valuenow="{percentMonthly}" aria-valuemin="0" aria-valuemax="100">{percentMonthlyVisual}%</div>
+                <div class="progress-bar bg-success" role="progressbar" style="width: {percentAnnually}%" aria-valuenow="{percentAnnually}" aria-valuemin="0" aria-valuemax="100">{percentAnnuallyVisual}%</div>
               </div>
             </div>
           </div>
