@@ -654,6 +654,7 @@ meta:
             method: 'POST',
             timeout: 60000,
             response: 'json',
+            tries: 3,
             body: {
               authenticationToken: token,
               command: 'admin:get-stats',
@@ -692,6 +693,7 @@ meta:
             method: 'POST',
             timeout: 60000,
             response: 'json',
+            tries: 3,
             body: {
               id: Manager.properties.global.app,
             },
@@ -703,6 +705,7 @@ meta:
               method: 'POST',
               timeout: 60000,
               response: 'json',
+              tries: 3,
               body: {
                 id: Manager.properties.global.app,
               },
@@ -713,7 +716,7 @@ meta:
               var subscriptions = [];
               var html = '';
               Object.keys(app.products)
-              .forEach((key, i) => {
+              .forEach(function (key, i) {
                 var product = app.products[key];
                 if (product.type === 'subscription' && product.monthly && product.monthly.price > 0) {
                   subscriptions = subscriptions.concat(product)
@@ -730,7 +733,7 @@ meta:
                 }
               })
 
-              subscriptions.forEach((subscription, i) => {
+              subscriptions.forEach(function (subscription, i) {
                 var count = total[subscription.planId] || {};
                 count.total = count.total || 0;
                 count.monthly = count.monthly || 0;
