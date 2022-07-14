@@ -283,6 +283,16 @@
 
 </script>
 
+<!-- Add DEV click -->
+{%- if site.url contains "http://" -%}
+<script type="text/javascript">
+  document.addEventListener('click', function (event) {
+    console.log('Click', event.target);
+  })
+</script>
+{% endif %}
+
+
 <!-- Master - Styles -->
 <style media="screen">
   /* Alert box */

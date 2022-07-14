@@ -158,43 +158,43 @@ settings:
 
                 <div id="auth-provider-buttons">
                   <div class="d-grid mb-4">
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="google.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="google.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" alt="Google Logo">
                         {{ page.meta.breadcrumb }} with Google
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="facebook.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="facebook.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" alt="Facebook Logo">
                         {{ page.meta.breadcrumb }} with Facebook
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="twitter.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="twitter.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" alt="Twitter Logo">
                         {{ page.meta.breadcrumb }} with Twitter
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="github.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="github.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" alt="GitHub Logo">
                         {{ page.meta.breadcrumb }} with GitHub
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="apple.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="apple.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" alt="Apple Logo">
                         {{ page.meta.breadcrumb }} with Apple
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="microsoft.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="microsoft.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" alt="Microsoft Logo">
                         {{ page.meta.breadcrumb }} with Microsoft
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="#" data-provider="yahoo.com" hidden>
+                    <a class="btn btn-white btn-lg mb-1 auth-signin-provider-btn" href="javascript:;" data-provider="yahoo.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" alt="Yahoo Logo">
                         {{ page.meta.breadcrumb }} with Yahoo
@@ -394,12 +394,32 @@ settings:
     redirectIsValid = Manager.isValidRedirectUrl(redirectUrl)
 
     // console.log('---redirect', redirectIsValid, redirectUrl);
+    // if (url.pathname.match(/signout/img)) {
+    //   if (!user) {
+    //     url.pathname = 'authentication/signin';
+    //     return redirect(url.toString());
+    //   } else {
+    //     firebase.auth().onAuthStateChanged(function (user) {
+    //       if (!user) {
+    //         url.pathname = 'authentication/signin';
+    //         return redirect(url.toString());
+    //       }
+    //     })
+    //     display('waiting');
+    //     return
+    //   }
+    // }
 
     firebase.auth()
       .getRedirectResult()
       .then(function (result) {
         console.log('----result', result);
         display();
+
+
+        // here
+
+
         if (!action) {
           display('hidden');
           if (url.searchParams.get('signout')) {
@@ -415,6 +435,24 @@ settings:
               redirect(url.toString())
             })
           } else {
+
+
+            if (url.pathname.match(/signout/img)) {
+              if (!user) {
+                url.pathname = 'authentication/signin';
+                return redirect(url.toString());
+              } else {
+                firebase.auth().onAuthStateChanged(function (user) {
+                  if (!user) {
+                    url.pathname = 'authentication/signin';
+                    return redirect(url.toString());
+                  }
+                })
+                display('waiting');
+                return
+              }
+            }
+
             // console.log('----qsToken', qsToken);
             // qsToken can be set on its own to simply sign in with it
             if (qsToken) {
@@ -431,8 +469,8 @@ settings:
             } else {
               action = true;
               console.log('----READY');
-              var prodiver = url.searchParams.get('provider');
-              if (prodiver) {
+              var provider = url.searchParams.get('provider');
+              if (provider) {
                 firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
                 .catch(function (e) {
                   display(e);
@@ -458,7 +496,7 @@ settings:
                       providerDetails = data;
 
                       Object.values(providerDetails)
-                      .forEach((value, i) => {
+                      .forEach(function (value, i) {
                         providerCount += value ? 1 : 0;
                       });
 
