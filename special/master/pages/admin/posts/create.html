@@ -691,6 +691,8 @@ admin:
 
     var lastPost = Manager.storage().get('admin.post') || {};
 
+    console.log('Last post', {jekyll: fields, storage: lastPost});
+
     // console.log('----lastPost.lastId', lastPost.lastId);
 
     if (lastPost.lastId) {
