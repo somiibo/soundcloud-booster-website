@@ -922,9 +922,10 @@ admin:
               val
               .toLowerCase()
               .trim()
-              .replace(/\s/g, '-')
-              .replace(/[^ \w-]/igm, '')
-              .replace(/-+/, '-')
+              .replace(/\s/g, '-') // replace spaces with dashes
+              .replace(/[^ \w-]/igm, '') //
+              .replace(/-+/, '-') // if there are multiple dashes, replace with one
+              .replace(/(^-|-$)/g, '') // remove dashes from end
             )
           }
 
