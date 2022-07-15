@@ -849,6 +849,10 @@ admin:
                 return;
               }
 
+              // Fixes
+              data.title = data.title.replace(/"/img, '\'')
+              data.excerpt = data.excerpt.replace(/"/img, '\'')
+
               var lastUrl = 'blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
               Manager.storage().set('admin.post.lastSlug', lastUrl)
