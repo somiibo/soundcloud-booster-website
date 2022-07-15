@@ -579,8 +579,10 @@ settings:
       })
       .catch(function (e) {
         console.log('Fail', e);
+        return resolve();
       })
       .finally(function () {
+        console.log('Completed signup');
         return resolve();
       })
     });
@@ -633,6 +635,7 @@ settings:
       console.log('---token', token);
       signUpHandler(token)
       .then(function () {
+        console.log('');
         fetch(serverApiURL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
