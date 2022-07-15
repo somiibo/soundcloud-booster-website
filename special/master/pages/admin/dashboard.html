@@ -577,6 +577,11 @@ meta:
                   Annually ({countAnnually})
                 </div>
 
+                <div class="col-auto">
+                  <span class="legend-indicator bg-warning"></span>
+                  Exempt ({countExempt})
+                </div>
+
               </div>
 
               <div class="progress rounded-pill" style="height: 0.75rem;">
@@ -661,47 +666,42 @@ meta:
               payload: {},
             },
           })
-          .then(function (data) {
-            console.log('Success', data);
+          .then(function (stats) {
+            // stats = {
+            //   users: { total: 172975, online: 1898 },
+            //   subscriptions: {
+            //     total: 472,
+            //     totals: { exempt: 3, total: 469 },
+            //     plans: { plus: {total: 3, monthly: 1, annually: 2} }
+            //   },
+            //   notifications: { total: 11987 }
+            // }
+            console.log('Stats', stats);
 
-            var statsUsersTotalDifference = calculateDifference(data.users.total, statsUsersTotalPrevious)
-            var statsUsersOnlineDifference = calculateDifference(data.users.online, statsUsersOnlinePrevious)
-            var statsNotificationSubscribersDifference = calculateDifference(data.notifications.total, statsNotificationSubscribersPrevious)
-            var statsPremiumSubscribersDifference = calculateDifference(data.subscriptions.total, statsPremiumSubscribersPrevious)
 
-            statsUsersTotalCurrentEl.innerHTML = numberWithCommas(data.users.total)
-            statsUsersOnlineCurrentEl.innerHTML = numberWithCommas(data.users.online)
-            statsNotificationSubscribersCurrentEl.innerHTML = numberWithCommas(data.notifications.total)
-            statsPremiumSubscribersCurrentEl.innerHTML = numberWithCommas(data.subscriptions.total)
+            var statsUsersTotalDifference = calculateDifference(stats.users.total, statsUsersTotalPrevious)
+            var statsUsersOnlineDifference = calculateDifference(stats.users.online, statsUsersOnlinePrevious)
+            var statsNotificationSubscribersDifference = calculateDifference(stats.notifications.total, statsNotificationSubscribersPrevious)
+            var statsPremiumSubscribersDifference = calculateDifference(stats.subscriptions.totals.total, statsPremiumSubscribersPrevious)
+
+            statsUsersTotalCurrentEl.innerHTML = numberWithCommas(stats.users.total)
+            statsUsersOnlineCurrentEl.innerHTML = numberWithCommas(stats.users.online)
+            statsNotificationSubscribersCurrentEl.innerHTML = numberWithCommas(stats.notifications.total)
+            statsPremiumSubscribersCurrentEl.innerHTML = numberWithCommas(stats.subscriptions.totals.total)
 
             setDifferenceHTML(statsUsersTotalIconEl, statsUsersTotalDifference)
             setDifferenceHTML(statsUsersOnlineIconEl, statsUsersOnlineDifference)
             setDifferenceHTML(statsNotificationSubscribersIconEl, statsNotificationSubscribersDifference)
             setDifferenceHTML(statsPremiumSubscribersIconEl, statsPremiumSubscribersDifference)
 
-            Manager.storage().set('admin.stats-users-total', data.users.total);
-            Manager.storage().set('admin.stats-users-online', data.users.online);
-            Manager.storage().set('admin.stats-notification-subscribers', data.notifications.total);
-            Manager.storage().set('admin.stats-premium-subscribers', data.subscriptions.total);
-          })
-          .catch(function (e) {
-            Admin().display(e);
-          });
+            Manager.storage().set('admin.stats-users-total', stats.users.total);
+            Manager.storage().set('admin.stats-users-online', stats.users.online);
+            Manager.storage().set('admin.stats-notification-subscribers', stats.notifications.total);
+            Manager.storage().set('admin.stats-premium-subscribers', stats.subscriptions.totals.total);
 
-          // Get sub data
-          WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getApp', {
-            method: 'POST',
-            timeout: 60000,
-            response: 'json',
-            tries: 3,
-            body: {
-              id: Manager.properties.global.app,
-            },
-          })
-          .then(function (app) {
-            console.log('App', app);
 
-            WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getSubscriptionTotals', {
+            // Get sub data
+            WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getApp', {
               method: 'POST',
               timeout: 60000,
               response: 'json',
@@ -710,8 +710,10 @@ meta:
                 id: Manager.properties.global.app,
               },
             })
-            .then(function (total) {
-              console.log('Total', total);
+            .then(function (app) {
+              console.log('App', app);
+
+              console.log('Total', stats.subscriptions);
 
               var subscriptions = [];
               var html = '';
@@ -734,10 +736,11 @@ meta:
               })
 
               subscriptions.forEach(function (subscription, i) {
-                var count = total[subscription.planId] || {};
+                var count = stats.subscriptions.plans[subscription.planId] || {};
                 count.total = count.total || 0;
                 count.monthly = count.monthly || 0;
                 count.annually = count.annually || 0;
+                count.exempt = count.exempt || 0;
 
                 var percentMonthly = ((count.monthly / count.total) * 100 || 0);
                 var percentAnnually = ((count.annually / count.total) * 100 || 0);
@@ -747,6 +750,7 @@ meta:
                   .replace(/{countTotal}/img, count.total)
                   .replace(/{countMonthly}/img, count.monthly)
                   .replace(/{countAnnually}/img, count.annually)
+                  .replace(/{countExempt}/img, count.exempt)
                   .replace(/{percentMonthly}/img, percentMonthly)
                   .replace(/{percentAnnually}/img, percentAnnually)
                   .replace(/{percentMonthlyVisual}/img, percentMonthly.toFixed(2))
@@ -756,6 +760,7 @@ meta:
               subscriptionBreakdownParentEl.innerHTML = html;
               subscriptionBreakdownParentEl.removeAttribute('hidden')
               subscriptionBreakdownSpinnerEl.setAttribute('hidden', true)
+
 
             })
             .catch(function (e) {
@@ -767,13 +772,10 @@ meta:
             Admin().display(e);
           });
 
-
         })
         .catch(function(e) {
           Admin().display(e);
         });
-
-
     }
   });
 
