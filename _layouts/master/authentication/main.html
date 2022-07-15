@@ -387,7 +387,8 @@ settings:
       ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
       : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
 
-    redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
+    redirectUrl = decodeURIComponent(url.searchParams.get('destination') || '{{ site.url }}');
+    // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
     qsToken = decodeURIComponent(url.searchParams.get('token') || '');
     // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
@@ -592,7 +593,7 @@ settings:
     console.log('Redirecting to', url);
     var delay = Manager.storage().get('auth.redirectDelay', 0);
     if (delay) {
-      alert('There is a redirect delay of ' + delay)
+      // alert('There is a redirect delay of ' + delay)
       setTimeout(function () {
         window.location.href = url;
       }, delay);
