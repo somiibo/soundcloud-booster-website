@@ -643,9 +643,12 @@ admin:
   var authors = [];
   var publicSiteUrl = '{{ site.url }}';
 
-  {% for post in site.posts limit:1 %}
+  {% assign latest-post = site.posts.first %}
+
   // console.log('----LOOP TITLE', '{{ post.post.title }}');
   // console.log('----LOOP ID', '{{ post.post.id }}');
+  // console.log('----', "{{ latest-post.post.id }}");
+  // console.log('----', parseInt("{{ latest-post.post.id }}") || 1);
   fields = {
     // title: "{{ post.post.title }}",
     title: "",
@@ -653,17 +656,15 @@ admin:
     url: "",
     // excerpt: "{{ post.post.excerpt }}",
     excerpt: "",
-    id: parseInt("{{ post.post.id }}") + 1,
-    author: "{{ post.post.author }}",
-    date: new Date().toISOString().split('T')[0] || '{{ post.date | date: "%Y-%m-%d" }}',
+    id: (parseInt("{{ latest-post.post.id }} || 0") + 1) || 1,
+    author: "{{ latest-post.post.author }}",
+    date: new Date().toISOString().split('T')[0] || '{{ latest-post.date | date: "%Y-%m-%d" }}',
     affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
-    tags: [{% for tag in post.post.tags %}"{{ tag }}",{% endfor %}],
-    categories: [{% for category in post.post.categories %}"{{ category }}",{% endfor %}],
+    tags: [{% for tag in latest-post.post.tags %}"{{ tag }}",{% endfor %}],
+    categories: [{% for category in latest-post.post.categories %}"{{ category }}",{% endfor %}],
     replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html name="{name}" alt="{alt}" -%}{% endraw %}',
   }
-  {% endfor %}
 
-  {% assign post-test = site.posts.first %}
 
   // console.log('----post-test', '{{ post-test.post.id }}');
 
@@ -691,7 +692,7 @@ admin:
 
     var lastPost = Manager.storage().get('admin.post') || {};
 
-    console.log('Last post', {jekyll: fields, storage: lastPost});
+    console.log('Post storage', {jekyll: fields, storage: lastPost});
 
     // console.log('----lastPost.lastId', lastPost.lastId);
 
