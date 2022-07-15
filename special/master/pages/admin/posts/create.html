@@ -924,6 +924,7 @@ admin:
               .trim()
               .replace(/\s/g, '-')
               .replace(/[^ \w-]/igm, '')
+              .replace(/-*/, '-')
             )
           }
 
