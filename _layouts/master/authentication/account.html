@@ -112,7 +112,7 @@ settings:
         <div class="col-sm mb-2 mb-sm-0">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-no-gutter">
-              <li class="breadcrumb-item"><a class="breadcrumb-link" href="{{ site.url }}">Home</a></li>
+              <li class="breadcrumb-item"><a class="breadcrumb-link" href="{{ site.url }}">{{ site.brand.name }}</a></li>
               <li class="breadcrumb-item active" aria-current="page">Account</li>
             </ol>
           </nav>
@@ -364,18 +364,49 @@ settings:
                 <!-- Form -->
                 <form id="personal-information-form" data-allow-resubmit="true">
                   <!-- Form -->
-                  <div class="mb-3">
-                    <label for="firstNameLabel" class="form-label">Full name</label>
+                  <div class="row mb-3">
+                    <p class="text-dark mb-0">Name</p>
+                    <div class="col-6">
+                      <label for="firstNameLabel" class="form-label text-muted">First name</label>
 
-                    <div class="input-group input-group-sm-vertical">
                       <input type="text" class="form-control" name="name.first" id="firstNameLabel" placeholder="Jon" aria-label="Jon" value="" autocomplete="given-name">
+                    </div>
+                    <div class="col-6">
+                      <label for="lastNameLabel" class="form-label text-muted">Last name</label>
+
                       <input type="text" class="form-control" name="name.last" id="lastNameLabel" placeholder="Snow" aria-label="Snow" value="" autocomplete="family-name">
                     </div>
                   </div>
                   <!-- End Form -->
 
                   <!-- Form -->
-                  <div class="mb-3">
+                  <div class="row mb-3">
+                    <!-- <p class="text-dark mb-0">Phone</p> -->
+                    <label for="nationalNumberLabel" class="form-label">Phone</label>
+
+                    <div class="input-group mb-3">
+                      <select id="countryCodes" class="form-select flex-grow-0" name="telephone.countryCode" autocomplete="tel-country-code" style="min-width: 4rem; max-width: 8rem; width: 50%;">
+                      </select>
+                      <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
+                               "mask": "(000) 000-0000"
+                             }'>
+                    </div>
+                    <!-- <div class="col-3 pe-0">
+                      <label for="countryCodeLabel" class="form-label text-muted">Country code</label>
+                      <input type="text" id="countryCodeLabel" class="js-input-mask form-control" name="telephone.countryCode" placeholder="+x" aria-label="+1" value="" style="max-width: 5rem;" autocomplete="tel-country-code" data-hs-mask-options='{
+                               "mask": "+0000"
+                             }'>
+                    </div>
+                    <div class="col-9 ps-0">
+                      <label for="nationalNumberLabel" class="form-label text-muted">Number</label>
+
+                      <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
+                               "mask": "(000) 000-0000"
+                             }'>
+                    </div> -->
+                  </div>
+
+                  <!-- <div class="mb-3">
                     <label for="phoneNumberLabel" class="form-label">Phone</label>
 
                     <div class="input-group input-group-xs-vertical">
@@ -386,7 +417,7 @@ settings:
                                "mask": "(000) 000-0000"
                              }'>
                    </div>
-                  </div>
+                  </div> -->
                   <!-- End Form -->
 
                   <div class="mb-3">
@@ -453,9 +484,35 @@ settings:
                     <p></p>
                   </div>
 
-                  <div class="d-flex justify-content-end">
+                  <!-- <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary">Save changes</button>
+                  </div> -->
+
+                  <div id="personal-information-save-popup" class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-3" style="max-width: 40rem;" hidden>
+                    <!-- Card -->
+                    <div class="card card-sm bg-dark border-dark mx-2">
+                      <div class="card-body">
+                        <div class="row justify-content-center justify-content-sm-between">
+                          <div class="col d-flex align-items-center text-light">
+                            <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> -->
+                            You have unsaved changes!
+                          </div>
+                          <!-- End Col -->
+
+                          <div class="col-auto">
+                            <div class="d-flex gap-3">
+                              <!-- <button type="button" class="btn btn-ghost-light">Discard</button> -->
+                              <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                          </div>
+                          <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                      </div>
+                    </div>
+                    <!-- End Card -->
                   </div>
+
                 </form>
                 <!-- End Form -->
               </div>
@@ -686,7 +743,7 @@ settings:
                   </div>
 
                   <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Change password</button>
+                    <button type="submit" class="btn btn-white">Change password</button>
                   </div>
                 </form>
               </div>
@@ -1006,6 +1063,7 @@ settings:
     var $premiumBadge = document.getElementById('premium-badge')
     var $profileBadges = document.getElementById('profile-badges')
     var $countries = document.getElementById('countryLabel')
+    var $countryCodes = document.getElementById('countryCodes')
     var $referralsParent = document.getElementById('referrals-parent')
     var $signinMethods = document.getElementById('signin-methods-parent')
 
@@ -1017,6 +1075,9 @@ settings:
     var $authUserProfileImg = document.getElementById('auth-user-profile-img')
 
     var $activeSessionsParent = document.getElementById('active-sessions-parent')
+
+    var $personalInformationSavePopup = document.getElementById('personal-information-save-popup')
+    var $personalInformationForm = document.getElementById('personal-information-form');
 
     var serverApiURL = 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
       .replace(/PROJECT_ID/g, Manager.utilities().get(Manager, 'properties.options.libraries.firebase_app.config.projectId'))
@@ -1068,6 +1129,7 @@ settings:
                   var premiumbadgeHtml = '';
                   var badgesHtml = '';
                   var countriesHtml = '<option value="">Choose a country</option>';
+                  var countryCodesHtml = '<option value="">Country code</option>';
                   var referralsHtml = '';
                   var signinMethodsHtml = '';
                   var activeSessionsHtml = '';
@@ -1106,6 +1168,7 @@ settings:
                   .forEach(function (code, i) {
                     var country = Countries.countries[code]
                     countriesHtml += '<option value="' + code + '">' + country.name + '</option>'
+                    countryCodesHtml += '<option value="' + country.phone + '">' + country.name + '  (+' + country.phone + ')</option>'
                   });
 
                   properties.affiliate.referrals.reverse()
@@ -1219,6 +1282,7 @@ settings:
                   $premiumBadge.innerHTML = premiumbadgeHtml;
                   $profileBadges.innerHTML = badgesHtml;
                   $countries.innerHTML = countriesHtml;
+                  $countryCodes.innerHTML = countryCodesHtml;
                   $signinMethods.innerHTML = signinMethodsHtml;
                   $activeSessionsParent.innerHTML = activeSessionsHtml;
                   if (properties.affiliate.referrals.length > 0) {
@@ -1257,6 +1321,10 @@ settings:
 
                   document.addEventListener('click', function (event) {
                     handleClick(event);
+                  })
+
+                  $('#personalInformation input, #personalInformation textarea, #personalInformation select').on('change keydown paste cut', function (event) {
+                    $personalInformationSavePopup.removeAttribute('hidden')
                   })
 
                   new bootstrap.ScrollSpy(document.body, {
@@ -1366,7 +1434,7 @@ settings:
         } else {
           _result(new Error('Please enter your password'))
         }
-      } else if (event.target.matches('#personal-information-form')) {
+      } else if (event.target === $personalInformationForm) {
         if (data.birthday.timestamp) {
           data.birthday.timestampUNIX = Math.round(new Date(data.birthday.timestamp).getTime() / 1000)
         }
@@ -1380,6 +1448,7 @@ settings:
         .set({personal: data}, {merge: true})
         .then(function () {
           _result()
+          $personalInformationSavePopup.setAttribute('hidden', true);
         })
         .catch(function (e) {
           _result(e)
