@@ -376,6 +376,7 @@ settings:
   var redirectIsValid = false;
   var redirectUrl;
   var qsToken;
+  var qsSource;
 
   Manager.auth().ready(function () {
     dom = Manager.dom();
@@ -390,6 +391,7 @@ settings:
     redirectUrl = decodeURIComponent(url.searchParams.get('destination') || '{{ site.url }}');
     // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
     qsToken = decodeURIComponent(url.searchParams.get('token') || '');
+    qsSource = decodeURIComponent(url.searchParams.get('source') || '');
     // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
     redirectIsValid = Manager.isValidRedirectUrl(redirectUrl)
@@ -416,10 +418,6 @@ settings:
       .then(function (result) {
         console.log('----result', result);
         display();
-
-
-        // here
-
 
         if (!action) {
           display('hidden');
@@ -590,8 +588,8 @@ settings:
   }
 
   function redirect(url) {
-    console.log('Redirecting to', url);
     var delay = Manager.storage().get('auth.redirectDelay', 0);
+    console.log('Redirecting with delay...', delay, url);
     if (delay) {
       // alert('There is a redirect delay of ' + delay)
       setTimeout(function () {
@@ -620,9 +618,16 @@ settings:
         return
       }
 
-      setTimeout(function () {
-        display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
-      }, 1000);
+      if (qsSource === 'app') {
+        console.log('Source is app, so launching app');
+        setTimeout(function () {
+          display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
+        }, 1000);
+      } else {
+        console.log('Source is NOT app, so just redirecting');
+        // display('success', 'Success! Redirecting you now...')
+      }
+
       // console.log('----redirectUrl', redirectUrl);
       // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
       redirect(redirectUrl)
@@ -756,8 +761,11 @@ settings:
           .setInnerHTML(msg || 'Success! Redirecting you...')
         spinnerEl
           .setAttribute('hidden', true)
-        resendBtn
-          .removeAttribute('hidden')
+        if (qsSource === 'app') {
+          resendBtn
+            .removeAttribute('hidden')
+        }
+
       }
 
       authContainer
