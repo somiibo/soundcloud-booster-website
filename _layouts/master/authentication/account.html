@@ -1674,9 +1674,7 @@ settings:
             tries: 2,
             body: {
               command: 'firebase:get-providers',
-              payload: {
-                firebaseApiKey: Manager.utilities().get(Manager, 'properties.options.libraries.firebase_app.config.apiKey'),
-              },
+              payload: {},
             },
           })
           .then(function (data) {
