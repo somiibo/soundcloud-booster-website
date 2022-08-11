@@ -482,9 +482,7 @@ settings:
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     command: 'firebase:get-providers',
-                    payload: {
-                      firebaseApiKey: Manager.properties.options.libraries.firebase_app.config.apiKey,
-                    },
+                    payload: {},
                   }),
                 })
                 .then(function (res) { // This function runs only on success
