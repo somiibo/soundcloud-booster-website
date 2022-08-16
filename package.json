@@ -49,8 +49,8 @@
   },
   "homepage": "https://template.itwcreativeworks.com",
   "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@babel/preset-env": "^7.18.9",
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
     "autoprefixer": "^9.8.8",
     "browser-sync": "^2.27.10",
     "del": "^6.1.1",
@@ -76,12 +76,12 @@
     "require-dir": "^1.2.0",
     "sharp": "0.23.1",
     "source-map-loader": "^2.0.2",
-    "terser-webpack-plugin": "^5.3.3",
+    "terser-webpack-plugin": "^5.3.4",
     "through2": "^4.0.2",
     "ultimate-jekyll-poster": "^0.0.13",
     "vinyl-named": "^1.1.0",
-    "web-manager": "^3.1.4",
-    "webpack": "^5.73.0",
+    "web-manager": "^3.1.6",
+    "webpack": "^5.74.0",
     "webpack-stream": "^6.1.2",
     "yargs": "^16.2.0"
   }

@@ -56,7 +56,7 @@ head:
   <div class="row h-100 justify-content-center align-items-center">
     <div class="col-12 text-center align-self-end">
       <div class="spinner-border text-primary mb-3" role="status"></div>
-      <h1 id="" class="h2 font-weight-normal">Authorizing <span id="oauth2-service">service</span>...</h1>
+      <h1 id="" class="h2 font-weight-normal">Authorizing <span id="oauth2-provider">provider</span>...</h1>
       <!-- <p id="ui-submission-subtitle" class="text-muted"></p> -->
       <!-- <p id="ui-submission-titleerror" class="text-danger"></p> -->
       <!-- <a class="btn btn-primary btn-lg transition-3d-hover" href="{{ site.url }}" id="ui-submission-return">Return home</a> -->
@@ -108,7 +108,7 @@ head:
     var $resultTitle = document.getElementById('result-title');
     var $resultBody = document.getElementById('result-body');
     var $resultReferrer = document.getElementById('result-referrer');
-    var $oauth2Service = document.getElementById('oauth2-service');
+    var $oauth2Provider = document.getElementById('oauth2-provider');
 
     function display(type) {
       $resultParent.removeAttribute('hidden')
@@ -137,9 +137,9 @@ head:
       qsState = null;
     }
 
-    console.log('Payload:', qsState);
+    console.log('State:', qsState);
 
-    $oauth2Service.innerText = qsState.service;
+    $oauth2Provider.innerText = capitalizeFirstLetter(qsState.provider);
 
     if (qsError) {
       return display(new Error(qsError))
@@ -149,7 +149,7 @@ head:
       return display(new Error(qsState.redirectUrl + ' is not a valid redirect URL'))
     }
 
-    // apply the service's default params
+    // apply the provider's default params
     currentURL
     .searchParams
     .forEach((value, key) => {
@@ -158,7 +158,7 @@ head:
 
     // apply my global custom params
     newPayload.state = 'tokenize';
-    newPayload.service = qsState.service;
+    newPayload.provider = qsState.provider;
 
     console.log('Server payload', qsState.serverUrl, newPayload);
 
@@ -187,4 +187,9 @@ head:
     })
 
   });
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 </script>

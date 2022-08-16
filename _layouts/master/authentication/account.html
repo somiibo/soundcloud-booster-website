@@ -240,7 +240,7 @@ settings:
               <!-- Profile Cover -->
               <div class="profile-cover">
                 <div class="profile-cover-img-wrapper">
-                  <img class="profile-cover-img" src="https://htmlstream.com/preview/front-dashboard-v2.0/assets/img/1920x400/img1.jpg" alt="Cover image">
+                  <img class="profile-cover-img" src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/img/1920x400/img1.jpg" alt="Cover image">
                 </div>
               </div>
               <!-- End Profile Cover -->
@@ -781,7 +781,7 @@ settings:
 
               <!-- Body -->
               <div class="card-body">
-                <p class="card-text">Integrated features from these accounts make it easier to connect {{ site.brand.name }} with other apps you use.</p>
+                <p class="card-text">Connect other apps you use and integrate their features into {{ site.brand.name }}.</p>
 
                 <!-- Form -->
                 <form>
@@ -987,7 +987,7 @@ settings:
       <div class="flex-grow-1 me-3">
         <div class="row align-items-center">
           <div class="col">
-            <h4 class="mb-0">{name}</h4>
+            <h4 class="mb-0">{name} <span class="connect-account-identity text-muted" data-provider="{id}">{identity}</span> </h4>
             <p class="fs-5 text-body mb-0">{description} <a href="{homepage}" target="_blank">Learn more</a> </p>
           </div>
           <!-- End Col -->
@@ -1058,6 +1058,7 @@ settings:
 
 <script type="text/javascript">
   Manager.auth().ready(function () {
+    var currentURL = new URL(window.location.href);
     var select = Manager.dom().select;
 
     var user = firebase.auth().currentUser;
@@ -1090,8 +1091,10 @@ settings:
     // var $connectedAccountsSection = document.getElementById('connectedAccounts');
     var $connectedAccountsParent = document.getElementById('connectedAccountsParent');
 
+    var qsDevelopment = Manager.properties.page.queryString.get('development');
+
     var serverApiURL = (
-        Manager.properties.page.queryString.get('development') === 'true'
+        qsDevelopment === 'true'
         ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
         : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
       )
@@ -1103,15 +1106,18 @@ settings:
         name: 'Google',
         description: 'Search and social.',
         homepage: 'https://google.com',
+        identity: 'email',
       },
       discord: {
         icon: 'discord',
         name: 'Discord',
         description: 'Chat and community.',
         homepage: 'https://discord.com',
+        identity: 'username',
       }
     }
 
+    $authUserProfileImg.setAttribute('onerror', '')
     $authUserProfileImg.src = gravatar;
     $authUserProfileParent.href = 'https://gravatar.com'
 
@@ -1215,6 +1221,7 @@ settings:
                         providers.password = true;
                         providersArray.unshift('password')
                       } else if (provider.providerId === 'google.com') {
+                        $authUserProfileImg.setAttribute('onerror', 'this.onerror=null;this.src="' + gravatar + '";')
                         $authUserProfileImg.src = provider.photoURL;
                         $authUserProfileParent.href = 'javascript:;'
                         $authUserProfileParent.setAttribute('target', '')
@@ -1316,16 +1323,24 @@ settings:
                     appData.oauth2 = appData.oauth2 || {};
                     Object.keys(appData.oauth2)
                     .forEach(function (provider, i) {
+                      // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
                       if (appData.oauth2[provider]) {
                         var details = oauth2Map[provider];
                         if (!details) {
                           return
                         }
+
+                        var identity = Manager.utilities().get(properties.oauth2[provider] || {}, 'identity.' + details.identity, '');
+                        if (identity) {
+                          identity = '- ' + identity;
+                        }
+
                         oauth2EnabledArray = oauth2EnabledArray.concat(provider);
                         connectedAccountsHtml += connectedAccountsTemplate
                           .replace(/{id}/img, provider)
                           .replace(/{icon}/img, details.icon)
                           .replace(/{name}/img, details.name)
+                          .replace(/{identity}/img, identity)
                           .replace(/{homepage}/img, details.homepage)
                           .replace(/{description}/img, details.description)
                           .replace(/{scope}/img, encodeURIComponent(JSON.stringify(appData.oauth2[provider].scope || [])))
@@ -1335,6 +1350,8 @@ settings:
                     if (oauth2EnabledArray.length === 0) {
                       connectedAccountsHtml = 'No providers are available to connect at the moment'
                     }
+
+
 
                     // Update HTML
                     $spinner.setAttribute('hidden', true);
@@ -1349,7 +1366,6 @@ settings:
                     if (properties.affiliate.referrals.length > 0) {
                       $referralsParent.innerHTML = referralsHtml
                     }
-
 
                     // Set personal data ib form
                     Powertools.getKeys(properties.personal)
@@ -1418,6 +1434,14 @@ settings:
                     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                       return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
                     })
+
+                    if (currentURL.hash) {
+                      var hashEl = document.querySelector('*[href="' + currentURL.hash + '"]');
+                      // console.log('---hashEl', currentURL.hash, hashEl);
+                      if (hashEl) {
+                        hashEl.click();
+                      }
+                    }
 
                   })
 
@@ -1641,6 +1665,8 @@ settings:
               provider: provider,
               state: action === 'connect' ? 'authorize' : 'deauthorize',
               scope: scope,
+              serverUrl: serverApiURL,
+              referrer: window.location.href,
             }
           },
         })
@@ -1712,12 +1738,12 @@ settings:
     }
 
     function checkOAuth2Connection(provider) {
-      var button = document.querySelector('.connect-account-btn[data-provider="' + provider + '"]');
-      if (!button) {
+      var $button = document.querySelector('.connect-account-btn[data-provider="' + provider + '"]');
+      if (!$button) {
         return
       }
-      button.setAttribute('disabled', true);
-      button.classList.add('disabled');
+      $button.setAttribute('disabled', true);
+      $button.classList.add('disabled');
 
       WonderfulFetch(serverApiURL, {
         method: 'POST',
@@ -1728,7 +1754,7 @@ settings:
           authenticationToken: token,
           command: 'user:oauth2',
           payload: {
-            removeInvalidTokens: false,
+            removeInvalidTokens: true,
             provider: provider,
             state: 'status',
           }
@@ -1737,15 +1763,15 @@ settings:
       .then(function (status) {
         console.log('status', status);
 
-        button.removeAttribute('disabled');
-        button.classList.remove('disabled');
+        $button.removeAttribute('disabled');
+        $button.classList.remove('disabled');
 
         if (status.status === 'connected') {
-          button.innerText = 'Disconnect'
-          button.dataset.action = 'disconnect';
+          $button.innerText = 'Disconnect'
+          $button.dataset.action = 'disconnect';
         } else {
-          button.innerText = 'Connect'
-          button.dataset.action = 'connect';
+          $button.innerText = 'Connect'
+          $button.dataset.action = 'connect';
         }
 
       })
