@@ -391,10 +391,10 @@ settings:
   var url;
   var serverApiURL;
   var providerDetails = {}
-  var redirectIsValid = false;
   var redirectUrl;
   var qsToken;
   var qsSource;
+  var qsDestination;
 
   Manager.auth().ready(function () {
     dom = Manager.dom();
@@ -406,13 +406,15 @@ settings:
       ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
       : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
 
-    redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.origin);
-    // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
     qsToken = decodeURIComponent(url.searchParams.get('token') || '');
     qsSource = decodeURIComponent(url.searchParams.get('source') || '');
+    qsDestination = decodeURIComponent(url.searchParams.get('destination') || '');
+
+    redirectUrl = qsDestination || url.origin;
+    // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
+
     // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
-    redirectIsValid = Manager.isValidRedirectUrl(redirectUrl)
 
     // console.log('---redirect', redirectIsValid, redirectUrl);
     // if (url.pathname.match(/signout/img)) {
@@ -476,7 +478,7 @@ settings:
               console.log('signInWithCustomToken(qsToken)', qsToken);
               firebase.auth().signInWithCustomToken(qsToken)
               .then(function (r) {
-                redirect(redirectUrl)
+                redirect()
               })
               .catch(function (e) {
                 display(e);
@@ -567,7 +569,8 @@ settings:
     document.addEventListener('click', function (event) {
       if (event.target.matches('#relaunch-btn')) {
         display('hidden');
-        launch();
+        // launch();
+        redirect();
       }
     })
 
@@ -607,31 +610,39 @@ settings:
 
   function redirect(url) {
     var delay = Manager.storage().get('auth.redirectDelay', 0);
+    url = url || redirectUrl;
+
     console.log('Redirecting with delay...', delay, url);
+
     if (delay) {
-      // alert('There is a redirect delay of ' + delay)
       setTimeout(function () {
-        window.location.href = url;
+        _redirect(url);
       }, delay);
     } else {
-      window.location.href = url;
+      _redirect(url)
     }
   }
 
-  function launch() {
-    // if (url.searchParams.get('inApp') === 'true' && window.electronManager) {
+  function _redirect(url) {
+    console.log('_RE', url);
     if (window.electronManager) {
       window.electronManager().processCustomToken(window.tokenResult);
     } else {
-      // console.log('--window.tokenResult', window.tokenResult);
-      redirectUrl = new URL(redirectUrl);
-      redirectUrl.searchParams.set('payload', JSON.stringify({
-        token: window.tokenResult
-      }))
-      redirectUrl = redirectUrl.toString();
+      url = new URL(url);
 
-      if (!redirectIsValid) {
-        var invalidError = new Error('This URL is not valid: ' + redirectUrl);
+      // If destination added, add payload with token
+      if (qsDestination) {
+        url.searchParams.set('payload', JSON.stringify({
+          token: window.tokenResult
+        }))
+      }
+      url = url.toString();
+
+      if (!Manager.isValidRedirectUrl(url)) {
+        var invalidError = new Error('This URL is not valid: ' + url);
+
+        display(invalidError)
+
         firebase.auth().signOut()
         .then(function () {
           console.log('Signed out because invalid URL');
@@ -639,7 +650,6 @@ settings:
         .catch(function (e) {
           console.error('Error signing out', e);
         })
-        display(invalidError)
         return
       }
 
@@ -653,11 +663,66 @@ settings:
         // display('success', 'Success! Redirecting you now...')
       }
 
-      // console.log('----redirectUrl', redirectUrl);
-      // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
-      redirect(redirectUrl)
+      window.location.href = url;
     }
   }
+
+  // function redirect(url) {
+  //   var delay = Manager.storage().get('auth.redirectDelay', 0);
+  //   console.log('Redirecting with delay...', delay, url);
+  //
+  //   if (delay) {
+  //     // alert('There is a redirect delay of ' + delay)
+  //     setTimeout(function () {
+  //       window.location.href = url;
+  //     }, delay);
+  //   } else {
+  //     window.location.href = url;
+  //   }
+  // }
+  //
+  // function launch() {
+  //   // if (url.searchParams.get('inApp') === 'true' && window.electronManager) {
+  //   if (window.electronManager) {
+  //     window.electronManager().processCustomToken(window.tokenResult);
+  //   } else {
+  //     // console.log('--window.tokenResult', window.tokenResult);
+  //     redirectUrl = new URL(redirectUrl);
+  //     if (qsDestination) {
+  //       redirectUrl.searchParams.set('payload', JSON.stringify({
+  //         token: window.tokenResult
+  //       }))
+  //     }
+  //     redirectUrl = redirectUrl.toString();
+  //
+  //     if (!redirectIsValid) {
+  //       var invalidError = new Error('This URL is not valid: ' + redirectUrl);
+  //       firebase.auth().signOut()
+  //       .then(function () {
+  //         console.log('Signed out because invalid URL');
+  //       })
+  //       .catch(function (e) {
+  //         console.error('Error signing out', e);
+  //       })
+  //       display(invalidError)
+  //       return
+  //     }
+  //
+  //     if (qsSource === 'app') {
+  //       console.log('Source is app, so launching app');
+  //       setTimeout(function () {
+  //         display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
+  //       }, 1000);
+  //     } else {
+  //       console.log('Source is NOT app, so just redirecting');
+  //       // display('success', 'Success! Redirecting you now...')
+  //     }
+  //
+  //     // console.log('----redirectUrl', redirectUrl);
+  //     // window.location.href = 'somiibo://dashboard?signin-with-token=true&token=' + window.tokenResult;
+  //     redirect(redirectUrl)
+  //   }
+  // }
 
   function createCustomToken(payload) {
     console.log('---createCustomToken', payload);
@@ -681,7 +746,8 @@ settings:
             .then(function (data) {
               console.log('Custom token', data.token);
               window.tokenResult = data.token;
-              launch();
+              // launch();
+              redirect();
             })
           } else {
             return res.text()
