@@ -37,7 +37,6 @@ gulp.task('browsersync', async function () {
             return await post.create({
               req: req,
               res: res,
-              test: {test: 'test'},
             })
             // res.write(JSON.stringify({test: 'penis'}));
             // return res.end();
@@ -53,6 +52,9 @@ gulp.task('browsersync', async function () {
     };
     if (argv.https) {
       if (!fs.exists('./@output/.temp/certificate/localhost.key.pem') || !fs.exists('./@output/.temp/certificate/localhost.cert.pem')) {
+        setTimeout(function () {
+          process.exit(1)
+        }, 1);
         return reject(new Error("To run the site on HTTPS you first need to execute: npm run create:cert"));
       }
       settings.https = {

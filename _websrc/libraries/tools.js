@@ -6,15 +6,21 @@ function Tools() {
   const self = this;
   self.isTemplate = __dirname.indexOf('/ultimate-jekyll/') > -1;
   self.isServer = argv.buildLocation === 'server';
+  self.task = 'unknown';
+  return self;
 }
 
-Tools.prototype.startTask = (name, timeout) => {
+Tools.prototype.startTask = function(name, timeout) {
+  const self = this;
   const now = new Date();
   timeout = timeout || 2;
+  self.task = name;
+  // self.log('Starting...')
   Global.set(`completed.${name}`, new Date(now.setTime(now.getTime() + (timeout * 60 * 1000))));
 }
 
-Tools.prototype.completeTask = (name) => {
+Tools.prototype.completeTask = function(name) {
+  const self = this;
   Global.set(`completed.${name}`, new Date());
 
   return through.obj((file, enc, done) => {
@@ -22,7 +28,8 @@ Tools.prototype.completeTask = (name) => {
   });
 }
 
-Tools.prototype.wait = function (ms) {
+Tools.prototype.wait = function(ms) {
+  const self = this;
   return new Promise(function(resolve, reject) {
     setInterval(function () {
       resolve();
@@ -30,7 +37,18 @@ Tools.prototype.wait = function (ms) {
   });
 };
 
-Tools.prototype.poll = function (fn, options) {
+Tools.prototype.log = function() {
+  const self = this;
+  console.log(`[${self.task || 'unknown'}]`, ...arguments);
+};
+
+Tools.prototype.error = function () {
+  const self = this;
+  console.error(`[${self.task || 'unknown'}] ERROR:`, ...arguments);
+};
+
+Tools.prototype.poll = function(fn, options) {
+  const self = this;
   options = options || {};
   var endTime = Number(new Date()) + (options.timeout || 2000);
   options.interval = options.interval || 100;

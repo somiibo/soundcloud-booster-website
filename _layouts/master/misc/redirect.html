@@ -1,16 +1,17 @@
 ---
 layout: null
 ---
+{% assign url = page.redirect.url | liquify %}
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Redirecting...</title>
   <meta name="description" content="Redirecting...">
-  <meta http-equiv="refresh" content="0; url={{ page.redirect.url }}">
+  <meta http-equiv="refresh" content="0; url={{ url }}">
 </head>
 
 <body>
-  Redirecting to: <a href="{{ page.redirect.url }}">{{ page.redirect.url }}</a>
+  Redirecting to: <a href="{{ url }}">{{ url }}</a>
 </body>
 </html>

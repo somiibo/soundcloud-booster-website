@@ -12,12 +12,25 @@ Manager.init(Configuration, function() {
   var app = require('../app/app.js');
   var slapform;
 
-  Manager.dom().select('form.slapform').on('submit', function (event) {
-    event.preventDefault();
-    import('./slapform-processor.js')
-    .then(function (mod) {
-      slapform = slapform || new mod.default;
-      slapform.process(event)
-    })
-  });
+  Manager.dom().select('form.slapform')
+  .each(function (el, i) {
+    Manager.dom().select(el).on('submit', function (event) {
+      event.preventDefault();
+      import('./slapform-processor.js')
+      .then(function (mod) {
+        slapform = slapform || new mod.default;
+        slapform.process(event);
+      })
+    });
+
+    Manager.dom().select(el.querySelector('button[type="submit"]'))
+    .removeAttribute('disabled')
+    .removeClass('disabled');
+  })
 });
+
+// require('./tracking/google-analytics.js')
+// window.gtag = function(){dataLayer.push(arguments);}
+// window.gtag('js', new Date());
+// window.gtag('config', 'UA-139422427-6');
+// console.log('----2', Configuration);

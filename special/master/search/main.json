@@ -3,6 +3,9 @@ layout: null
 permalink: /search/main.json/
 sitemap:
   include: false
+
+meta:
+  index: false    
 ---
 [
   {%- if site.search.enable != false -%}
@@ -13,7 +16,7 @@ sitemap:
         "category": "",
         "title": "{{ post.meta.title }}",
         "desc": "{{ post.meta.description }}",
-        "breadcrumb": "{{ post.meta.breadcrumb }}",
+        "breadcrumb": "{{ post.meta.breadcrumb | liquify }}",
         "type": "post"
       },
     {%- endif -%}
@@ -25,7 +28,7 @@ sitemap:
         "category": "",
         "title": "{{ page.meta.title }}",
         "desc": "{{ page.meta.description }}",
-        "breadcrumb": "{{ page.meta.breadcrumb }}",
+        "breadcrumb": "{{ post.meta.breadcrumb | liquify }}",
         "type": "{{ page.settings.page-type }}"
       },
     {%- endif -%}

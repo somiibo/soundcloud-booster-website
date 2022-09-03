@@ -1,13 +1,15 @@
 {%- if page.advertising.google-adsense == false -%}
 {%- elsif site.advertising.google-adsense != false -%}
 <!-- Adunit - Adsense In-feed Ad-->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{%- if include.include-adsense-script == true -%}
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+{%- endif -%}
 <ins class="adsbygoogle"
      style="display:block; {{ include.style }}"
      data-ad-format="fluid"
      data-ad-layout-key="{{ include.layout-key }}"
-     data-ad-client="{{ site.advertising.google-adsense }}"
-     data-ad-slot="{{ include.slot }}"></ins>
+     data-ad-client="ca-{{ site.advertising.google-adsense }}"
+     data-ad-slot="{{ include.slot | default: page.advertising.google-adsense-in-feed-slot | default: layout.advertising.google-adsense-in-feed-slot | default: site.advertising.google-adsense-in-feed-slot }}"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>

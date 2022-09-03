@@ -33,7 +33,7 @@ function getBlogImages() {
 
     getDirectories('assets/_src/images/blog/posts', function (err, res) {
       if (err) {
-        console.log('Error', err);
+        tools.error('Could not getBlogImages', err);
       } else {
         return resolve(res);
       }
@@ -49,37 +49,60 @@ gulp.task('imageminResponsive', async function () {
 
   tools.startTask('imageminResponsive');
 
-  console.log('Performing imageminResponsive');
-
   let images = await getBlogImages();
   const regex = /(\.jpg|\.jpeg|\.png)/img;
+
+  tools.log('Fixing undersized images...');
 
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
     const imgPathNew = imgPath.replace(regex, '-new$1');
 
     if (!imgPath.match(regex)) { continue }
-    const newImage = await sharp(imgPath);
-    const newImageMeta = await newImage.metadata();
-    if (newImageMeta.width < 1024) {
-      console.log('Fixing image', imgPath);
-      jetpack.remove(imgPathNew);
-      await newImage
-        .resize({ width: 1024 })
-        .toFile(imgPathNew)
-      jetpack.remove(imgPath);
-      jetpack.rename(imgPathNew, imgPath.split('/').pop())
-    }
-    // if (image && image.bitmap && image.bitmap.width < 1024) {
-    //   console.log('Fixing image', imgPath);
-    //   const ratio = (1024 / image.bitmap.width);
-    //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
-    //   // await image.quality(quality);
-    //   await image.writeAsync(imgPath);
-    // }
+
+    const newImage = sharp(imgPath)
+
+    await newImage.metadata()
+    .then(async (newImageMeta) => {
+
+      if (newImageMeta.width < 1024) {
+        tools.log('Fixing image', imgPath);
+        jetpack.remove(imgPathNew);
+        await newImage
+          .resize({ width: 1024 })
+          .toFile(imgPathNew)
+          .then(() => {
+            jetpack.remove(imgPath);
+            jetpack.rename(imgPathNew, imgPath.split('/').pop())
+          })
+          .catch(e => {
+            tools.error('Failed to fix image (resize)', imgPath, e);
+          })
+      }
+      // if (image && image.bitmap && image.bitmap.width < 1024) {
+      //   console.log('Fixing image', imgPath);
+      //   const ratio = (1024 / image.bitmap.width);
+      //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
+      //   // await image.quality(quality);
+      //   await image.writeAsync(imgPath);
+      // }
+    })
+    .catch(e => {
+      tools.error('Failed to fix image (meta)', imgPath, e);
+    })
+
   }
 
-  return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.{jpg,jpeg,png}', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
+  tools.log('Finished fixing undersized images');
+
+  const imageminGlobs = [`!${config.assets}${config.assetsSubpath}/${config.imagemin.src}/favicon/**/*`]
+  if (argv.imageMinPostId) {
+    imageminGlobs.unshift(`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/blog/posts/post-${argv.imageMinPostId}/*.{jpg,jpeg,png}`)
+  } else {
+    imageminGlobs.unshift(`${config.assets}${config.assetsSubpath}/${config.imagemin.src}/**/*.{jpg,jpeg,png}`)
+  }
+
+  return gulp.src(imageminGlobs)
     .pipe(cached('images'))
     .pipe(responsive({
       '**/*.{jpg,jpeg}': [
@@ -210,6 +233,6 @@ gulp.task('imageminResponsive', async function () {
     {
       errorOnUnusedConfig: false
     }))
-    .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest))
+    .pipe(gulp.dest(`${config.assets}/${config.imagemin.dest}`))
     .pipe(tools.completeTask('imageminResponsive'))
 });

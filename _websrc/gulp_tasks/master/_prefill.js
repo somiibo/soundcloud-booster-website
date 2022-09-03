@@ -5,6 +5,7 @@ const _configYml = require('js-yaml').load(fs.read('_config.yml'));
 const del        = require('del');
 const tools      = new (require('../../libraries/tools.js'));
 const Global     = require('../../libraries/global.js');
+const fetch      = require('node-fetch');
 
 gulp.task('_prefill', async () => {
   return new Promise(async (resolve, reject) => {
@@ -226,6 +227,24 @@ gulp.task('_prefill', async () => {
       } else {
         await createFile('./CNAME', new URL(_configYml.url).host);
       }
+
+
+      // Get analytics
+      // await fetch('https://www.googletagmanager.com/gtag/js')
+      // .then(async (res) => {
+      //   if (res.ok) {
+      //     fs.write('./assets/_src/js/master/tracking/google-analytics.js', await res.text())
+      //   } else {
+      //     throw new Error('Failed to get gtag.js')
+      //   }
+      // })
+      // .catch(e => {
+      //   console.error(e);
+      //   reject(e);
+      //   process.exit(1)
+      // })
+
+
       Global.set('prefillStatus', 'done');
       return resolve();
     } catch (e) {

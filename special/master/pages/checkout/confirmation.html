@@ -3,13 +3,15 @@
 layout: master/global/default
 permalink: /checkout/confirmation/
 
+sitemap:
+  include: false
+
 ### REGULAR PAGES ###
 meta:
   title: "Thank you!"
   description: "Thanks for checking out!"
   breadcrumb: "Thank you"
-  # sitemap:
-    # include: false
+  index: false
 
 settings:
   include-app-head: false
@@ -150,6 +152,7 @@ head:
     var qsOrderTotal = parseFloat(url.searchParams.get('orderTotal') || '0.00');
     var qsOrderFreq = url.searchParams.get('orderFreq');
     var qsProductId = url.searchParams.get('productId') || 'unknown';
+    var qsProductIdGlobal = url.searchParams.get('productIdGlobal') || 'unknown';
     var qsUrlText = url.searchParams.get('urlText') || 'Continue';
     var qsUrl = url.searchParams.get('url') || '{{ site.url }}';
 
@@ -184,8 +187,8 @@ head:
           "shipping": 0,
           "items": [
             {
-              "id": qsProductId,
-              "name": qsProductId,
+              "id": qsProductIdGlobal,
+              "name": qsProductIdGlobal,
               // "list_name": "Search Results",
               // "brand": "Google",
               // "category": "Apparel/T-Shirts",

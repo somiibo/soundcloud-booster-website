@@ -10,6 +10,7 @@ meta:
   title: "Firestore"
   description: "Test your Firestore rules in this sandbox."
   breadcrumb: "Firestore"
+  index: false
 ---
 <!-- Header -->
 <div class="header mt-md-5">
@@ -37,7 +38,7 @@ meta:
   <div class="col-lg-8 offset-lg-2">
     <div class="d-flex justify-content-center">
       <div class="spinner-border text-primary" role="status">
-        
+
       </div>
     </div>
   </div>
@@ -237,13 +238,6 @@ meta:
     setTimeout(function () {
       htmlEditor.refresh();
     }, 1);
-    // special
-    // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_sendNotification';
-    // var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_sendNotification';
-    // var env = buildFile.environment;
-    // dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
-    // dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
-    // dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
 
   }
 

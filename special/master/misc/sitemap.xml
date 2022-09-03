@@ -19,15 +19,15 @@ sitemap:
         {%- endif -%}
 
         {%- if post.sitemap.changefreq == null -%}
-        <changefreq>weekly</changefreq>
+          <changefreq>weekly</changefreq>
         {%- else -%}
-        <changefreq>{{ post.sitemap.changefreq }}</changefreq>
+          <changefreq>{{ post.sitemap.changefreq }}</changefreq>
         {%- endif -%}
 
         {%- if post.sitemap.priority == null -%}
-        <priority>0.7</priority>
+          <priority>0.7</priority>
         {%- else -%}
-        <priority>{{ post.sitemap.priority }}</priority>
+          <priority>{{ post.sitemap.priority }}</priority>
         {%- endif -%}
 
       </url>
@@ -39,21 +39,21 @@ sitemap:
         <loc>{{ site.url }}{{ page.url }}</loc>
 
         {%- if page.sitemap.lastmod == null -%}
-        <lastmod>{{ default_time }}</lastmod>
+          <lastmod>{{ default_time }}</lastmod>
         {%- else -%}
-        <lastmod>{{ page.sitemap.lastmod | date_to_xmlschema }}</lastmod>
+          <lastmod>{{ page.sitemap.lastmod | date_to_xmlschema }}</lastmod>
         {%- endif -%}
 
         {%- if page.sitemap.changefreq == null -%}
-        <changefreq>weekly</changefreq>
+          <changefreq>weekly</changefreq>
         {%- else -%}
-        <changefreq>{{ page.sitemap.changefreq }}</changefreq>
+          <changefreq>{{ page.sitemap.changefreq }}</changefreq>
         {%- endif -%}
 
         {%- if page.sitemap.priority == null -%}
-        <priority>0.5</priority>
+          <priority>0.5</priority>
         {%- else -%}
-        <priority>{{ page.sitemap.priority }}</priority>
+          <priority>{{ page.sitemap.priority }}</priority>
         {%- endif -%}
 
        </url>
