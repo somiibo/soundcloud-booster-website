@@ -152,8 +152,8 @@ settings:
           </div>
 
           <div class="d-grid">
-            <div id="" class="alert alert-danger auth-error-message-element" role="alert" hidden> </div>
-            <div id="result" class="alert" role="alert" hidden> </div>
+            <!-- <div id="" class="alert alert-danger auth-error-message-element" role="alert" hidden> </div> -->
+            <!-- <div id="result" class="alert" role="alert" hidden> </div> -->
             <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
           </div>
 
@@ -386,6 +386,36 @@ settings:
   <!-- End Content -->
 </main>
 
+<div class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-sm-0 mb-md-5 text-center">
+  <div class="row">
+    <div class="col-sm-12 col-md-6 offset-md-3">
+      <div id="" class="alert alert-danger auth-error-message-element mb-0" role="alert" hidden> </div>
+      <div id="result" class="alert mb-0" role="alert" hidden> </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="auth-error-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Oops!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="d-grid">
+          <div id="auth-error-modal-message" class="alert alert-danger" role="alert"> 
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var dom;
   var url;
@@ -395,6 +425,8 @@ settings:
   var qsToken;
   var qsSource;
   var qsDestination;
+  var $authErrorModal;
+  var $authErrorModalMessage;
 
   Manager.auth().ready(function () {
     dom = Manager.dom();
@@ -415,6 +447,10 @@ settings:
 
     // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
+
+    $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {
+    })
+    $authErrorModalMessage = document.getElementById('auth-error-modal-message');
 
     // console.log('---redirect', redirectIsValid, redirectUrl);
     // if (url.pathname.match(/signout/img)) {
@@ -437,7 +473,7 @@ settings:
       .getRedirectResult()
       .then(function (result) {
         console.log('----result', result);
-        display();
+        display('loading');
 
         if (!action) {
           display('hidden');
@@ -783,6 +819,10 @@ settings:
       console.log('display()', type, msg);
     }
 
+    console.log('providerDetails', providerDetails);
+
+    $authErrorModal.hide();
+
     alertEl
       .setAttribute('hidden', true)
       .removeClass('alert-danger')
@@ -801,45 +841,49 @@ settings:
     providerBtnEl
       .setAttribute('hidden', true)
       .setAttribute('disabled', true)
-      .removeClass('disabled')
-
-    // emailAndPassForm
-    //   .setAttribute('hidden', true)
-    //   .setAttribute('disabled', true)
-    //   .removeClass('disabled')
+      .addClass('disabled')
 
     authOrSeparatorEl
-      .removeAttribute('hidden');
+      .setAttribute('hidden', true);
 
     authProviderPass
-      .removeAttribute('hidden');
+      .setAttribute('hidden', true);
 
     authProviderPassBtns
-      .removeAttribute('hidden')
+      .setAttribute('hidden', true)
 
     authProviderGlobalBtns
-      .removeAttribute('hidden')
+      .setAttribute('hidden', true)    
+      
+    // providerDetails.password = false;
 
-    // providerDetails.password = true;
-    // console.log('---providerDetails', providerDetails);
+    function _enableLogin() {
 
-    if (!providerDetails.password) {
       authOrSeparatorEl
-        .setAttribute('hidden', true)
+        .removeAttribute('hidden');
 
       authProviderPass
-        .setAttribute('hidden', true)
+        .removeAttribute('hidden');
+
+      authProviderPassBtns
+        .removeAttribute('hidden')
 
       authProviderGlobalBtns
-        .setAttribute('hidden', true)
-    } else {
-      authProviderPassBtns
-        .setAttribute('hidden', true)
-    }
+        .removeAttribute('hidden')
 
-    if (type === 'waiting') {
-      spinnerEl
+      if (!providerDetails.password) {
+        authOrSeparatorEl
         .setAttribute('hidden', true)
+
+        authProviderPass
+        .setAttribute('hidden', true)
+
+        authProviderGlobalBtns
+        .setAttribute('hidden', true)
+      } else {
+        authProviderPassBtns
+        .setAttribute('hidden', true)
+      }
 
       providerBtnEl
       .each(function (el) {
@@ -854,7 +898,14 @@ settings:
           el.setAttribute('disabled', true);
           el.classList.add('disabled');
         }
-      })
+      })      
+    }
+
+    if (type === 'waiting') {
+      spinnerEl
+        .setAttribute('hidden', true)
+
+      _enableLogin()
 
       // emailAndPassForm
       //   .removeAttribute('hidden')
@@ -865,12 +916,17 @@ settings:
         .setAttribute('hidden', true)
 
     } else if (type instanceof Error) {
+      var resolvedError = 'Failed to sign you in. Please try again: <br><br>' + type;
       alertEl
         .addClass('alert-danger')
-        .setInnerHTML('Failed to sign you in. Please try again: <br><br>' + type)
+        .setInnerHTML(resolvedError)
       spinnerEl
         .setAttribute('hidden', true)
-      // console.error(type);
+
+      _enableLogin()
+
+      $authErrorModalMessage.innerHTML = resolvedError;
+      // $authErrorModal.show();
     } else if (type === 'success' || type === 'hidden') {
       if (type === 'success') {
         alertEl
