@@ -213,7 +213,7 @@ gulp.task('_prefill', async () => {
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
         await createFile('./pages/.gitignore', '/index.md'+'\n'+'.gitignore'+'\n');
-        await createFile('./blog/.gitignore', '/index.html'+'\n'+'.gitignore'+'\n');
+        // await createFile('./blog/.gitignore', '/index.html'+'\n'+'.gitignore'+'\n');
 
         // POST
         await createFile('./_posts/.gitignore', gitignore_ph);
