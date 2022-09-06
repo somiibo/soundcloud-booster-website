@@ -281,8 +281,9 @@ meta:
 
       var roleMap = {
         admin: 'danger',
-        beta: 'danger',
-        developer: 'warning',
+        betaTester: 'purple',
+        developer: 'info',
+        vip: 'warning',
       }
       var rolesTemplate = `
         <span class="badge bg-soft-{roleClass} bg-{roleClass} text-{roleClass}">
@@ -293,17 +294,21 @@ meta:
       result
       .forEach(function (item, i) {
 
-        console.log('---item', item);
         item.data.roles = item.data.roles || {};
 
         var time = new Date(item.data.activity.lastActivity.timestampUNIX * 1000)
-        var roles = '';
+        var rolesHtml = '';
+        var sortedRoles = Object.keys(item.data.roles).sort()
 
-        Object.keys(item.data.roles)
+        console.log('User', item);
+
+        sortedRoles
         .forEach(function (role) {
-          roles += rolesTemplate
+          if (item.data.roles[role]) {
+            rolesHtml += rolesTemplate
             .replace(/{roleName}/ig, capitalizeFirstLetter(role))
-            .replace(/{roleClass}/ig, roleMap[role] || 'primary')
+            .replace(/{roleClass}/ig, roleMap[role] || 'primary')            
+          }
         });
 
         table.row.add(
@@ -314,7 +319,7 @@ meta:
               .replace(/{userEmail}/g, item.data.auth.email)
               .replace(/{dateLastActivity}/g, time.toLocaleDateString() + ' @ ' + time.toLocaleTimeString())
               .replace(/{dateLastActivityUNIX}/g, item.data.activity.lastActivity.timestampUNIX)
-              .replace(/{roles}/g, roles)
+              .replace(/{roles}/g, rolesHtml)
           )
         )
       });
