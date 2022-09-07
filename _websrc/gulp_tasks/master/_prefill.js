@@ -62,32 +62,19 @@ gulp.task('_prefill', async () => {
           ""
         )
         
+        if ((await listFiles('./pages') || []).length < 2) {
+        }
+
         if (!fs.exists('./pages/index.md') && !fs.exists('./pages/index.html')) {
-          const indexTemplate = await readFile('./_websrc/templates/master/placeholder/index.md');
-          await createFile('./pages/index.md', indexTemplate)
+          await createFile('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
+          await createFile('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
+          await createFile('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
         }
 
-        if (!fs.exists('./pages/about.md') && !fs.exists('./pages/about.html')) {
-          const aboutTemplate = await readFile('./_websrc/templates/master/placeholder/about.md');
-          await createFile('./pages/about.md', aboutTemplate)
-        }
-
-        if (!fs.exists('./pages/contact.md') && !fs.exists('./pages/contact.html')) {
-          const contactTemplate = await readFile('./_websrc/templates/master/placeholder/contact.md');
-          await createFile('./pages/contact.md', contactTemplate)
-        }
-
-        if (!fs.exists('./pages/legal/terms.md') && !fs.exists('./pages/legal/terms.html')) {
-          const termsTemplate = await readFile('./_websrc/templates/master/placeholder/legal/terms.md');
-          await createFile('./pages/legal/terms.md', termsTemplate)
-        }
-        if (!fs.exists('./pages/legal/privacy.md') && !fs.exists('./pages/legal/privacy.html')) {
-          const privacyTemplate = await readFile('./_websrc/templates/master/placeholder/legal/privacy.md');
-          await createFile('./pages/legal/privacy.md', privacyTemplate)
-        }        
-        if (!fs.exists('./pages/legal/cookies.md') && !fs.exists('./pages/legal/cookies.html')) {
-          const cookiesTemplate = await readFile('./_websrc/templates/master/placeholder/legal/cookies.md');
-          await createFile('./pages/legal/cookies.md', cookiesTemplate)
+        if (!fs.exists('./pages/legal')) {
+          await createFile('./pages/legal/terms.md', await readFile('./_websrc/templates/master/placeholder/legal/terms.md'))
+          await createFile('./pages/legal/privacy.md', await readFile('./_websrc/templates/master/placeholder/legal/privacy.md'))
+          await createFile('./pages/legal/cookies.md', await readFile('./_websrc/templates/master/placeholder/legal/cookies.md'))
         }  
 
         await createFile(config.assets + config.assetsSubpath + '/js/app/service-worker.js',
@@ -206,9 +193,7 @@ gulp.task('_prefill', async () => {
         await createFile('./_includes/app/misc/.gitignore', gitignore_ph);
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
-        // await createFile('./blog/.gitignore', '/index.html'+'\n'+'.gitignore'+'\n');
-        // await createFile('./pages/.gitignore', '/index.md'+'\n'+'.gitignore'+'\n');
-        await createFile('./pages/.gitignore', `* \n !@reference`);
+        await createFile('./pages/.gitignore', `* \n!@reference`);
 
 
         // POST
