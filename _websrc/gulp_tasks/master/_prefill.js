@@ -61,25 +61,35 @@ gulp.task('_prefill', async () => {
           "});" + "\n" +
           ""
         )
+        
         if (!fs.exists('./pages/index.md') && !fs.exists('./pages/index.html')) {
-          await createFile('./pages/index.md',
-            '---' + '\n' +
-            '### ALL PAGES ###' + '\n' +
-            'layout: master/global/default' + '\n' +
-            'permalink: /' + '\n' +
-            'sitemap:' + '\n' +
-            '  include: false' + '\n' +
-            '' + '\n' +
-            '### REGULAR PAGES ###' + '\n' +
-            'meta:' + '\n' +
-            '  title: "Home"' + '\n' +
-            '  description: "We are a great company and would love to design an intuitive solution for you!"' + '\n' +
-            '  breadcrumb: "Home"' + '\n' +
-            '---' + '\n' +
-            'This is a wonderful homepage!' +
-            ''
-          )
+          const indexTemplate = await readFile('./_websrc/templates/master/placeholder/index.md');
+          await createFile('./pages/index.md', indexTemplate)
         }
+
+        if (!fs.exists('./pages/about.md') && !fs.exists('./pages/about.html')) {
+          const aboutTemplate = await readFile('./_websrc/templates/master/placeholder/about.md');
+          await createFile('./pages/about.md', aboutTemplate)
+        }
+
+        if (!fs.exists('./pages/contact.md') && !fs.exists('./pages/contact.html')) {
+          const contactTemplate = await readFile('./_websrc/templates/master/placeholder/contact.md');
+          await createFile('./pages/contact.md', contactTemplate)
+        }
+
+        if (!fs.exists('./pages/legal/terms.md') && !fs.exists('./pages/legal/terms.html')) {
+          const termsTemplate = await readFile('./_websrc/templates/master/placeholder/legal/terms.md');
+          await createFile('./pages/legal/terms.md', termsTemplate)
+        }
+        if (!fs.exists('./pages/legal/privacy.md') && !fs.exists('./pages/legal/privacy.html')) {
+          const privacyTemplate = await readFile('./_websrc/templates/master/placeholder/legal/privacy.md');
+          await createFile('./pages/legal/privacy.md', privacyTemplate)
+        }        
+        if (!fs.exists('./pages/legal/cookies.md') && !fs.exists('./pages/legal/cookies.html')) {
+          const cookiesTemplate = await readFile('./_websrc/templates/master/placeholder/legal/cookies.md');
+          await createFile('./pages/legal/cookies.md', cookiesTemplate)
+        }  
+
         await createFile(config.assets + config.assetsSubpath + '/js/app/service-worker.js',
           "// app service-worker.js code" + "\n" +
           "if (typeof log === 'undefined') {" + "\n" +
@@ -114,28 +124,12 @@ gulp.task('_prefill', async () => {
         //   return name.indexOf('example-post') > -1;
         // })) {
         if ((await listFiles('./_posts') || []).length < 2) {
+          const now = new Date();
+          const postTemplate = await readFile('./_websrc/templates/master/placeholder/blog/example-post.md');
           for (var i = 1; i < 8; i++) {
-            await createFile(`./_posts/2019-01-0${i}-example-post-${i}.md`,
-              '---' + '\n' +
-              '### ALL PAGES ###' + '\n' +
-              'layout: master/blog/post' + '\n' +
-              '' + '\n' +
-              '### POST ONLY ###' + '\n' +
-              'post:' + '\n' +
-                `  title: Example post number ${i}` + '\n' +
-                // `  date: 2019-01-0${i}` + '\n' +
-                `  excerpt: This is a sample excerpt for post number ${i}` + '\n' +
-                `  description: This is a sample excerpt for post number ${i}` + '\n' +
-                `  author: samantha` + '\n' +
-                `  id: ${i}` + '\n' +
-                `  tags: [tag, tag2, tag3]` + '\n' +
-                `  categories: [marketing, business]` + '\n' +
-                `  affiliate-search-term: Marketing` + '\n' +
-              '---' + '\n' +
-              '' + '\n' +
-              `## Title inside post ${i}` + '\n' +
-              'This is a wonderful paragrah inside a post!' + '\n' +
-              ''
+            await createFile(`./_posts/${now.getFullYear()}-01-0${i}-example-post-${i}.md`,
+              postTemplate
+                .replace(/{id}/ig, i)
             )
           }
         }
@@ -154,7 +148,7 @@ gulp.task('_prefill', async () => {
         //   '---' + '\n'
         // );
 
-        await createFile(`./_authors/samantha.md`, await readFile('./_websrc/templates/master/authors/example-author.md'));
+        await createFile(`./_authors/samantha.md`, await readFile('./_websrc/templates/master/placeholder/authors/example-author.md'));
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
         await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
@@ -212,8 +206,10 @@ gulp.task('_prefill', async () => {
         await createFile('./_includes/app/misc/.gitignore', gitignore_ph);
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
-        await createFile('./pages/.gitignore', '/index.md'+'\n'+'.gitignore'+'\n');
         // await createFile('./blog/.gitignore', '/index.html'+'\n'+'.gitignore'+'\n');
+        // await createFile('./pages/.gitignore', '/index.md'+'\n'+'.gitignore'+'\n');
+        await createFile('./pages/.gitignore', `* \n !@reference`);
+
 
         // POST
         await createFile('./_posts/.gitignore', gitignore_ph);

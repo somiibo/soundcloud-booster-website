@@ -50,6 +50,7 @@
 {% endif %}
 
 <!-- TODO: FIX THIS -->
+<!-- Script - Core -->
 {%- if page.settings.include-script-core == false -%}
 {% elsif layout.settings.include-script-core == false %}
 {% elsif site.settings.include-script-core == false %}
@@ -63,6 +64,28 @@
   {% endif %}
   <!-- <script type="text/javascript" src="{{ '/assets/js/master.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ core_optimization }}></script> -->
 {% endif %}
+
+<!-- TODO: FIX THIS -->
+<!-- Script - Slapform -->
+{%- if page.settings.include-script-slapform == true -%}
+  {% assign slapform_include = true %}
+{% elsif layout.settings.include-script-slapform == true %}
+  {% assign slapform_include = true %}
+{% elsif site.settings.include-script-slapform == true %}
+  {% assign slapform_include = true %}
+  {% else %}
+  {%- if page.settings.include-script-slapform-optimization != null -%}
+    {% assign slapform_optimization = page.settings.include-script-slapform-optimization %}
+  {%- elsif site.settings.include-script-slapform-optimization == null -%}
+    {% assign slapform_optimization = 'async' %}
+  {%- else -%}
+    {% assign slapform_optimization = site.settings.include-script-slapform-optimization %}
+  {% endif %}
+{% endif %}
+{%- if slapform_include == true -%}
+  <!-- <script type="text/javascript" src="{{ '/assets/js/slapform-processor.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ slapform_optimization }}></script> -->
+{% endif %}
+
 
 {%- if include.post-bundle-script != null -%}
   {{ include.post-bundle-script | liquify }}
