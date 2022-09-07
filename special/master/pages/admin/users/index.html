@@ -54,7 +54,7 @@ meta:
             <div class="input-group-prepend input-group-text">
               <i class="bi-search"></i>
             </div>
-            <input id="datatable-search-input" type="search" class="form-control" placeholder="Search payment profiles" aria-label="Search payment profiles" readonly>
+            <input id="datatable-search-input" type="search" class="form-control" placeholder="Search users" aria-label="Search users" readonly>
           </div>
           <!-- End Search -->
         </form>
@@ -102,6 +102,7 @@ meta:
           <th>Email</th>
           <th>Active</th>
           <th>Roles</th>
+          <th>Edit</th>
         </tr>
       </thead>
 
@@ -121,6 +122,22 @@ meta:
 </div>
 <!-- End Card -->
 
+<div id="expand-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow: scroll;">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
   var dataTemplate = `
@@ -147,60 +164,18 @@ meta:
       <td>
         {roles}
       </td>
-      <td class="hidden">
+      <td>
         <div class="dropdown">
-          <a class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-empty" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-empty" href="#" role="button" id="dropdownMenuLink-{userUid}" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi-pencil me-2"></i> Edit
           </a>
 
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{userUid}">
             <li class="">
-              <a class="dropdown-item subscription-cancel-btn {cancelDisabled} text-{cancelDisabledColor}" href="#" data-resource-id="{resourceId}" data-order-id="{orderId}" {cancelDisabled}><i class="bi-trash me-2"></i>Cancel</a>
+              <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2"></i>View user</a>
             </li>
           </ul>
         </div>
-
-        <!--
-        <div class="btn-group" role="group">
-          <a class="btn btn-white btn-sm" href="./ecommerce-order-details.html">
-            <i class="bi-eye"></i> View
-          </a>
-
-          <div class="btn-group">
-            <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" id="ordersExportDropdown1" data-bs-toggle="dropdown" aria-expanded="false"></button>
-
-            <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="ordersExportDropdown1" style="z-index: 10000;">
-              <span class="dropdown-header">Options</span>
-              <a class="js-export-copy dropdown-item" href="javascript:;">
-                <img class="avatar avatar-xss avatar-4x3 me-2" src="./assets/svg/illustrations/copy-icon.svg" alt="Image Description">
-                Copy
-              </a>
-              <a class="js-export-print dropdown-item" href="javascript:;">
-                <img class="avatar avatar-xss avatar-4x3 me-2" src="./assets/svg/illustrations/print-icon.svg" alt="Image Description">
-                Print
-              </a>
-              <div class="dropdown-divider"></div>
-              <span class="dropdown-header">Download options</span>
-              <a class="js-export-excel dropdown-item" href="javascript:;">
-                <img class="avatar avatar-xss avatar-4x3 me-2" src="./assets/svg/brands/excel-icon.svg" alt="Image Description">
-                Excel
-              </a>
-              <a class="js-export-csv dropdown-item" href="javascript:;">
-                <img class="avatar avatar-xss avatar-4x3 me-2" src="./assets/svg/components/placeholder-csv-format.svg" alt="Image Description">
-                .CSV
-              </a>
-              <a class="js-export-pdf dropdown-item" href="javascript:;">
-                <img class="avatar avatar-xss avatar-4x3 me-2" src="./assets/svg/brands/pdf-icon.svg" alt="Image Description">
-                PDF
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:;">
-                <i class="bi-trash dropdown-item-icon"></i> Delete
-              </a>
-            </div>
-          </div>
-        </div>
-        -->
 
       </td>
     </tr>
@@ -208,12 +183,17 @@ meta:
 
   var table;
   var appMap = {};
+  var allResponse = {};
 
   Manager.ready(function () {
     var searchInput = document.getElementById('datatable-search-input')
     var searchForm = document.getElementById('datatable-search-form')
     var spinner = document.getElementById('datatable-spinner')
-    var tableTbody = document.querySelector('#datatable-table tbody')
+    var tableTbody = document.querySelector('#datatable-table tbody');
+    var qsQuery = Manager.properties.page.queryString.get('query')
+
+    var $expandModal = document.getElementById('expand-modal');
+    var expandModal = new bootstrap.Modal($expandModal, {});
 
     table = Admin().initializeTable();
 
@@ -238,6 +218,11 @@ meta:
           handleClick(event)
         })
 
+        if (qsQuery) {
+          searchInput.value = qsQuery;
+          handleSearch(qsQuery)
+        }
+
         Admin().display('ready');
 
         if (Manager.properties.meta.environment === 'development') {
@@ -248,168 +233,163 @@ meta:
       .catch(function(e) {
 
       })
-  })
 
-  function handleSearch(input) {
-    console.log('---search...', input);
-    Admin().display('loading');
+    // HERE
+    function handleSearch(input) {
+      console.log('---search...', input);
+      Admin().display('loading');
 
-    if (input.length < 3) {
-      return Admin().display(new Error('Please enter at least 3 characters'));
-    }
-
-    table.clear().draw()
-
-    runQuery(input)
-    .then(function (result) {
-
-      result.sort(function(a, b) {
-        var a = a.data.timestampUNIX;
-        var b = b.data.timestampUNIX;
-        if (a > b) {
-          return -1;
-        }
-        if (a < b) {
-          return 1;
-        }
-
-        // names must be equal
-        return 0;
-      });
-
-      table.clear()
-
-      var roleMap = {
-        admin: 'danger',
-        betaTester: 'purple',
-        developer: 'info',
-        vip: 'warning',
+      if (input.length < 3) {
+        return Admin().display(new Error('Please enter at least 3 characters'));
       }
-      var rolesTemplate = `
-        <span class="badge bg-soft-{roleClass} bg-{roleClass} text-{roleClass}">
-          <span class="legend-indicator bg-{roleClass}"></span> {roleName}
-        </span>
-      `
 
-      result
-      .forEach(function (item, i) {
+      table.clear().draw()
 
-        item.data.roles = item.data.roles || {};
+      runQuery(input)
+      .then(function (result) {
 
-        var time = new Date(item.data.activity.lastActivity.timestampUNIX * 1000)
-        var rolesHtml = '';
-        var sortedRoles = Object.keys(item.data.roles).sort()
-
-        console.log('User', item);
-
-        sortedRoles
-        .forEach(function (role) {
-          if (item.data.roles[role]) {
-            rolesHtml += rolesTemplate
-            .replace(/{roleName}/ig, capitalizeFirstLetter(role))
-            .replace(/{roleClass}/ig, roleMap[role] || 'primary')            
+        result.sort(function(a, b) {
+          var a = a.data.timestampUNIX;
+          var b = b.data.timestampUNIX;
+          if (a > b) {
+            return -1;
           }
+          if (a < b) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
         });
 
-        table.row.add(
-          $(
-            dataTemplate
-              .replace(/{index}/g, i)
-              .replace(/{userUid}/g, item.data.auth.uid)
-              .replace(/{userEmail}/g, item.data.auth.email)
-              .replace(/{dateLastActivity}/g, time.toLocaleDateString() + ' @ ' + time.toLocaleTimeString())
-              .replace(/{dateLastActivityUNIX}/g, item.data.activity.lastActivity.timestampUNIX)
-              .replace(/{roles}/g, rolesHtml)
-          )
-        )
-      });
+        allResponse = {};
 
-      table.draw();
-      Admin().display('ready');
+        table.clear()
 
-    })
-    .catch(function (e) {
-      Admin().display(e);
-    })
-  }
+        var roleMap = {
+          admin: 'danger',
+          betaTester: 'purple',
+          developer: 'info',
+          vip: 'warning',
+        }
+        var rolesTemplate = `
+          <span class="badge bg-soft-{roleClass} bg-{roleClass} text-{roleClass}">
+            <span class="legend-indicator bg-{roleClass}"></span> {roleName}
+          </span>
+        `
 
-  function handleClick(event) {
-    // if (event.target.matches('.subscription-cancel-btn')) {
-    //   WonderfulFetch('https://api.itwcreativeworks.com/payment-cancellation', {
-    //     method: 'POST',
-    //     tries: 2,
-    //     timeout: 30000,
-    //     response: 'json',
-    //     body: {
-    //       orderId: event.target.dataset.orderId,
-    //       resourceId: event.target.dataset.resourceId,
-    //       bypassTimeRestriction: true,
-    //     },
-    //   })
-    //   .then(function (json) { // This function runs only on success
-    //     Admin().display('success', json.message);
-    //   })
-    //   .catch(function (e) { // This function runs only on error
-    //     Admin().display(e);
-    //   })
-    // }
-  }
+        result
+        .forEach(function (item, i) {
 
-  function runQuery(input) {
-    return new Promise(function(resolve, reject) {
-      // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
-      var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
+          item.data.roles = item.data.roles || {};
 
-      var user = firebase.auth().currentUser;
+          var time = new Date(item.data.activity.lastActivity.timestampUNIX * 1000)
+          var rolesHtml = '';
+          var sortedRoles = Object.keys(item.data.roles).sort();
 
-      if (!user) {
-        return reject(new Error('Not authenticated'))
-      }
+          allResponse[item.data.auth.uid] = item.data;
 
-      user.getIdToken(true)
-      .then(function (token) {
-        WonderfulFetch(serverProd, {
-          method: 'POST',
-          tries: 2,
-          timeout: 30000,
-          response: 'json',
-          body: {
-            authenticationToken: token,
-            command: 'admin:firestore-query',
-            payload: {
-              queries: [
-                {
-                  collection: 'users',
-                  where: [
-                    { field: 'auth.email', operator: '>=', value: input },
-                    { field: 'auth.email', operator: '<=', value: input + '\uf8ff' },
-                  ],
-                },
-                {
-                  collection: 'users',
-                  where: [
-                    { field: 'auth.uid', operator: '>=', value: input },
-                    { field: 'auth.uid', operator: '<=', value: input + '\uf8ff' },
-                  ],
-                },
-              ],
+          console.log('User', item);
+
+          sortedRoles
+          .forEach(function (role) {
+            if (item.data.roles[role]) {
+              rolesHtml += rolesTemplate
+              .replace(/{roleName}/ig, capitalizeFirstLetter(role))
+              .replace(/{roleClass}/ig, roleMap[role] || 'primary')            
             }
-          },
-        })
-        .then(function (json) {
-          return resolve(json);
+          });
+
+          table.row.add(
+            $(
+              dataTemplate
+                .replace(/{index}/g, i)
+                .replace(/{userUid}/g, item.data.auth.uid)
+                .replace(/{userEmail}/g, item.data.auth.email)
+                .replace(/{dateLastActivity}/g, time.toLocaleDateString() + ' @ ' + time.toLocaleTimeString())
+                .replace(/{dateLastActivityUNIX}/g, item.data.activity.lastActivity.timestampUNIX)
+                .replace(/{roles}/g, rolesHtml)
+            )
+          )
+        });
+
+        table.draw();
+        Admin().display('ready');
+
+      })
+      .catch(function (e) {
+        Admin().display(e);
+      })
+  }
+
+    function handleClick(event) {
+      if (event.target.matches('.user-open-btn')) {
+        var uid = event.target.dataset.uid;
+        $expandModal.querySelector('.modal-title').innerHTML = `Viewing <code>${uid}</code>`;
+        $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
+        expandModal.show();
+      }
+    }
+
+    function runQuery(input) {
+      return new Promise(function(resolve, reject) {
+        // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
+
+        var user = firebase.auth().currentUser;
+
+        if (!user) {
+          return reject(new Error('Not authenticated'))
+        }
+
+        user.getIdToken(true)
+        .then(function (token) {
+          WonderfulFetch(serverProd, {
+            method: 'POST',
+            tries: 2,
+            timeout: 30000,
+            response: 'json',
+            body: {
+              authenticationToken: token,
+              command: 'admin:firestore-query',
+              payload: {
+                queries: [
+                  {
+                    collection: 'users',
+                    where: [
+                      { field: 'auth.email', operator: '>=', value: input },
+                      { field: 'auth.email', operator: '<=', value: input + '\uf8ff' },
+                    ],
+                  },
+                  {
+                    collection: 'users',
+                    where: [
+                      { field: 'auth.uid', operator: '>=', value: input },
+                      { field: 'auth.uid', operator: '<=', value: input + '\uf8ff' },
+                    ],
+                  },
+                ],
+              }
+            },
+          })
+          .then(function (json) {
+            return resolve(json);
+          })
+          .catch(function (e) {
+            return reject(e);
+          })
         })
         .catch(function (e) {
           return reject(e);
         })
-      })
-      .catch(function (e) {
-        return reject(e);
-      })
-    });
-  }
+      });
+    }
 
-  function capitalizeFirstLetter(string) {
-   return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+  })
+
+
 </script>

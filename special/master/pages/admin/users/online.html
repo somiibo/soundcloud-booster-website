@@ -11,6 +11,13 @@ meta:
   description: "Explore online users with this Firestore query tool."
   breadcrumb: "Explore online Users"
   index: false
+
+admin:
+  header: '
+    <a class="btn btn-soft-primary refresh-users-btn" href="javascript:;">
+      <i class="bi-arrow-clockwise me-1"></i> Refresh Users
+    </a>
+  '  
 ---
 <div class="row loaded-false">
 	<div class="col-lg-8 offset-lg-2">
@@ -48,7 +55,7 @@ meta:
 			<!-- End Card -->
 		</div>
 
-		<div class="col-12">
+		<!-- <div class="col-12">
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -58,6 +65,7 @@ meta:
 						<th scope="col">Date</th>
 						<th scope="col">Platform</th>
 						<th scope="col">IP</th>
+						<th scope="col">Edit</th>
 					</tr>
 				</thead>
 				<tbody id="table-body">
@@ -65,24 +73,93 @@ meta:
 				</tbody>
 
 			</table>
-		</div>
+		</div> -->
+    <div class="table-responsive datatable-custom">
+      <table id="datatable-table" class="js-datatable-checkboxes table table-hover table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table no-footer" data-hs-datatables-options="">
+        <thead class="thead-light">
+          <tr>
+            <th class="table-column-pe-0">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="datatable-checkbox-select-all">
+                <label class="form-check-label" for="datatable-checkbox-select-all"></label>
+              </div>
+            </th>
+						<th scope="col">UID</th>
+						<th scope="col">Email</th>
+						<th scope="col">Date</th>
+						<th scope="col">Platform</th>
+						<th scope="col">IP</th>
+						<th scope="col">Version</th>
+						<th scope="col">Edit</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+        </tbody>
+      </table>
+    </div>    
 	</div>
 </div>
 
 <div id="table-template" data-template='
   <tr>
-    <th scope="row">{index}</th>
+    <td class="table-column-pe-0">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="datatable-checkbox-{index}">
+        <label class="form-check-label" for="datatable-checkbox-{index}"></label>
+      </div>
+    </td>
     <td><code>{uid}</code></td>
     <td>{email}</td>
-    <td>{date}</td>
+    <td data-order="{timestampUNIX}">
+      <span class="d-block">{timestamp}</span>
+    </td>
     <td>{platform}</td>
     <td><a href="{ipLink}" target="_blank">{ip}</a></td>
+    <td>{version}</td>
+    <td>
+      <div class="dropdown">
+        <a class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-empty" href="#" role="button" id="dropdownMenuLink-{uid}" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi-pencil me-2"></i> Edit
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{uid}" style="">
+          <li class="">
+            <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{uid}"><i class="bi-person-fill me-2"></i>Oepn user</a>
+          </li>
+          <li class="">
+            <a class="dropdown-item session-open-btn" href="javascript:;" data-session="{session}"><i class="bi-eye-fill me-2"></i>View session</a>
+          </li>          
+        </ul>
+      </div>
+    </td>    
   </tr>
 '></div>
+
+<div id="expand-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <!-- Exploring the library -->
 <script type="text/javascript">
 	var dom;
+  var table;
+  var allResponse = {};
 
 	Manager.auth().ready(function () {
 
@@ -96,11 +173,38 @@ meta:
     var $table = document.getElementById('table-body');
     var $online = document.getElementById('online-count');
     var template = document.getElementById('table-template').getAttribute('data-template');
+    var $expandModal = document.getElementById('expand-modal');
+    var expandModal = new bootstrap.Modal($expandModal, {});
+
+    var tableTbody = document.querySelector('#datatable-table tbody')
+
+    table = Admin().initializeTable();    
+
 
 		dom = Manager.dom();
 
-    firebase.auth().currentUser.getIdToken(true)
-      .then(function(token) {
+    document.addEventListener('click', function (event) {
+      if (event.target.matches('.user-open-btn')) {
+        var uid = event.target.dataset.uid;
+        window.location.href = '{{ site.url }}/admin/users?query=' + uid
+      } else if (event.target.matches('.session-open-btn')) {
+        var session = event.target.dataset.session;
+        $expandModal.querySelector('.modal-title').innerHTML = `Viewing <code>${session}</code>`;
+        $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[session], null, 2)}</code></pre>`
+        expandModal.show();
+      } else if (event.target.matches('.refresh-users-btn')) {
+        refreshOnlineUsers()
+      }
+    })
+
+    function refreshOnlineUsers() {
+      table.clear().draw();
+
+      dom.select('.loaded-false').show();
+      dom.select('.loaded-true').hide();      
+
+      firebase.auth().currentUser.getIdToken(true)
+      .then(function (token) {
 
         WonderfulFetch(serverApiURL, {
           method: 'POST',
@@ -117,6 +221,10 @@ meta:
         })
         .then(function (data) {
 
+         table.clear()
+
+          allResponse = data;
+
           var html = '';
           var count = 0;
 
@@ -126,22 +234,33 @@ meta:
 
             count++;
 
-            html += template
-              .replace(/{index}/ig, i + 1)
-              .replace(/{uid}/ig, session.uid)
-              .replace(/{email}/ig, session.email)
-              .replace(/{date}/ig, new Date(session.timestampUNIX).toLocaleString())
-              .replace(/{platform}/ig, getPlatform(session.platform))
-              .replace(/{ip}/ig, session.ip)
-              .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(session.ip))
+            table.row.add(
+              $(
+                template
+                  .replace(/{index}/ig, i + 1)
+                  .replace(/{uid}/ig, session.uid)
+                  .replace(/{email}/ig, session.email)
+                  .replace(/{timestamp}/ig, new Date(session.timestampUNIX).toLocaleString())
+                  .replace(/{timestampUNIX}/ig, session.timestampUNIX || 0)
+                  .replace(/{platform}/ig, getPlatform(session.platform))
+                  .replace(/{ip}/ig, session.ip)
+                  .replace(/{version}/ig, session.version)
+                  .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(session.ip))
+                  .replace(/{session}/ig, id)
+              )
+            )
+
           });
 
-          $table.innerHTML = html;
+          // $table.innerHTML = html;
           $online.innerHTML = count;
+
+          table.draw();
 
           // Finally, make everything visible
           dom.select('.loaded-false').hide();
           dom.select('.loaded-true').show();
+
         })
         .catch(function (e) {
           alert('Failed to fetch: ' + e)
@@ -150,9 +269,12 @@ meta:
       })
       .catch(function(e) {
         alert(e);
-      })      
- 
+      })          
+      
+    }  
 
+    refreshOnlineUsers();
+ 
 	}, {
 		waitFor: function () {
 			return true;
