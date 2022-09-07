@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: master/authors/profile
+layout: master/placeholder/authors/profile
 
 ### AUTHOR PAGES ###
 author:

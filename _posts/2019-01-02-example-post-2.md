@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: master/blog/post
+layout: master/placeholder/blog/post
 
 ### POST ONLY ###
 post:
