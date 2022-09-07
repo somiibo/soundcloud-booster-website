@@ -221,9 +221,12 @@ gulp.task('_prefill', async () => {
         await createFile('./@output/build/.gitignore', gitignore_ph);
         await createFile('./special/master/misc/.gitignore', '/master-service-worker.js'+'\n'+'.gitignore'+'\n');
       } else {
+        await fs.removeAsync('./special/master/pages/@reference')
         await createFile('./CNAME', new URL(_configYml.url).host);
       }
 
+      // if (!tools.isTemplate && tools.isServer) {
+      // }
 
       // Get analytics
       // await fetch('https://www.googletagmanager.com/gtag/js')
