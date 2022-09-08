@@ -65,9 +65,10 @@ email-marketing: # Get this information from Mailchimp > Audience > Manage Audie
   mailchimp-list-id: "" # string, example: b3456e5ffd
 
 contact:
-  email-support: "support@somiibo.com" #string, example: support@example.com
-  email-business: "support@somiibo.com" #string, example: hello@example.com
-  slapform-form-id: "000000" #string, example: abc123 (create one at https://slapform.com)
+  email-support: "support@somiibo.com" # string, example: support@example.com
+  email-business: "support@somiibo.com" # string, example: hello@example.com
+  slapform-form-id: "000000" # string, example: abc123 (create one at https://slapform.com)
+  phone: "+1 (000) 000 - 0000" # string, example: +1 (000) 000 - 0000
 
 brand:
   name: "SoundCloudBooster" # example: Google
