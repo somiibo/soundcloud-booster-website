@@ -23,7 +23,7 @@ compartment-site:
 
 # Custom Configuration
 version: '1.0.0'
-app: 'soundcloudbooster'
+app: 'somiibo'
 meta:
   title: "SoundCloud Bot - Get real followers, plays, likes, reposts, and comments - SoundCloudBooster"
   description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!"
@@ -48,7 +48,7 @@ comments:
   disqus: "" # string, example: somiibo
 
 tracking:
-  google-analytics: UA-104885300-28 # false to disable, example: UA-123456789
+  google-analytics: G-9LBNCESVK6 # false to disable, example: UA-123456789
   facebook-pixel: false # false to disable, example: fbp-123456789
   tiktok-pixel: false # false to disable, example: D4829D83H38929384H48
 
@@ -71,7 +71,7 @@ contact:
   phone: "+1 (000) 000 - 0000" # string, example: +1 (000) 000 - 0000
 
 brand:
-  name: "SoundCloudBooster" # example: Google
+  name: "SoundCloud Booster" # example: Google
   type: "Corporation" # example: Corporation
   description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!" # example: A search engine company.
   logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-black-1024x1024.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
@@ -80,8 +80,8 @@ brand:
   address-country: "United States" # String | example: United States
 
 manifest:
-  name: "" # example: Google Maps
-  short-name: "" # example: Maps
+  name: "SoundCloud Booster" # example: Google Maps
+  short-name: "SoundCloud Booster" # example: Maps
   theme-color: "#ffffff" # example: #ffffff
   background-color: "#ffffff" # example: #ffffff
   display: "standalone" # example: standalone
