@@ -1,9 +1,32 @@
 function Slapform() {
-  this.id = 0;
+  var self = this;
+  self.id = 0;
 }
 
+Slapform.prototype.init = function () {
+  var self = this;
+
+  Manager.dom().select('form.slapform')
+  .each(function (el, i) {
+
+    console.log('Initialized slapform', i, el);
+
+    Manager.dom().select(el)
+      .on('submit', function (event) {
+        event.preventDefault();
+        self.process(event);
+      });
+
+    Manager.dom().select(el.querySelector('button[type="submit"]'))
+      .removeAttribute('disabled')
+      .removeClass('disabled');
+  })
+
+};
+
 Slapform.prototype.process = function (event) {
-  event.target.id = event.target.id || 'slapform-' + this.id++;
+  var self = this;
+  event.target.id = event.target.id || 'slapform-' + self.id++;
   var dom = Manager.dom();
   var formData = {};
   var idSelector = '#' + event.target.id;
@@ -97,3 +120,5 @@ Slapform.prototype.process = function (event) {
 };
 
 module.exports = Slapform;
+window._SlapformProcessor = Slapform;
+

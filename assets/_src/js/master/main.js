@@ -14,6 +14,7 @@ Manager.init(Configuration, function() {
 
   Manager.dom().select('form.slapform')
   .each(function (el, i) {
+
     Manager.dom().select(el).on('submit', function (event) {
       event.preventDefault();
       import('./slapform-processor.js')
@@ -24,8 +25,8 @@ Manager.init(Configuration, function() {
     });
 
     Manager.dom().select(el.querySelector('button[type="submit"]'))
-    .removeAttribute('disabled')
-    .removeClass('disabled');
+      .removeAttribute('disabled')
+      .removeClass('disabled');
   })
 });
 

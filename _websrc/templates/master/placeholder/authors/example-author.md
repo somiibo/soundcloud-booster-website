@@ -1,7 +1,9 @@
 ---
 ### ALL PAGES ###
-layout: master/authors/profile
-
+layout: master/placeholder/authors/profile
+sitemap:
+  include: true
+  
 ### AUTHOR PAGES ###
 author:
   name: Samantha Raeburn

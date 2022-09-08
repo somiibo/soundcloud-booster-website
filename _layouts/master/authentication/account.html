@@ -503,7 +503,7 @@ settings:
                     <div class="card card-sm bg-dark border-dark mx-2">
                       <div class="card-body">
                         <div class="row justify-content-center justify-content-sm-between">
-                          <div class="col d-flex align-items-center text-light">
+                          <div class="col d-flex align-items-center text-white">
                             <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> -->
                             You have unsaved changes!
                           </div>
@@ -568,6 +568,26 @@ settings:
                 </div>
                 <!-- End Row -->
               </div>
+
+              <div class="card-body">
+                <p class="card-text">View and manage your account usage. Usage resets on <strong id="usage-reset"></strong>. </p>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-thead-bordered table-nowrap table-align-middle card-table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Metric</th>
+                      <th>Used</th>
+                      <th>Allowed</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="usage-table">
+                 
+                  </tbody>
+                </table>
+              </div>              
               <!-- End Body -->
             </div>
             <!-- End Card -->
@@ -686,7 +706,7 @@ settings:
               <!-- Body -->
               <div class="card-body">
 
-                <form>
+                <form id="api-keys-form">
                   <!-- Form -->
                   <div class="mb-3">
                     <label for="apiKeys_private" class="form-label">Private key</label>
@@ -705,9 +725,30 @@ settings:
                       </a>
                     </div>
                   </div>
+
+                  <!-- <div class="mb-3">
+                    <label for="apiKeys_client" class="form-label">Client key</label>
+
+                    <div class="input-group input-group-sm input-group-merge table-input-group">
+                      <input id="apiKeys_client" type="text" class="form-control form-control-light auth-apikey-element" readonly value="">
+                      <a class="js-clipboard input-group-append input-group-text" href="javascript:;" data-bs-toggle="tooltip" title="Copy to clipboard" data-hs-clipboard-options='{
+                          "type": "tooltip",
+                          "successText": "Copied!",
+                          "contentTarget": "#apiKeys_client",
+                          "classChangeTarget": "#apiKeys_clientIcon",
+                          "defaultClass": "bi-clipboard",
+                          "successClass": "bi-check"
+                         }'>
+                        <i id="apiKeys_clientIcon" class="bi-clipboard"></i>
+                      </a>
+                    </div>
+                  </div>                   -->
                   <!-- End Form -->
 
-
+                  <div class="alert alert-soft-danger" role="alert" hidden>
+                    <h4 class="alert-heading">Error</h4>
+                    <p></p>
+                  </div>
 
                   <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-white">Regenerate keys</button>
@@ -978,7 +1019,7 @@ settings:
       </td>
       <td><i class="bi-{icon} fs-3 me-2"></i> {platform} {online}</td>
       <td>
-        <a href="{ipUrl}" target="_blank" rel="nofollow">{ip}</a>
+        <a href="{ipUrl}" target="_blank" rel="nofollow">{ip} <i class="bi-box-arrow-up-right ms-1"></i></a>
       </td>
       <td>{date}</td>
     </tr>
@@ -1016,6 +1057,15 @@ settings:
       </div>
     </div>
   </div>
+'></div>
+
+<div id="usage-template" hidden
+  data-template='
+  <tr>
+    <td class="align-items-center">{metric}</td>
+    <td>{used}</td>
+    <td>{allowed}</td>
+  </tr>   
 '></div>
 
 <script>
@@ -1087,7 +1137,11 @@ settings:
     var signinMethodsTemplate = document.getElementById('signin-methods-template').dataset.template;
     var activeSessionsTemplate = document.getElementById('active-sessions-template').dataset.template;
     var connectedAccountsTemplate = document.getElementById('connected-accounts-template').dataset.template;
+    var usageTemplate = document.getElementById('usage-template').dataset.template;
 
+    var $usageTable = document.getElementById('usage-table')
+    var $usageReset = document.getElementById('usage-reset')
+    
     var $authUserProfileParent = document.getElementById('auth-user-profile-parent')
     var $authUserProfileImg = document.getElementById('auth-user-profile-img')
 
@@ -1148,6 +1202,10 @@ settings:
         .then(function (appData) {
           console.log('appData', appData);
 
+          var resolvedPlanData = {};
+
+          appData.products = appData.products || {};
+
           firebase.firestore().doc('users/' + user.uid)
           .get()
           .then(function (doc) {
@@ -1171,6 +1229,8 @@ settings:
                     var providersArray = Object.keys(providers);
                     var sessionsArray = Object.keys(sessions);
 
+                    var devicesCount = sessionsArray.length;
+
                     var premiumbadgeHtml = '';
                     var badgesHtml = '';
                     var countriesHtml = '<option value="">Choose a country</option>';
@@ -1179,6 +1239,16 @@ settings:
                     var signinMethodsHtml = '';
                     var activeSessionsHtml = '';
                     var connectedAccountsHtml = ''
+                    var usageHtml = ''
+
+                    // Resolve plan
+                    Object.keys(appData.products)
+                    .forEach(function (id) {
+                      var plan = appData.products[id];
+                      if (plan.planId === properties.plan.id) {
+                        resolvedPlanData = plan;
+                      }
+                    });
 
                     if (properties.plan.id !== 'basic') {
                       premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
@@ -1227,8 +1297,8 @@ settings:
                     user.providerData
                     .forEach(function (provider, i) {
                       if (provider.providerId === 'password') {
-                        providers.password = true;
-                        providersArray.unshift('password')
+                        // providers.password = true;
+                        // providersArray.unshift('password')
                       } else if (provider.providerId === 'google.com') {
                         $authUserProfileImg.setAttribute('onerror', 'this.onerror=null;this.src="' + gravatar + '";')
                         $authUserProfileImg.src = provider.photoURL;
@@ -1236,6 +1306,8 @@ settings:
                         $authUserProfileParent.setAttribute('target', '')
                       }
                     });
+
+                    console.log('---providersArray', providersArray);
 
                     providersArray
                     .forEach(function (provider, i) {
@@ -1309,12 +1381,12 @@ settings:
                       } else if (platform.includes('win')) {
                         platformHuman = 'Windows';
                         icon = 'windows';
-                      } else if (platform.includes('unknown')) {
+                      } else if (platform.includes('linux')) {
+                        platformHuman = 'Linux';
+                        icon = 'motherboard-fill';                        
+                      } else {
                         platformHuman = 'Unknown';
                         icon = 'question-octagon-fill';
-                      } else {
-                        platformHuman = 'Linux';
-                        icon = 'motherboard-fill';
                       }
                       // console.log('---session', session);
                       activeSessionsHtml += activeSessionsTemplate
@@ -1357,9 +1429,33 @@ settings:
                     });
 
                     if (oauth2EnabledArray.length === 0) {
-                      connectedAccountsHtml = 'No providers are available to connect at the moment'
+                      connectedAccountsHtml = '<i>No providers are available to connect at the moment</i>'
                     }
 
+                    // usage
+                    properties.usage = properties.usage || {};
+                    properties.usage.devices = properties.usage.devices || {};
+                    properties.usage.devices.count = properties.usage.devices.count || devicesCount;
+                    // resolvedPlanData.limits.submissions = 99
+
+                    Object.keys(properties.usage)
+                    .forEach(function (metric) {
+
+                      properties.usage[metric] = properties.usage[metric] || {};
+
+                      usageHtml += usageTemplate
+                        .replace(/{metric}/ig, capitalizeFirstLetter(metric))
+                        .replace(/{used}/ig, properties.usage[metric].count || 0)
+                        .replace(/{allowed}/ig, resolvedPlanData.limits[metric] || 'Unlimited')
+                    });
+
+
+                    var nowDate = new Date();
+                    var resetDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 1);
+                    var Difference_In_Time = resetDate.getTime() - nowDate.getTime();
+                    var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));   
+                    var isAnS = Difference_In_Days === 1 ? '' : 's';
+                    $usageReset.innerHTML = resetDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' (' + Difference_In_Days + ' day' + isAnS + ')'
 
 
                     // Update HTML
@@ -1372,6 +1468,7 @@ settings:
                     $signinMethods.innerHTML = signinMethodsHtml;
                     $activeSessionsParent.innerHTML = activeSessionsHtml;
                     $connectedAccountsParent.innerHTML = connectedAccountsHtml;
+                    $usageTable.innerHTML = usageHtml;
                     if (properties.affiliate.referrals.length > 0) {
                       $referralsParent.innerHTML = referralsHtml
                     }
@@ -1557,6 +1654,23 @@ settings:
         .catch(function (e) {
           _result(e)
         })
+      } else if (event.target.matches('#api-keys-form')) {
+        WonderfulFetch(serverApiURL, {
+          method: 'POST',
+          timeout: 30000,
+          response: 'json',
+          tries: 2,
+          body: {
+            authenticationToken: token,
+            command: 'user:regenerate-api-keys',
+          },
+        })
+        .then(function (data) {
+          window.location.reload();
+        })
+        .catch(function (e) {
+          _result(e)
+        })        
       }
     }
 
@@ -1814,6 +1928,10 @@ settings:
       return 'unknown'
     }
   }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }  
 
   // document.addEventListener('click', function (event) {
   //   console.log('---1');

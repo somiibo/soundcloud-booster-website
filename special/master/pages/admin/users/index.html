@@ -1,0 +1,394 @@
+---
+### ALL PAGES ###
+layout: master/admin/main
+permalink: /admin/users/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Explore Users"
+  description: "Explore users with this Firestore query tool."
+  breadcrumb: "Explore Users"
+  index: false
+---
+<div class="row justify-content-end mb-3">
+  <div class="col-lg">
+    <!-- Datatable Info -->
+    <div id="datatableCounterInfo" style="display: none;">
+      <div class="d-sm-flex justify-content-lg-end align-items-sm-center">
+        <span class="d-block d-sm-inline-block fs-5 me-3 mb-2 mb-sm-0">
+          <span id="datatableCounter">0</span>
+          Selected
+        </span>
+        <a class="btn btn-outline-danger btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+          <i class="bi-trash"></i> Delete
+        </a>
+        <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+          <i class="bi-archive"></i> Archive
+        </a>
+        <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+          <i class="bi-upload"></i> Publish
+        </a>
+        <a class="btn btn-white btn-sm mb-2 mb-sm-0" href="javascript:;">
+          <i class="bi-x-lg"></i> Unpublish
+        </a>
+      </div>
+    </div>
+    <!-- End Datatable Info -->
+  </div>
+  <!-- End Col -->
+</div>
+<!-- End Row -->
+
+<!-- Card -->
+<div class="card">
+  <!-- Header -->
+  <div class="card-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="col">
+        <!-- Filter -->
+        <form id="datatable-search-form" onsubmit="return false">
+          <!-- Search -->
+          <div class="input-group input-group-merge input-group-flush">
+            <div class="input-group-prepend input-group-text">
+              <i class="bi-search"></i>
+            </div>
+            <input id="datatable-search-input" type="search" class="form-control" placeholder="Search users" aria-label="Search users" readonly>
+          </div>
+          <!-- End Search -->
+        </form>
+        <!-- End Filter -->
+      </div>
+
+      <div class="col-auto">
+        <!-- Datatable Info -->
+        <div id="datatable-checkbox-select-counter" class="ms-3" style="display: none;">
+          <div class="d-flex align-items-center">
+            <span class="fs-5 me-3">
+              <span id="datatable-checkbox-select-counter-data">0</span>
+              Selected
+            </span>
+            <a class="btn btn-sm btn-outline-danger disabled" href="javascript:;" disabled>
+              <i class="bi bi-trash"></i> Delete
+            </a>
+          </div>
+        </div>
+        <!-- End Datatable Info -->
+      </div>
+
+      <div class="col-auto">
+        <div id="datatable-spinner" class="spinner-border text-primary ms-3" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Header -->
+
+  <!-- Table -->
+  <div class="table-responsive datatable-custom">
+    <table id="datatable-table" class="js-datatable-checkboxes table table-hover table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table no-footer" data-hs-datatables-options="">
+      <thead class="thead-light">
+        <tr>
+          <th class="table-column-pe-0">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="datatable-checkbox-select-all">
+              <label class="form-check-label" for="datatable-checkbox-select-all"></label>
+            </div>
+          </th>
+          <th class="table-column-ps-0">UID</th>
+          <th>Email</th>
+          <th>Active</th>
+          <th>Roles</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <!-- End Table -->
+
+  <div class="card-footer">
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center justify-content-sm-end">
+      <nav id="datatable-pagination" aria-label="Activity pagination"></nav>
+    </div>
+    <!-- End Pagination -->
+  </div>
+</div>
+<!-- End Card -->
+
+<div id="expand-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow: scroll;">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var dataTemplate = `
+    <tr>
+      <td class="table-column-pe-0">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="datatable-checkbox-{index}">
+          <label class="form-check-label" for="datatable-checkbox-{index}"></label>
+        </div>
+      </td>
+      <td class="table-column-ps-0">
+        <span class="d-block"><code>{userUid}</code></span>
+      </td>
+      <td>
+        <span class="d-block">{userEmail}</span>
+      </td>
+      <!-- <td>
+        <span class="d-block h5 mb-0">Director</span>
+        <span class="d-block">Human resources</span>
+      </td> -->
+      <td data-order="{dateLastActivityUNIX}">
+        <span class="d-block">{dateLastActivity}</span>
+      </td>
+      <td>
+        {roles}
+      </td>
+      <td>
+        <div class="dropdown">
+          <a class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-empty" href="#" role="button" id="dropdownMenuLink-{userUid}" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi-pencil me-2"></i> Edit
+          </a>
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{userUid}">
+            <li class="">
+              <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2"></i>View user</a>
+            </li>
+          </ul>
+        </div>
+
+      </td>
+    </tr>
+  `
+
+  var table;
+  var appMap = {};
+  var allResponse = {};
+
+  Manager.ready(function () {
+    var searchInput = document.getElementById('datatable-search-input')
+    var searchForm = document.getElementById('datatable-search-form')
+    var spinner = document.getElementById('datatable-spinner')
+    var tableTbody = document.querySelector('#datatable-table tbody');
+    var qsQuery = Manager.properties.page.queryString.get('query')
+
+    var $expandModal = document.getElementById('expand-modal');
+    var expandModal = new bootstrap.Modal($expandModal, {});
+
+    table = Admin().initializeTable();
+
+    firebase.firestore().collection('apps')
+      .get()
+      .then(function(snapshot) {
+
+        snapshot
+        .forEach(function (val, i) {
+          var data = val.data();
+          appMap[data.id] = {
+            name: data.name,
+            brandmark: data.images.brandmark,
+          };
+        });
+
+        searchForm.addEventListener('submit', function (event) {
+          handleSearch(searchInput.value || '')
+        })
+
+        document.addEventListener('click', function (event) {
+          handleClick(event)
+        })
+
+        if (qsQuery) {
+          searchInput.value = qsQuery;
+          handleSearch(qsQuery)
+        }
+
+        Admin().display('ready');
+
+        if (Manager.properties.meta.environment === 'development') {
+          // handleSearch('100')
+        }
+
+      })
+      .catch(function(e) {
+
+      })
+
+    // HERE
+    function handleSearch(input) {
+      console.log('---search...', input);
+      Admin().display('loading');
+
+      if (input.length < 3) {
+        return Admin().display(new Error('Please enter at least 3 characters'));
+      }
+
+      table.clear().draw()
+
+      runQuery(input)
+      .then(function (result) {
+
+        result.sort(function(a, b) {
+          var a = a.data.timestampUNIX;
+          var b = b.data.timestampUNIX;
+          if (a > b) {
+            return -1;
+          }
+          if (a < b) {
+            return 1;
+          }
+
+          // names must be equal
+          return 0;
+        });
+
+        allResponse = {};
+
+        table.clear()
+
+        var roleMap = {
+          admin: 'danger',
+          betaTester: 'purple',
+          developer: 'info',
+          vip: 'warning',
+        }
+        var rolesTemplate = `
+          <span class="badge bg-soft-{roleClass} bg-{roleClass} text-{roleClass}">
+            <span class="legend-indicator bg-{roleClass}"></span> {roleName}
+          </span>
+        `
+
+        result
+        .forEach(function (item, i) {
+
+          item.data.roles = item.data.roles || {};
+
+          var time = new Date(item.data.activity.lastActivity.timestampUNIX * 1000)
+          var rolesHtml = '';
+          var sortedRoles = Object.keys(item.data.roles).sort();
+
+          allResponse[item.data.auth.uid] = item.data;
+
+          console.log('User', item);
+
+          sortedRoles
+          .forEach(function (role) {
+            if (item.data.roles[role]) {
+              rolesHtml += rolesTemplate
+              .replace(/{roleName}/ig, capitalizeFirstLetter(role))
+              .replace(/{roleClass}/ig, roleMap[role] || 'primary')            
+            }
+          });
+
+          table.row.add(
+            $(
+              dataTemplate
+                .replace(/{index}/g, i)
+                .replace(/{userUid}/g, item.data.auth.uid)
+                .replace(/{userEmail}/g, item.data.auth.email)
+                .replace(/{dateLastActivity}/g, time.toLocaleDateString() + ' @ ' + time.toLocaleTimeString())
+                .replace(/{dateLastActivityUNIX}/g, item.data.activity.lastActivity.timestampUNIX)
+                .replace(/{roles}/g, rolesHtml)
+            )
+          )
+        });
+
+        table.draw();
+        Admin().display('ready');
+
+      })
+      .catch(function (e) {
+        Admin().display(e);
+      })
+  }
+
+    function handleClick(event) {
+      if (event.target.matches('.user-open-btn')) {
+        var uid = event.target.dataset.uid;
+        $expandModal.querySelector('.modal-title').innerHTML = `Viewing <code>${uid}</code>`;
+        $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
+        expandModal.show();
+      }
+    }
+
+    function runQuery(input) {
+      return new Promise(function(resolve, reject) {
+        // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
+
+        var user = firebase.auth().currentUser;
+
+        if (!user) {
+          return reject(new Error('Not authenticated'))
+        }
+
+        user.getIdToken(true)
+        .then(function (token) {
+          WonderfulFetch(serverProd, {
+            method: 'POST',
+            tries: 2,
+            timeout: 30000,
+            response: 'json',
+            body: {
+              authenticationToken: token,
+              command: 'admin:firestore-query',
+              payload: {
+                queries: [
+                  {
+                    collection: 'users',
+                    where: [
+                      { field: 'auth.email', operator: '>=', value: input },
+                      { field: 'auth.email', operator: '<=', value: input + '\uf8ff' },
+                    ],
+                  },
+                  {
+                    collection: 'users',
+                    where: [
+                      { field: 'auth.uid', operator: '>=', value: input },
+                      { field: 'auth.uid', operator: '<=', value: input + '\uf8ff' },
+                    ],
+                  },
+                ],
+              }
+            },
+          })
+          .then(function (json) {
+            return resolve(json);
+          })
+          .catch(function (e) {
+            return reject(e);
+          })
+        })
+        .catch(function (e) {
+          return reject(e);
+        })
+      });
+    }
+
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+  })
+
+
+</script>
