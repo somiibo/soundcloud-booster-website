@@ -66,6 +66,7 @@ gulp.task('_prefill', async () => {
           await createFile('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
           await createFile('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
           await createFile('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
+          await createFile('./pages/blog.md', await readFile('./_websrc/templates/master/placeholder/blog.md'))
         }
 
         if (!fs.exists('./pages/legal')) {
