@@ -62,9 +62,6 @@ gulp.task('_prefill', async () => {
           ""
         )
         
-        if ((await listFiles('./pages') || []).length < 2) {
-        }
-
         if (!fs.exists('./pages/index.md') && !fs.exists('./pages/index.html')) {
           await createFile('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
           await createFile('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
