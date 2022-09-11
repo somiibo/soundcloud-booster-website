@@ -1174,6 +1174,10 @@ admin:
                   $('#importGoogleDoc').modal('toggle');
                   dom.select('#import-btn').removeAttribute('disabled');
 
+                  if (!dom.select('#headerImageURL').getValue()) {
+                    randomizeHeaderImage();
+                  }
+
                   setHeaderImagePreview()
                   countChars();
                   countCharactersAndWords();
