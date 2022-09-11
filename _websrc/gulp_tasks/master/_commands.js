@@ -82,7 +82,7 @@ gulp.task('clean:npm', async function () {
 });
 
 gulp.task('template:update', async function () {
-  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git merge template -m "Merged from template." && git push origin`)
+  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git pull && git merge template -m "Merged from template." && git push origin`)
   .then(data => {
     console.log(data)
   })
