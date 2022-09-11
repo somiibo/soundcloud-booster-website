@@ -97,7 +97,7 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/authentication/signin/',
+          required: '/authentication/signup/',
         }
       }
     }
@@ -215,14 +215,19 @@ settings:
                   <i class="bi-trash3 nav-icon"></i> Delete account
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link link-danger auth-signout-all-btn" href="javascript:;">
+                  <i class="bi-door-open nav-icon" style="pointer-events: none;"></i> Sign out
+                </a>
+              </li>              
             </ul>
           </div>
           <!-- End Navbar Collapse -->
         </div>
         <!-- End Navbar -->
-        <div class="d-grid mb-2">
+        <!-- <div class="d-grid mb-2">
           <button class="btn btn-soft-danger auth-signout-all-btn" type="button"><i class="bi-door-open me-1"></i> Sign out</button>
-        </div>
+        </div> -->
       </div>
 
       <div class="col-lg-9">
@@ -1119,6 +1124,7 @@ settings:
   Manager.auth().ready(function () {
     var currentURL = new URL(window.location.href);
     var select = Manager.dom().select;
+    var _ = Manager.utilities();
 
     var user = firebase.auth().currentUser;
     var email = user ? user.email : '';
@@ -1161,7 +1167,7 @@ settings:
         ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
         : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
       )
-      .replace(/PROJECT_ID/g, Manager.utilities().get(Manager, 'properties.options.libraries.firebase_app.config.projectId'))
+      .replace(/PROJECT_ID/g, _.get(Manager, 'properties.options.libraries.firebase_app.config.projectId'))
     var token;
     var oauth2Map = {
       google: {
@@ -1411,7 +1417,7 @@ settings:
                           return
                         }
 
-                        var identity = Manager.utilities().get(properties.oauth2[provider] || {}, 'identity.' + details.identity, '');
+                        var identity = _.get(properties.oauth2[provider] || {}, 'identity.' + details.identity, '');
                         if (identity) {
                           identity = '- ' + identity;
                         }
@@ -1445,8 +1451,8 @@ settings:
 
                       usageHtml += usageTemplate
                         .replace(/{metric}/ig, capitalizeFirstLetter(metric))
-                        .replace(/{used}/ig, properties.usage[metric].count || 0)
-                        .replace(/{allowed}/ig, resolvedPlanData.limits[metric] || 'Unlimited')
+                        .replace(/{used}/ig, _.get(properties, 'usage.' + metric + '.count', 0))
+                        .replace(/{allowed}/ig, _.get(resolvedPlanData, 'limits.' + metric, 'Unlimited'))
                     });
 
 
@@ -1476,7 +1482,7 @@ settings:
                     // Set personal data ib form
                     Powertools.getKeys(properties.personal)
                     .forEach(function (key, i) {
-                      var val = Manager.utilities().get(properties.personal, key);
+                      var val = _.get(properties.personal, key);
                       var $el = select('*[name="' + key + '"]');
                       // console.log('---', key, val, $el.get(0));
                       if ($el) {
@@ -1614,7 +1620,7 @@ settings:
       select(event.target.querySelectorAll('input, select, textarea'))
       .each(function (el) {
         var $el = select(el);
-        Manager.utilities().set(data, $el.getAttribute('name'), $el.getValue() || null)
+        _.set(data, $el.getAttribute('name'), $el.getValue() || null)
       })
 
       console.log('Data', data);
