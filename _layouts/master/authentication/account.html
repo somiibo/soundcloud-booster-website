@@ -1411,7 +1411,7 @@ settings:
                     Object.keys(appData.oauth2)
                     .forEach(function (provider, i) {
                       // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
-                      if (appData.oauth2[provider]) {
+                      if (appData.oauth2[provider] && appData.oauth2[provider].enabled) {
                         var details = oauth2Map[provider];
                         if (!details) {
                           return
