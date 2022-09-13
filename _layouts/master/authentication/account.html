@@ -14,6 +14,9 @@ head:
 
     <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/css/theme.min.css" data-hs-appearance="default">
     <link rel="preload" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/css/theme-dark.min.css" data-hs-appearance="dark" as="style">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/regular.min.css" integrity="sha512-aNH2ILn88yXgp/1dcFPt2/EkSNc03f9HBFX0rqX3Kw37+vjipi1pK3L9W08TZLhMg4Slk810sPLdJlNIjwygFw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/solid.min.css" integrity="sha512-uj2QCZdpo8PSbRGL/g5mXek6HM/APd7k/B5Hx/rkVFPNOxAQMXD+t+bG4Zv8OAdUpydZTU3UHmyjjiHv2Ww0PA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style data-hs-appearance-onload-styles>
       * {
@@ -165,7 +168,7 @@ settings:
                  }'>
              <li class="nav-item">
                <a class="nav-link active" href="#content">
-                 <i class="bi-person nav-icon"></i> Account details
+                 <i class="bi-person nav-icon"></i> Account details                 
                </a>
              </li>
               <li class="nav-item">
@@ -565,7 +568,7 @@ settings:
 
                   <div class="col-md-auto">
                     <div class="d-grid d-sm-flex gap-3">
-                      <a class="btn btn-white auth-billing-update-btn" href="javascript:;" target="_blank" hidden>Manage plan</a>
+                      <a class="btn btn-white auth-billing-update-btn" href="javascript:;" target="_blank" rel="nofollow" hidden>Manage plan</a>
                       <a class="btn btn-success auth-billing-subscribe-btn" href="{{ site.url }}/pricing" target="_blank" hidden><i class="bi-star-fill me-1"></i> Subscribe</a>
                     </div>
                   </div>
@@ -871,7 +874,7 @@ settings:
 
                   <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="activeSessionsDropdown">
                     <a class="dropdown-item text-danger auth-signout-all-sessions-btn" href="javascript:;">
-                      <i class="bi-door-open-fill"></i> Sign out of all sessions
+                      <i class="bi-door-open-fill me-1"></i> Sign out of all sessions
                     </a>
                   </div>
                 </div>
@@ -915,7 +918,7 @@ settings:
 
               <!-- Body -->
               <div class="card-body">
-                <p class="card-text">When you delete your account, you lose access to {{ site.brand.name }} account services, and we permanently delete your personal data. This action is <strong>irreversible</strong>.</p>
+                <p class="card-text">When you delete your account, you lose access to all {{ site.brand.name }} services and all your personal data is permanently deleted. This action is <strong>irreversible</strong>.</p>
 
                 <div class="mb-4">
                   <!-- Form Check -->
@@ -992,7 +995,7 @@ settings:
     <div class="list-group-item">
       <div class="d-flex">
         <div class="flex-shrink-0">
-          <i class="bi-{icon} list-group-icon"></i>
+          {icon}
         </div>
 
         <div class="flex-grow-1">
@@ -1019,10 +1022,14 @@ settings:
   data-template='
     <tr>
       <td class="align-items-center" hidden>
-        <i class="bi-{icon} list-group-icon"></i>
-        <!-- <img class="avatar avatar-xss me-2" src="./assets/svg/brands/chrome-icon.svg" alt="Image Description"> Chrome on Windows -->
+        {icon}
       </td>
-      <td><i class="bi-{icon} fs-3 me-2"></i> {platform} {online}</td>
+      <td>
+        <div class="flex-shrink-0">
+          {icon} {platform} {online}
+        </div>
+        
+      </td>
       <td>
         <a href="{ipUrl}" target="_blank" rel="nofollow">{ip} <i class="bi-box-arrow-up-right ms-1"></i></a>
       </td>
@@ -1035,15 +1042,15 @@ settings:
   <div class="list-group-item connect-account-parent" data-provider="{id}">
     <div class="d-flex">
       <div class="flex-shrink-0">
-        <i class="bi-{icon} list-group-icon"></i>
-        <!-- <img class="avatar avatar-xs" src="./assets/svg/brands/google-icon.svg" alt="Image Description"> -->
+        <!-- <i class="bi-{icon} list-group-icon"></i> -->
+        <img class="avatar avatar-xs me-3" src="{icon}" alt="{identity}">
       </div>
 
       <div class="flex-grow-1 me-3">
         <div class="row align-items-center">
           <div class="col">
             <h4 class="mb-0">{name} <span class="connect-account-identity text-muted" data-provider="{id}">{identity}</span> </h4>
-            <p class="fs-5 text-body mb-0">{description} <a href="{homepage}" target="_blank">Learn more</a> </p>
+            <p class="fs-5 text-body mb-0">{description} <a href="{homepage}" target="_blank" rel="nofollow">Learn more</a> </p>
           </div>
           <!-- End Col -->
 
@@ -1171,19 +1178,35 @@ settings:
     var token;
     var oauth2Map = {
       google: {
-        icon: 'google',
+        // icon: 'google',
+        icon: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg',
         name: 'Google',
         description: 'Search and social.',
         homepage: 'https://google.com',
         identity: 'email',
       },
       discord: {
-        icon: 'discord',
+        // icon: 'discord',
+        icon: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/discord.svg',
         name: 'Discord',
         description: 'Chat and community.',
         homepage: 'https://discord.com',
         identity: 'username',
       }
+    }
+    var signinMethodMap = {
+      google: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg',
+      facebook: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg',
+      twitter: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg',
+      github: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg',
+      apple: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg',
+      microsoft: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg',
+      yahoo: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg',
+    }
+    var sessionsMap = {
+      mac: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg',
+      windows: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg',
+      linux: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/linux.svg',
     }
 
     $authUserProfileImg.setAttribute('onerror', '')
@@ -1256,24 +1279,53 @@ settings:
                       }
                     });
 
+                    if (qsDevelopment) {
+                      properties.plan.id = 'premium';
+                      properties.roles = {
+                        admin: true,
+                        developer: true,
+                        moderator: true,
+                        blogger: true,
+                        betaTester: true,
+                        vip: true,
+                      }
+                    }
+
                     if (properties.plan.id !== 'basic') {
-                      premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
+                      // premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
+                      premiumbadgeHtml += '<i class="fa-solid fa-star fs-2 text-success me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
                     }
 
                     if (properties.roles.admin) {
-                      badgesHtml += '<i class="bi-magic fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+                      // badgesHtml += '<i class="bi-magic fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+                      // badgesHtml += '<i class="fa-solid fa-fire-flame-curved fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+                      // badgesHtml += '<i class="fa-solid fa-crown fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+                      badgesHtml += '<i class="fa-solid fa-hat-wizard fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
                     }
 
                     if (properties.roles.developer) {
-                      badgesHtml += '<i class="bi-code-square fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
+                      // badgesHtml += '<i class="bi-code-square fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
+                      badgesHtml += '<i class="fa-solid fa-code fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
                     }
 
+                    if (properties.roles.moderator) {
+                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
+                      badgesHtml += '<i class="fa-solid fa-sailboat fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
+                    }
+
+                    if (properties.roles.blogger) {
+                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
+                      badgesHtml += '<i class="fa-solid fa-book fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
+                    }                    
+
                     if (properties.roles.betaTester) {
-                      badgesHtml += '<i class="bi-lightning-fill fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
+                      // badgesHtml += '<i class="bi-lightning-fill fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
+                      badgesHtml += '<i class="fa-solid fa-bolt fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
                     }
 
                     if (properties.roles.vip) {
-                      badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
+                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
+                      badgesHtml += '<i class="fa-solid fa-award fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
                     }
 
 
@@ -1318,7 +1370,7 @@ settings:
                     providersArray
                     .forEach(function (provider, i) {
                       var plainId = provider.replace('.com', '');
-                      var icon = plainId;
+                      var icon;
                       var url;
                       var classAction;
                       var shouldEnable;
@@ -1339,11 +1391,12 @@ settings:
                       }
 
                       if (provider === 'password') {
-                        icon = 'person-fill';
+                        icon = '<i class="bi-person-fill _list-group-icon me-3 display-5"></i>';
                         url = new URL('{{ site.url }}');
                         classAction = '';
                         shouldEnable = false;
                       } else {
+                        icon = '<img class="avatar avatar-xs me-3" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
                         url = new URL('https://' + provider);
                         classAction = userHasEnabled ? 'auth-unlink-provider-btn' : 'auth-link-provider-btn';
                         shouldEnable = true;
@@ -1381,18 +1434,20 @@ settings:
                       var platform = (session.platform || 'unkown').toLowerCase();
                       var platformHuman;
                       var icon;
+                      var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
+                      var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
                       if (platform.includes('mac')) {
                         platformHuman = 'macOS';
-                        icon = 'apple';
+                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.mac);
                       } else if (platform.includes('win')) {
                         platformHuman = 'Windows';
-                        icon = 'windows';
+                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.windows);
                       } else if (platform.includes('linux')) {
                         platformHuman = 'Linux';
-                        icon = 'motherboard-fill';                        
+                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);                        
                       } else {
                         platformHuman = 'Unknown';
-                        icon = 'question-octagon-fill';
+                        icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
                       }
                       // console.log('---session', session);
                       activeSessionsHtml += activeSessionsTemplate
@@ -1408,6 +1463,10 @@ settings:
                     // Fill connected accounts
                     var oauth2EnabledArray = [];
                     appData.oauth2 = appData.oauth2 || {};
+
+                    // appData.oauth2.google = {enabled: true}
+                    // appData.oauth2.discord = {enabled: true}
+
                     Object.keys(appData.oauth2)
                     .forEach(function (provider, i) {
                       // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
@@ -1672,7 +1731,13 @@ settings:
           },
         })
         .then(function (data) {
-          window.location.reload();
+          console.log('Api keys', data);
+          document.getElementById('apiKeys_private').value = data.privateKey;
+          HSCore.components.HSClipboard.init('.js-clipboard')
+          _result()
+          setTimeout(function () {
+            alert('Your API keys have been regenerated. Make sure to use the new keys in your applications.')
+          }, 10);
         })
         .catch(function (e) {
           _result(e)
