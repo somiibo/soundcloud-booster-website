@@ -60,11 +60,11 @@ jobs:
           JEKYLL_PAT: ${{ secrets.ACCESS_TOKEN }}
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge
-  clean-artifacts:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: kolpav/purge-artifacts-action@v1
-        with:
-          token: $
-          expire-in: 0 # Set this to 0 to delete all artifacts
+  # clean-artifacts:
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: kolpav/purge-artifacts-action@v1
+  #       with:
+  #         token: $
+  #         expire-in: 0 # Set this to 0 to delete all artifacts
