@@ -1309,13 +1309,10 @@ settings:
                     }
 
                     if (properties.roles.moderator) {
-                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
-                      // badgesHtml += '<i class="fa-solid fa-sailboat fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
                       badgesHtml += '<i class="fa-solid fa-shield-halved fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
                     }
 
                     if (properties.roles.blogger) {
-                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
                       // badgesHtml += '<i class="fa-solid fa-book fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
                       badgesHtml += '<i class="fa-solid fa-pen-clip fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
                     }                    
@@ -1438,13 +1435,14 @@ settings:
                       var icon;
                       var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
                       var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
-                      if (platform.includes('mac')) {
+                      
+                      if (platform.match(/(mac|darwin)/ig)) {
                         platformHuman = 'macOS';
                         icon = iconHtml.replace(/{icon}/ig, sessionsMap.mac);
-                      } else if (platform.includes('win')) {
+                      } else if (platform.match(/win/ig)) {
                         platformHuman = 'Windows';
                         icon = iconHtml.replace(/{icon}/ig, sessionsMap.windows);
-                      } else if (platform.includes('linux')) {
+                      } else if (platform.match(/linux/ig)) {
                         platformHuman = 'Linux';
                         icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);                        
                       } else {
@@ -1989,11 +1987,11 @@ settings:
         return navigator.userAgentData.platform;
       } else {
         if (navigator.userAgent.match(/Mac/i)) {
-          return 'Mac'
+          return 'mac'
         } else if (navigator.userAgent.match(/Windows/i)) {
-          return 'Windows'
+          return 'windows'
         } else {
-          return 'Linux'
+          return 'linux'
         }
       }
     } catch (e) {
