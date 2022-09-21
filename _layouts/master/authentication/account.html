@@ -1834,7 +1834,7 @@ settings:
         try {
           scope = JSON.parse(decodeURIComponent(scope))
         } catch (e) {
-          console.warn('oops', scope, e);
+          console.warn('Could not parse scopes', scope, e);
           scope = []
         }
 
