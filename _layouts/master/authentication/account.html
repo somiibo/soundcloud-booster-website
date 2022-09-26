@@ -22,7 +22,7 @@ head:
       * {
         transition: unset !important;
       }
-      
+
       /*
       body {
         opacity: 0;
@@ -1828,10 +1828,11 @@ settings:
           $el.removeAttribute('disabled').removeClass('disabled').removeClass('text-muted');
         })
       } else if (event.target.matches('.connect-account-btn')) {
-        var $el = select(event.target);
         var provider = event.target.dataset.provider;
         var action = event.target.dataset.action;
         var scope = event.target.dataset.scope;
+        var $el = select(event.target);
+        var $identity = select('.connect-account-identity[data-provider="' + provider + '"]');
 
         try {
           scope = JSON.parse(decodeURIComponent(scope))
@@ -1868,6 +1869,7 @@ settings:
         })
         .then(function (response) {
           console.log('response', response);
+          // 
           if (action === 'connect') {
             console.log('response.url', response.url);
             setTimeout(function () {
@@ -1875,6 +1877,7 @@ settings:
             }, 1000);
           } else {
             $el.setAttribute('data-action', 'connect').setInnerHTML('Connect')
+            $identity.setText('')
             _enable()
           }
         })
