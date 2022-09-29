@@ -1,6 +1,7 @@
 name: Compile and Build Site
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -8,7 +9,6 @@ on:
       - template
   schedule:
     - cron: '0 0 1 * *'
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.ref }}
