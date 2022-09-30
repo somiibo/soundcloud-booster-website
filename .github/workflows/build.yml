@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  # ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
   build:
