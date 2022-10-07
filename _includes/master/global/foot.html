@@ -1,3 +1,11 @@
+
+
+{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
+  {% assign page_is_post = true %}
+{% else %}
+  {% assign page_is_post = false %}
+{% endif %}
+
 <!-- Master - Alert Box -->
 <div class="master-alert master-alert-outdated">
   <span class="master-alert-close" onclick="this.parentElement.style.display='none';">&times;</span>
@@ -153,7 +161,7 @@
 
 <!-- Script - Social Share Kit Script -->
 {% assign include_socialsharekitscript = false %}
-{%- if page.layout contains 'post' -%}
+{%- if page_is_post == true -%}
   {%- if page.settings.include-socialsharekit == false -%}
     {% assign include_socialsharekitscript = false %}
   {%- elsif layout.settings.include-socialsharekit == false -%}
@@ -232,38 +240,53 @@
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
+      "name": "{{ site.brand.name }}",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "Home",
-          "item": "{{ site.url }}"
+          "item": {
+            "@id": "{{ site.url }}",
+            "name": "Home"
+          }          
         }
-
         {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
         {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
         {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
         {%- for i in (1..forLoopMaxInt) -%}
-            {%- assign pos = forloop.index -%}
-            {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
-            {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
-            {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
-            {%- for breadcrumb_page in site.pages -%}
-                {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
-                {% assign j = forLoopMaxInt | plus: 0 %}
-                  {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-                  {% capture comma %}{% if i != j %},{% endif %}{% endcapture %}
-                  ,{
-                    "@type": "ListItem",
-                    "position": {{ pos | plus: 1 }},
-                    "name": "{{ breadcrumb_page.meta.breadcrumb | liquify}}"{{ comma }}
-                    {% if i != j %}
-                      "item": "{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}"
-                    {% endif %}
-                  }
-                {%- endif -%}
-            {%- endfor -%}
+          {%- assign pos = forloop.index -%}
+          {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
+          {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
+          {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
+          
+          {%- for breadcrumb_page in site.pages -%}
+            {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
+              {% assign j = forLoopMaxInt | plus: 0 %}
+              {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
+              {% capture comma %}{% if i != j %},{% endif %}{% endcapture %}
+              ,{
+                "@type": "ListItem",
+                "position": {{ pos | plus: 1 }},
+                "item": {
+                  "@id": "{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}",
+                  "name": "{{ breadcrumb_page.meta.breadcrumb | liquify}}"
+                }
+              }
+            {%- endif -%}        
+
+          {%- endfor -%}
         {%- endfor -%}
+
+        {%- if page_is_post == true -%}
+          ,{
+            "@type": "ListItem",
+            "position": {{ pos | plus: 1 }},
+            "item": {
+              "@id": "{{ site.url }}{{ page.url }}",
+              "name": "{{ page.post.title | liquify }}"
+            }
+          }              
+        {%- endif -%}        
       ]
     }
   </script>
@@ -278,10 +301,11 @@
   {
     "@context": "http://schema.org",
     "@type": "{{ site.brand.type }}",
+    "@id": "{{ site.url }}#{{ site.brand.type }}",
+    "url": "{{ site.url }}",
     "name": "{{ site.brand.name }}",
     "description": "{{ site.brand.description }}",
     "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
-    "url": "{{ site.url }}",
     "sameAs": [
       {%- if site.socials.linkedin != null -%}
       "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
@@ -307,7 +331,7 @@
       "https://www.facebook.com/{{ site.socials.facebook }}/",
       {%- endif -%}
 
-      ""
+      "{{ site.url }}"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -323,16 +347,47 @@
 {% elsif layout.schema.sitelinks == false %}
 {% elsif site.schema.sitelinks == false %}
 {% else %}
-  <script id="uj-sitelinks-json" type="application/ld+json">
+  <script id="uj-website-json" type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "WebSite",
+      "@id": "{{ site.url }}#WebSite",
       "url": "{{ site.url }}",
+      "name": "{{ site.brand.name }}",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "{{ site.url }}/search/cse?q={search_term_string}",
         "query-input": "required name=search_term_string"
       }
+    }
+  </script>
+{% endif %}
+
+<!-- Schema - BlogPosting -->
+{%- if page_is_post == true -%}
+  <script id="uj-blogposting-json" type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "BlogPosting",
+      "@id": "{{ site.url }}{{ page.url }}#BlogPosting",      
+      "url": "{{ site.url }}{{ page.url }}",      
+      "name": "{{ page.post.title | liquify }}",
+      "description": "{{ page.post.excerpt | liquify }} ",
+      "headline": "{{ page.post.title | liquify }}",
+      "datePublished": "{{ page.date | date_to_xmlschema }}",
+      "author": {
+        "@id": "{{ site.url }}/authors/{{ page.post.author }}"
+      },
+      "publisher": {
+        "@id": "{{ site.url }}"
+      },
+      "isPartOf": {
+        "@id": "{{ site.url }}{{ page.url }}"
+      },
+      "image": {
+        "@id": "{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page.url | split: "/" | last }}.jpg"
+      },
+      "inLanguage": "en-US"
     }
   </script>
 {% endif %}
