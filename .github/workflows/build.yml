@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 # env:
-  # ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  # GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build:
@@ -61,6 +61,6 @@ jobs:
       - name: Build Jekyll
         uses: helaili/jekyll-action@v2
         env:
-          JEKYLL_PAT: ${{ secrets.ACCESS_TOKEN }}
+          JEKYLL_PAT: ${{ secrets.GH_TOKEN }}
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge      
