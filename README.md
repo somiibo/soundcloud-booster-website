@@ -27,7 +27,7 @@
 2. In the next window, name the new repository and choose an organization to host the repository.
 3. Click **1 Branch** in the middle bar and then the pencil icon next to `template` in the next window. Name it `master`.
 4. Open the newly created repository on GitHub and click **Open in Desktop** then choose location using GitHub desktop.
-5. In the repo's settings add a secret called `ACCESS_TOKEN` and paste a GitHub token that has write permissions for this repo.
+5. In the repo's settings add a secret called `GH_TOKEN` and paste a GitHub token that has write permissions for this repo.
 6. Open Terminal and do the following commands or simply `npm run template:setup`    
 7. Go back into GitHub desktop on the new repo and press **Push** in top bar.
 8. Initialize the new repo by entering this command in Terminal:
