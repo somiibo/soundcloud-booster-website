@@ -112,7 +112,7 @@ gulp.task('_prefill', async () => {
         // if (posts.find(function (name) {
         //   return name.indexOf('example-post') > -1;
         // })) {
-        if ((await listFiles('./_posts') || []).length < 2) {
+        if ((await listFiles('./_posts') || []).length === 0) {
           const now = new Date();
           const postTemplate = await readFile('./_websrc/templates/master/placeholder/blog/example-post.md');
           for (var i = 1; i < 8; i++) {

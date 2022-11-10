@@ -1,6 +1,7 @@
 name: Compile and Build Site
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -13,13 +14,16 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
+# env:
+  # GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
 jobs:
   build:
     # needs: nothing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup ruby
         uses: actions/setup-ruby@v1
         with:
@@ -28,7 +32,7 @@ jobs:
         run: |
           bundle install --path vendor/bundle
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 10
       - name: Run node install
@@ -43,7 +47,7 @@ jobs:
           timestamp_pst=$(date +%FT%TZ)
           temp_build_json=$(cat @output/build/build.json)
 
-          echo account: $GITHUB_ACTOR,
+          echo account: $GITHUB_ACTOR
           echo repo: $GITHUB_REPOSITORY
           echo timestamp_utc: $timestamp_utc
           echo timestamp_pst: $timestamp_pst
@@ -55,8 +59,8 @@ jobs:
 
           sed -n '1h;1!H;${;g;s/GEN>>>.*<<<GEN/<REDACTED FOR LIVE PUBLISH>/g;p;}' .gitignore > .gitignore
       - name: Build Jekyll
-        uses: helaili/jekyll-action@2.0.4
+        uses: helaili/jekyll-action@v2
         env:
-          JEKYLL_PAT: ${{ secrets.ACCESS_TOKEN }}
+          JEKYLL_PAT: ${{ secrets.GH_TOKEN }}
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge      

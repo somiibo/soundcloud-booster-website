@@ -15,6 +15,7 @@ const timestamp = new Date().getTime();
 
 module.exports = {
   mode: 'production',
+  // mode: 'development',
   target: ['web', 'es5'],
   // devtool: 'source-map',
   module: {
@@ -44,9 +45,22 @@ module.exports = {
 
     // https://github.com/webpack/webpack/issues/959
     chunkFilename: (pathData) => {
-      // return pathData.chunk.name === 'main' ? '[name].js' : 'chunk.[name].[chunkhash].js';
-      return pathData.chunk.name === 'main' ? '[name].js' : `chunk.[name].${timestamp}.js`;
+      return pathData.chunk.name === 'main' ? '[name].js' : 'chunk.[name].[chunkhash].js';
+      // return pathData.chunk.name === 'main' ? '[name].js' : `chunk.[name].${timestamp}.js`;
     },
+    filename: (pathData) => {
+      return '[name].js';
+    },    
+    
+    // https://github.com/webpack/webpack/issues/2329
+    // chunkFilename: `chunk.[name].[chunkhash].js?cb=[chunkhash]`,    
+
+
+    // https://stackoverflow.com/questions/39238163/how-to-use-cache-busting-with-webpack
+    // filename: `[name].js?cb=${timestamp}`,
+    // chunkFilename: `chunk.[name].js?cb=${timestamp}`,    
+    // path: '/assets/js/',
+
     // umdNamedDefine: false,
   },
 
