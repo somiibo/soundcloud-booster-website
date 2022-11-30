@@ -770,6 +770,8 @@ admin:
             invoiceDropdownEl.insertAdjacentHTML('beforeend', newDropdownHTML)
           }
 
+          Manager.dom().select('#invoiceNote').setValue(Manager.storage().get('admin.post.invoiceNote', ''));
+
           dom.select('body').on('click', function(event) {
             // allowLeave = false;
             if (event.target.matches('#stackedit-edit')) {
@@ -890,6 +892,7 @@ admin:
               var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
               existingInvoiceEmails.unshift(data.invoiceEmail);
               Manager.storage().set('admin.post.invoiceEmails', existingInvoiceEmails)
+              Manager.storage().set('admin.post.invoiceNote', data.invoiceNote)
 
               fetch(endpoint, {
                 method: 'POST',
@@ -908,8 +911,8 @@ admin:
 
                     if (data.postHandler.success && data.postHandler.data.invoice && data.postHandler.data.invoice.success) {
                       Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.invoice.data.href)
-                    } else {
-                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
+                    // } else {
+                      // Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
                     }
 
                     // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
