@@ -512,11 +512,25 @@ admin:
                 Price of the invoice
               </small>
 
-              <input type="number" class="form-control" name="invoicePrice" id="invoicePrice" placeholder="30" aria-label="30" min="5">
+              <input type="number" class="form-control" name="invoicePrice" id="invoicePrice" placeholder="30" aria-label="30" min="5" step="1">
 
             </div>
             <!-- End Form -->
           </div>
+
+          <div class="col-12">
+            <!-- Form -->
+            <div class="mb-4">
+              <label for="invoiceNote" class="_form-label text-dark">Invoice note</label>
+              <small class="d-block _form-text text-muted">
+                Put company details of both parties here
+              </small>
+
+              <textarea type="email" class="form-control" name="invoiceNote" id="invoiceNote" rows="3" placeholder="ITW Creative Works" aria-label="ITW Creative Works"></textarea>
+
+            </div>
+            <!-- End Form -->
+          </div>          
         </div>
 
       </div>
