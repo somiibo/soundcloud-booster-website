@@ -232,7 +232,7 @@ meta:
 
           function getPreviewIcon() {
             var newPreviewIcon = dom.select('#icon').getValue();
-            if (lastPreviewIcon != newPreviewIcon) {
+            if (lastPreviewIcon !== newPreviewIcon) {
               // console.log('NEW', newPreviewIcon);
               lastPreviewIcon = newPreviewIcon;
               dom.select(previewIconEl)
@@ -262,7 +262,7 @@ meta:
             var env = buildFile.environment;
             dom.select('#processingAddy_dev').setInnerHTML(serverDev).setAttribute('value', serverDev);
             dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
-            dom.select('#processingAddy').setValue(env == 'development' ? serverDev : serverProd);
+            dom.select('#processingAddy').setValue(env === 'development' ? serverDev : serverProd);
 
           }
 

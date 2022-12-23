@@ -44,21 +44,19 @@ try {
   console.error('master-service-worker.js failed setup.', e)
 }
 
-// Load Firebase Messaging
+// Load Firebase
 try {
-  // NEED TO POLYFILL XMLHttpRequest in order to use promo-server
-  // importScripts('https://gist.githubusercontent.com/lemonhall/3120320/raw/af9113b06ead851159cd643a686881e577920ed1/gistfile1.js');
-  importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-app.js');
-  importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-messaging.js');
-  // importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-database.js');
-  // importScripts('https://www.gstatic.com/firebasejs/{firebase-version}/firebase-firestore.js');
+  // Import Firebase libraries
+  importScripts(
+    'https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/9.15.0/firebase-messaging-compat.js',
+    'https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js',
+    'https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js',
+  );
 
-  // if (typeof firebase === 'undefined') {
-  //   throw new Error('hosting/init-error: Firebase SDK not detected.');
-  // }
-
+  // Initialize app
   firebase.initializeApp(SWManager.config.firebase);
-  var messaging = firebase.messaging();
+  firebase.messaging();
   SWManager.libraries.firebase = firebase;
   log('master-service-worker.js initialized Firebase.');
 } catch (e) {
@@ -134,23 +132,25 @@ try {
 
 // Load PromoServer
 try {
-  // importScripts('https://cdn.jsdelivr.net/npm/promo-server@latest/dist/index.min.js');
-  //
-  // setTimeout(function () {
-  //   SWManager.libraries.promoServer = new PromoServer({
-  //     app: SWManager.app, // <any string>
-  //     platform: 'web', // web | electron | extension
-  //     log: true, // true | false
-  //     firebase: firebase, // reference to firebase (one will be implied if not provided)
-  //     alwaysRun: true,
-  //   });
-  //   SWManager.libraries.promoServer.handle(function (item) {
-  //     console.log('---PS', item);
-  //     if (item) {
-  //
-  //     }
-  //   });
-  // }, SWManager.environment == 'development' ? 1000 : 60000);
+  // Import libraries
+  importScripts('https://cdn.jsdelivr.net/npm/promo-server@latest/dist/index.min.js');
+
+  // Register and handle
+  setTimeout(function () {
+    SWManager.libraries.promoServer = new PromoServer({
+      app: SWManager.app, // <any string>
+      platform: 'web', // web | electron | extension
+      log: true, // true | false
+      alwaysRun: SWManager.environment === 'development',
+      libraries: {
+        firebase: firebase, // reference to firebase (one will be implied if not provided)
+      },      
+    });
+
+    SWManager.libraries.promoServer.handle();
+    log('master-service-worker.js handling PromoServer.');
+  }, SWManager.environment === 'development' ? 1 : 30000);
+  log('master-service-worker.js initialized PromoServer.');
 } catch (e) {
   console.error('master-service-worker.js failed to import promo-server.js', e);
 }
@@ -170,20 +170,20 @@ self.addEventListener('message', function(event) {
     data.args = data.args || {};
     response.command = data.command;
 
-    if (data.command == '') { return };
+    if (data.command === '') { return };
 
     log('master-service-worker.js postMessage ', data);
 
-    if (data.command == 'function') {
+    if (data.command === 'function') {
       data.args.function = data.args.function || function() {};
       data.args.function();
-    } else if (data.command == 'debug') {
+    } else if (data.command === 'debug') {
       console.log('master-service-worker.js Debug data =', data);
       event.ports[0].postMessage(response);
-    } else if (data.command == 'skipWaiting') {
+    } else if (data.command === 'skipWaiting') {
       self.skipWaiting();
       event.ports[0].postMessage(response);
-    } else if (data.command == 'unregister') {
+    } else if (data.command === 'unregister') {
       self.registration.unregister()
       .then(function() {
         event.ports[0].postMessage(response);
@@ -192,7 +192,7 @@ self.addEventListener('message', function(event) {
         response.status = 'fail';
         event.ports[0].postMessage(response);
       });
-    } else if (data.command == 'cache') {
+    } else if (data.command === 'cache') {
       data.args.pages = data.args.pages || [];
       var defaultPages =
       [
@@ -230,7 +230,7 @@ self.addEventListener('message', function(event) {
 
 function log() {
   try {
-    if (SWManager.environment == 'development') {
+    if (SWManager.environment === 'development') {
       var args = Array.prototype.slice.call(arguments);
       args.unshift('[SW DEV LOG]');
       console.log.apply(console, args);

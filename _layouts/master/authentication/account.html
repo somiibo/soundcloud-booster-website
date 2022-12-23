@@ -5,7 +5,7 @@ layout: master/global/default
 ### REGULAR PAGES ###
 head:
   post-bundle-css: '
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/vendor/bootstrap-icons/font/bootstrap-icons.css">
@@ -39,6 +39,14 @@ head:
       a.dropdown-item * {
         pointer-events: none;
       }
+
+      /* SET FONT */
+      body {
+        font-family: "Open Sans", sans-serif !important;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.6;
+      }      
     </style>
   '
 
@@ -553,7 +561,7 @@ settings:
               <div class="card-body">
                 <div class="row">
                   <div class="col-md mb-4 mb-md-0">
-                    <div class="mb-4">
+                    <div class="mb-1">
                       <span class="card-subtitle">Your plan<span class="auth-billing-frequency-element"></span>:</span>
                       <h3><span class="auth-billing-plan-id-element"></span><span class="auth-billing-start-date-element"></span></h3>
                     </div>

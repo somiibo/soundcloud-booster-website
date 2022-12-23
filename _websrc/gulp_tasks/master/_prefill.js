@@ -172,14 +172,6 @@ gulp.task('_prefill', async () => {
         fs.dir('./@output/lighthouse');
         fs.remove('./@output/build/build.json');
         await createFile('./@output/build/build.json', build_json);
-
-        // Create the master service worker
-        await fs.writeAsync('./special/master/misc/master-service-worker.js',
-          (await readFile('./_websrc/templates/master/js/master-service-worker.js')).replace(/{firebase-version}/img,
-            require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '')
-          )
-        );
-
       }
 
       // only create these files if NOT on template

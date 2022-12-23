@@ -260,7 +260,7 @@ settings:
       });
 
       function setEmail(email) {
-        if (email && Manager.dom().select('#mce-EMAIL').getValue() == '') {
+        if (email && Manager.dom().select('#mce-EMAIL').getValue() === '') {
           Manager.dom().select('#mce-EMAIL').setValue(email)
         }
       }

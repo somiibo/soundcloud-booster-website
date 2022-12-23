@@ -85,7 +85,7 @@ settings:
 
           Manager.dom().select('#ui-submission-return').setAttribute('href', submission.meta.referrer);
 
-          if (submission.meta.status == 'success') {
+          if (submission.meta.status === 'success') {
             Manager.dom().select('#ui-submission-title').setInnerHTML('Thank you!');
             Manager.dom().select('#ui-submission-subtitle').setInnerHTML('Your submission has been received.');
           } else {
