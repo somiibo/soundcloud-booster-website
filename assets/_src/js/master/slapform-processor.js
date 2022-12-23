@@ -43,10 +43,10 @@ Slapform.prototype.process = function (event) {
     var name = elSelected.getAttribute('name');
     var required = elSelected.getAttribute('required');
     required = !(required == null);
-    formData[name] = (type == 'checkbox' || type == 'radio')
+    formData[name] = (type === 'checkbox' || type === 'radio')
     ? dom.select(idSelector + ' ' + '*[name=\'' + name + '\']').getValue()
     : elSelected.getValue();
-    var valToCheck = (type == 'checkbox') ? (formData[name] || [])[0] : formData[name];
+    var valToCheck = (type === 'checkbox') ? (formData[name] || [])[0] : formData[name];
     pass = (!required || (required && !!valToCheck));
     console.log(name, formData[name], 'required = ' + required, 'pass = ' + pass);
     if (!pass) {

@@ -16,7 +16,7 @@
 //   entry.push(config.assets + config.assetsSubpath + '/' + config.js.src + '/' + config.js.entry[i]);
 // }
 //
-// if (config.tasks.eslint && argv.skipESLint != 'true') {
+// if (config.tasks.eslint && argv.skipESLint !== 'true') {
 //   config_webpack.module.rules.push(config.eslintLoader);
 // }
 //

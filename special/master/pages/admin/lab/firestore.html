@@ -244,12 +244,12 @@ meta:
   function display(type, message) {
     dom.select('#response .alert-info').hide()
     dom.select('#post-submit-btn').removeAttribute('disabled');
-    if (type == 'failed') {
+    if (type === 'failed') {
       dom.select('#response').show()
       dom.select('#response .alert-success').hide()
       dom.select('#response .alert-danger').show()
       dom.select('#failed-response-code').setInnerHTML(message)
-    } else if (type == 'success') {
+    } else if (type === 'success') {
       dom.select('#response').show()
       dom.select('#response .alert-success').show()
       dom.select('#response .alert-danger').hide()

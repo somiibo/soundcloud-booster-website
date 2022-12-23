@@ -7,7 +7,7 @@ const through  = require('through2');
 const tools    = new (require('../../libraries/tools.js'));
 const Global   = require('../../libraries/global.js');
 const glob     = require('glob');
-
+const fs       = require('fs-jetpack');
 
 function doImagesExist(imgPath) {
   return new Promise(function(resolve, reject) {
@@ -87,6 +87,13 @@ gulp.task('copyJs', async function () {
   //   .pipe(newer(config.assets + '/js/app'))
   //   .pipe(gulp.dest(config.assets + '/js/app'));
 
+  // Create the master service worker
+  await fs.writeAsync('./special/master/misc/master-service-worker.js',
+    (await fs.read('./_websrc/templates/master/js/master-service-worker.js')).replace(/{firebase-version}/img,
+      require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '')
+    )
+  );  
+
   return es.merge(
     gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
       .pipe(newer(config.assets + '/js/theme'))
@@ -95,7 +102,6 @@ gulp.task('copyJs', async function () {
     gulp.src([config.assets + config.assetsSubpath + '/js/app/**/*'])
       .pipe(newer(config.assets + '/js/app'))
       .pipe(gulp.dest(config.assets + '/js/app')),
-
   )
   .pipe(tools.completeTask('copyJs'))
 });

@@ -24,7 +24,13 @@ gulp.task('watch', function () {
   watch([
     config.assets + config.assetsSubpath + '/' + config.js.src + '/**/*',
     config.assets + config.assetsSubpath + '/' + config.sass.src + '/**/*',
-    './special'+ '/**/*',
+    './special/**/*',
+    
+    // Trigger on service-worker changes
+    './_websrc/templates/master/js/master-service-worker.js',
+    
+    // But don't trigger when service worker is copied
+    '!./special/master/misc/master-service-worker.js',
   ], function () {
     gulp.start('copyJs');
     gulp.start('copyCss');
@@ -63,6 +69,7 @@ gulp.task('watch', function () {
       // '!./**/*.webp',
       // '!./**/*.jpg',
       // '!./**/*.jpeg',
+      // '!./special/master/misc/master-service-worker.js',
 
     ], function () {
       gulp.start('browser-reload');

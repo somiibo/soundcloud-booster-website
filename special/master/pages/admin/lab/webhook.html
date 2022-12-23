@@ -224,18 +224,18 @@ meta:
       dom.select('#response #search-preloader').hide()
       dom.select('#send-btn').removeAttribute('disabled').removeClass('disabled');
       dom.select('#response').show()
-      if (type == 'failed') {
+      if (type === 'failed') {
         dom.select('#response .alert-success').hide()
         dom.select('#response .alert-danger').show()
         dom.select('#response #search-preloader').hide()
         dom.select('#failed-response-code').setInnerHTML(extractContent(message))
         Manager.log('Fail:', extractContent(message));
-      } else if (type == 'success') {
+      } else if (type === 'success') {
         dom.select('#response .alert-success').show()
         dom.select('#response .alert-danger').hide()
         dom.select('#response #search-preloader').hide()
         dom.select('#success-response-code').setInnerHTML('message')
-      } else if (type == 'waiting') {
+      } else if (type === 'waiting') {
         dom.select('#response .alert-danger').hide()
         dom.select('#response .alert-success').hide()
         dom.select('#response #search-preloader').show()

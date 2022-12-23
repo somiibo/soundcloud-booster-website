@@ -75,7 +75,7 @@ Post.prototype.create = async function (options) {
         // console.log('----------err', err);
       });
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         poster.write(finalPost.path, finalPost.content);
         response.data = finalPost;
       }
