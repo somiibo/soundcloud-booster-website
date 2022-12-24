@@ -798,9 +798,15 @@ settings:
                   <!-- <div class="mb-3">
                     <label for="accountPasswordLabel" class="form-label">Account password</label>
 
-                    <input type="password" class="form-control" name="password" id="accountPasswordLabel" placeholder="Enter current password" aria-label="Enter current password" autocomplete="current-password" minlength="6">
+                    <input type="password" class="form-control" name="password" id="accountPasswordLabel" placeholder="Enter current password" aria-label="Enter current password" autocomplete="current-password" minlength="6" required>
                     <small class="form-text">This is the password you use to log in to your {{ site.brand.name }} account.</small>
                   </div> -->
+                  <div class="mb-3">
+                    <label for="accountEmailLabel" class="form-label">Confirm email</label>
+
+                    <input type="email" class="form-control" name="email" id="accountEmailLabel" placeholder="Enter account email" aria-label="Enter account email" autocomplete="email" required>
+                    <small class="form-text">Confirm the email you use to log in to to your {{ site.brand.name }} account.</small>
+                  </div>                  
                   <!-- End Form -->
 
                   <div class="alert alert-soft-success" role="alert" hidden>
@@ -1700,7 +1706,10 @@ settings:
       $alertDanger.setAttribute('hidden', true);
 
       if (event.target.matches('#change-password-form')) {
-        if ((data.password || '').length >= 6) {
+        if ((
+          (data.password || '').length >= 6)
+          || (data.email === user.email)
+        ) {
           firebase.auth().sendPasswordResetEmail(user.email)
             .then(function () {
               _result()
@@ -1709,7 +1718,7 @@ settings:
               _result(e)
             });
         } else {
-          _result(new Error('Please enter your password'))
+          _result(new Error('The email you entered does not match'))
         }
       } else if (event.target === $personalInformationForm) {
         if (data.birthday.timestamp) {
