@@ -385,7 +385,7 @@ admin:
               .replace(/{index}/ig, i + 1)
               .replace(/{uid}/ig, utilities.escapeHTML(session.uid || 'null'))
               .replace(/{email}/ig, utilities.escapeHTML(session.email || 'null'))
-              .replace(/{timestamp}/ig, timestamp.toLocaleString())
+              .replace(/{timestamp}/ig, timestamp.toLocaleDateString() + ' @ ' + timestamp.toLocaleTimeString())
               .replace(/{timestampUNIX}/ig, Math.round(timestamp.getTime() / 1000))
               .replace(/{platform}/ig, getPlatform(utilities.escapeHTML(session.platform)))
               .replace(/{ip}/ig, utilities.escapeHTML(session.ip))
