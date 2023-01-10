@@ -125,7 +125,7 @@ admin:
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{uid}" style="">
           <li class="">
-            <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{uid}"><i class="bi-person-fill me-2"></i>Oepn user</a>
+            <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{uid}"><i class="bi-person-fill me-2"></i>Open user</a>
           </li>
           <li class="">
             <a class="dropdown-item session-open-btn" href="javascript:;" data-session="{session}"><i class="bi-eye-fill me-2"></i>View session</a>
@@ -158,8 +158,17 @@ admin:
 <!-- Exploring the library -->
 <script type="text/javascript">
 	var dom;
+	var utilities;
   var table;
   var allResponse = {};
+
+  var sessionsMap = {
+    macOS: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg',
+    Windows: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg',
+    Linux: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/linux.svg',
+  }  
+
+  var iconHtml = '<img class="avatar avatar-xs me-1" src="{icon}" alt="{platform}"> {platform}';
 
 	Manager.auth().ready(function () {
 
@@ -182,6 +191,7 @@ admin:
 
 
 		dom = Manager.dom();
+		utilities = Manager.utilities();
 
     document.addEventListener('click', function (event) {
       if (event.target.matches('.user-open-btn')) {
@@ -206,6 +216,8 @@ admin:
       firebase.auth().currentUser.getIdToken(true)
       .then(function (token) {
 
+        allResponse = {};
+
         WonderfulFetch(serverApiURL, {
           method: 'POST',
           timeout: 30000,
@@ -215,60 +227,86 @@ admin:
             authenticationToken: token,
             command: 'admin:database-read',
             payload: {
-              path: 'sessions/app'
+              path: 'gatherings/online'
             }
           },
         })
         .then(function (data) {
+          
+          // Response
+          allResponse = Object.assign(allResponse, data)
 
-         table.clear()
+          WonderfulFetch(serverApiURL, {
+            method: 'POST',
+            timeout: 30000,
+            response: 'json',
+            tries: 2,
+            body: {
+              authenticationToken: token,
+              command: 'admin:database-read',
+              payload: {
+                path: 'sessions/app'
+              }
+            },
+          })
+          .then(function (data) {
 
-          allResponse = data;
+            allResponse = Object.assign(allResponse, data)
 
-          var html = '';
-          var count = 0;
+            table.clear()
 
-          Object.keys(data)
-          .forEach((id, i) => {
-            var session = data[id];
+            var html = '';
+            var count = 0;
 
-            count++;
+            Object.keys(allResponse)
+            .forEach((id, i) => {
+              var session = allResponse[id];
+              var timestamp = new Date(session.timestampUNIX || session.timestamp)
 
-            table.row.add(
-              $(
-                template
-                  .replace(/{index}/ig, i + 1)
-                  .replace(/{uid}/ig, session.uid)
-                  .replace(/{email}/ig, session.email)
-                  .replace(/{timestamp}/ig, new Date(session.timestampUNIX).toLocaleString())
-                  .replace(/{timestampUNIX}/ig, session.timestampUNIX || 0)
-                  .replace(/{platform}/ig, getPlatform(session.platform))
-                  .replace(/{ip}/ig, session.ip)
-                  .replace(/{version}/ig, session.version)
-                  .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(session.ip))
-                  .replace(/{session}/ig, id)
+              count++;
+
+              console.log('[Session]', session);
+
+              table.row.add(
+                $(
+                  template
+                    .replace(/{index}/ig, i + 1)
+                    .replace(/{uid}/ig, utilities.escapeHTML(session.uid || 'null'))
+                    .replace(/{email}/ig, utilities.escapeHTML(session.email || 'null'))
+                    .replace(/{timestamp}/ig, timestamp.toLocaleString())
+                    .replace(/{timestampUNIX}/ig, Math.round(timestamp.getTime() / 1000))
+                    .replace(/{platform}/ig, getPlatform(utilities.escapeHTML(session.platform)))
+                    .replace(/{ip}/ig, utilities.escapeHTML(session.ip))
+                    .replace(/{version}/ig, utilities.escapeHTML(session.version))
+                    .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(utilities.escapeHTML(session.ip)))
+                    .replace(/{session}/ig, utilities.escapeHTML(id))
+                )
               )
-            )
 
-          });
+            });
 
-          // $table.innerHTML = html;
-          $online.innerHTML = count;
+            // $table.innerHTML = html;
+            $online.innerHTML = count;
 
-          table.draw();
+            table.draw();
 
-          // Finally, make everything visible
-          dom.select('.loaded-false').hide();
-          dom.select('.loaded-true').show();
+            // Finally, make everything visible
+            dom.select('.loaded-false').hide();
+            dom.select('.loaded-true').show();
+
+          })
+          .catch(function (e) {
+            _alert('Failed to fetch: ' + e)
+          })   
 
         })
         .catch(function (e) {
-          alert('Failed to fetch: ' + e)
+          _alert('Failed to fetch: ' + e)
         })   
 
       })
       .catch(function(e) {
-        alert(e);
+        _alert(e);
       })          
       
     }  
@@ -281,16 +319,29 @@ admin:
 		}
 	});
 
+  function _alert(e) {
+    console.error(e);
+    alert(e);
+  }
+
   function getPlatform(platform) {
-    if (platform === 'mac') {
-      return 'MacOS'
-    } else if (platform === 'windows') {
-      return 'Windows'
-    } else if (platform === 'linux') {
-      return 'Linux'
+    var platformHuman;
+
+    platform = platform || '';
+
+    if (platform.match(/(mac|darwin)/ig)) {
+      platformHuman = 'macOS';
+    } else if (platform.match(/win/ig)) {
+      platformHuman = 'Windows';
+    } else if (platform.match(/linux/ig)) {
+      platformHuman = 'Linux';
     } else {
-      return 'unknown'
-    }
-    
+      platformHuman = 'Unknown';
+      // icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
+    }    
+
+    return iconHtml
+      .replace(/{icon}/ig, sessionsMap[platformHuman])
+      .replace(/{platform}/ig, platformHuman)
   }
 </script>
