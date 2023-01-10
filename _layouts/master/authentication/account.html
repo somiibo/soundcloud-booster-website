@@ -1445,7 +1445,7 @@ settings:
                     .forEach(function (id) {
                       var session = sessions[id] || {};
                       var isCurrent = !!session._current;
-                      var timestamp = new Date(session.timestampUNIX);
+                      var timestamp = new Date(session.timestampUNIX || session.timestamp);
                       var ip = session.ip;
                       var platform = (session.platform || 'unkown').toLowerCase();
                       var platformHuman;
