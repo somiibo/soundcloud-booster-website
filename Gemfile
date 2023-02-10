@@ -36,3 +36,7 @@ gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 # Required for Apple silicon
 gem "webrick", "~> 1.7"
+
+# Fix x86_64 / arm64e error
+# /Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.rb:1:in `require': dlopen(/Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle, 0x0009): tried: '/Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle' (mach-o file, but is an incompatible architecture (have (x86_64), need (arm64e))) - /Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle (LoadError)
+gem "redcarpet", "~> 3.5.1"
