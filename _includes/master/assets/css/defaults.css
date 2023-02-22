@@ -3,8 +3,25 @@
   font-display: auto;
 }
 
+/* Test if the sheet is loading */
+/* .test-red {
+  color: red;
+  background-color: red;
+} */
+
+/* Properly hide things */
 .hidden {
   display: none;
+}
+
+/* Pointer events - can help fix bubbling issues for click listeners */
+.pointer-none {
+  pointer-events: none;
+}
+
+/* API styles */
+.auth-signin-provider-btn * {
+  pointer-events: none;
 }
 
 article, aside, details, figcaption, figure,
