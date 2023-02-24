@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /review/
+permalink: /feedback/
 sitemap:
   include: false
 
@@ -183,17 +183,17 @@ meta:
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label" for="feedback-like">What do you <b>like</b>?</label>
-                  <textarea id="feedback-like" name="like" class="form-control" placeholder="Tell us what you like about {{ site.brand.name }}" rows="1" required autofocus></textarea>
+                  <textarea id="feedback-like" name="like" class="form-control" placeholder="Tell us what you like about {{ site.brand.name }}" rows="2" autofocus></textarea>
                 </div>
 
                 <div class="col-12 mb-3">
                   <label class="form-label" for="feedback-like">What do you <b>dislike</b>?</label>
-                  <textarea id="feedback-like" name="dislike" class="form-control" placeholder="Tell us what you dislike about {{ site.brand.name }}" rows="1" required></textarea>
+                  <textarea id="feedback-like" name="dislike" class="form-control" placeholder="Tell us what you dislike about {{ site.brand.name }}" rows="2"></textarea>
                 </div>
 
                 <div class="col-12 mb-3">
                   <label class="form-label" for="feedback-like">What would you <b>change</b>?</label>
-                  <textarea id="feedback-like" name="change" class="form-control" placeholder="Tell us what you would add or change to {{ site.brand.name }}" rows="1" required></textarea>
+                  <textarea id="feedback-like" name="change" class="form-control" placeholder="Tell us what you would add or change to {{ site.brand.name }}" rows="2"></textarea>
                 </div>                
 
                 <div class="col-12 mb-3">
@@ -416,7 +416,7 @@ meta:
 
     function autoGrow(element) {
       element.style.height = '5px';
-      element.style.height = (element.scrollHeight) + 'px';
+      element.style.height = Math.max(62, element.scrollHeight) + 'px';
     }    
 
     if (isDeveloper) {
