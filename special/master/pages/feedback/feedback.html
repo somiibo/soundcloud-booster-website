@@ -317,8 +317,8 @@ meta:
 
       if (
         data.like.length < 10
-        || data.dislike.length < 5
-        || data.change.length < 10
+        || data.dislike.length < 3
+        || data.change.length < 3
         || !data.rating
       ) {
         return display(new Error('Please fill out all fields and provide at least one sentence for each field.'))
