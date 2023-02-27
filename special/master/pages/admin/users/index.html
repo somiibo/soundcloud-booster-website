@@ -380,6 +380,8 @@ meta:
         timestampUNIX: Math.round(new Date(date).getTime() / 1000),
       }
 
+      console.log('Setting user premium:', uid, id, expires);
+
       // Set the user
       firebase.firestore().doc('users/' + uid)
       .set({
