@@ -312,9 +312,16 @@ meta:
       event.preventDefault();
 
       var data = getFormData();
+      var user = firebase.auth().currentUser;
 
-      console.log('submit', data);
+      console.log('submit', data, user);
 
+      // Validate data
+      if (!user || !user.uid) {
+        return display(new Error('You must be logged in to submit feedback.'));
+      }
+
+      // Validate data
       if (
         data.like.length < 10
         || data.dislike.length < 3
@@ -327,8 +334,12 @@ meta:
       // Submit data to server
       display('loading');
 
-      firebase.auth().currentUser.getIdToken(false)
+      user.getIdToken(false)
       .then(function (token) {
+        // Preprocess data
+        data.owner = data.owner || {};
+        data.owner.uid = data.owner.uid || user.uid;
+
         // Send data to server
         WonderfulFetch(serverAPIUrl, {
           method: 'post',
