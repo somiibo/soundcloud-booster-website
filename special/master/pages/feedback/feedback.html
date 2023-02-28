@@ -337,8 +337,8 @@ meta:
       user.getIdToken(false)
       .then(function (token) {
         // Preprocess data
-        data.owner = data.owner || {};
-        data.owner.uid = data.owner.uid || user.uid;
+        // data.owner = data.owner || {};
+        // data.owner.uid = data.owner.uid || user.uid;
 
         // Send data to server
         WonderfulFetch(serverAPIUrl, {
