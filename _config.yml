@@ -187,15 +187,15 @@ pagination:
 
 # Jekyll Defaults
 collections:
-  authors:
-    title: Authors
+  team:
+    title: Team Members
     output: true
 defaults:
 - scope:
     path: ''
-    type: authors
+    type: team
   values:
-    permalink: "/blog/authors/:title/"
+    permalink: "/team/:title/"
 
 # Build settings
 markdown: kramdown
