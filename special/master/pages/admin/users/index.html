@@ -208,6 +208,8 @@ meta:
               <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2 pointer-none"></i>View user</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item user-premium-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-star-fill me-2 pointer-none"></i>Give premium</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item user-signout-btn text-danger" href="javascript:;" data-uid="{userUid}"><i class="bi-door-open-fill me-2 pointer-none"></i>Sign out all sessions</a>
             </li>
           </ul>
         </div>
@@ -231,6 +233,9 @@ meta:
     var $premiumModal = document.getElementById('premium-modal');
     var expandModal = new bootstrap.Modal($expandModal, {});
     var premiumModal = new bootstrap.Modal($premiumModal, {});
+
+    // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+    var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
 
     table = Admin().initializeTable();
 
@@ -417,19 +422,49 @@ meta:
         $premiumModal.querySelector('input[name="expiration"]').value = new Date(date.setMonth(date.getMonth() + 1)).toISOString().substring(0, 10);
         // $premiumModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
         premiumModal.show();
+      } else if (event.target.matches('.user-signout-btn')) {
+        var uid = event.target.dataset.uid;
+
+        handleSignOutAllSessions(uid);
       }
+    }
+
+    function handleSignOutAllSessions(uid) {
+      return new Promise(function (resolve, reject) {
+        var user = firebase.auth().currentUser;
+
+        user.getIdToken(true)
+          .then(function (token) {
+            WonderfulFetch(serverProd, {
+              method: 'POST',
+              tries: 2,
+              timeout: 30000,
+              response: 'json',
+              body: {
+                authenticationToken: token,
+                command: 'user:sign-out-all-sessions',
+                payload: {
+                  uid: uid,
+                }
+              },
+            })
+            .then(function (json) {
+              console.log('Successfully signed out all sessions for ' + uid, json);
+              alert('Successfully signed out all sessions for ' + uid)
+              return resolve(json);
+            })
+            .catch(function (e) {
+              console.error('Error signing out all sessions for ' + uid, e);
+              alert('Error signing out all sessions for ' + uid + ': ' + e)
+              return reject(e);
+            })
+          })
+      });
     }
 
     function runQuery(input) {
       return new Promise(function(resolve, reject) {
-        // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
-        var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
-
         var user = firebase.auth().currentUser;
-
-        if (!user) {
-          return reject(new Error('Not authenticated'))
-        }
 
         user.getIdToken(true)
         .then(function (token) {
