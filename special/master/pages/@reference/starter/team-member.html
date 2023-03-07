@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /@reference/starter/blog-author/
+permalink: /@reference/starter/team-member/
 ---
 <!-- CONTENT START -->
 <article class="" itemscope itemtype="http://schema.org/BlogPosting">
@@ -16,8 +16,8 @@ permalink: /@reference/starter/blog-author/
         {{ page.date | date: date_format }}
       </time>
       {%- if page.post.author -%}
-        {% assign author = site.authors | where: 'title', post.author | first %}
-        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="" itemprop="name"><a href="{{ site.url}}{{ author.url }}"> {{ author.author.name }}</a></span></span>
+        {% assign member = site.team | where: 'title', post.author | first %}
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="" itemprop="name"><a href="{{ site.url}}{{ member.url }}"> {{ member.member.name }}</a></span></span>
       {%- endif -%}</p>
   </header>
 

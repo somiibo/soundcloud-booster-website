@@ -138,6 +138,40 @@ meta:
   </div>
 </div>
 
+<div id="premium-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="datatable-premium-form" onsubmit="return false;">
+        <div class="modal-body" style="max-height: 80vh; overflow: scroll;">
+          <p>Give premium to this user.</p>
+          <div class="row mb-3" hidden>
+            <label for="uidLabel" class="form-label text-muted">UID</label>
+            <input type="text" class="form-control" name="uid" id="uidLabel" value="">
+          </div>
+
+          <div class="mb-3">
+            <label for="planLabel" class="form-label">Plan ID</label>
+            <input type="text" class="form-control" name="plan" id="planLabel" value="premium">
+          </div>          
+
+          <div class="mb-3">
+            <label for="expLabel" class="form-label">Exp. Date</label>
+            <input type="date" class="form-control" name="expiration" id="expLabel" value="">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success"><i class="bi-star-fill"></i> Save</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </form>     
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var dataTemplate = `
     <tr>
@@ -171,7 +205,9 @@ meta:
 
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{userUid}">
             <li class="">
-              <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2"></i>View user</a>
+              <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2 pointer-none"></i>View user</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item user-premium-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-star-fill me-2 pointer-none"></i>Give premium</a>
             </li>
           </ul>
         </div>
@@ -186,13 +222,15 @@ meta:
 
   Manager.ready(function () {
     var searchInput = document.getElementById('datatable-search-input')
-    var searchForm = document.getElementById('datatable-search-form')
+    var expDateInput = document.querySelector('input[name="expiration"]')
     var spinner = document.getElementById('datatable-spinner')
     var tableTbody = document.querySelector('#datatable-table tbody');
     var qsQuery = Manager.properties.page.queryString.get('query')
 
     var $expandModal = document.getElementById('expand-modal');
+    var $premiumModal = document.getElementById('premium-modal');
     var expandModal = new bootstrap.Modal($expandModal, {});
+    var premiumModal = new bootstrap.Modal($premiumModal, {});
 
     table = Admin().initializeTable();
 
@@ -209,9 +247,13 @@ meta:
           };
         });
 
-        searchForm.addEventListener('submit', function (event) {
-          handleSearch(searchInput.value || '')
-        })
+        document.addEventListener('submit', function (event) {
+          if (event.target.matches('#datatable-search-form')) {
+            handleSearch(searchInput.value || '')
+          } else if (event.target.matches('#datatable-premium-form')) {
+            handlePremiumForm(event)
+          }
+        })        
 
         document.addEventListener('click', function (event) {
           handleClick(event)
@@ -220,9 +262,9 @@ meta:
         if (qsQuery) {
           searchInput.value = qsQuery;
           handleSearch(qsQuery)
+        } else {
+          Admin().display('ready');
         }
-
-        Admin().display('ready');
 
         if (Manager.properties.meta.environment === 'development') {
           // handleSearch('100')
@@ -321,12 +363,60 @@ meta:
       })
   }
 
+    function handlePremiumForm(event) {
+      var uid = event.target.querySelector('input[name="uid"]').value;
+      var date = event.target.querySelector('input[name="expiration"]').value;
+      var id = event.target.querySelector('input[name="plan"]').value;
+
+      event.preventDefault();
+
+      if (!uid || !date || !id) {
+        return alert(new Error('You need to specifcy a UID, plan ID, and exp. date.'))
+      }
+
+      // Set date
+      var expires = {
+        timestamp: new Date(date).toISOString(),
+        timestampUNIX: Math.round(new Date(date).getTime() / 1000),
+      }
+
+      console.log('Setting user premium:', uid, id, expires);
+
+      // Set the user
+      firebase.firestore().doc('users/' + uid)
+      .set({
+        plan: {
+          id: id,
+          expires: expires,
+          payment: {
+            ignoreUntil: expires,
+          }
+        }
+      }, {merge: true})
+      .then(function () {
+        premiumModal.hide();
+        alert('Successfully updated')
+      })
+      .catch(function (e) {
+        alert(e)
+      })
+    }
+
     function handleClick(event) {
       if (event.target.matches('.user-open-btn')) {
         var uid = event.target.dataset.uid;
         $expandModal.querySelector('.modal-title').innerHTML = `Viewing <code>${uid}</code>`;
         $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
         expandModal.show();
+      } else if (event.target.matches('.user-premium-btn')) {
+        var uid = event.target.dataset.uid;
+        var date = new Date();
+
+        $premiumModal.querySelector('.modal-title').innerHTML = `Editing <code>${uid}</code>`;
+        $premiumModal.querySelector('input[name="uid"]').value = uid;
+        $premiumModal.querySelector('input[name="expiration"]').value = new Date(date.setMonth(date.getMonth() + 1)).toISOString().substring(0, 10);
+        // $premiumModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
+        premiumModal.show();
       }
     }
 

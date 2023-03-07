@@ -26,11 +26,6 @@ head:
       }
       */      
     </style>
-    <style media="screen">
-      .auth-signin-provider-btn * {
-        pointer-events: none;
-      }
-    </style>
   '
 
 foot:
@@ -45,7 +40,7 @@ foot:
     <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- JS Implementing Plugins -->
-    <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+    <!-- <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script> -->
 
     <!-- JS Front -->
     <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/js/theme.min.js"></script>
@@ -249,9 +244,9 @@ settings:
                   {%- endif -%}
 
                   <div class="input-group input-group-merge">
-                    <input type="password" class="js-toggle-password form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
-                    <a class="js-toggle-password-target-1 input-group-append input-group-text" href="javascript:;" tabindex="-1">
-                      <i class="js-toggle-password-show-icon-1 bi-eye"></i>
+                    <input type="password" class="form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
+                    <a class="input-group-append input-group-text toggle-password-visibility-btn" href="javascript:;" tabindex="-1">
+                      <i class="bi-eye pointer-none"></i>
                     </a>
                   </div>
 
@@ -265,9 +260,9 @@ settings:
                   <label class="form-label" for="signupSrConfirmPassword">Confirm password</label>
 
                   <div class="input-group input-group-merge">
-                    <input type="password" class="js-toggle-password form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
-                    <a class="js-toggle-password-target-2 input-group-append input-group-text" href="javascript:;" tabindex="-1">
-                      <i class="js-toggle-password-show-icon-2 bi-eye"></i>
+                    <input type="password" class="form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
+                    <a class="input-group-append input-group-text toggle-password-visibility-btn" href="javascript:;" tabindex="-1">
+                      <i class="bi-eye pointer-none"></i>
                     </a>
                   </div>
 
@@ -609,6 +604,19 @@ settings:
         display('hidden');
         // launch();
         redirect();
+      } else if (event.target.matches('.toggle-password-visibility-btn')) {
+        // select neighboring input element
+        var $input = event.target.previousElementSibling;
+        var $icon = event.target.querySelector('i');
+        if ($input.type === 'password') {
+          $input.type = 'text';
+          $icon.classList.remove('bi-eye');
+          $icon.classList.add('bi-eye-slash');          
+        } else {
+          $input.type = 'password';
+          $icon.classList.remove('bi-eye-slash');
+          $icon.classList.add('bi-eye');
+        }
       }
     })
 

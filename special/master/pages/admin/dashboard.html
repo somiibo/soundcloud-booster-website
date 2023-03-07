@@ -663,7 +663,9 @@ meta:
             body: {
               authenticationToken: token,
               command: 'admin:get-stats',
-              payload: {},
+              payload: {
+                update: true,
+              },
             },
           })
           .then(function (stats) {

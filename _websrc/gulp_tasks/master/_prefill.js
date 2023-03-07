@@ -130,14 +130,14 @@ gulp.task('_prefill', async () => {
         //   '---' + '\n'
         // );
         //
-        // await createFile(`./blog/authors/index.html`,
+        // await createFile(`./team/index.html`,
         //   '---' + '\n' +
         //   '### ALL PAGES ###' + '\n' +
-        //   'layout: master/authors/index' + '\n' +
+        //   'layout: master/team/index' + '\n' +
         //   '---' + '\n'
         // );
 
-        await createFile(`./_authors/samantha.md`, await readFile('./_websrc/templates/master/placeholder/authors/example-author.md'));
+        await createFile(`./_team/samantha.md`, await readFile('./_websrc/templates/master/placeholder/team/example-member.md'));
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
         await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
@@ -192,7 +192,7 @@ gulp.task('_prefill', async () => {
 
         // POST
         await createFile('./_posts/.gitignore', gitignore_ph);
-        await createFile('./_authors/.gitignore', gitignore_ph);
+        await createFile('./_team/.gitignore', gitignore_ph);
       }
 
       // Only for non-server environment

@@ -1,11 +1,11 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/authors/profile
+layout: master/placeholder/team/profile
 sitemap:
   include: true
   
-### AUTHOR PAGES ###
-author:
+### TEAM MEMBER PAGES ###
+member:
   name: Samantha Raeburn
   position: Social Media Manager
   excerpt: "Sam is an experienced social media expert from Beverly Hills, CA and is a major contributor to Somiibo's blog."

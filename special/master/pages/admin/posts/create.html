@@ -666,7 +666,7 @@ admin:
   // fields
   var UNSPLASH_API_KEY = 'lWKjK_iq12b0DlVLVK8Dvazm7fkmNpq6Ai18N0lnwmI';
   var fields = {};
-  var authors = [];
+  var members = [];
   var publicSiteUrl = '{{ site.url }}';
 
   {% assign latest-post = site.posts.first %}
@@ -694,10 +694,10 @@ admin:
 
   // console.log('----post-test', '{{ post-test.post.id }}');
 
-  authors = [{% for author in site.authors %}"{{ author.title | replace: " ", "-" | downcase }}",{% endfor %} ]
+  members = [{% for member in site.team %}"{{ member.title | replace: " ", "-" | downcase }}",{% endfor %}]
 
   // console.log('FIELDS', fields);
-  // console.log('AUTHORS', authors);
+  // console.log('members', members);
 </script>
 
 <!-- Exploring the library -->
@@ -1279,10 +1279,10 @@ admin:
 
   function setupForm() {
     var select = dom.select('#author').get(0);
-    for (var i = 0; i < authors.length; i++) {
+    for (var i = 0; i < members.length; i++) {
       var opt = document.createElement('option');
-      opt.value = authors[i];
-      opt.innerHTML = authors[i];
+      opt.value = members[i];
+      opt.innerHTML = members[i];
       select.appendChild(opt);
     }
     // var date = new Date();

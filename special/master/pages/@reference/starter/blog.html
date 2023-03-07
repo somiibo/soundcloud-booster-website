@@ -31,7 +31,7 @@ meta:
 
           {% for post in paginator.posts %}
             {% assign mod3 = forloop.index | modulo: 3 %}
-            {% assign author = site.authors | where: 'title', post.author | first %}
+            {% assign member = site.team | where: 'title', post.author | first %}
 
             <article class="">
 
@@ -40,7 +40,7 @@ meta:
 
               <div class="post-content">
                 <h2><a href="{{ site.url }}{{ post.url }}">{{ post.post.title }}</a></h2>
-                <div class="meta"><span class="date">{{ post.date | date_to_string }}</span><a href="{{ site.url}}{{ author.url }}"> {{ author.author.name }}</a></div>
+                <div class="meta"><span class="date">{{ post.date | date_to_string }}</span><a href="{{ site.url}}{{ member.url }}"> {{ member.member.name }}</a></div>
                 <p>{{ post.post.excerpt }}</p>
               </div>
             </article>

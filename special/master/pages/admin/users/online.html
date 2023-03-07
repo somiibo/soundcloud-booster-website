@@ -74,6 +74,48 @@ admin:
 
 			</table>
 		</div> -->
+
+    <div class="card-header">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="col">
+          <!-- Filter -->
+          <form id="datatable-search-form" onsubmit="return false">
+            <!-- Search -->
+            <div class="input-group input-group-merge input-group-flush">
+              <div class="input-group-prepend input-group-text">
+                <i class="bi-search"></i>
+              </div>
+              <input id="datatable-search-input" type="search" class="form-control" placeholder="Search users" aria-label="Search users" readonly>
+            </div>
+            <!-- End Search -->
+          </form>
+          <!-- End Filter -->
+        </div>
+
+        <div class="col-auto">
+          <!-- Datatable Info -->
+          <div id="datatable-checkbox-select-counter" class="ms-3" style="display: none;">
+            <div class="d-flex align-items-center">
+              <span class="fs-5 me-3">
+                <span id="datatable-checkbox-select-counter-data">0</span>
+                Selected
+              </span>
+              <a class="btn btn-sm btn-outline-danger disabled" href="javascript:;" disabled>
+                <i class="bi bi-trash"></i> Delete
+              </a>
+            </div>
+          </div>
+          <!-- End Datatable Info -->
+        </div>
+
+        <div class="col-auto">
+          <div id="datatable-spinner" class="spinner-border text-primary ms-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="table-responsive datatable-custom">
       <table id="datatable-table" class="js-datatable-checkboxes table table-hover table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table no-footer" data-hs-datatables-options="">
         <thead class="thead-light">
@@ -97,7 +139,15 @@ admin:
         <tbody>
         </tbody>
       </table>
-    </div>    
+    </div>   
+
+    <div class="card-footer">
+      <!-- Pagination -->
+      <div class="d-flex justify-content-center justify-content-sm-end">
+        <nav id="datatable-pagination" aria-label="Activity pagination"></nav>
+      </div>
+      <!-- End Pagination -->
+    </div>     
 	</div>
 </div>
 
@@ -125,10 +175,10 @@ admin:
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{uid}" style="">
           <li class="">
-            <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{uid}"><i class="bi-person-fill me-2"></i>Oepn user</a>
+            <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{uid}"><i class="bi-person-fill me-2 pointer-none"></i>Open user</a>
           </li>
           <li class="">
-            <a class="dropdown-item session-open-btn" href="javascript:;" data-session="{session}"><i class="bi-eye-fill me-2"></i>View session</a>
+            <a class="dropdown-item session-open-btn" href="javascript:;" data-session="{session}"><i class="bi-eye-fill me-2 pointer-none"></i>View session</a>
           </li>          
         </ul>
       </div>
@@ -158,8 +208,17 @@ admin:
 <!-- Exploring the library -->
 <script type="text/javascript">
 	var dom;
+	var utilities;
   var table;
   var allResponse = {};
+
+  var sessionsMap = {
+    macOS: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg',
+    Windows: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg',
+    Linux: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/linux.svg',
+  }  
+
+  var iconHtml = '<img class="avatar avatar-xs me-1" src="{icon}" alt="{platform}"> {platform}';
 
 	Manager.auth().ready(function () {
 
@@ -176,12 +235,15 @@ admin:
     var $expandModal = document.getElementById('expand-modal');
     var expandModal = new bootstrap.Modal($expandModal, {});
 
-    var tableTbody = document.querySelector('#datatable-table tbody')
+    var tableTbody = document.querySelector('#datatable-table tbody');
+
+    var searchInput = document.getElementById('datatable-search-input')
+    var searchForm = document.getElementById('datatable-search-form')
 
     table = Admin().initializeTable();    
 
-
 		dom = Manager.dom();
+		utilities = Manager.utilities();
 
     document.addEventListener('click', function (event) {
       if (event.target.matches('.user-open-btn')) {
@@ -195,7 +257,7 @@ admin:
       } else if (event.target.matches('.refresh-users-btn')) {
         refreshOnlineUsers()
       }
-    })
+    }) 
 
     function refreshOnlineUsers() {
       table.clear().draw();
@@ -206,6 +268,9 @@ admin:
       firebase.auth().currentUser.getIdToken(true)
       .then(function (token) {
 
+        allResponse = {};
+        table.clear().draw();
+
         WonderfulFetch(serverApiURL, {
           method: 'POST',
           timeout: 30000,
@@ -215,64 +280,166 @@ admin:
             authenticationToken: token,
             command: 'admin:database-read',
             payload: {
-              path: 'sessions/app'
+              path: 'gatherings/online'
             }
           },
         })
         .then(function (data) {
+          
+          // Response
+          allResponse = Object.assign(allResponse, data)
 
-         table.clear()
+          WonderfulFetch(serverApiURL, {
+            method: 'POST',
+            timeout: 30000,
+            response: 'json',
+            tries: 2,
+            body: {
+              authenticationToken: token,
+              command: 'admin:database-read',
+              payload: {
+                path: 'sessions/app'
+              }
+            },
+          })
+          .then(function (data) {
 
-          allResponse = data;
+            allResponse = Object.assign(allResponse, data)
 
-          var html = '';
-          var count = 0;
+            var html = '';
 
-          Object.keys(data)
-          .forEach((id, i) => {
-            var session = data[id];
+            // $table.innerHTML = html;
+            $online.innerHTML = buildTable(allResponse);
 
-            count++;
+            Admin().display('ready');
 
-            table.row.add(
-              $(
-                template
-                  .replace(/{index}/ig, i + 1)
-                  .replace(/{uid}/ig, session.uid)
-                  .replace(/{email}/ig, session.email)
-                  .replace(/{timestamp}/ig, new Date(session.timestampUNIX).toLocaleString())
-                  .replace(/{timestampUNIX}/ig, session.timestampUNIX || 0)
-                  .replace(/{platform}/ig, getPlatform(session.platform))
-                  .replace(/{ip}/ig, session.ip)
-                  .replace(/{version}/ig, session.version)
-                  .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(session.ip))
-                  .replace(/{session}/ig, id)
-              )
-            )
+            // Finally, make everything visible
+            dom.select('.loaded-false').hide();
+            dom.select('.loaded-true').show();
 
-          });
+            searchForm.addEventListener('submit', function (event) {
+              handleSearch(searchInput.value || '')
+            })            
 
-          // $table.innerHTML = html;
-          $online.innerHTML = count;
-
-          table.draw();
-
-          // Finally, make everything visible
-          dom.select('.loaded-false').hide();
-          dom.select('.loaded-true').show();
+          })
+          .catch(function (e) {
+            _alert('Failed to fetch: ' + e)
+          })   
 
         })
         .catch(function (e) {
-          alert('Failed to fetch: ' + e)
+          _alert('Failed to fetch: ' + e)
         })   
 
       })
       .catch(function(e) {
-        alert(e);
+        _alert(e);
       })          
       
     }  
 
+    // Helpers
+    function _alert(e) {
+      console.error(e);
+      alert(e);
+    }
+
+    function getPlatform(platform) {
+      var platformHuman;
+
+      platform = platform || '';
+
+      if (platform.match(/(mac|darwin)/ig)) {
+        platformHuman = 'macOS';
+      } else if (platform.match(/win/ig)) {
+        platformHuman = 'Windows';
+      } else if (platform.match(/linux/ig)) {
+        platformHuman = 'Linux';
+      } else {
+        platformHuman = 'Unknown';
+        // icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
+      }    
+
+      return iconHtml
+        .replace(/{icon}/ig, sessionsMap[platformHuman])
+        .replace(/{platform}/ig, platformHuman)
+    }
+
+    function buildTable(data) {
+      var count = 0;
+
+      table.clear();
+
+      Object.keys(data)
+      .forEach((id, i) => {
+        var session = data[id];
+        var timestamp = new Date(session.timestampUNIX || session.timestamp)
+
+        count++;
+
+        console.log('[Session]', session);
+
+        table.row.add(
+          $(
+            template
+              .replace(/{index}/ig, i + 1)
+              .replace(/{uid}/ig, utilities.escapeHTML(session.uid || 'null'))
+              .replace(/{email}/ig, utilities.escapeHTML(session.email || 'null'))
+              .replace(/{timestamp}/ig, timestamp.toLocaleDateString() + ' @ ' + timestamp.toLocaleTimeString())
+              .replace(/{timestampUNIX}/ig, Math.round(timestamp.getTime() / 1000))
+              .replace(/{platform}/ig, getPlatform(utilities.escapeHTML(session.platform)))
+              .replace(/{ip}/ig, utilities.escapeHTML(session.ip))
+              .replace(/{version}/ig, utilities.escapeHTML(session.version))
+              .replace(/{ipLink}/ig, 'https://tools.keycdn.com/geo?host=' + encodeURIComponent(utilities.escapeHTML(session.ip)))
+              .replace(/{session}/ig, utilities.escapeHTML(id))
+          )
+        )
+
+      });   
+
+      table.draw();
+
+      return count;   
+    }     
+
+    function handleSearch(input) {
+      console.log('---search...', input);
+      Admin().display('loading');
+
+      if (input && input.length < 3) {
+        return Admin().display(new Error('Please enter at least 3 characters'));
+      }
+
+      table.clear().draw()
+
+      var filteredResult = {};
+
+      Object.keys(allResponse)
+      .forEach(function (id, i) {
+        var session = allResponse[id];
+        var email = session.email || '';
+        var uid = session.uid || '';
+
+        if (
+          input
+          && (
+            !email.includes(input)
+            && !uid.includes(input)
+          )
+        ) {
+          return
+        }
+
+        filteredResult[id] = session;
+      })
+
+      buildTable(filteredResult);
+
+      Admin().display('ready');
+
+    }
+
+    // Refresh
     refreshOnlineUsers();
  
 	}, {
@@ -280,17 +447,4 @@ admin:
 			return true;
 		}
 	});
-
-  function getPlatform(platform) {
-    if (platform === 'mac') {
-      return 'MacOS'
-    } else if (platform === 'windows') {
-      return 'Windows'
-    } else if (platform === 'linux') {
-      return 'Linux'
-    } else {
-      return 'unknown'
-    }
-    
-  }
 </script>
