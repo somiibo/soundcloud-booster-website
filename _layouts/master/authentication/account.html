@@ -1190,6 +1190,10 @@ settings:
       )
       .replace(/PROJECT_ID/g, _.get(Manager, 'properties.options.libraries.firebase_app.config.projectId'))
     var token;
+    var appData = {};
+    var providerData = {};
+    var accountData = {};
+    var resolvedPlanData = {};
     var oauth2Map = {
       google: {
         // icon: 'google',
@@ -1228,11 +1232,23 @@ settings:
     $authUserProfileParent.href = 'https://gravatar.com'
 
     // Process
-    if (user) {
-      user.getIdToken(false)
-      .then(function (tk) {
-        token = tk;
+    if (!user) {
+      return
+    }
 
+    function getIdToken() {
+      return new Promise(function(resolve, reject) {
+        user.getIdToken(false)
+        .then(function (response) {
+          token = response;
+
+          return resolve(token);
+        })        
+      });
+    }
+
+    function getAppData() {
+      return new Promise(function(resolve, reject) {
         WonderfulFetch('https://us-central1-itw-creative-works.cloudfunctions.net/getApp', {
           method: 'POST',
           timeout: 30000,
@@ -1242,411 +1258,408 @@ settings:
             id: Manager.properties.global.app,
           },
         })
-        .then(function (appData) {
-          console.log('appData', appData);
-
-          var resolvedPlanData = {};
-
+        .then(function (response) {
+          appData = response;
           appData.products = appData.products || {};
 
-          firebase.firestore().doc('users/' + user.uid)
-          .get()
-          .then(function (doc) {
-            Manager.account().import()
-            .then(function (Account) {
-              var account = new Account();
+          console.log('appData', appData);
 
-              account.resolve(doc.data(), {})
-              .then(function (properties) {
-                console.log('.account().resolve()', properties);
+          return resolve(appData);
+        })        
+      });
+    }
 
-                getAvailableProviers()
-                .then(function (providers) {
-                  console.log('Providers', providers);
+    function resolveAccount() {
+      return new Promise(function(resolve, reject) {
+        Manager.account().import()
+        .then(function (Account) {
+          var account = new Account();
 
-                  getSessions()
-                  .then(function (sessions) {
-                    console.log('Session', sessions);
+          account.resolve({}, {})
+          .then(function (properties) {
+            accountData = properties;
 
-                    // properties.plan.id = 'premium'
-                    var providersArray = Object.keys(providers);
-                    var sessionsArray = Object.keys(sessions);
+            console.log('.account().resolve()', accountData);
 
-                    var devicesCount = sessionsArray.length;
-
-                    var premiumbadgeHtml = '';
-                    var badgesHtml = '';
-                    var countriesHtml = '<option value="">Choose a country</option>';
-                    var countryCodesHtml = '<option value="">Country code</option>';
-                    var referralsHtml = '';
-                    var signinMethodsHtml = '';
-                    var activeSessionsHtml = '';
-                    var connectedAccountsHtml = ''
-                    var usageHtml = ''
-
-                    // Resolve plan
-                    Object.keys(appData.products)
-                    .forEach(function (id) {
-                      var plan = appData.products[id];
-                      if (plan.planId === properties.plan.id) {
-                        resolvedPlanData = plan;
-                      }
-                    });
-
-                    if (qsDevelopment) {
-                      properties.plan.id = 'premium';
-                      properties.roles = {
-                        admin: true,
-                        developer: true,
-                        moderator: true,
-                        blogger: true,
-                        betaTester: true,
-                        vip: true,
-                      }
-                    }
-
-                    if (properties.plan.id !== 'basic') {
-                      // premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
-                      premiumbadgeHtml += '<i class="fa-solid fa-star fs-2 text-success me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(properties.plan.id) + ' plan"></i>';
-                    }
-
-                    if (properties.roles.admin) {
-                      // badgesHtml += '<i class="bi-magic fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
-                      // badgesHtml += '<i class="fa-solid fa-fire-flame-curved fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
-                      // badgesHtml += '<i class="fa-solid fa-crown fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
-                      badgesHtml += '<i class="fa-solid fa-hat-wizard fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
-                    }
-
-                    if (properties.roles.developer) {
-                      // badgesHtml += '<i class="bi-code-square fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
-                      badgesHtml += '<i class="fa-solid fa-code fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
-                    }
-
-                    if (properties.roles.moderator) {
-                      badgesHtml += '<i class="fa-solid fa-shield-halved fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
-                    }
-
-                    if (properties.roles.blogger) {
-                      // badgesHtml += '<i class="fa-solid fa-book fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
-                      badgesHtml += '<i class="fa-solid fa-pen-clip fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
-                    }                    
-
-                    if (properties.roles.betaTester) {
-                      // badgesHtml += '<i class="bi-lightning-fill fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
-                      badgesHtml += '<i class="fa-solid fa-bolt fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
-                    }
-
-                    if (properties.roles.vip) {
-                      // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
-                      badgesHtml += '<i class="fa-solid fa-award fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
-                    }
-
-
-                    // if (Manager.properties.meta.environment === 'development') {
-                    //   properties.affiliate.referrals = [
-                    //     {uid: '1vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2020-09-15T00:36:26.177Z'},
-                    //     {uid: '1vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2021-05-03T00:36:26.177Z'},
-                    //     {uid: '2vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2022-07-14T00:36:26.177Z'},
-                    //   ]
-                    // }
-
-                    // Add countries
-                    Object.keys(Countries.countries)
-                    .forEach(function (code, i) {
-                      var country = Countries.countries[code]
-                      countriesHtml += '<option value="' + code + '">' + country.name + '</option>'
-                      countryCodesHtml += '<option value="' + country.phone + '">' + country.name + '  (+' + country.phone + ')</option>'
-                    });
-
-                    properties.affiliate.referrals.reverse()
-                    .forEach(function (referral, i) {
-                      referralsHtml += referralsTemplate
-                        .replace(/{uid}/, referral.uid)
-                        .replace(/{date}/, new Date(referral.timestamp).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
-                    });
-
-                    user.providerData
-                    .forEach(function (provider, i) {
-                      if (provider.providerId === 'password') {
-                        // providers.password = true;
-                        // providersArray.unshift('password')
-                      } else if (provider.providerId === 'google.com') {
-                        $authUserProfileImg.setAttribute('onerror', 'this.onerror=null;this.src="' + gravatar + '";')
-                        $authUserProfileImg.src = provider.photoURL;
-                        $authUserProfileParent.href = 'javascript:;'
-                        $authUserProfileParent.setAttribute('target', '')
-                      }
-                    });
-
-                    console.log('---providersArray', providersArray);
-
-                    providersArray
-                    .forEach(function (provider, i) {
-                      var plainId = provider.replace('.com', '');
-                      var icon;
-                      var url;
-                      var classAction;
-                      var shouldEnable;
-                      var appHasEnabled = providers[provider];
-                      var userHasEnabled = user.providerData.some(function (item) {
-                        return item.providerId === provider;
-                      });
-                      var authUrl = new URL('{{ site.url }}/authentication/signin');
-                      authUrl.searchParams.set('signout', true)
-                      authUrl.searchParams.set('provider', provider)
-                      authUrl.searchParams.set('destination', window.location.href)
-
-                      console.log('---provider', provider, appHasEnabled, userHasEnabled);
-
-                      if (!appHasEnabled) {
-                        console.log('Skipping', provider);
-                        return
-                      }
-
-                      if (provider === 'password') {
-                        icon = '<i class="bi-person-fill _list-group-icon me-3 display-5"></i>';
-                        url = new URL('{{ site.url }}');
-                        classAction = '';
-                        shouldEnable = false;
-                      } else {
-                        icon = '<img class="avatar avatar-xs me-3" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
-                        url = new URL('https://' + provider);
-                        classAction = userHasEnabled ? 'auth-unlink-provider-btn' : 'auth-link-provider-btn';
-                        shouldEnable = true;
-                      }
-
-                      signinMethodsHtml += signinMethodsTemplate
-                        .replace(/{classAction}/g, classAction)
-                        .replace(/{provider}/g, provider)
-                        .replace(/{name}/g, uppercase(plainId))
-                        .replace(/{urlShort}/g, url.host)
-                        .replace(/{urlFull}/g, url.toString())
-                        .replace(/{urlAuth}/g, authUrl.toString())
-                        .replace(/{icon}/g, icon)
-                        .replace(/{disabled}/g, shouldEnable ? '' : 'disabled')
-                        .replace(/{buttonText}/g, userHasEnabled ? 'Disconnect' : 'Connect')
-                    });
-
-                    // Active sessions
-                    sessionsArray.unshift('now');
-                    sessions.now = {
-                      _current: true,
-                      timestampUNIX: new Date(),
-                      platform: getNavigatorPlatform(),
-                      ip: 'This device',
-                    }
-
-                    console.log('---sessions.now', sessions.now);
-
-                    sessionsArray
-                    .forEach(function (id) {
-                      var session = sessions[id] || {};
-                      var isCurrent = !!session._current;
-                      var timestamp = new Date(session.timestampUNIX || session.timestamp);
-                      var ip = session.ip;
-                      var platform = (session.platform || 'unkown').toLowerCase();
-                      var platformHuman;
-                      var icon;
-                      var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
-                      var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
-                      
-                      if (platform.match(/(mac|darwin)/ig)) {
-                        platformHuman = 'macOS';
-                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.mac);
-                      } else if (platform.match(/win/ig)) {
-                        platformHuman = 'Windows';
-                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.windows);
-                      } else if (platform.match(/linux/ig)) {
-                        platformHuman = 'Linux';
-                        icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);                        
-                      } else {
-                        platformHuman = 'Unknown';
-                        icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
-                      }
-                      // console.log('---session', session);
-                      activeSessionsHtml += activeSessionsTemplate
-                        .replace(/{icon}/g, icon)
-                        .replace(/{platform}/g, platformHuman)
-                        .replace(/{online}/g, isCurrent ? '<span class="badge bg-soft-success text-success ms-1">Current</span>' : '')
-                        .replace(/{ipUrl}/g, 'https://tools.keycdn.com/geo?host=' + (isCurrent ? '' : encodeURIComponent(ip)))
-                        .replace(/{ip}/g, ip)
-                        .replace(/{date}/g, isCurrent ? 'Now' : timestamp.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) + ', ' + timestamp.toLocaleTimeString());
-                    })
-
-
-                    // Fill connected accounts
-                    var oauth2EnabledArray = [];
-                    appData.oauth2 = appData.oauth2 || {};
-
-                    // appData.oauth2.google = {enabled: true}
-                    // appData.oauth2.discord = {enabled: true}
-
-                    Object.keys(appData.oauth2)
-                    .forEach(function (provider, i) {
-                      // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
-                      if (appData.oauth2[provider] && appData.oauth2[provider].enabled) {
-                        var details = oauth2Map[provider];
-                        if (!details) {
-                          return
-                        }
-
-                        var identity = _.get(properties.oauth2[provider] || {}, 'identity.' + details.identity, '');
-                        if (identity) {
-                          identity = '- ' + identity;
-                        }
-
-                        oauth2EnabledArray = oauth2EnabledArray.concat(provider);
-                        connectedAccountsHtml += connectedAccountsTemplate
-                          .replace(/{id}/img, provider)
-                          .replace(/{icon}/img, details.icon)
-                          .replace(/{name}/img, details.name)
-                          .replace(/{identity}/img, identity)
-                          .replace(/{homepage}/img, details.homepage)
-                          .replace(/{description}/img, details.description)
-                          .replace(/{scope}/img, encodeURIComponent(JSON.stringify(appData.oauth2[provider].scope || [])))
-                      }
-                    });
-
-                    if (oauth2EnabledArray.length === 0) {
-                      connectedAccountsHtml = '<i>No providers are available to connect at the moment</i>'
-                    }
-
-                    // usage
-                    properties.usage = properties.usage || {};
-                    properties.usage.devices = properties.usage.devices || {};
-                    properties.usage.devices.count = properties.usage.devices.count || devicesCount;
-                    // resolvedPlanData.limits.submissions = 99
-
-                    Object.keys(properties.usage)
-                    .forEach(function (metric) {
-
-                      properties.usage[metric] = properties.usage[metric] || {};
-
-                      usageHtml += usageTemplate
-                        .replace(/{metric}/ig, capitalizeFirstLetter(metric))
-                        .replace(/{used}/ig, _.get(properties, 'usage.' + metric + '.count', 0))
-                        .replace(/{allowed}/ig, _.get(resolvedPlanData, 'limits.' + metric, 'Unlimited'))
-                    });
-
-
-                    var nowDate = new Date();
-                    var resetDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 1);
-                    var Difference_In_Time = resetDate.getTime() - nowDate.getTime();
-                    var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));   
-                    var isAnS = Difference_In_Days === 1 ? '' : 's';
-                    $usageReset.innerHTML = resetDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' (' + Difference_In_Days + ' day' + isAnS + ')'
-
-
-                    // Update HTML
-                    $spinner.setAttribute('hidden', true);
-                    $accountParent.removeAttribute('hidden')
-                    $premiumBadge.innerHTML = premiumbadgeHtml;
-                    $profileBadges.innerHTML = badgesHtml;
-                    $countries.innerHTML = countriesHtml;
-                    $countryCodes.innerHTML = countryCodesHtml;
-                    $signinMethods.innerHTML = signinMethodsHtml;
-                    $activeSessionsParent.innerHTML = activeSessionsHtml;
-                    $connectedAccountsParent.innerHTML = connectedAccountsHtml;
-                    $usageTable.innerHTML = usageHtml;
-                    if (properties.affiliate.referrals.length > 0) {
-                      $referralsParent.innerHTML = referralsHtml
-                    }
-
-                    // Set personal data ib form
-                    Powertools.getKeys(properties.personal)
-                    .forEach(function (key, i) {
-                      var val = _.get(properties.personal, key);
-                      var $el = select('*[name="' + key + '"]');
-                      // console.log('---', key, val, $el.get(0));
-                      if ($el) {
-                        if (
-                          (key === 'birthday.timestamp' && val === '1970-01-01T00:00:00.000Z')
-                          || (key === 'telephone.countryCode' && val === 0)
-                          || (key === 'telephone.national' && val === 0)
-                        ) {
-                          return
-                        }
-                        $el.setValue(val)
-                      }
-                    });
-
-                    if (!providers.password) {
-                      select('#changePassword, #changePasswordParent')
-                      .each(function (el) {
-                        el.setAttribute('hidden', true)
-                      })
-                    }
-
-                    if (oauth2EnabledArray.length !== 0) {
-                      oauth2EnabledArray
-                      .forEach(function (provider, i) {
-                        checkOAuth2Connection(provider);
-                      });
-                    }
-
-
-                    document.addEventListener('submit', function (event) {
-                      handleSubmit(event);
-                    })
-
-                    document.addEventListener('click', function (event) {
-                      handleClick(event);
-                    })
-
-                    $('#personalInformation input, #personalInformation textarea, #personalInformation select').on('change keydown paste cut', function (event) {
-                      $personalInformationSavePopup.removeAttribute('hidden')
-                    })
-
-                    new bootstrap.ScrollSpy(document.body, {
-                      target: '#navbarSettings',
-                      offset: 100,
-                      // offset: 0,
-                    })
-
-                    new HSScrollspy('#navbarVerticalNavMenu', {
-                      breakpoint: 'lg',
-                      scrollOffset: -20,
-                      // scrollOffset: 0,
-                    })
-
-                    HSCore.components.HSClipboard.init('.js-clipboard')
-
-                    HSCore.components.HSMask.init('.js-input-mask')
-
-                    // accountResultEl.setInnerHTML(JSON.stringify(properties, null, 2));
-
-                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                      return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
-                    })
-
-                    if (currentURL.hash) {
-                      var hashEl = document.querySelector('*[href="' + currentURL.hash + '"]');
-                      // console.log('---hashEl', currentURL.hash, hashEl);
-                      if (hashEl) {
-                        hashEl.click();
-                      }
-                    }
-
-                  })
-
-                })
-
-              })
-            })
-            .catch(function (e) {
-              // accountResultEl.setInnerHTML(e);
-            })
+            return resolve(accountData)
           })
-          .catch(function (e) {
-            // accountResultEl.setInnerHTML(e);
-          })
+        })
+      });
+    }
 
+    Promise.all([
+      getIdToken(),
+      getAppData(),
+      getAvailableProviders(),
+      resolveAccount(),
+    ])
+    .then(function (response) {
+      // console.log('---response', response);
+
+      getSessions()
+      .then(function (sessionData) {
+        // properties.plan.id = 'premium'
+        var providersArray = Object.keys(providerData);
+        var sessionsArray = Object.keys(sessionData);
+
+        var devicesCount = sessionsArray.length;
+
+        var premiumbadgeHtml = '';
+        var badgesHtml = '';
+        var countriesHtml = '<option value="">Choose a country</option>';
+        var countryCodesHtml = '<option value="">Country code</option>';
+        var referralsHtml = '';
+        var signinMethodsHtml = '';
+        var activeSessionsHtml = '';
+        var connectedAccountsHtml = ''
+        var usageHtml = ''
+
+        // Resolve plan
+        Object.keys(appData.products)
+        .forEach(function (id) {
+          var plan = appData.products[id];
+          if (plan.planId === accountData.plan.id) {
+            resolvedPlanData = plan;
+          }
+        });
+
+        if (qsDevelopment) {
+          accountData.plan.id = 'premium';
+          accountData.roles = {
+            admin: true,
+            developer: true,
+            moderator: true,
+            blogger: true,
+            betaTester: true,
+            vip: true,
+          }
+        }
+
+        if (accountData.plan.id !== 'basic') {
+          // premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(accountData.plan.id) + ' plan"></i>';
+          premiumbadgeHtml += '<i class="fa-solid fa-star fs-2 text-success me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(accountData.plan.id) + ' plan"></i>';
+        }
+
+        if (accountData.roles.admin) {
+          // badgesHtml += '<i class="bi-magic fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+          // badgesHtml += '<i class="fa-solid fa-fire-flame-curved fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+          // badgesHtml += '<i class="fa-solid fa-crown fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+          badgesHtml += '<i class="fa-solid fa-hat-wizard fs-badge text-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Admin"></i>';
+        }
+
+        if (accountData.roles.developer) {
+          // badgesHtml += '<i class="bi-code-square fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
+          badgesHtml += '<i class="fa-solid fa-code fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Developer"></i>';
+        }
+
+        if (accountData.roles.moderator) {
+          badgesHtml += '<i class="fa-solid fa-shield-halved fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Moderator"></i>';
+        }
+
+        if (accountData.roles.blogger) {
+          // badgesHtml += '<i class="fa-solid fa-book fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
+          badgesHtml += '<i class="fa-solid fa-pen-clip fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
+        }                    
+
+        if (accountData.roles.betaTester) {
+          // badgesHtml += '<i class="bi-lightning-fill fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
+          badgesHtml += '<i class="fa-solid fa-bolt fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
+        }
+
+        if (accountData.roles.vip) {
+          // badgesHtml += '<i class="bi-award-fill fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
+          badgesHtml += '<i class="fa-solid fa-award fs-badge text-warning me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="VIP"></i>';
+        }
+
+
+        // if (Manager.accountData.meta.environment === 'development') {
+        //   accountData.affiliate.referrals = [
+        //     {uid: '1vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2020-09-15T00:36:26.177Z'},
+        //     {uid: '1vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2021-05-03T00:36:26.177Z'},
+        //     {uid: '2vzZdTI5PHphyeKbjYFzHoApm0Bj2', timestamp: '2022-07-14T00:36:26.177Z'},
+        //   ]
+        // }
+
+        // Add countries
+        Object.keys(Countries.countries)
+        .forEach(function (code, i) {
+          var country = Countries.countries[code]
+          countriesHtml += '<option value="' + code + '">' + country.name + '</option>'
+          countryCodesHtml += '<option value="' + country.phone + '">' + country.name + '  (+' + country.phone + ')</option>'
+        });
+
+        accountData.affiliate.referrals.reverse()
+        .forEach(function (referral, i) {
+          referralsHtml += referralsTemplate
+            .replace(/{uid}/, referral.uid)
+            .replace(/{date}/, new Date(referral.timestamp).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
+        });
+
+        user.providerData
+        .forEach(function (provider, i) {
+          if (provider.providerId === 'password') {
+            // providers.password = true;
+            // providersArray.unshift('password')
+          } else if (provider.providerId === 'google.com') {
+            $authUserProfileImg.setAttribute('onerror', 'this.onerror=null;this.src="' + gravatar + '";')
+            $authUserProfileImg.src = provider.photoURL;
+            $authUserProfileParent.href = 'javascript:;'
+            $authUserProfileParent.setAttribute('target', '')
+          }
+        });
+
+        console.log('providersArray', providersArray);
+
+        providersArray
+        .forEach(function (provider, i) {
+          var plainId = provider.replace('.com', '');
+          var icon;
+          var url;
+          var classAction;
+          var shouldEnable;
+          var appHasEnabled = providerData[provider];
+          var userHasEnabled = user.providerData.some(function (item) {
+            return item.providerId === provider;
+          });
+          var authUrl = new URL('{{ site.url }}/authentication/signin');
+          authUrl.searchParams.set('signout', true)
+          authUrl.searchParams.set('provider', provider)
+          authUrl.searchParams.set('destination', window.location.href)
+
+          console.log('Provider', provider, appHasEnabled, userHasEnabled);
+
+          if (!appHasEnabled) {
+            console.log('Skipping', provider);
+            return
+          }
+
+          if (provider === 'password') {
+            icon = '<i class="bi-person-fill _list-group-icon me-3 display-5"></i>';
+            url = new URL('{{ site.url }}');
+            classAction = '';
+            shouldEnable = false;
+          } else {
+            icon = '<img class="avatar avatar-xs me-3" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
+            url = new URL('https://' + provider);
+            classAction = userHasEnabled ? 'auth-unlink-provider-btn' : 'auth-link-provider-btn';
+            shouldEnable = true;
+          }
+
+          signinMethodsHtml += signinMethodsTemplate
+            .replace(/{classAction}/g, classAction)
+            .replace(/{provider}/g, provider)
+            .replace(/{name}/g, uppercase(plainId))
+            .replace(/{urlShort}/g, url.host)
+            .replace(/{urlFull}/g, url.toString())
+            .replace(/{urlAuth}/g, authUrl.toString())
+            .replace(/{icon}/g, icon)
+            .replace(/{disabled}/g, shouldEnable ? '' : 'disabled')
+            .replace(/{buttonText}/g, userHasEnabled ? 'Disconnect' : 'Connect')
+        });
+
+        // Active sessions
+        sessionsArray.unshift('now');
+        sessionData.now = {
+          _current: true,
+          timestampUNIX: new Date(),
+          platform: getNavigatorPlatform(),
+          ip: 'This device',
+        }
+
+        // console.log('---sessionData.now', sessionData.now);
+
+        sessionsArray
+        .forEach(function (id) {
+          var session = sessionData[id] || {};
+          var isCurrent = !!session._current;
+          var timestamp = new Date(session.timestampUNIX || session.timestamp);
+          var ip = session.ip;
+          var platform = (session.platform || 'unkown').toLowerCase();
+          var platformHuman;
+          var icon;
+          var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
+          var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
+          
+          if (platform.match(/(mac|darwin)/ig)) {
+            platformHuman = 'macOS';
+            icon = iconHtml.replace(/{icon}/ig, sessionsMap.mac);
+          } else if (platform.match(/win/ig)) {
+            platformHuman = 'Windows';
+            icon = iconHtml.replace(/{icon}/ig, sessionsMap.windows);
+          } else if (platform.match(/linux/ig)) {
+            platformHuman = 'Linux';
+            icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);                        
+          } else {
+            platformHuman = 'Unknown';
+            icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
+          }
+          // console.log('---session', session);
+          activeSessionsHtml += activeSessionsTemplate
+            .replace(/{icon}/g, icon)
+            .replace(/{platform}/g, platformHuman)
+            .replace(/{online}/g, isCurrent ? '<span class="badge bg-soft-success text-success ms-1">Current</span>' : '')
+            .replace(/{ipUrl}/g, 'https://tools.keycdn.com/geo?host=' + (isCurrent ? '' : encodeURIComponent(ip)))
+            .replace(/{ip}/g, ip)
+            .replace(/{date}/g, isCurrent ? 'Now' : timestamp.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) + ', ' + timestamp.toLocaleTimeString());
         })
 
-      })
 
-    }
+        // Fill connected accounts
+        var oauth2EnabledArray = [];
+        appData.oauth2 = appData.oauth2 || {};
+
+        // appData.oauth2.google = {enabled: true}
+        // appData.oauth2.discord = {enabled: true}
+
+        Object.keys(appData.oauth2)
+        .forEach(function (provider, i) {
+          // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
+          if (appData.oauth2[provider] && appData.oauth2[provider].enabled) {
+            var details = oauth2Map[provider];
+            if (!details) {
+              return
+            }
+
+            var identity = _.get(accountData.oauth2[provider] || {}, 'identity.' + details.identity, '');
+            if (identity) {
+              identity = '- ' + identity;
+            }
+
+            oauth2EnabledArray = oauth2EnabledArray.concat(provider);
+            connectedAccountsHtml += connectedAccountsTemplate
+              .replace(/{id}/img, provider)
+              .replace(/{icon}/img, details.icon)
+              .replace(/{name}/img, details.name)
+              .replace(/{identity}/img, identity)
+              .replace(/{homepage}/img, details.homepage)
+              .replace(/{description}/img, details.description)
+              .replace(/{scope}/img, encodeURIComponent(JSON.stringify(appData.oauth2[provider].scope || [])))
+          }
+        });
+
+        if (oauth2EnabledArray.length === 0) {
+          connectedAccountsHtml = '<i>No providers are available to connect at the moment</i>'
+        }
+
+        // usage
+        accountData.usage = accountData.usage || {};
+        accountData.usage.devices = accountData.usage.devices || {};
+        accountData.usage.devices.count = accountData.usage.devices.count || devicesCount;
+        // resolvedPlanData.limits.submissions = 99
+
+        Object.keys(accountData.usage)
+        .forEach(function (metric) {
+
+          accountData.usage[metric] = accountData.usage[metric] || {};
+
+          usageHtml += usageTemplate
+            .replace(/{metric}/ig, capitalizeFirstLetter(metric))
+            .replace(/{used}/ig, _.get(accountData, 'usage.' + metric + '.count', 0))
+            .replace(/{allowed}/ig, _.get(resolvedPlanData, 'limits.' + metric, 'Unlimited'))
+        });
+
+
+        var nowDate = new Date();
+        var resetDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 1);
+        var Difference_In_Time = resetDate.getTime() - nowDate.getTime();
+        var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));   
+        var isAnS = Difference_In_Days === 1 ? '' : 's';
+        $usageReset.innerHTML = resetDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' (' + Difference_In_Days + ' day' + isAnS + ')'
+
+
+        // Update HTML
+        $spinner.setAttribute('hidden', true);
+        $accountParent.removeAttribute('hidden')
+        $premiumBadge.innerHTML = premiumbadgeHtml;
+        $profileBadges.innerHTML = badgesHtml;
+        $countries.innerHTML = countriesHtml;
+        $countryCodes.innerHTML = countryCodesHtml;
+        $signinMethods.innerHTML = signinMethodsHtml;
+        $activeSessionsParent.innerHTML = activeSessionsHtml;
+        $connectedAccountsParent.innerHTML = connectedAccountsHtml;
+        $usageTable.innerHTML = usageHtml;
+        if (accountData.affiliate.referrals.length > 0) {
+          $referralsParent.innerHTML = referralsHtml
+        }
+
+        // Set personal data ib form
+        Powertools.getKeys(accountData.personal)
+        .forEach(function (key, i) {
+          var val = _.get(accountData.personal, key);
+          var $el = select('*[name="' + key + '"]');
+          // console.log('---', key, val, $el.get(0));
+          if ($el) {
+            if (
+              (key === 'birthday.timestamp' && val === '1970-01-01T00:00:00.000Z')
+              || (key === 'telephone.countryCode' && val === 0)
+              || (key === 'telephone.national' && val === 0)
+            ) {
+              return
+            }
+            $el.setValue(val)
+          }
+        });
+
+        if (!providerData.password) {
+          select('#changePassword, #changePasswordParent')
+          .each(function (el) {
+            el.setAttribute('hidden', true)
+          })
+        }
+
+        if (oauth2EnabledArray.length !== 0) {
+          oauth2EnabledArray
+          .forEach(function (provider, i) {
+            checkOAuth2Connection(provider);
+          });
+        }
+
+
+        document.addEventListener('submit', function (event) {
+          handleSubmit(event);
+        })
+
+        document.addEventListener('click', function (event) {
+          handleClick(event);
+        })
+
+        $('#personalInformation input, #personalInformation textarea, #personalInformation select').on('change keydown paste cut', function (event) {
+          $personalInformationSavePopup.removeAttribute('hidden')
+        })
+
+        new bootstrap.ScrollSpy(document.body, {
+          target: '#navbarSettings',
+          offset: 100,
+          // offset: 0,
+        })
+
+        new HSScrollspy('#navbarVerticalNavMenu', {
+          breakpoint: 'lg',
+          scrollOffset: -20,
+          // scrollOffset: 0,
+        })
+
+        HSCore.components.HSClipboard.init('.js-clipboard')
+
+        HSCore.components.HSMask.init('.js-input-mask')
+
+        // accountResultEl.setInnerHTML(JSON.stringify(accountData, null, 2));
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
+        })
+
+        if (currentURL.hash) {
+          var hashEl = document.querySelector('*[href="' + currentURL.hash + '"]');
+          // console.log('---hashEl', currentURL.hash, hashEl);
+          if (hashEl) {
+            hashEl.click();
+          }
+        }
+        
+      })
+    })    
 
     // helpers
     function handleSubmit(event) {
@@ -1904,7 +1917,7 @@ settings:
       }
     }
 
-    function getAvailableProviers() {
+    function getAvailableProviders() {
       return new Promise(function(resolve, reject) {
           WonderfulFetch(serverApiURL, {
             method: 'POST',
@@ -1917,9 +1930,15 @@ settings:
             },
           })
           .then(function (data) {
+            providerData = data;
+
+            console.log('Providers', providerData);
+
             return resolve(data)
           })
           .catch(function (e) {
+            console.error('Failed to get providers', e);
+
             return resolve({});
           })
       });
@@ -1942,9 +1961,15 @@ settings:
           },
         })
         .then(function (data) {
+          sessionData = data;
+
+          console.log('Session', sessionData);
+
           return resolve(data)
         })
         .catch(function (e) {
+          console.error('Failed to get sessions', e);
+
           return resolve({});
         })
       });
