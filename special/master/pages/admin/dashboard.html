@@ -24,7 +24,7 @@ meta:
       <!-- Media -->
       <div class="d-flex">
         <div class="flex-grow-1">
-          <h6 class="card-subtitle mb-3">Total users</h6>
+          <h6 class="card-subtitle mb-3">Total users <a href="{{ site.url }}/admin/users" class="stretched-link"></a></h6>
           <h3 id="stats-users-total-current" class="card-title"><div class="spinner-border text-primary spinner-border-sm" role="status"></div></h3>
 
           <div class="d-flex align-items-center">
@@ -48,7 +48,7 @@ meta:
       <!-- Media -->
       <div class="d-flex">
         <div class="flex-grow-1">
-          <h6 class="card-subtitle mb-3">Online Users</h6>
+          <h6 class="card-subtitle mb-3">Online Users <a href="{{ site.url }}/admin/users/online" class="stretched-link"></a></h6>
           <h3 id="stats-users-online-current" class="card-title"><div class="spinner-border text-primary spinner-border-sm" role="status"></div></h3>
 
           <div class="d-flex align-items-center">
@@ -71,7 +71,7 @@ meta:
       <!-- Media -->
       <div class="d-flex">
         <div class="flex-grow-1">
-          <h6 class="card-subtitle mb-3">Notifications</h6>
+          <h6 class="card-subtitle mb-3">Notifications <a href="{{ site.url }}/admin/notifications/create" class="stretched-link"></a></h6>
           <h3 id="stats-notification-subscribers-current" class="card-title"><div class="spinner-border text-primary spinner-border-sm" role="status"></div></h3>
 
           <div class="d-flex align-items-center">
@@ -292,7 +292,16 @@ meta:
 </div>
 <!-- End Card -->
 
+
+<div class="card mb-3 mb-lg-5">
+  <div class="card-header border-bottom">
+    <h4 class="card-header-title">Actions</h4>
+  </div>
+
+  <!-- Body -->
+  <div class="card-body">
 <div class="row">
+
   <div class="col-md-6 mb-3">
     <a class="card card-hover-shadow" href="{{ site.url }}/admin/notifications/create">
       <div class="card-body">
@@ -336,6 +345,28 @@ meta:
       </div>
     </a>
   </div>
+
+  <div class="col-md-6 mb-3">
+    <a class="card card-hover-shadow" href="{{ site.url }}/admin/users">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-shrink-0">
+            <img class="avatar avatar-lg avatar-4x3" src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/svg/illustrations/oc-chatting.svg" alt="Image Description" style="min-height: 5rem;" data-hs-theme-appearance="default">
+            <img class="avatar avatar-lg avatar-4x3" src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/svg/illustrations-light/oc-chatting.svg" alt="Image Description" style="min-height: 5rem;" data-hs-theme-appearance="dark">
+          </div>
+
+          <div class="flex-grow-1 ms-4">
+            <h3 class="text-inherit mb-1">Users</h3>
+            <span class="text-body">Explore and edit users</span>
+          </div>
+
+          <div class="ms-2 text-end">
+            <i class="bi-chevron-right text-body text-inherit"></i>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>  
 
   <!-- <div class="col-lg-4 mb-3 mb-lg-5"> -->
   <div class="col-lg-12 mb-3 mb-lg-5" hidden>
@@ -542,6 +573,17 @@ meta:
   </div>
   <!-- End Col -->
 </div>
+  </div>
+  <!-- End Body -->
+</div>
+
+
+
+
+
+
+
+
 <!-- End Row -->
 <script type="text/javascript">
 
