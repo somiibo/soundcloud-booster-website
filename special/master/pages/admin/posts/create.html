@@ -39,17 +39,25 @@ admin:
     <div class="row mb-3">
       <div class="col-12">
         <div id="previous-post-container">
-          <h3 class="header-title mb-3">
+          <h3 class="header-title mb-3 d-flex justify-content-between align-items-center">
             Previous Post
+            <a class="btn btn-primary btn-sm btn-copy py-1" data-copy="#copy-main">Copy</a>
           </h3>
 
           <div class="row">
             <div class="col-12">
+              <!-- <div class="alert alert-warning" role="alert">
+                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>               -->
               <div class="alert alert-soft-secondary">
                 <div><strong>ID:</strong> <span id="previous-post-id">...</span> </div>
                 <div><strong>URL:</strong> <span id="previous-post-url">...</span> </div>
-                <div><strong>Slug:</strong> <span id="previous-post-slug">...</span> </div>
-                <div><strong>Invoice:</strong> <span id="previous-post-invoice">...</span> </div>
+                <div id="copy-main">
+                  <div><strong>Slug:</strong> <span id="previous-post-slug">...</span> </div>
+                  <div><strong>Invoice:</strong> <span id="previous-post-invoice">...</span> </div>                      
+                </div>
+
               </div>
             </div>
           </div>
@@ -657,7 +665,6 @@ admin:
   </div>
 </div>
 
-
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
 <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
@@ -779,7 +786,7 @@ admin:
               stackedit.openFile({
                 name: 'Filename', // with an optional filename
                 content: {
-                  text: stackEditElement.value // and the Markdown content.
+                  text: stackEditElement.value, // and the Markdown content.
                 }
               });
             } else if (event.target.matches('#url-format-btn')) {
@@ -790,6 +797,9 @@ admin:
               invoiceEmailEl.value = event.target.dataset.invoiceEmail;
             } else if (event.target.matches('#randomize-preview-image')) {
               randomizeHeaderImage();
+            } else if (event.target.matches('.btn-copy')) {
+              Manager.utilities().clipboardCopy(document.querySelector(event.target.dataset.copy));
+              Admin().elements.toastCopy.show();
             }
           });
 
@@ -883,7 +893,7 @@ admin:
               data.title = data.title.replace(/"/img, '\'')
               data.excerpt = data.excerpt.replace(/"/img, '\'')
 
-              var lastUrl = 'blog/' + data.url;
+              var lastUrl = '/blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
               Manager.storage().set('admin.post.lastSlug', lastUrl)
               Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
