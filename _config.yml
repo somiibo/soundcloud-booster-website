@@ -144,12 +144,12 @@ settings:
           config: {
             palette: {
               popup: {
-                background: '#1FB7F2',
+                background: '#1fb7f2',
                 text: '#fff'
               },
               button: {
                 background: '#fff',
-                text: '#1FB7F2'
+                text: '#1fb7f2'
               }
             }
           }
