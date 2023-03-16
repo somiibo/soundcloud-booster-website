@@ -154,12 +154,12 @@ settings:
             }
           }
         },
-        tawk: {
+        chatsy: {
           enabled: true,
           config: {
-            chatId: '5c885bdec37db86fcfcd71ed',
-            widgetId: 'default',
-            prechatColor: '#1FB7F2'
+            accountId: 'pLnXvh03xRQOHWAurn5EBnobC5H3',
+            chatId: 't4IJJsOMNc4hiH',
+            settings: {},
           }
         },
         sentry: {
