@@ -160,7 +160,9 @@ settings:
             accountId: '98WVIFYdGrUbjL4jgyXLPe8ICFt1',
             chatId: 'NcEywcnfLMs1cB',
             settings: {
-              openChatButton: '#1fb7f2',
+              openChatButton: {
+                background: '#1fb7f2',
+              },
             },
           }
         },
