@@ -157,9 +157,11 @@ settings:
         chatsy: {
           enabled: true,
           config: {
-            accountId: 'pLnXvh03xRQOHWAurn5EBnobC5H3',
-            chatId: 't4IJJsOMNc4hiH',
-            settings: {},
+            accountId: '98WVIFYdGrUbjL4jgyXLPe8ICFt1',
+            chatId: 'NcEywcnfLMs1cB',
+            settings: {
+              openChatButton: '#1fb7f2',
+            },
           }
         },
         sentry: {
