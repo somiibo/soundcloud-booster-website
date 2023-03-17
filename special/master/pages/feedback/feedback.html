@@ -117,23 +117,23 @@ settings:
   include-css-bundle: false
   manager-configuration: "
     {
+      auth: {
+        state: 'required',
+        sends: {
+          required: '/authentication/signup/',
+        },
+      },      
       libraries: {
         cookieconsent: {
-          enabled: false
+          enabled: false,
         },
         chatsy: {
-          enabled: false
+          enabled: false,
         },
         lazysizes: {
           enabled: false,
         },
       },
-      auth: {
-        state: 'required',
-        sends: {
-          required: '/authentication/signup/',
-        }
-      }
     }
   "
 

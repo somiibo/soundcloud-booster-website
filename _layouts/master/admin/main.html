@@ -80,24 +80,24 @@ settings:
   include-css-bundle: false
   manager-configuration: "
     {
-      libraries: {
-        cookieconsent: {
-          enabled: false
-        },
-        chatsy: {
-          enabled: false
-        },
-        sentry: {
-          enabled: false
-        }
-      },
       auth: {
         state: 'required',
         sends: {
           required: '/authentication/signin/',
-          prohibited: '/admin/dashboard/'
+          prohibited: '/admin/dashboard/',
         }
-      }
+      },      
+      libraries: {
+        cookieconsent: {
+          enabled: false,
+        },
+        chatsy: {
+          enabled: false,
+        },
+        sentry: {
+          enabled: false,
+        }
+      },
     }
   "
 ---
