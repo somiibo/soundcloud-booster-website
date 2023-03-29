@@ -8,7 +8,7 @@ on:
       - main
       - template
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 1 * *' # every 1st of the month at 12 am UTC
 
 concurrency:
   group: ${{ github.ref }}
