@@ -1095,6 +1095,9 @@ admin:
                   title = (title || '')
                     .replace('.docx', '')
                     .replace('.doc', '')
+                    .replace(/[^a-zA-Z0-9\u00C0-\u017F-:\s]+/g, '') // remove non-alphanumeric characters except dashes
+                    .replace(/\s+/g, ' ') // replace multiple spaces with one
+
 
                   dom.select('#title').setValue(turndownService.turndown(title))
 
