@@ -971,7 +971,7 @@ admin:
               .toLowerCase()
               .trim()
               .replace(/\s/g, '-') // replace spaces with dashes
-              .replace(/[^ \w-]/igm, '') //
+              .replace(/[^a-zA-Z0-9\u00C0-\u017F-]+/g, '') // remove non-alphanumeric characters except dashes
               .replace(/-+/g, '-') // if there are multiple dashes, replace with one
               .replace(/(^-|-$)/g, '') // remove dashes from end
             )
