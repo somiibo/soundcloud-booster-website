@@ -1143,6 +1143,10 @@ admin:
                   }
                   markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
 
+                  // Remove links from titles
+                  markdown = markdown
+                    .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
+
                   var links = [];
                   links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
                   // Fix Google Links
