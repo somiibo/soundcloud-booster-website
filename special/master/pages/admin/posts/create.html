@@ -896,7 +896,7 @@ admin:
               var lastUrl = '/blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
               Manager.storage().set('admin.post.lastSlug', lastUrl)
-              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
+              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + lastUrl)
               Manager.storage().set('admin.post.lastInvoice', 'Manual')
 
               var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
