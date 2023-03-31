@@ -175,41 +175,47 @@ head:
     document.getElementById('checkout-step-status-success-url-text').innerText = qsUrlText
     document.getElementById('checkout-step-status-success-url').setAttribute('href', qsUrl);
 
+    setTimeout(function () {
+      window.location.href = qsUrl;
+    }, 30000);
+
     try {
       var storageKey = '_orders.' + qsOrderId;
+
       if (Manager.properties.meta.environment === 'development') {
         Manager.storage().set(storageKey, false);
       }
 
       var currentValue = Manager.storage().get(storageKey);
 
-      // console.log('-----', storageKey, currentValue);
       if (!currentValue) {
-        // console.log('Theres nothing here');
+        console.log('Saving order to storage and reporting to analytics');
+
         gtag('event', 'purchase', {
-          "transaction_id": qsOrderId,
-          // "affiliation": "Google online store",
-          "value": qsOrderTotal,
-          "currency": "USD",
-          "tax": 0,
-          "shipping": 0,
-          "items": [
+          transaction_id: qsOrderId,
+          // affiliation: 'Google online store',
+          value: qsOrderTotal,
+          currency: 'USD',
+          tax: 0,
+          shipping: 0,
+          items: [
             {
-              "id": qsProductIdGlobal,
-              "name": qsProductIdGlobal,
-              // "list_name": "Search Results",
-              // "brand": "Google",
-              // "category": "Apparel/T-Shirts",
-              "variant": qsOrderFreq,
-              // "list_position": 1,
-              "quantity": 1,
-              "price": qsOrderTotal,
+              id: qsProductIdGlobal,
+              name: qsProductIdGlobal,
+              // list_name: 'Search Results',
+              // brand: 'Google',
+              // category: 'Apparel/T-Shirts',
+              variant: qsOrderFreq,
+              // list_position: 1,
+              quantity: 1,
+              price: qsOrderTotal,
             }
           ]
         });
+
         Manager.storage().set(storageKey, 'done');
       } else {
-        // console.log('Theres already something here');
+        console.log('Already reported order to analytics');
       }
 
     } catch (e) {
