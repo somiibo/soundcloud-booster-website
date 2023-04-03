@@ -175,9 +175,14 @@ head:
     document.getElementById('checkout-step-status-success-url-text').innerText = qsUrlText
     document.getElementById('checkout-step-status-success-url').setAttribute('href', qsUrl);
 
-    setTimeout(function () {
-      window.location.href = qsUrl;
-    }, 30000);
+    // Navigate away if the user is not on the page so we avoid double-counting the analytics events
+    setInterval(function () {
+      var hasFocus = document.hasFocus && document.hasFocus();
+      
+      if (!hasFocus) {
+        window.location.href = qsUrl;
+      }
+    }, 60000);
 
     try {
       var storageKey = '_orders.' + qsOrderId;
