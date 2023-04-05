@@ -64,4 +64,9 @@ jobs:
         env:
           JEKYLL_PAT: ${{ secrets.GH_TOKEN }}
       - name: Purge CloudFlare Cache
-        run: npm run cloudflare:purge      
+        run: npm run cloudflare:purge
+      - name: Purge Artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          expire-in: 0 # Set this to 0 to delete all artifacts          
