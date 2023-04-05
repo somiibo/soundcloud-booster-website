@@ -239,7 +239,7 @@ admin:
         </div>
 
         <div class="row">
-          <div class="col-md-8 col-lg-10 col-xxl-11">
+          <div class="col-md-8 col-lg-9 col-xxl-10">
             <div>
               <!-- Form -->
               <div class="mb-4">
@@ -253,7 +253,7 @@ admin:
             </div>
           </div>
 
-          <div class="col-md-4 col-lg-2 col-xxl-1">
+          <div class="col-md-4 col-lg-3 col-xxl-2">
               <img class="img-fluid img-thumbnail mb-1" id="headerImageURLPreview" src="" alt="" style="min-width: 100%; min-height: 10px">
               <span id="preview-icon-error" class="text-danger" hidden>Error loading image...</span>
             <div>
@@ -296,10 +296,10 @@ admin:
             <!-- End Form -->
           </div>
 
-          <div class="col-sm-12">
+          <div class="col-12">
             <div class="d-flex justify-content-between mt-3">
-              <a href="" onclick="return false;" class="btn btn-lg btn-secondary w-100 me-3" id="stackedit-edit">Edit in StackEdit</a>
-              <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">Import from Google Docs</a>
+              <a href="" onclick="return false;" class="btn btn-lg btn-soft-primary w-100 me-3" id="stackedit-edit">Edit in StackEdit</a>
+              <!-- <a href="" onclick="return false;" class="btn btn-lg btn-outline-secondary w-100" id="" data-bs-toggle="modal" data-bs-target="#importGoogleDoc">Import from Google Docs</a> -->
             </div>
           </div>
         </div>
@@ -896,7 +896,7 @@ admin:
               var lastUrl = '/blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
               Manager.storage().set('admin.post.lastSlug', lastUrl)
-              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + '/' + lastUrl)
+              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + lastUrl)
               Manager.storage().set('admin.post.lastInvoice', 'Manual')
 
               var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
@@ -971,7 +971,7 @@ admin:
               .toLowerCase()
               .trim()
               .replace(/\s/g, '-') // replace spaces with dashes
-              .replace(/[^ \w-]/igm, '') //
+              .replace(/[^a-zA-Z0-9\u00C0-\u017F-]+/g, '') // remove non-alphanumeric characters except dashes
               .replace(/-+/g, '-') // if there are multiple dashes, replace with one
               .replace(/(^-|-$)/g, '') // remove dashes from end
             )
@@ -1095,6 +1095,9 @@ admin:
                   title = (title || '')
                     .replace('.docx', '')
                     .replace('.doc', '')
+                    .replace(/[^a-zA-Z0-9\u00C0-\u017F-:\s]+/g, '') // remove non-alphanumeric characters except dashes
+                    .replace(/\s+/g, ' ') // replace multiple spaces with one
+
 
                   dom.select('#title').setValue(turndownService.turndown(title))
 
@@ -1142,6 +1145,10 @@ admin:
                       .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
                   }
                   markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
+
+                  // Remove links from titles
+                  markdown = markdown
+                    .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
 
                   var links = [];
                   links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];

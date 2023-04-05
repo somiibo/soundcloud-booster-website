@@ -241,6 +241,17 @@ meta:
   </div>
 </div>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 2000">
+  <div id="toast-copy" class="toast align-items-center bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Copied!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="modal-success" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -249,23 +260,26 @@ meta:
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Wow—thank you so much for the feedback!</p>
+        <p class="text-dark">Wow—thank you so much for the feedback!</p>
 
-        <p>We have one small favor to ask...</p>
+        <p class="text-dark">Would you be interested in posting your feedback as review for <strong>{{ site.brand.name }}</strong>?</p>
 
-        <p>Would you be interested in posting your feedback as review for <b>{{ site.brand.name }}</b>?</p>
+        <p class="text-dark">Reviews help us attract new users and allow us to <strong>invest more in our service to you</strong>!</p>
 
         <div class="row">
           <div class="col-12 mb-3">
-            <label class="form-label" for="review-text">Your feedback</label>
-            <textarea id="review-text" name="change" class="form-control" readonly></textarea>
+            <div class="d-flex justify-content-between mb-2">
+              <label class="form-label mb-0" for="review-text">Here's what you wrote:</label>
+              <a href="javascript:;" id="copy-review-btn" class="btn btn-primary py-0">Copy</a>
+            </div>
+            <textarea id="review-text" name="change" class="form-control" disabled style="resize: none;"></textarea>
           </div>   
         </div>
       
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-white" data-bs-dismiss="modal">No thanks</button>
-        <a id="review-url" type="button" class="btn btn-success" href="" target="_blank">Post review</a>
+        <a id="review-url" type="button" class="btn btn-success" href="" target="_blank">Go to review site</a>
       </div>
     </div>
   </div>
@@ -291,6 +305,7 @@ meta:
 
     var $reviewText = document.getElementById('review-text');
     var $reviewModal = new bootstrap.Modal(document.getElementById('modal-success'));
+    var $toastCopy = new bootstrap.Toast(document.getElementById('toast-copy'));
 
     var isDeveloper = Manager.properties.meta.environment === 'development';
 
@@ -367,6 +382,15 @@ meta:
           display(e);
         })        
       })
+    })
+
+    // click handler
+    document.addEventListener('click', function (event) {
+      if (event.target.matches('#copy-review-btn')) {
+        $reviewText.select();
+        Manager.utilities().clipboardCopy($reviewText.value);
+        $toastCopy.show();
+      }
     })
 
     // on input change, auto grrow textarea

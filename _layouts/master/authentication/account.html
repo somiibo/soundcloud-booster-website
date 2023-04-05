@@ -975,11 +975,14 @@ settings:
 <!-- ========== END MAIN CONTENT ========== -->
 
 <!-- TOAST -->
-<div id="toast-main" class="position-fixed align-items-center text-white bg-primary border-0 toast hide" role="alert" aria-live="assertive" aria-atomic="true" style="top: 20px; right: 20px; z-index: 1000;">
-  <div class="d-flex">
-    <div class="toast-body">
-    </div>
-    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
+  <div id="toast-main" class="toast bg-danger text-white">
+    <div class="d-flex">
+      <div class="toast-body">
+        <!-- Dynamically filled -->
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>      
   </div>
 </div>
 
@@ -1149,7 +1152,7 @@ settings:
 
     var user = firebase.auth().currentUser;
     var email = user ? user.email : '';
-    var gravatar = "https://secure.gravatar.com/avatar/" + md5(email) + "?size=" + 200 + '&d=retro';
+    var gravatar = 'https://secure.gravatar.com/avatar/' + md5(email) + '?size=' + 200 + '&d=retro';
 
     var $spinner = document.getElementById('spinner-loader');
     var $accountParent = document.getElementById('account-parent');
@@ -1243,7 +1246,10 @@ settings:
           token = response;
 
           return resolve(token);
-        })        
+        })
+        .catch(function (e) {
+          return reject(e);
+        })
       });
     }
 
@@ -1265,6 +1271,9 @@ settings:
           console.log('appData', appData);
 
           return resolve(appData);
+        })
+        .catch(function (e) {
+          return reject(e);
         })        
       });
     }
@@ -1283,7 +1292,13 @@ settings:
 
             return resolve(accountData)
           })
+          .catch(function (e) {
+            return reject(e);
+          })          
         })
+        .catch(function (e) {
+          return reject(e);
+        })        
       });
     }
 
@@ -1568,8 +1583,7 @@ settings:
 
 
         // Update HTML
-        $spinner.setAttribute('hidden', true);
-        $accountParent.removeAttribute('hidden')
+        display('success')
         $premiumBadge.innerHTML = premiumbadgeHtml;
         $profileBadges.innerHTML = badgesHtml;
         $countries.innerHTML = countriesHtml;
@@ -1659,7 +1673,11 @@ settings:
         }
         
       })
-    })    
+    })
+    .catch(function (e) {
+      Manager.sentry().captureException(e);
+      display(e);
+    })
 
     // helpers
     function handleSubmit(event) {
@@ -1779,9 +1797,12 @@ settings:
       var $el = document.getElementById('toast-main');
       $el.classList.remove('bg-primary', 'bg-danger', 'bg-success');
       var $toast = bootstrap.Toast.getOrCreateInstance($el, {
-        delay: 5000
+        delay: 5000,
+        autohide: false,
       })
       var $body = $el.querySelector('.toast-body')
+
+      $toast.hide();
 
       if (type instanceof Error) {
         $el.classList.add('bg-danger')
@@ -1796,6 +1817,7 @@ settings:
           $el.classList.add('bg-primary')
         }
       }
+
       $toast.show();
     }
 
@@ -2016,6 +2038,19 @@ settings:
       .catch(function (e) {
         console.error('Fetch failed', e);
       })
+    }
+
+    function display(type, message) {
+      if (type instanceof Error) {
+        console.error(type);
+        toast(type);
+        $spinner.setAttribute('hidden', true);
+      } else if (type === 'success') {
+        $spinner.setAttribute('hidden', true);
+        $accountParent.removeAttribute('hidden');
+      } else {
+        console.log(message);
+      }
     }
 
 
