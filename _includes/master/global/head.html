@@ -10,7 +10,8 @@
 {% if site.meta.viewport != '' and site.meta.viewport != false and site.meta.viewport != null %}
   <meta name="viewport" content="{{ site.meta.viewport }}">
 {% else %}
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=5">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=5"> --> <!-- DISABLED 4/8/23 to prevent auto-zooming on text fields -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
 {% endif %}
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -357,8 +358,19 @@
     opacity: 1.0;
     pointer-events: none;
   }
+  #prechat-btn {
+    transition: transform 167ms cubic-bezier(0.33, 0, 0, 1) 0s;
+    transform-origin: center center;
+  }
+
   #prechat-btn:hover {
-    opacity: 0.9;
+    transition: transform 250ms cubic-bezier(0.33, 0, 0, 1) 0s;
+    transform: scale(1.1);
+  }
+
+  #prechat-btn:active {
+    transform: scale(0.85);
+    transition: transform 134ms cubic-bezier(0.45, 0, 0.2, 1) 0s;
   }
 
   @media (max-width: 768px) {
