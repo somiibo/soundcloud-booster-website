@@ -1,0 +1,316 @@
+<script src="https://cdn.jsdelivr.net/npm/wonderful-fetch@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/node-powertools@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
+
+<!-- Default elements -->
+<div id="dashboard-template-display-error" data-template='
+  <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
+    <div class="dashboard-display-error toast bg-danger text-white">
+      <div class="d-flex">
+        <div class="toast-body">
+          <h4 class="text-white">Error</h4>
+          <span class="dashboard-display-error-message">
+            Unknown error
+          </span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>      
+    </div>
+  </div> 
+'>
+</div>
+
+<div id="dashboard-template-unsaved-popup" data-template='
+  <div class="dashboard-display-unsaved-popup" hidden>
+    <div class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-3" style="max-width: 40rem;" >
+      <div class="card card-sm bg-dark border-dark mx-2">
+        <div class="card-body">
+          <div class="row justify-content-center justify-content-sm-between">
+            <div class="col d-flex align-items-center text-white">
+              You have unsaved changes!
+            </div>
+
+            <div class="col-auto">
+              <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary">
+                  <span class="dashboard-display-loader" hidden>
+                    <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                  </span>                    
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div> 
+'>
+</div>
+
+<script type="text/javascript">
+  var DashboardManager = {
+
+  }
+  var inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+  var select;
+  var get;
+  var set;
+  var storage;
+
+  window.onbeforeunload = function (event) {
+    var result = undefined;
+
+    Object.keys(DashboardManager).forEach(function (id) {
+      var dashboard = DashboardManager[id];
+
+      if (!dashboard.allowLeave) {
+        result = '';
+      }
+    });
+
+    return result;
+  }  
+
+  function Dashboard() {
+    var self = this;
+
+    self.id = null;
+    self.element = {};
+    self.options = {};
+    self.allowLeave = true;
+
+    self._handler = {
+      onSubmit: function () {},
+      onChange: function () {},
+    }
+
+    // Set global libraries
+    select = Manager.dom().select;
+    get = Manager.utilities().get;
+    set = Manager.utilities().set;
+    storage = Manager.storage();
+
+    return self;
+  }
+
+  Dashboard.prototype.register = function (id, options) {
+    var self = this;
+
+    self.id = id;
+
+    // Set default options
+    options = options || {};
+
+    options.error = options.error || {};
+    options.error.parent = options.error.parent || '.dashboard-display-error';
+    options.error.message = options.error.message || '.dashboard-display-error-message';
+
+    options.unsaved = options.unsaved || {};
+    options.unsaved.parent = options.unsaved.parent || '.dashboard-display-unsaved-popup';
+
+    options.loader = options.loader || {};
+    options.loader.parent = options.loader.parent || '.dashboard-display-loader';
+
+    options.createDefaultElements = typeof options.createDefaultElements === 'undefined' ? true : options.createDefaultElements;
+    options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
+
+    self.element.id = select(id);
+
+    // Create default elements
+    if (options.createDefaultElements) {
+      self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-display-error').getAttribute('data-template'));
+      self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-unsaved-popup').getAttribute('data-template'));
+    }
+
+    // Setup the reset of the elements
+    self.element.error = {
+      parent: select(options.error.parent),
+      message: select(options.error.message),
+    };
+
+    self.element.unsaved = {
+      parent: select(options.unsaved.parent),
+    };
+
+    self.element.loader = {
+      parent: select(options.loader.parent),
+    };    
+
+    DashboardManager[self.id] = {
+      allowLeave: self.allowLeave,
+    };
+
+    // Handler
+    $(id).on('change, keydown', 'input, textarea, select', function (event) {
+      setTimeout(function () {
+        if (event.key === 'Enter') {
+          return
+        }
+
+        console.log('[Dashboard]', id, 'change event', event);
+
+        if (options.showUnsavedPopup) {
+          self.element.unsaved.parent.removeAttribute('hidden');
+        }
+
+        self.setAllowLeave(false);
+
+        self.display('ready');
+
+        self._handler.onChange(event, self.getFormData());
+      }, 1);
+    })
+
+    self.element.id.get(0).addEventListener('submit', function (event) {
+      console.log('[Dashboard]', id, 'submit event', event);
+
+      self.display('loading');
+
+      self._handler.onSubmit(event, self.getFormData());
+    });
+
+    self.display('loading');
+
+    self.options = options;
+
+    return self;
+  };
+
+  Dashboard.prototype.setAllowLeave = function (state) {
+    var self = this;
+
+    self.allowLeave = state;
+
+    DashboardManager[self.id].allowLeave = state;
+
+    return self;
+  }
+
+  Dashboard.prototype.display = function (status) {
+    var self = this;
+
+    // status = ready, loading, success, error
+    var _error;
+
+    if (status instanceof Error) {
+      _error = status;
+      status = 'error';
+    }
+
+    var elements = self.element.id.get(0).querySelectorAll(inputAndSubmit);
+
+    console.log('[Dashboard]', self.id, 'display', status);
+
+    // Enable or disable all inputs and submit buttons
+    elements
+    .forEach(function (el) {
+      var $el = Manager.dom().select(el);
+
+      if (status === 'loading' && (!el.classList.contains('disabled') || !el.hasAttribute('disabled'))) {
+        $el.addClass('disabled').setAttribute('disabled', 'true');
+      } else if (el.classList.contains('disabled') || el.hasAttribute('disabled')) {
+        $el.removeClass('disabled').removeAttribute('disabled');
+      }
+    });
+
+    // Show spinner or hide
+    if (status === 'loading') {
+      self.element.loader.parent.removeAttribute('hidden');
+    } else {
+      self.element.loader.parent.setAttribute('hidden', 'true');
+    }
+
+    // Remove unsaved changes popup
+    if (status === 'success' || status === 'error') {
+      self.element.unsaved.parent.setAttribute('hidden', 'true');
+    }
+
+    // Show error message
+    var toasts = [];
+
+    try {
+      self.element.error.parent
+      .each(function (el) {
+        toasts.push(new bootstrap.Toast(el, {}))
+      })
+    } catch (e) {
+      
+    }
+
+    // Show error message
+    if (status === 'error') {
+      if (toasts.length > 0) {
+        toasts
+        .forEach(function (toast) {
+          toast.show();
+          toast._element.querySelector('.dashboard-display-error-message').innerHTML = _error.message;
+        });
+      } else {
+        self.element.error.parent.removeAttribute('hidden');
+        self.element.error.parent.querySelector('.dashboard-display-error-message').innerHTML = _error.message;
+      }
+    } else {
+      if (toasts.length > 0) {
+        toasts
+        .forEach(function (toast) {
+          toast.hide();
+        });
+      } else {
+        self.element.error.parent.setAttribute('hidden', true);
+      }
+    }
+
+    // Set allow leave
+    if (status === 'success') {
+      self.setAllowLeave(true);
+    }
+    
+    return self;
+  };
+
+  Dashboard.prototype.getFormData = function () {
+    var self = this;
+    var data = {};
+    
+    self.element.id.get(0).querySelectorAll(inputAndSubmit)
+    .forEach(function (el) {
+      var $el = Manager.dom().select(el);
+      var name = $el.getAttribute('name');
+      var value = $el.getValue();
+
+      set(data, name, value);
+    }); 
+    
+    return data;
+  };    
+
+  Dashboard.prototype.onSubmit = function (fn) {
+    var self = this;
+
+    self._handler.onSubmit = fn;
+    
+    return self;
+  };
+
+  Dashboard.prototype.onChange = function (fn) {
+    var self = this;
+
+    self._handler.onChange = fn;
+    
+    return self;
+  };   
+
+  window.Dashboard = Dashboard;
+
+  // Log
+  console.log('Dashboard loaded', Dashboard);
+</script>
+
+
+<!-- 
+  Make a dashboard suite 
+  - include an error toast
+  - a success toast
+  - a popup toast to save changes
+  - ability to set a allowLeave whihc will prevent navigation
+ -->
