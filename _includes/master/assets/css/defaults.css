@@ -10,7 +10,7 @@
 } */
 
 /* Properly hide things */
-.hidden {
+.hidden, [hidden] {
   display: none;
 }
 
@@ -27,4 +27,60 @@
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
+}
+
+/* Simple Animations */
+.animation-slide-up {
+  animation: slide-up 1s ease;
+}
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animation-fade-in {
+  animation: fade-in 1s ease;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animation-fade-out {
+  animation: fade-out 1s ease;
+}
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.animation-hover-up:hover {
+  -moz-transform: translate(0,-8px);
+  -o-transform: translate(0,-8px);
+  -ms-transform: translate(0,-8px);
+  -webkit-transform: translate(0,-8px);
+  transform: translateY(-8px);
+}
+.animation-hover-up {
+  -webkit-transition: all .3s cubic-bezier(.2,.3,0,1);
+  -moz-transition: all .3s cubic-bezier(.2,.3,0,1);
+  -ms-transition: all .3s cubic-bezier(.2,.3,0,1);
+  -o-transition: all .3s cubic-bezier(.2,.3,0,1);
+  transition: all .3s cubic-bezier(.2,.3,0,1);
 }
