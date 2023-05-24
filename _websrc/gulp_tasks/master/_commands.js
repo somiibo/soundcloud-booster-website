@@ -11,7 +11,7 @@ gulp.task('cloudflare:purge', async function () {
   console.log(`starting cloudflare:purge on zone: ${doc.cloudflare.zone} ...`);
 
   return new Promise(function(resolve, reject) {
-    // Don't need to wait for this because there is a server-side delay to allow for the webiste to finish building before PURGE is called
+    // Don't need to wait for this because there is a server-side delay to allow for the website to finish building before PURGE is called
     fetch('https://api.itwcreativeworks.com/wrapper', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
@@ -22,9 +22,9 @@ gulp.task('cloudflare:purge', async function () {
         body: {
           purge_everything: true
         },
-        delay: parseInt(argv.delay) || (500 * 1000),
+        delay: parseInt(argv.delay || 500) * 1000,
       }),
-      timeout: parseInt(argv.timeout) || 30000,
+      timeout: parseInt(argv.timeout || 30) * 1000,
     })
     .then(res => {
       if (res.status >= 200 && res.status < 300) {

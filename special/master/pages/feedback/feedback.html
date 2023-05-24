@@ -41,6 +41,7 @@ head:
 
       #rating-system input[type=radio] {
         -webkit-appearance: none;
+        appearance: none;
         width: 60px;
         height: 60px;
         border: none;
@@ -120,7 +121,7 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/authentication/signup/',
+          required: '/signup/',
         },
       },      
       libraries: {
@@ -349,7 +350,7 @@ meta:
       // Submit data to server
       display('loading');
 
-      user.getIdToken(false)
+      user.getIdToken(true)
       .then(function (token) {
         // Preprocess data
         // data.owner = data.owner || {};

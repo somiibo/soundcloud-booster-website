@@ -28,6 +28,9 @@ meta:
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
 
+launcher:
+  download: "" # string, example: https://example.com/download
+
 cloudflare:
   zone: '282d4b5b8f71a0cb5f9ccae85b905a48'
 

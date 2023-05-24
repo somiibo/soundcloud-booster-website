@@ -693,7 +693,7 @@ meta:
       statsNotificationSubscribersPreviousEl.innerHTML = numberWithCommas(statsNotificationSubscribersPrevious)
       statsPremiumSubscribersPreviousEl.innerHTML = numberWithCommas(statsPremiumSubscribersPrevious)
 
-      user.getIdToken(false)
+      user.getIdToken(true)
         .then(function(token) {
 
           // Get stats

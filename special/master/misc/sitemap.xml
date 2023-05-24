@@ -8,6 +8,7 @@ sitemap:
   <?xml version="1.0" encoding="UTF-8"?>
   <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {% assign default_time = site.time | date_to_xmlschema %}
+
     {% for post in site.posts %}
       <url>
         <loc>{{ site.url }}{{ post.url }}</loc>
@@ -29,12 +30,22 @@ sitemap:
         {%- else -%}
           <priority>{{ post.sitemap.priority }}</priority>
         {%- endif -%}
-
       </url>
     {% endfor %}
     {% for page in site.pages %}
-      {%- if page.url contains '/@reference/' -%}
-      {%- elsif page.sitemap.include != false -%}
+      {% assign include = true %}
+
+      {%- if page.layout.sitemap.include != null -%}
+        {% assign include = layout.sitemap.include %}
+      {%- endif -%}
+      {%- if page.sitemap.include != null -%}
+        {% assign include = page.sitemap.include %}
+      {%- endif -%}
+
+      {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or include == false -%}
+        {%- continue -%}
+      {%- endif -%}
+
       <url>
         <loc>{{ site.url }}{{ page.url }}</loc>
 
@@ -50,14 +61,14 @@ sitemap:
           <changefreq>{{ page.sitemap.changefreq }}</changefreq>
         {%- endif -%}
 
-        {%- if page.sitemap.priority == null -%}
-          <priority>0.5</priority>
+        {%- if page.url == '/' -%}
+          <priority>1.0</priority>
+        {%- elsif page.sitemap.priority == null -%}
+          <priority>0.5</priority>          
         {%- else -%}
           <priority>{{ page.sitemap.priority }}</priority>
         {%- endif -%}
-
-       </url>
-      {%- endif -%}
+       </url>      
     {% endfor %}
   </urlset>
 {%- endif -%}

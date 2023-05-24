@@ -15,10 +15,10 @@ meta:
 We at {{ site.brand.name }} are a great company and would love to design an intuitive solution for you!
 
 ## Create an account at {{ site.brand.name }}
-- [My account]({{ site.url }}/authentication/account)
-- [Sign in]({{ site.url }}/authentication/signin)
-- [Sign up]({{ site.url }}/authentication/signup)
-- [Recover account]({{ site.url }}/authentication/forgot)
+- [My account]({{ site.url }}/account)
+- [Sign in]({{ site.url }}/signin)
+- [Sign up]({{ site.url }}/signup)
+- [Recover account]({{ site.url }}/forgot)
 
 ## Navigation
 - [Contact us]({{ site.url }}/contact)

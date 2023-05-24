@@ -126,11 +126,6 @@
   };
 </script>
 
-<!-- Redirect -->
-{%- if page.redirect.url != null and page.redirect.url != '' -%}
-  <meta http-equiv="refresh" content="0; url={{ page.redirect.url }}">
-{%- endif -%}
-
 <!-- Favicon -->
 {%- if site.favicon.path != null and site.favicon.path != '' -%}
 {% assign favicon_path = site.favicon.path %}
@@ -285,10 +280,16 @@
 </script>
 
 <!-- Add DEV click -->
-{%- if site.url contains "http://" -%}
+{%- if site.url contains ":40" -%}
 <script type="text/javascript">
-  document.addEventListener('click', function (event) {
-    console.log('Click', event.target);
+  Manager.ready(function () {
+    // Log development info
+    Manager.log('Enabling development mode features...');
+
+    // Add development click handler
+    document.addEventListener('click', function (event) {
+      Manager.log('Click', event.target);
+    })    
   })
 </script>
 {% endif %}

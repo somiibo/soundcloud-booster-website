@@ -91,7 +91,7 @@ head:
     var newURL;
 
     if (!currentUser && qsAuthRequired !== 'false') {
-      return window.location.href = '{{ site.url }}/authentication/signup?auth_redirect=' + encodeURIComponent(window.location.href);
+      return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
     } else if (!qsDestination) {
       // return window.history.back();
       return window.location.href = '{{ site.url }}';

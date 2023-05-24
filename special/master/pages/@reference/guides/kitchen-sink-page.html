@@ -24,9 +24,9 @@ foot:
   "
 
 tracking:
-  google-analytics: true
-  facebook-pixel: true
-  tiktok-pixel: true
+  google-analytics: "UA-123456789-1"
+  facebook-pixel: "PIXEL-ID"
+  tiktok-pixel: "PIXEL-ID"
 
 advertising:
   google-adsense: "ca-pub-123456789"
@@ -71,7 +71,8 @@ search:
   include: true
 
 redirect:
-  url: "" # false | URL
+  url: "{{ site.url }}" # false | string URL
+  querystring: true # true | false
 
 ### POST ONLY ###
 post:
@@ -86,9 +87,9 @@ post:
 
 ### TEAM MEMBER ONLY ###
 member:
-  name: Samantha Raeburn
+  name: Alex Raeburn
   position: Social Media Manager
-  excerpt: "Sam is an experienced social media expert from Beverly Hills, CA and is a major contributor to Somiibo's blog."
+  excerpt: "Alex is an experienced social media expert from Beverly Hills, CA and is a major contributor to Somiibo's blog."
 
   location: Beverly Hills, CA
   skills: Writing, Blog Management
