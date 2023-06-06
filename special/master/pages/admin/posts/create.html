@@ -895,14 +895,22 @@ admin:
                 return;
               }
 
+              // Fix excerpt
+              data.excerpt = data.excerpt
+                // Remove double quotes
+                .replace(/"/img, '\'')
+                // Remove images and links
+                .replace(/!\[([^\]]*)\]\([^\)]+\)|\[([^\]]+)\]\([^\)]+\)/g, '$1$2')
+
+              // Fix title
+              data.title = data.title
+                // Remove double quotes
+                .replace(/"/img, '\'')
+
               if (data.excerpt.match(/\[*.\]\(/)) {
                 displayError('There is a link or image in the excerpt');
                 return;
               }
-
-              // Fixes
-              data.title = data.title.replace(/"/img, '\'')
-              data.excerpt = data.excerpt.replace(/"/img, '\'')
 
               var lastUrl = '/blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
