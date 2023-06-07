@@ -90,10 +90,9 @@ settings:
       url: '{{ url }}',
       querystring: "{{ querystring }}" || true,
     };
-    var isDevelopment = Manager.properties.meta.environment;
+    var isDevelopment = Manager.properties.meta.environment === 'development';
 
     console.log('Redirect options', redirect);
-    console.log('====', "{{ url }}");
 
     // Set
     if (redirect.url) {
@@ -102,7 +101,7 @@ settings:
       redirect.url = new URL(host);
     }
 
-    // If redirect.querystring is true, loop throuhg all querystring parameters and add them to the redirect url
+    // If redirect.querystring is true, loop through all querystring parameters and add them to the redirect url
     if (redirect.querystring !== false && redirect.querystring !== 'false') {
       for (var pair of url.searchParams.entries()) {
         redirect.url.searchParams.set(pair[0], pair[1]);
