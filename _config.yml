@@ -44,7 +44,12 @@ socials:
   slack: "" # string, example: somiibo
   discord: "" # string, example: gxAuKX6
   github: "" # string, example: somiibo
+  dev: "" # string, example: somiibo
   tiktok: "" # string, example: somiibo
+  twitch: "" # string, example: somiibo
+  soundcloud: "" # string, example: somiibo
+  spotify: "" # string, example: somiibo
+  mixcloud: "" # string, example: somiibo
 
 comments:
   disqus: "" # string, example: somiibo
