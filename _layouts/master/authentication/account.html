@@ -96,7 +96,7 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/authentication/signup/',
+          required: '/signup/',
         },
       },      
       libraries: {
@@ -1241,7 +1241,7 @@ settings:
 
     function getIdToken() {
       return new Promise(function(resolve, reject) {
-        user.getIdToken(false)
+        user.getIdToken(true)
         .then(function (response) {
           token = response;
 
@@ -1436,7 +1436,7 @@ settings:
           var userHasEnabled = user.providerData.some(function (item) {
             return item.providerId === provider;
           });
-          var authUrl = new URL('{{ site.url }}/authentication/signin');
+          var authUrl = new URL('{{ site.url }}/signin');
           authUrl.searchParams.set('signout', true)
           authUrl.searchParams.set('provider', provider)
           authUrl.searchParams.set('destination', window.location.href)

@@ -21,6 +21,7 @@ jobs:
   build:
     # needs: nothing
     runs-on: ubuntu-latest
+    timeout-minutes: 80
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v3

@@ -86,21 +86,21 @@ settings:
 {% assign secondary-subtitle = 'An account is required ' %}
 {% assign auth-btn-class = 'auth-signin-provider-btn' %}
 
-{%- if page.permalink == '/authentication/signup/' -%}
+{%- if page.permalink == '/signup/' -%}
   {% assign is-sign-up-page = true %}
   {% assign subtitle-middle-word = 'for' %}
   <!-- DISABLED BECAUSE UX FOR THIS IS MEH -->
   <!-- {% assign auth-btn-class = 'auth-signup-provider-btn' %} -->
   {% assign auth-btn-class = 'auth-signin-provider-btn' %}
-{%- elsif page.permalink == '/authentication/signin/' -%}
+{%- elsif page.permalink == '/signin/' -%}
   {% assign is-sign-in-page = true %}
   {% assign subtitle-middle-word = 'to' %}
   {% assign auth-btn-class = 'auth-signin-provider-btn' %}
-{%- elsif page.permalink == '/authentication/signout/' -%}
+{%- elsif page.permalink == '/signout/' -%}
   {% assign is-sign-out-page = true %}
   {% assign secondary-title = 'Sign out' %}
   {% capture secondary-subtitle %}Sign out of <strong>{{ site.brand.name }}</strong>{% endcapture %}
-{%- elsif page.permalink == '/authentication/forgot/' -%}
+{%- elsif page.permalink == '/forgot/' -%}
   {% assign is-forgot-page = true %}
   {% assign secondary-title = 'Recover your account' %}
   {% capture secondary-subtitle %}Reset your password for <strong>{{ site.brand.name }}</strong>{% endcapture %}
@@ -135,11 +135,11 @@ settings:
 
   <!-- Content -->
   <div class="container py-5 py-sm-7">
-    <a class="d-flex justify-content-center mb-5" href="{{ site.url }}" target="_blank">
+    <a class="d-flex justify-content-center mb-5 animation-slide-up" href="{{ site.url }}" target="_blank">
       <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
     </a>
 
-    <div class="mx-auto" style="max-width: 30rem;">
+    <div class="mx-auto animation-slide-up" style="max-width: 30rem;">
       <!-- Card -->
       <div class="card card-lg mb-5">
         <div class="card-body">
@@ -154,7 +154,7 @@ settings:
             <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
           </div>
 
-          <div id="auth-container" hidden>
+          <div id="auth-container" class="animation-slide-up" hidden>
             <!-- Form -->
             {%- if is-sign-up-page == true or is-sign-in-page == true -%}
             <form class="" onsubmit="return false;">
@@ -162,9 +162,9 @@ settings:
                 <div class="mb-5">
                   <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-middle-word }} {{ site.brand.name }}</h1>
                   {%- if is-sign-up-page == true -%}
-                    <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in here</a></p>
+                    <p>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in here</a></p>
                   {% else %}
-                    <p>Need an account? <a class="link" href="{{ site.url }}/authentication/signup">Sign up here</a></p>
+                    <p>Need an account? <a class="link" href="{{ site.url }}/signup">Sign up here</a></p>
                   {% endif %}
                 </div>
 
@@ -238,7 +238,7 @@ settings:
                     <label class="form-label w-100" for="signupSrPassword" tabindex="-1">
                       <span class="d-flex justify-content-between align-items-center">
                         <span>Password</span>
-                        <a class="form-label-link mb-0" href="{{ site.url }}/authentication/forgot" tabindex="-1">Forgot Password?</a>
+                        <a class="form-label-link mb-0" href="{{ site.url }}/forgot" tabindex="-1">Forgot Password?</a>
                       </span>
                     </label>
                   {%- endif -%}
@@ -329,17 +329,17 @@ settings:
                 <div class="text-center">
                   <span class="divider-center text-muted mb-4">OR</span>
                   <div class="">
-                    <p>Ready to log in? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                    <p>Ready to log in? <a class="link" href="{{ site.url }}/signin">Sign in</a></p>
                   </div>
                 </div>
               {%- else -%}
                 <div class="d-grid gap-2 mb-4">
-                  <a id="" class="btn btn-primary" href="{{ site.url }}/authentication/signup">Sign up for an account</a>
+                  <a id="" class="btn btn-primary" href="{{ site.url }}/signup">Sign up for an account</a>
                 </div>
                 <div class="text-center">
                   <span class="divider-center text-muted mb-4">OR</span>
                   <div class="">
-                    <p>Already have an account? <a class="link" href="{{ site.url }}/authentication/signin">Sign in</a></p>
+                    <p>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in</a></p>
                   </div>
                 </div>
               {%- endif -%}
@@ -383,7 +383,7 @@ settings:
   <!-- End Content -->
 </main>
 
-<div class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-sm-0 mb-md-5 text-center">
+<div class="position-fixed start-50 top-0 translate-middle-x w-75 zi-99 mt-3 mt-md-5 text-center">
   <div class="row">
     <div class="col-sm-12 col-md-6 offset-md-3">
       <div id="" class="alert alert-danger auth-error-message-element mb-0" role="alert" hidden> </div>
@@ -772,7 +772,7 @@ settings:
 
   function createCustomToken(payload) {
     console.log('---createCustomToken', payload);
-    payload.user.getIdToken(false)
+    payload.user.getIdToken(true)
     .then(function (token) {
       console.log('---token', token);
       signUpHandler(token)

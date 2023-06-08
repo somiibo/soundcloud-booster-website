@@ -31,6 +31,9 @@ meta:
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
 
+launcher:
+  download: "" # string, example: https://example.com/download
+
 cloudflare:
   zone: '03cbb630b3cb2c0b97abcf9d30570e3a'
 
@@ -41,8 +44,15 @@ socials:
   youtube: "" # string, example: somiibo
   instagram: "" # string, example: somiibo
   tumblr: "" # string, example: somiibo
-  slack: "" # string, example: https://somiibo.slack.com
-  discord-invite: "" # string, example: https://discord.gg/vkeZEqb
+  slack: "" # string, example: somiibo
+  discord: "" # string, example: gxAuKX6
+  github: "" # string, example: somiibo
+  dev: "" # string, example: somiibo
+  tiktok: "" # string, example: somiibo
+  twitch: "" # string, example: somiibo
+  soundcloud: "" # string, example: somiibo
+  spotify: "" # string, example: somiibo
+  mixcloud: "" # string, example: somiibo
 
 comments:
   disqus: "" # string, example: somiibo

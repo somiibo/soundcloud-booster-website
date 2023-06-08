@@ -38,6 +38,12 @@ admin:
   <form class="" onsubmit="return false;" id="post-creator-form">
     <div class="row mb-3">
       <div class="col-12">
+        <h3 class="header-title mb-3 d-flex justify-content-center align-items-center">
+          Total posts: <span id="total-posts" class="ms-1">0</span>
+        </h3>        
+      </div>
+
+      <div class="col-12">
         <div id="previous-post-container">
           <h3 class="header-title mb-3 d-flex justify-content-between align-items-center">
             Previous Post
@@ -677,31 +683,35 @@ admin:
   var publicSiteUrl = '{{ site.url }}';
 
   {% assign latest-post = site.posts.first %}
+  {% assign total-posts = site.posts.size %}
 
+  console.log('----total-posts', '{{ total-posts }}');
   // console.log('----LOOP TITLE', '{{ post.post.title }}');
   // console.log('----LOOP ID', '{{ post.post.id }}');
-  // console.log('----', "{{ latest-post.post.id }}");
-  // console.log('----', parseInt("{{ latest-post.post.id }}") || 1);
+  // console.log('----', '{{ latest-post.post.id }}');
+  // console.log('----', parseInt('{{ latest-post.post.id }}') || 1);
   fields = {
-    // title: "{{ post.post.title }}",
-    title: "",
-    // url: "{{ post.url }}",
-    url: "",
-    // excerpt: "{{ post.post.excerpt }}",
-    excerpt: "",
-    id: (parseInt("{{ latest-post.post.id }} || 0") + 1) || 1,
-    author: "{{ latest-post.post.author }}",
+    // title: '{{ post.post.title }}',
+    title: '',
+    // url: '{{ post.url }}',
+    url: '',
+    // excerpt: '{{ post.post.excerpt }}',
+    excerpt: '',
+    // id: (parseInt('{{ latest-post.post.id }} || 0') + 1) || 1,
+    total: parseInt('{{ total-posts }}') || 0,
+    id: Math.round(new Date().getTime() / 1000),
+    author: '{{ latest-post.post.author }}',
     date: new Date().toISOString().split('T')[0] || '{{ latest-post.date | date: "%Y-%m-%d" }}',
-    affiliateSearchTerm: "{{ post.post.affiliate-search-term }}",
-    tags: [{% for tag in latest-post.post.tags %}"{{ tag }}",{% endfor %}],
-    categories: [{% for category in latest-post.post.categories %}"{{ category }}",{% endfor %}],
+    affiliateSearchTerm: '{{ post.post.affiliate-search-term }}',
+    tags: [{% for tag in latest-post.post.tags %}'{{ tag }}',{% endfor %}],
+    categories: [{% for category in latest-post.post.categories %}'{{ category }}',{% endfor %}],
     replaceImagesIncludeTag: '{% raw %}{%- include /master/helpers/blog-image.html name="{name}" alt="{alt}" -%}{% endraw %}',
   }
 
 
   // console.log('----post-test', '{{ post-test.post.id }}');
 
-  members = [{% for member in site.team %}"{{ member.title | replace: " ", "-" | downcase }}",{% endfor %}]
+  members = [{% for member in site.team %}'{{ member.title | replace: " ", "-" | downcase }}',{% endfor %}]
 
   // console.log('FIELDS', fields);
   // console.log('members', members);
@@ -735,6 +745,7 @@ admin:
       }
       Manager.dom().select('#previous-post-container').removeAttribute('hidden');
       Manager.dom().select('#previous-post-id').setInnerHTML(lastPost.lastId);
+      // Manager.dom().select('#previous-post-id').setInnerHTML(Math.round(new Date().getTime() / 1000));
       Manager.dom().select('#previous-post-slug').setInnerHTML(lastPost.lastSlug);
       Manager.dom().select('#previous-post-invoice').setInnerHTML(lastPost.lastInvoice);
       Manager.dom().select('#previous-post-url').setInnerHTML(lastPost.lastUrl);
@@ -884,14 +895,22 @@ admin:
                 return;
               }
 
+              // Fix excerpt
+              data.excerpt = data.excerpt
+                // Remove double quotes
+                .replace(/"/img, '\'')
+                // Remove images and links
+                .replace(/!\[([^\]]*)\]\([^\)]+\)|\[([^\]]+)\]\([^\)]+\)/g, '$1$2')
+
+              // Fix title
+              data.title = data.title
+                // Remove double quotes
+                .replace(/"/img, '\'')
+
               if (data.excerpt.match(/\[*.\]\(/)) {
                 displayError('There is a link or image in the excerpt');
                 return;
               }
-
-              // Fixes
-              data.title = data.title.replace(/"/img, '\'')
-              data.excerpt = data.excerpt.replace(/"/img, '\'')
 
               var lastUrl = '/blog/' + data.url;
               Manager.storage().set('admin.post.lastId', data.id)
@@ -1309,6 +1328,7 @@ admin:
     dom.select('#url').setValue((fields.url || '').replace(/\/(.*?)\//,'').replace(/\//,''));
     dom.select('#date').setValue(date.toISOString().split('T')[0]);
     dom.select('#id').setValue(fields.id || 1);
+    dom.select('#total-posts').setInnerHTML(fields.total);
     dom.select('#author').setValue(fields.author || '');
     dom.select('#affiliate').setValue(fields.affiliateSearchTerm || '');
     dom.select('#tags').setValue((fields.tags || '').toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));

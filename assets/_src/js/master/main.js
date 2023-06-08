@@ -9,13 +9,23 @@ Manager = new (require('web-manager'));
 
 Manager.init(Configuration, function() {
   Manager.log('Init main.js');
-  var app = require('../app/app.js');
-  var slapform;
 
-  Manager.dom().select('form.slapform')
+  var dom = Manager.dom();
+  var url = window.location.href;
+
+  // Load page specific scripts
+  if (url.includes('/pricing')) {
+    dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/pricing-page-handler/index.js'})
+  } else if (url.includes('/download')) {
+    dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/download-page-handler/index.js'})
+  }  
+
+  // Load Slapform
+  var slapform;
+  dom.select('form.slapform')
   .each(function (el, i) {
 
-    Manager.dom().select(el).on('submit', function (event) {
+    dom.select(el).on('submit', function (event) {
       event.preventDefault();
       import('./slapform-processor.js')
       .then(function (mod) {
@@ -24,10 +34,13 @@ Manager.init(Configuration, function() {
       })
     });
 
-    Manager.dom().select(el.querySelector('button[type="submit"]'))
+    dom.select(el.querySelector('button[type="submit"]'))
       .removeAttribute('disabled')
       .removeClass('disabled');
   })
+
+  // Require app.js
+  require('../app/app.js');
 });
 
 // require('./tracking/google-analytics.js')
