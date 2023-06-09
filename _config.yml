@@ -54,6 +54,17 @@ socials:
 comments:
   disqus: "" # string, example: somiibo
 
+download:
+  mac: ''
+  windows: ''
+  linux-debian: ''
+  linux-snap: ''
+
+extension:
+  chrome: ''
+  firefox: ''
+  opera: ''
+
 tracking:
   google-analytics: false # false to disable, example: UA-123456789
   facebook-pixel: false # false to disable, example: fbp-123456789
