@@ -57,6 +57,17 @@ socials:
 comments:
   disqus: "" # string, example: somiibo
 
+download:
+  mac: '' # string, example: https://github.com/somiibo/download-server/releases/download/installer/Somiibo.dmg
+  windows: '' # string, example: https://github.com/somiibo/download-server/releases/download/installer/Somiibo-Setup.exe
+  linux-debian: '' # string, example: https://github.com/somiibo/download-server/releases/download/installer/Somiibo_amd64.deb
+  linux-snap: '' # string, example: https://snapcraft.io/somiibo
+
+extension:
+  chrome: '' # string, example: https://chrome.google.com/webstore/detail/somiibo/opidlipnbfhpdenbnanplcalbdgoplnc
+  firefox: '' # string, example: https://addons.mozilla.org/en-US/firefox/addon/somiibo
+  opera: '' # string, example: https://addons.opera.com/en/extensions/details/somiibo
+
 tracking:
   google-analytics: G-9LBNCESVK6 # false to disable, example: UA-123456789
   facebook-pixel: false # false to disable, example: fbp-123456789
