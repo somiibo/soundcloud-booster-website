@@ -1078,6 +1078,33 @@ admin:
             }
           }
 
+          function toTitleCase(str) {
+            var lowerCaseWords = [
+              // short conjunctions
+              "and", "as", "but", "for", "if", "nor", "or", "so", "yet", "although", "because", "since", "unless",
+
+              // articles
+              "a", "an", "the",
+
+              // short prepositions
+              "as", "at", "by", "for", "in", "of", "off", "on", "per", "to", "up", "via", "with", "from", "over", "under", "about", "after", "against", "between", "during", "into", "through", "upon", "within",
+
+              // other common short words
+              "is", "are", "was", "be", "am", "do"
+            ];            
+
+            return str
+              .split(' ')
+              .map(function (word, i, arr) {
+                if (i === 0 || i === arr.length - 1 || !lowerCaseWords.includes(word.toLowerCase())) {
+                  return word[0].toUpperCase() + word.substr(1).toLowerCase();
+                } else {
+                  return word.toLowerCase();
+                }
+              })
+              .join(' ');
+          }          
+
           dom.select('#google-doc-form').on('submit', function (event) {
             var formData = {};
             dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
@@ -1114,7 +1141,10 @@ admin:
                     .replace('.doc', '')
                     .replace(/[^a-zA-Z0-9\u00C0-\u017F-:\s]+/g, '') // remove non-alphanumeric characters except dashes
                     .replace(/\s+/g, ' ') // replace multiple spaces with one
+                    .trim();
 
+                  // Set title casing
+                  title = toTitleCase(title);
 
                   dom.select('#title').setValue(turndownService.turndown(title))
 
