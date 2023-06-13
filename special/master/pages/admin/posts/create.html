@@ -899,8 +899,6 @@ admin:
               data.excerpt = data.excerpt
                 // Remove double quotes
                 .replace(/"/img, '\'')
-                // Remove images and links
-                .replace(/!\[([^\]]*)\]\([^\)]+\)|\[([^\]]+)\]\([^\)]+\)/g, '$1$2')
 
               // Fix title
               data.title = data.title
@@ -1218,8 +1216,15 @@ admin:
                   // Trim
                   markdown = markdown.trim()
 
+                  // Extract excerpt
+                  var excerpt = markdown
+                    // Remove images and links
+                    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+                    // Separate by line breaks
+                    .match(/(?:.*?\.){2}/)[0] || '';
+
                   // Set exceprt
-                  dom.select('#excerpt').setValue((markdown.match(/(?:.*?\.){2}/, '') || [])[0]);
+                  dom.select('#excerpt').setValue(excerpt);
 
                   dom.select('#body').setValue(markdown);
                   dom.select('#google-doc-error').hide();
