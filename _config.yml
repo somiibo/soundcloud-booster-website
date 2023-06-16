@@ -223,6 +223,7 @@ markdown: kramdown
 plugins:
   - jekyll-paginate-v2
   - jekyll-liquify
+  - jekyll-truthyfalsy
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
