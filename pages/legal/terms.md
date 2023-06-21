@@ -86,7 +86,7 @@ We reserve the right to alter the amount or terms of our subscription fees at an
 
 We reserve the right to charge you for any unauthorized use of your subscription by third parties. We reserve the right to terminate your account without the possibility of a refund if we find that you are violating any portion of this contract.
 
-You may cancel your subscription at any time by visiting [{{ site.url }}/authentication/account]({{ site.url }}/authentication/account) and manually canceling your subscription.
+You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and manually canceling your subscription.
 
 Upon cancellation you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
 
