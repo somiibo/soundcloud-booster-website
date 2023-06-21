@@ -151,7 +151,7 @@ settings:
           enabled: true,
           config: {
             apiKey: 'AIzaSyA3-YBkywbzpstijvMqUwn_a0GQTi3EZQc',
-            authDomain: 'somiibo-91d13.firebaseapp.com',
+            authDomain: 'auth.somiibo.com',
             databaseURL: 'https://somiibo-91d13.firebaseio.com',
             projectId: 'somiibo-91d13',
             storageBucket: 'somiibo-91d13.appspot.com',
