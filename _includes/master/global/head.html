@@ -1,5 +1,12 @@
 {% assign page-url-stripped = page.url | replace: 'index.html', '' %}
 
+{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
+  {% assign page_is_post = true %}
+{% else %}
+  {% assign page_is_post = false %}
+{% endif %}
+
+
 <!-- Prefetch -->
 <link rel="dns-prefetch" href="https://fonts.gstatic.com/" >
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/" >
@@ -35,7 +42,7 @@
 <link rel="manifest" href="{{ site.url }}/manifest.json">
 
 <!-- Title -->
-{%- if page.layout contains 'post' and page.post.title != null and page.post.title != '' -%}
+{%- if page_is_post and page.post.title != null and page.post.title != '' -%}
   {% assign page-title = page.post.title | liquify %}
 {%- elsif page.meta.title != null and page.meta.title != '' -%}
   {% assign page-title = page.meta.title | liquify %}
@@ -49,7 +56,7 @@
 <meta property="og:title" content="{{ page-title }}" />
 
 <!-- Description -->
-{%- if page.layout contains 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
+{%- if page_is_post and page.post.excerpt != null and page.post.excerpt != '' -%}
   {% assign page-description = page.post.excerpt | liquify %}
 {%- elsif page.meta.description != null and page.meta.description != '' -%}
   {% assign page-description = page.meta.description | liquify %}
@@ -63,7 +70,7 @@
 <meta property="og:description" content="{{ page-description }}" />
 
 <!-- Image -->
-{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
+{%- if page_is_post and page.post.id != null and page.post.id != '' -%}
   {% capture page-image %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page-url-stripped | split: '/' | last }}.jpg{% endcapture %}
 {%- elsif page.meta.og-image != null and page.meta.og-image != '' -%}
   {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
@@ -80,7 +87,12 @@
 
 <!-- OG: Facebook / Open Graph -->
 <meta property="og:url" content="{{ site.url }}{{ page-url-stripped }}" />
-<meta property="og:type" content="article" />
+{%- if page_is_post -%}
+  {% assign og-type = 'article' %}
+{%- else -%}
+  {% assign og-type = 'website' %}
+{%- endif -%}
+<meta property="og:type" content="{{ og-type }}" />
 
 <!-- Main Feed -->
 <link href="{{ site.url }}/feed.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
@@ -102,7 +114,7 @@
   var Configuration = {
     page: {
       code: '{{ page.settings.page-code | default: page.meta.breadcrumb | default: page.post.breadcrumb | default: "" | liquify }}',
-      type: '{%- if page.layout contains 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
+      type: '{%- if page_is_post -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.meta.breadcrumb | default: page.post.breadcrumb | liquify }}',
       settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },
@@ -113,11 +125,11 @@
       cacheBreaker: '{{ site.time | date: '%s' }}',
       settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
-        name: '{{ site.brand.name }}'
+        name: '{{ site.brand.name }}',
       },
       contact: {
         emailSupport: '{{ site.contact.email-support }}',
-        emailBusiness: '{{ site.contact.email-business }}'
+        emailBusiness: '{{ site.contact.email-business }}',
       },
       validRedirectHosts: ['itwcreativeworks.com'],
       // tracking: {
@@ -173,7 +185,7 @@
 
 <!-- CSS - Social Share Kit Style -->
 {% assign include_socialsharekitscript = false %}
-{%- if page.layout contains 'post' -%}
+{%- if page_is_post -%}
   {%- if page.settings.include-socialsharekit == false -%}
     {% assign include_socialsharekitscript = false %}
   {%- elsif layout.settings.include-socialsharekit == false -%}
