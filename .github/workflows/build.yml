@@ -37,6 +37,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 10
+      - name: Run node install
+        run: npm install
       - name: Log dependency versions
         run: |
           echo -n "Ruby: " && ruby -v
@@ -44,9 +46,7 @@ jobs:
           echo -n "Bundler: " && bundle -v
           echo -n "Node: " && node -v
           echo -n "NPM: " && npm -v
-          echo "Dependencies: " && npm list --depth=0
-      - name: Run node install
-        run: npm install
+          echo "Dependencies: " && npm list --depth=0        
       - name: Run node build
         run: npm run build -- --buildLocation='server' --skipJekyll='true'
       - name: Create build.json
