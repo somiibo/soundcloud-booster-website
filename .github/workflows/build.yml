@@ -44,7 +44,7 @@ jobs:
           echo -n "Bundler: " && bundle -v
           echo -n "Node: " && node -v
           echo -n "NPM: " && npm -v
-          echo "Dependencies: " && npm out
+          echo "Dependencies: " && npm list --depth=0
       - name: Run node install
         run: npm install
       - name: Run node build
