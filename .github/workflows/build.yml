@@ -28,7 +28,7 @@ jobs:
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0'
+          ruby-version: '3.0.0'
           bundler-cache: false
       - name: Run bundle install
         run: |
@@ -39,6 +39,15 @@ jobs:
           node-version: 10
       - name: Run node install
         run: npm install
+      - name: Log dependency versions
+        run: |
+          echo "Ruby: $(ruby -v)"
+          echo "Gem: $(gem -v)"
+          echo "Bundler: $(bundle -v)"
+          echo "Node: $(node -v)"
+          echo "NPM: $(npm -v)"
+          echo "Dependencies: "
+          npm list --depth=0 || echo ""
       - name: Run node build
         run: npm run build -- --buildLocation='server' --skipJekyll='true'
       - name: Create build.json

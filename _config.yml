@@ -106,8 +106,8 @@ manifest:
   theme-color: "#ffffff" # example: #ffffff
   background-color: "#ffffff" # example: #ffffff
   display: "standalone" # example: standalone
-  start-url: "index.html" # example: index.html, /maps/?source=pwa
-  scope: "/" # example: /maps/, /
+  start-url: "/?source=pwa" # example: /, /maps/?source=pwa
+  scope: "/" # example: /, /maps/
   orientation: "portrait" # example: portrait,
 
 schema:
@@ -241,6 +241,7 @@ markdown: kramdown
 plugins:
   - jekyll-paginate-v2
   - jekyll-liquify
+  - jekyll-truthyfalsy
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list

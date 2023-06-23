@@ -9,7 +9,7 @@ const tasks = [];
 requireDir('./_websrc/gulp_tasks', {recurse: true});
 
 // Log important stuff
-console.log('Using Node.js v', process.versions.node);
+console.log(`Using Node.js v${process.versions.node}`);
 console.log('Command line args => ', argv);
 
 Object.keys(config.tasks).forEach(function (key) {

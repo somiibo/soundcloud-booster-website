@@ -1,3 +1,12 @@
+{% assign page-url-stripped = page.url | replace: 'index.html', '' %}
+
+{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
+  {% assign page_is_post = true %}
+{% else %}
+  {% assign page_is_post = false %}
+{% endif %}
+
+
 <!-- Prefetch -->
 <link rel="dns-prefetch" href="https://fonts.gstatic.com/" >
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/" >
@@ -16,15 +25,15 @@
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 
-<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<link rel="canonical" href="{{ site.url }}{{ page-url-stripped }}">
 
 {%- if page.meta.index == false or layout.meta.index == false or site.meta.index == false -%}
   <meta name="robots" content="noindex">
 {% endif %}
 
-{%- if page.meta.keywords != null and page.meta.keywords != "" -%}
+{%- if page.meta.keywords != null and page.meta.keywords != '' -%}
   <meta name="keywords" content="{{ page.meta.keywords }}">
-{%- elsif site.meta.keywords != null and site.meta.keywords != "" -%}
+{%- elsif site.meta.keywords != null and site.meta.keywords != '' -%}
   <meta name="keywords" content="{{ site.meta.keywords }}">
 {%- else -%}
 {%- endif -%}
@@ -33,11 +42,11 @@
 <link rel="manifest" href="{{ site.url }}/manifest.json">
 
 <!-- Title -->
-{%- if page.layout contains 'post' and page.post.title != null and page.post.title != '' -%}
+{%- if page_is_post and page.post.title != null and page.post.title != '' -%}
   {% assign page-title = page.post.title | liquify %}
-{%- elsif page.meta.title != null and page.meta.title != "" -%}
+{%- elsif page.meta.title != null and page.meta.title != '' -%}
   {% assign page-title = page.meta.title | liquify %}
-{%- elsif layout.meta.title != null and layout.meta.title != "" -%}
+{%- elsif layout.meta.title != null and layout.meta.title != '' -%}
   {% assign page-title = layout.meta.title | liquify %}
 {%- else -%}
   {% assign page-title = site.meta.title | liquify %}
@@ -47,11 +56,11 @@
 <meta property="og:title" content="{{ page-title }}" />
 
 <!-- Description -->
-{%- if page.layout contains 'post' and page.post.excerpt != null and page.post.excerpt != '' -%}
+{%- if page_is_post and page.post.excerpt != null and page.post.excerpt != '' -%}
   {% assign page-description = page.post.excerpt | liquify %}
-{%- elsif page.meta.description != null and page.meta.description != "" -%}
+{%- elsif page.meta.description != null and page.meta.description != '' -%}
   {% assign page-description = page.meta.description | liquify %}
-{%- elsif layout.meta.description != null and layout.meta.description != "" -%}
+{%- elsif layout.meta.description != null and layout.meta.description != '' -%}
   {% assign page-description = layout.meta.description | liquify %}
 {%- else -%}
   {% assign page-description = site.meta.description | liquify %}
@@ -61,9 +70,9 @@
 <meta property="og:description" content="{{ page-description }}" />
 
 <!-- Image -->
-{%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
-  {% capture page-image %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page.url | split: "/" | last }}.jpg{% endcapture %}
-{%- elsif page.meta.og-image != null and page.meta.og-image != "" -%}
+{%- if page_is_post and page.post.id != null and page.post.id != '' -%}
+  {% capture page-image %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page-url-stripped | split: '/' | last }}.jpg{% endcapture %}
+{%- elsif page.meta.og-image != null and page.meta.og-image != '' -%}
   {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
 {%- else -%}
   {% capture page-image %}{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}{% endcapture %}
@@ -77,8 +86,13 @@
 <meta name="twitter:widgets:theme" content="light">
 
 <!-- OG: Facebook / Open Graph -->
-<meta property="og:url" content="{{ site.url }}{{ page.url }}" />
-<meta property="og:type" content="article" />
+<meta property="og:url" content="{{ site.url }}{{ page-url-stripped }}" />
+{%- if page_is_post -%}
+  {% assign og-type = 'article' %}
+{%- else -%}
+  {% assign og-type = 'website' %}
+{%- endif -%}
+<meta property="og:type" content="{{ og-type }}" />
 
 <!-- Main Feed -->
 <link href="{{ site.url }}/feed.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
@@ -100,7 +114,7 @@
   var Configuration = {
     page: {
       code: '{{ page.settings.page-code | default: page.meta.breadcrumb | default: page.post.breadcrumb | default: "" | liquify }}',
-      type: '{%- if page.layout contains 'post' -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
+      type: '{%- if page_is_post -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.meta.breadcrumb | default: page.post.breadcrumb | liquify }}',
       settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },
@@ -108,15 +122,22 @@
       app: '{{ site.app }}',
       version: '{{ site.version }}',
       url: '{{ site.url }}',
-      cacheBreaker: '{{ site.time | date: '%s' }}',
+      cacheBreaker: '{{ site.time | date: "%s" }}',
       settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
-        name: '{{ site.brand.name }}'
+        name: '{{ site.brand.name }}',
       },
       contact: {
         emailSupport: '{{ site.contact.email-support }}',
-        emailBusiness: '{{ site.contact.email-business }}'
+        emailBusiness: '{{ site.contact.email-business }}',
       },
+      download: {
+        windows: '{{ site.download.windows }}',
+        mac: '{{ site.download.mac }}',
+        linuxDebian: '{{ site.download.linux-debian }}',
+        linuxSnap: '{{ site.download.linux-snap }}',
+      },
+      validRedirectHosts: ['itwcreativeworks.com'],
       // tracking: {
       //   googleAnalytics: '{{ site.tracking.google-analytics }}',
       //   facebookPixel: '{{ site.tracking.facebook-pixel }}',
@@ -128,9 +149,9 @@
 
 <!-- Favicon -->
 {%- if site.favicon.path != null and site.favicon.path != '' -%}
-{% assign favicon_path = site.favicon.path %}
+  {% assign favicon_path = site.favicon.path %}
 {%- else -%}
-{% assign favicon_path = '/assets/images/favicon' %}
+  {% assign favicon_path = '/assets/images/favicon' %}
 {%- endif -%}
 
 <link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
@@ -170,7 +191,7 @@
 
 <!-- CSS - Social Share Kit Style -->
 {% assign include_socialsharekitscript = false %}
-{%- if page.layout contains 'post' -%}
+{%- if page_is_post -%}
   {%- if page.settings.include-socialsharekit == false -%}
     {% assign include_socialsharekitscript = false %}
   {%- elsif layout.settings.include-socialsharekit == false -%}
@@ -280,7 +301,7 @@
 </script>
 
 <!-- Add DEV click -->
-{%- if site.url contains ":40" -%}
+{%- if site.url contains ':40' -%}
 <script type="text/javascript">
   Manager.ready(function () {
     // Log development info

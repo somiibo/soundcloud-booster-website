@@ -82,7 +82,25 @@ gulp.task('clean:npm', async function () {
 });
 
 gulp.task('template:update', async function () {
-  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git pull && git merge template -m "Merged from template." && git push origin`)
+  await asyncCmd(`git checkout master`)
+  .then(data => {
+    console.log(data)
+  })
+  .catch(e => {})
+
+  await asyncCmd(`git add . && git commit -m "UJ: Pre-merge commit + push"`)
+  .then(data => {
+    console.log(data)
+  })
+  .catch(e => {})
+
+  await asyncCmd(`git push origin`)
+  .then(data => {
+    console.log(data)
+  })
+  .catch(e => {})
+
+  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git pull && git merge template -m "UJ: Merged from template." && git push origin`)
   .then(data => {
     console.log(data)
   })
@@ -92,7 +110,7 @@ gulp.task('template:update', async function () {
 });
 
 gulp.task('template:setup', async function () {
-  return asyncCmd(`git checkout master && git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git && git remote set-url --push upstream no_push && git fetch upstream template && git merge upstream/template --allow-unrelated-histories -m "Merge from template."`)
+  return asyncCmd(`git checkout master && git remote add upstream https://github.com/itw-creative-works/ultimate-jekyll.git && git remote set-url --push upstream no_push && git fetch upstream template && git merge upstream/template --allow-unrelated-histories -m "UJ: Merge from template."`)
   .then(data => {
     console.log(data)
   })

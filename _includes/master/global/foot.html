@@ -1,5 +1,3 @@
-
-
 {%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
   {% assign page_is_post = true %}
 {% else %}
@@ -115,12 +113,14 @@
 {% elsif site.tracking.google-analytics == false %}
 {% else %}
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id={{ site.tracking.google-analytics }}" async></script>
-  <script type="text/javascript" async>
+  <script type="text/javascript">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', '{{ site.tracking.google-analytics }}');
+    gtag('config', '{{ site.tracking.google-analytics }}', {
+      // 'user_id': 'USER_ID',
+    });
   </script>
 {% endif %}
 
@@ -129,7 +129,7 @@
 {% elsif layout.tracking.facebook-pixel == false %}
 {% elsif site.tracking.facebook-pixel == false %}
 {% else %}
-  <script type="text/javascript" async>
+  <script type="text/javascript">
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -138,6 +138,7 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
+
     fbq('init', '{{ site.tracking.facebook-pixel }}');
     fbq('track', 'PageView');
   </script>
@@ -153,7 +154,7 @@
 {% elsif layout.tracking.tiktok-pixel == false %}
 {% elsif site.tracking.tiktok-pixel == false %}
 {% else %}
-  <script>
+  <script type="text/javascript">
     !function (w, d, t) {
       //part1
       w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
@@ -313,28 +314,79 @@
     "description": "{{ site.brand.description }}",
     "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
     "sameAs": [
-      {%- if site.socials.linkedin != null -%}
-      "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
+      {%- assign facebook_truthy = site.socials.facebook | istruthy -%}
+      {%- if facebook_truthy -%}
+      "https://www.facebook.com/{{ site.socials.facebook }}/",
       {%- endif -%}
 
-      {%- if site.socials.youtube != null -%}
-      "https://www.youtube.com/channel/{{ site.socials.youtube }}",
-      {%- endif -%}
-
-      {%- if site.socials.twitter != null -%}
+      {%- assign twitter_truthy = site.socials.twitter | istruthy -%}
+      {%- if twitter_truthy -%}
       "https://twitter.com/{{ site.socials.twitter }}",
       {%- endif -%}
 
-      {%- if site.socials.instagram != null -%}
+      {%- assign linkedin_truthy = site.socials.linkedin | istruthy -%}
+      {%- if linkedin_truthy -%}
+      "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
+      {%- endif -%}
+
+      {%- assign youtube_truthy = site.socials.youtube | istruthy -%}
+      {%- if youtube_truthy -%}
+      "https://www.youtube.com/c/{{ site.socials.youtube }}",
+      {%- endif -%}
+
+      {%- assign instagram_truthy = site.socials.instagram | istruthy -%}
+      {%- if instagram_truthy -%}
       "https://www.instagram.com/{{ site.socials.instagram }}/",
       {%- endif -%}
 
-      {%- if site.socials.tumblr != null -%}
+      {%- assign tumblr_truthy = site.socials.tumblr | istruthy -%}
+      {%- if tumblr_truthy -%}
       "https://{{ site.socials.tumblr }}.tumblr.com/",
       {%- endif -%}
 
-      {%- if site.socials.facebook != null -%}
-      "https://www.facebook.com/{{ site.socials.facebook }}/",
+      {%- assign slack_truthy = site.socials.slack | istruthy -%}
+      {%- if slack_truthy -%}
+      "https://{{ site.socials.slack }}.slack.com/",
+      {%- endif -%}
+
+      {%- assign discord_truthy = site.socials.discord | istruthy -%}
+      {%- if discord_truthy -%}
+      "https://discord.gg/{{ site.socials.discord }}",
+      {%- endif -%}
+
+      {%- assign github_truthy = site.socials.github | istruthy -%}
+      {%- if github_truthy -%}
+      "https://github.com/{{ site.socials.github }}",
+      {%- endif -%}
+
+      {%- assign dev_truthy = site.socials.dev | istruthy -%}
+      {%- if dev_truthy -%}
+      "https://dev.to/{{ site.socials.dev }}",
+      {%- endif -%}
+
+      {%- assign tiktok_truthy = site.socials.tiktok | istruthy -%}
+      {%- if tiktok_truthy -%}
+      "https://www.tiktok.com/@{{ site.socials.tiktok }}",
+      {%- endif -%}
+
+      {%- assign twitch_truthy = site.socials.twitch | istruthy -%}
+      {%- if twitch_truthy -%}
+      "https://www.twitch.tv/{{ site.socials.twitch }}",
+      {%- endif -%}
+
+      {%- assign soundcloud_truthy = site.socials.soundcloud | istruthy -%}
+      {%- if soundcloud_truthy -%}
+      "https://soundcloud.com/{{ site.socials.soundcloud }}",
+      {%- endif -%}
+
+      {%- assign spotify_truthy = site.socials.spotify | istruthy -%}
+      {%- if spotify_truthy -%}
+      "https://open.spotify.com/artist/{{ site.socials.spotify }}",
+      {%- endif -%}
+
+      {%- assign mixcloud_truthy = site.socials.mixcloud | istruthy -%}
+      {%- if mixcloud_truthy -%}
+      "https://www.mixcloud.com/{{ site.socials.mixcloud }}/",
       {%- endif -%}
 
       "{{ site.url }}"
