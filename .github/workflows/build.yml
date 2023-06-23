@@ -41,12 +41,13 @@ jobs:
         run: npm install
       - name: Log dependency versions
         run: |
-          echo -n "Ruby: " && ruby -v
-          echo -n "Gem: " && gem -v
-          echo -n "Bundler: " && bundle -v
-          echo -n "Node: " && node -v
-          echo -n "NPM: " && npm -v
-          echo "Dependencies: " && npm list --depth=0        
+          echo "Ruby: $(ruby -v)"
+          echo "Gem: $(gem -v)"
+          echo "Bundler: $(bundle -v)"
+          echo "Node: $(node -v)"
+          echo "NPM: $(npm -v)"
+          echo "Dependencies: "
+          npm list --depth=0 || echo ""
       - name: Run node build
         run: npm run build -- --buildLocation='server' --skipJekyll='true'
       - name: Create build.json
