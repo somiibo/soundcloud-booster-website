@@ -37,6 +37,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 10
+      - name: Log dependency versions
+        run: |
+          echo -n "Ruby: " && ruby -v
+          echo -n "Gem: " && gem -v
+          echo -n "Bundler: " && bundle -v
+          echo -n "Node: " && node -v
+          echo -n "NPM: " && npm -v
       - name: Run node install
         run: npm install
       - name: Run node build

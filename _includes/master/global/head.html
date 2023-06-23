@@ -122,7 +122,7 @@
       app: '{{ site.app }}',
       version: '{{ site.version }}',
       url: '{{ site.url }}',
-      cacheBreaker: '{{ site.time | date: '%s' }}',
+      cacheBreaker: '{{ site.time | date: "%s" }}',
       settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
         name: '{{ site.brand.name }}',
@@ -130,6 +130,12 @@
       contact: {
         emailSupport: '{{ site.contact.email-support }}',
         emailBusiness: '{{ site.contact.email-business }}',
+      },
+      download: {
+        windows: '{{ site.download.windows }}',
+        mac: '{{ site.download.mac }}',
+        linuxDebian: '{{ site.download.linux-debian }}',
+        linuxSnap: '{{ site.download.linux-snap }}',
       },
       validRedirectHosts: ['itwcreativeworks.com'],
       // tracking: {
