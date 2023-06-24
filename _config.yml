@@ -27,7 +27,7 @@ app: 'somiibo'
 meta:
   title: "SoundCloud Bot - Get real followers, plays, likes, reposts, and comments - SoundCloudBooster"
   description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!"
-  og-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-square-black-1024x1024.png"
+  og-image: "https://cdn.itwcreativeworks.com/assets/somiibo/images/socials/somiibo-brandmark-square-blue-1024x1024.png"
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
 
@@ -95,7 +95,7 @@ brand:
   name: "SoundCloud Booster" # example: Google
   type: "Corporation" # example: Corporation
   description: "Automate your SoundCloud activity with this free like bot, follow bot & play bot. SoundCloudBooster is a follow bot and play generator all in one. Increase SoundCloud followers & plays for free!" # example: A search engine company.
-  logo-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-square-black-1024x1024.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
+  logo-image: "https://cdn.itwcreativeworks.com/assets/somiibo/images/logo/somiibo-brandmark-blue-1024x1024.png" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.png
   logo-image-svg: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" # URL | LOCAL path, example: https://defaultogimage.com, /assets/img/og/og.svg
   address-locality: "Los Angeles" # String | example: Los Angeles
   address-country: "United States" # String | example: United States
