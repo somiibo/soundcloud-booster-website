@@ -449,23 +449,7 @@ settings:
     })
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
 
-    // console.log('---redirect', redirectIsValid, redirectUrl);
-    // if (url.pathname.match(/signout/img)) {
-    //   if (!user) {
-    //     url.pathname = 'authentication/signin';
-    //     return redirect(url.toString());
-    //   } else {
-    //     firebase.auth().onAuthStateChanged(function (user) {
-    //       if (!user) {
-    //         url.pathname = 'authentication/signin';
-    //         return redirect(url.toString());
-    //       }
-    //     })
-    //     display('waiting');
-    //     return
-    //   }
-    // }
-
+    // Process the auth
     firebase.auth()
       .getRedirectResult()
       .then(function (result) {
@@ -491,12 +475,12 @@ settings:
 
             if (url.pathname.match(/signout/img)) {
               if (!user) {
-                url.pathname = 'authentication/signin';
+                url.pathname = 'signin';
                 return redirect(url.toString());
               } else {
                 firebase.auth().onAuthStateChanged(function (user) {
                   if (!user) {
-                    url.pathname = 'authentication/signin';
+                    url.pathname = 'signin';
                     return redirect(url.toString());
                   }
                 })
@@ -596,7 +580,7 @@ settings:
 
     /*
       firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider('google.com'))
-      http://localhost:4000/authentication/oauth/?provider=google.com&signout=true&development=true
+      http://localhost:4000/oauth2/?provider=google.com&signout=true&development=true
     */
 
     document.addEventListener('click', function (event) {
