@@ -4,6 +4,28 @@
   {% assign page_is_post = false %}
 {% endif %}
 
+{%- capture analytics-unused-ga %}
+  <script type="text/javascript">
+    function gtag() {};
+  </script>
+{% endcapture -%}
+
+{%- capture analytics-unused-meta %}
+  <script type="text/javascript">
+    function fbq() {};
+  </script>
+{% endcapture -%}
+
+{%- capture analytics-unused-tiktok %}
+  <script type="text/javascript">
+    window.ttq = {
+      load: function () {},
+      page: function () {},
+      track: function () {},
+    }
+  </script>
+{% endcapture -%}
+
 <!-- Master - Alert Box -->
 <div class="master-alert master-alert-outdated">
   <span class="master-alert-close" onclick="this.parentElement.style.display='none';">&times;</span>
@@ -109,8 +131,11 @@
 
 <!-- Script - Google Analytics Tracking Script -->
 {%- if page.tracking.google-analytics == false -%}
+  {{ analytics-unused-ga }}
 {% elsif layout.tracking.google-analytics == false %}
+  {{ analytics-unused-ga }}
 {% elsif site.tracking.google-analytics == false %}
+  {{ analytics-unused-ga }}
 {% else %}
   <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id={{ site.tracking.google-analytics }}" async></script>
   <script type="text/javascript">
@@ -126,8 +151,11 @@
 
 <!-- Script - Facebook Pixel Tracking Script -->
 {%- if page.tracking.facebook-pixel == false -%}
+  {{ analytics-unused-meta }}
 {% elsif layout.tracking.facebook-pixel == false %}
+  {{ analytics-unused-meta }}
 {% elsif site.tracking.facebook-pixel == false %}
+  {{ analytics-unused-meta }}
 {% else %}
   <script type="text/javascript">
     !function(f,b,e,v,n,t,s)
@@ -151,8 +179,11 @@
 
 <!-- Script - TikTok Pixel Tracking Script -->
 {%- if page.tracking.tiktok-pixel == false -%}
+  {{ analytics-unused-tiktok }}
 {% elsif layout.tracking.tiktok-pixel == false %}
+  {{ analytics-unused-tiktok }}
 {% elsif site.tracking.tiktok-pixel == false %}
+  {{ analytics-unused-tiktok }}
 {% else %}
   <script type="text/javascript">
     !function (w, d, t) {
