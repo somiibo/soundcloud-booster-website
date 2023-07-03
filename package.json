@@ -87,6 +87,6 @@
     "web-manager": "3.1.38",
     "webpack": "5.88.0",
     "webpack-stream": "6.1.2",
-    "yargs": "16.2.0_"
+    "yargs": "16.2.0"
   }
 }
