@@ -8,10 +8,12 @@ sitemap:
 ### REGULAR PAGES ###
 meta:
   title: "{{ site.brand.name }} - Home"
-  description: "We at {{ site.brand.name }} are a great company and would love to design an intuitive solution for you!"
+  description: "{{ site.meta.description }}"
   breadcrumb: "Home"  
 ---
 # Welcome to {{ site.brand.name }}
+{{ site.meta.description }}
+
 We at {{ site.brand.name }} are a great company and would love to design an intuitive solution for you!
 
 ## Create an account at {{ site.brand.name }}
@@ -20,10 +22,12 @@ We at {{ site.brand.name }} are a great company and would love to design an intu
 - [Sign up]({{ site.url }}/signup)
 - [Recover account]({{ site.url }}/forgot)
 
+## Get started
+- [Download]({{ site.url }}/download)
+
 ## Navigation
 - [Contact us]({{ site.url }}/contact)
 - [About]({{ site.url }}/about)
 - [Terms of Service]({{ site.url }}/terms)
 - [Privacy Policy]({{ site.url }}/privacy)
 - [Cookie Policy]({{ site.url }}/cookies)
-

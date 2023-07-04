@@ -2,6 +2,20 @@
 ### ALL PAGES ###
 layout: null
 permalink: /analytics/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Analytics - {{ site.brand.name }}"
+  description: "Test {{ site.brand.name }} analytics"
+  breadcrumb: "Analytics"
+  index: false
+
+foot:
+  post-bundle-script: '
+    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+  '
 ---
 <!doctype html>
 <html lang="en">
