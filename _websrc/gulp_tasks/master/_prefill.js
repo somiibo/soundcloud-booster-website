@@ -67,6 +67,8 @@ gulp.task('_prefill', async () => {
           await fs.write('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
           await fs.write('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
           await fs.write('./pages/blog.md', await readFile('./_websrc/templates/master/placeholder/blog.md'))
+          await fs.write('./pages/download.md', await readFile('./_websrc/templates/master/placeholder/download.md'))
+          await fs.write('./pages/extension.md', await readFile('./_websrc/templates/master/placeholder/extension.md'))
         }
 
         if ((!fs.exists('./pages/404.md') && !fs.exists('./pages/404.html')) || tools.isTemplate) {

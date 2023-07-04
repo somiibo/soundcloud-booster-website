@@ -100,13 +100,19 @@ gulp.task('template:update', async function () {
   })
   .catch(e => {})
 
-  return asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git pull && git merge template -m "UJ: Merged from template." && git push origin`)
+  await asyncCmd(`git checkout template && git fetch upstream && git pull upstream && git checkout master && git pull && git merge template -m "UJ: Merged from template." && git push origin`)
   .then(data => {
     console.log(data)
   })
   .catch(err => {
     console.log('Error executing command:', err)
   })
+
+  return await asyncCmd(`npm install`)
+  .then(data => {
+    console.log(data)
+  })
+  .catch(e => {})  
 });
 
 gulp.task('template:setup', async function () {

@@ -18,7 +18,9 @@ Manager.init(Configuration, function() {
     dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/pricing-page-handler/index.js'})
   } else if (url.includes('/download')) {
     dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/download-page-handler/index.js'})
-  }  
+  } else if (url.includes('/browser-extension') || url.includes('/extension')) {
+    dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/browser-extension-page-handler/index.js'})
+  }
 
   // Load Slapform
   var slapform;

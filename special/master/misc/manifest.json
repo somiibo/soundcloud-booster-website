@@ -81,7 +81,7 @@ sitemap:
   "display": "{{ display }}",
   "start_url": "{{ start-url }}",
   "scope": "{{ scope }}",
-  "orientation": "{{ orientation }}"
+  "orientation": "{{ orientation }}",
 
   "gcm_sender_id": "103953800507",
 
