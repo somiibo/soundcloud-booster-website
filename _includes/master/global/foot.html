@@ -230,9 +230,6 @@
 {% elsif layout.advertising.google-adsense == false %}
 {% elsif site.advertising.google-adsense == false %}
 {% else %}
-  {% comment %}
-  <script data-ad-client="ca-{{ site.advertising.google-adsense }}" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  {% endcomment %}
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{{ site.advertising.google-adsense }}" crossorigin="anonymous"></script>
 {% endif %}
 

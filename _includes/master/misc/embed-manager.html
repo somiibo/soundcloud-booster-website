@@ -13,85 +13,85 @@
     inIframe = true;
   }
 
-  if (inIframe) {
-    function _sendParentMessage(message) {
-      window.parent.postMessage(message, '*')
-    }
+  if (!inIframe)  {return}
 
-    function messageHandler() {
-      var message = event.data || {};
-      var command = message.command || '';
-      var payload = message.payload || {};
-
-      console.log('Message', command, payload.type, message);
-
-      if (command === 'embed-manager:update') {
-        if (payload.type === 'theme-change') {
-          setTheme(payload.theme)
-        }
-      }
-    }
-
-    function setTheme(theme) {
-      try {
-        theme = theme || HSThemeAppearance.getAppearance();
-        HSThemeAppearance.setAppearance(theme)
-        document.body.setAttribute('data-theme', theme);
-      } catch (e) {
-        console.error('Cannot set appearance', e);
-      }
-    }
-
-    setTheme();
-
-    window.addEventListener('message', messageHandler, false);
-
-    // Fetch build.json
-    fetch('{{ site.url }}/@output/build/build.json?cb=' + new Date().getTime(), {
-      method: 'GET',
-    })
-    .then(function (res) {
-      if (res.ok) {
-        res.json()
-        .then(function (data) {
-          _sendParentMessage({
-            command: 'embed-manager:update',
-            payload: {
-              type: 'init',
-              url: window.location.href,
-              build: data,
-            },
-          })
-        })
-      } else {
-        return res.text()
-        .then(function (data) {
-          throw new Error(data || res.statusText || 'Unknown error.')
-        })
-      }
-    })
-    .catch(function (e) {
-      var error = new Error('Failed to fetch build.json: ' + e)
-      console.error(error);
-      alert(error)
-    })
-
-    // Fetch auth
-    Manager.auth().ready(function () {
-      var user = firebase.auth().currentUser || {};
-      _sendParentMessage({
-        command: 'embed-manager:update',
-        payload: {
-          type: 'auth',
-          user: {
-            authenticated: !!user.uid,
-            uid: user.uid,
-            email: user.email,
-          },
-
-        }
-      })
-    })
-
+  function _sendParentMessage(message) {
+    window.parent.postMessage(message, '*')
   }
+
+  function messageHandler() {
+    var message = event.data || {};
+    var command = message.command || '';
+    var payload = message.payload || {};
+
+    console.log('Message', command, payload.type, message);
+
+    if (command === 'embed-manager:update') {
+      if (payload.type === 'theme-change') {
+        setTheme(payload.theme)
+      }
+    }
+  }
+
+  function setTheme(theme) {
+    try {
+      theme = theme || HSThemeAppearance.getAppearance();
+      HSThemeAppearance.setAppearance(theme)
+      document.body.setAttribute('data-theme', theme);
+    } catch (e) {
+      console.error('Cannot set appearance', e);
+    }
+  }
+
+  setTheme();
+
+  window.addEventListener('message', messageHandler, false);
+
+  // Fetch build.json
+  fetch('{{ site.url }}/@output/build/build.json?cb=' + new Date().getTime(), {
+    method: 'GET',
+  })
+  .then(function (res) {
+    if (res.ok) {
+      res.json()
+      .then(function (data) {
+        _sendParentMessage({
+          command: 'embed-manager:update',
+          payload: {
+            type: 'init',
+            url: window.location.href,
+            build: data,
+          },
+        })
+      })
+    } else {
+      return res.text()
+      .then(function (data) {
+        throw new Error(data || res.statusText || 'Unknown error.')
+      })
+    }
+  })
+  .catch(function (e) {
+    var error = new Error('Failed to fetch build.json: ' + e)
+    console.error(error);
+    alert(error)
+  })
+
+  // Fetch auth
+  Manager.auth().ready(function () {
+    var user = firebase.auth().currentUser || {};
+    _sendParentMessage({
+      command: 'embed-manager:update',
+      payload: {
+        type: 'auth',
+        user: {
+          authenticated: !!user.uid,
+          uid: user.uid,
+          email: user.email,
+        },
+
+      }
+    })
+  })
+
 </script>
