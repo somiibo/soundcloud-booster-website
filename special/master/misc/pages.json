@@ -15,17 +15,23 @@ meta:
   {%- if site.search.enable != false -%}
     {% for page in data %}
 
+      {%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
+        {% assign page-type = 'post' %}
+      {% else %}
+        {% assign page-type = null %}
+      {% endif %}    
+
       {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or page.search.enable == false -%}
         {%- continue -%}
       {%- endif -%}
 
       {
         "url": "{{ site.url }}{{ page.url }}",
-        "category": "{{ page.search.category | default: page.meta.category }}",
-        "title": "{{ page.meta.title }}",
-        "desc": "{{ page.meta.description }}",
+        "title": "{{ page.meta.title | liquify }}",
+        "desc": "{{ page.meta.description | liquify }}",
         "breadcrumb": "{{ page.meta.breadcrumb | liquify }}",
-        "type": "{{ page.settings.page-type }}"
+        "category": "{{ page.search.category | default: page.post.category | liquify }}",
+        "type": "{{ page-type| default: page.settings.page-type | liquify }}"
       }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   {%- endif -%}
