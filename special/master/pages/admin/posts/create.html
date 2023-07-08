@@ -260,9 +260,13 @@ admin:
           </div>
 
           <div class="col-md-4 col-lg-3 col-xxl-2">
-              <img class="img-fluid img-thumbnail mb-1" id="headerImageURLPreview" src="" alt="" style="min-width: 100%; min-height: 10px">
-              <span id="preview-icon-error" class="text-danger" hidden>Error loading image...</span>
+            <img class="img-fluid img-thumbnail mb-1" id="headerImageURLPreview" src="" alt="" style="min-width: 100%; min-height: 10px">
+            <span id="preview-icon-error" class="text-danger" hidden>Error loading image...</span>
+            <div id="unsplash-credits" hidden>
+              Photo by <a id="unsplash-credits-artist" href="" target="_blank"></a> on <a id="unsplash-credits-website" href="https://unsplash.com/?utm_source=ultimate-jekyll&utm_medium=referral" target="_blank">Unsplash</a>
+            </div>
             <div>
+              <input type="text" class="form-control mb-1" name="headerImageKeywords" id="headerImageKeywords" placeholder="business, tech" aria-label="business, tech">
               <a href="javascript:;" class="btn btn-lg btn-soft-primary w-100 me-3" id="randomize-preview-image">Get new image</a>
             </div>
           </div>
@@ -1381,6 +1385,7 @@ admin:
     dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
     dom.select('#processingAddy').setValue(env === 'development' ? serverDev : serverProd);
     dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('value', serverProdDev);
+    
     if (Manager.properties.meta.environment !== 'development') {
       dom.select('#processingAddy_prodDev').hide();
     }
@@ -1393,21 +1398,26 @@ admin:
   }
 
   function randomizeHeaderImage() {
-    var url = 'https://api.unsplash.com/photos/random?client_id=' + UNSPLASH_API_KEY + '&orientation=landscape&query=' + encodeURIComponent(dom.select('#excerpt').getValue() || dom.select('#title').getValue())
+    var search = dom.select('#headerImageKeywords').getValue() || dom.select('#excerpt').getValue() || dom.select('#title').getValue()
+    var url = 'https://api.unsplash.com/photos/random?client_id=' + UNSPLASH_API_KEY + '&orientation=landscape&query=' + encodeURIComponent(search)
+    var $unsplashCredits = dom.select('#unsplash-credits');
+    var $unsplashCreditsArtist = dom.select('#unsplash-credits-artist');
     // console.log('===url', url);
 
-    fetch(url, {
+    WonderfulFetch(url, {
       method: 'GET',
+      response: 'json',
     })
-    .then(function (res) {
-      if (res.status >= 200 && res.status < 300) {
-        res.json()
-        .then(function (json) {
-          // console.log('---json', json);
-          dom.select('#headerImageURL').setValue(json.urls.regular)
-          setHeaderImagePreview();
-        })
-      }
+    .then(function (json) {
+      console.log('Unsplash image', json);
+
+      dom.select('#headerImageURL').setValue(json.urls.regular);
+
+      $unsplashCredits.removeAttribute('hidden');
+      $unsplashCreditsArtist.setAttribute('href', 'https://unsplash.com/@' + json.user.username + '?utm_source=ultimate-jekyll&utm_medium=referral');
+      $unsplashCreditsArtist.setInnerHTML(json.user.name);
+
+      setHeaderImagePreview();
     })
   }
 

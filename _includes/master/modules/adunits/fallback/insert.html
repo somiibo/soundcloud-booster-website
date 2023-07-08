@@ -54,7 +54,7 @@
 
       adURL = new URL(adURL);
 
-      adURL.searchParams.set('url', window.location.href);
+      adURL.searchParams.set('parentURL', window.location.href);
 
       // Load the ad units
       $vertSlots.each(function ($el) {
