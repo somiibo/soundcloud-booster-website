@@ -97,10 +97,7 @@
           || Manager.properties.global.isAdblockerEnabled
           || Manager.properties.meta.environment === 'development';
 
-        console.log('Adblock enabled', Manager.properties.global.isAdblockerEnabled);
-        console.log('isOGVertsLoaded', isOGVertsLoaded);  
-        console.log('Unfilled vert slots', isUnfilledVertSlots);  
-        console.log('Needs custom verts', needsCustomVerts);     
+        console.log('Adblock enabled', Manager.properties.global.isAdblockerEnabled, 'isOGVertsLoaded', isOGVertsLoaded, 'Unfilled vert slots', isUnfilledVertSlots, 'Needs custom verts', needsCustomVerts);
 
         if (!isOGVertsLoaded && !Manager.properties.global.isAdblockerEnabled) {
           return;
