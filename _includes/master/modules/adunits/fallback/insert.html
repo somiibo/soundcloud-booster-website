@@ -9,7 +9,6 @@
     src="{src}"
   ></iframe>
 '>
-
 </div>
 
 <script async defer type="text/javascript">
@@ -19,52 +18,103 @@
 
     var $iframeVertTemplate = select('#vert-template').get(0).getAttribute('data-template');
 
-    // Check if adblocker detector exists
-    if (typeof Manager.properties.global.isAdblockerEnabled === 'undefined') {
-      Manager.properties.global.isAdblockerEnabled = true;
-      
-      // Load the adblocker detector
-      Manager.dom().loadScript({src: '/assets/js/taboola_ads.js'})
-      .catch(function (e) {
-        console.error('Failed to load adblock checker', e);
-      })
-      .finally(function () {
+    var slotId = new Date().getTime();
+
+    var vertSlotsSelector = '.uj-vert-unit';
+    var vertSlotsSelectorLoaded = '.uj-vert-unit ins[data-ad-status]';
+    var vertSlotsSelectorUnfilled = '.uj-vert-unit ins[data-ad-status="unfilled"]';
+
+    // Check if being handled already
+    if (window._ujVertCheckerStarted) {
+      return;
+    }
+    window._ujVertCheckerStarted = true;
+
+    // Message Handler
+    function messageHandler(event) {
+      var message = event.data || {};
+      var command = message.command || '';
+      var payload = message.payload || {};
+
+      if (command === 'uj-vert-unit:set-dimensions') {
+        var $iframe = select('#uj-vert-' + payload.id).get(0);
+
+        console.log('Message', command, message, event.source);
+
+        $iframe.style.height = payload.height + 'px';
+      }
+    }
+
+    // Fill the units
+    function fillUnits() {
+      var $vertSlots = select(vertSlotsSelector);
+      var adURL = Manager.properties.meta.environment === 'development'
+        ? 'http://localhost:4001/verts/main'
+        : 'https://promo-server.itwcreativeworks.com/verts/main'
+
+      adURL = new URL(adURL);
+
+      adURL.searchParams.set('url', window.location.href);
+
+      // Load the ad units
+      $vertSlots.each(function ($el) {
+        var isFilled = $el.matches('[data-ad-status="filled"]');
+        var finalURL = new URL(adURL.toString());
+
+        finalURL.searchParams.set('frameId', slotId);
+
+        finalURL = finalURL.toString();
+
+        if (isFilled) {
+          return;
+        }
+
+        console.log('Loading ad unit', $el, finalURL);
+
+        $el.innerHTML = $iframeVertTemplate
+          .replace(/{id}/g, 'uj-vert-' + slotId++)
+          .replace(/{src}/g, finalURL)
+      })      
+    }
+
+    window.addEventListener('message', messageHandler, false);    
+
+    // Load the adblocker detector
+    Manager.dom().loadScript({src: '/assets/js/taboola_ads.js'})
+    .catch(function (e) {
+      console.error('Failed to load adblock checker', e);
+    })
+    .finally(function () {
+      var filledChecker = setInterval(function () {
+        // Check if there are unfilled units
+        var isOGVertsLoaded = select(vertSlotsSelectorLoaded).elements.exists;
+        var isUnfilledVertSlots = select(vertSlotsSelectorUnfilled).elements.exists;
+
+        // Set the global adblocker enabled flag
         Manager.properties.global.isAdblockerEnabled = !select('#uj-antivert-detector').elements.exists;
 
+        var needsCustomVerts = isUnfilledVertSlots 
+          || Manager.properties.global.isAdblockerEnabled
+          || Manager.properties.meta.environment === 'development';
+
         console.log('Adblock enabled', Manager.properties.global.isAdblockerEnabled);
+        console.log('isOGVertsLoaded', isOGVertsLoaded);  
+        console.log('Unfilled vert slots', isUnfilledVertSlots);  
+        console.log('Needs custom verts', needsCustomVerts);     
+
+        if (!isOGVertsLoaded && !Manager.properties.global.isAdblockerEnabled) {
+          return;
+        }
+
+        if (needsCustomVerts) {
+          clearInterval(filledChecker);
+        } else {
+          return;
+        }
 
         // If adblocker is enabled, load the ad units
-        if (Manager.properties.global.isAdblockerEnabled) {
-          var $vertSlots = select('.uj-vert-unit');
-          var slotId = new Date().getTime();
-          // var adURL = window.location.protocol + '://' + window.location.host
-          var adURL = Manager.properties.meta.environment === 'development'
-            ? 'http://localhost:4001/verts/main'
-            : 'https://promo-server.itwcreativeworks.com/verts/main'
-
-          adURL = new URL(adURL);
-
-          adURL.searchParams.set('url', window.location.href);
-
-          // Load the ad units
-          $vertSlots.each(function ($el) {
-            var finalURL = new URL(adURL.toString());
-
-            var parentElHeight = $el.parentElement.offsetHeight;
-            var parentElWidth = $el.parentElement.offsetWidth;
-
-            finalURL.searchParams.set('parentElHeight', parentElHeight);
-            finalURL.searchParams.set('parentElWidth', parentElWidth);
-            finalURL.searchParams.set('cb', slotId);
-
-            finalURL = finalURL.toString();
-
-            $el.innerHTML = $iframeVertTemplate
-              .replace(/{id}/g, 'uj-vert-' + slotId++)
-              .replace(/{src}/g, finalURL)
-          })
-        }
-      })
-    }
+        fillUnits();
+      }, 300)
+    })
   })
 </script>

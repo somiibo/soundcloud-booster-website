@@ -20,7 +20,7 @@
       window.parent.postMessage(message, '*')
     }
 
-    function messageHandler() {
+    function messageHandler(event) {
       var message = event.data || {};
       var command = message.command || '';
       var payload = message.payload || {};
