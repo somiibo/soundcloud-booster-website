@@ -1,6 +1,11 @@
+{%- if include.author != null -%}
+  {% assign author-id = include.author %}
+{%- else -%}
+  {% assign author-id = page.post.author %}
+{%- endif -%}
 
 {% for member in site.team %}
-  {% if member.id contains include.author %}
+  {% if member.id contains author-id %}
     {% assign author = member %}
   {% endif %}
 {% endfor %}    
