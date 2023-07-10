@@ -103,18 +103,16 @@
           return;
         }
 
-        if (isOGVertsLoaded) {
+        if (isOGVertsLoaded && !isUnfilledVertSlots) {
           return clearInterval(filledChecker);
         }
 
         if (needsCustomVerts) {
           clearInterval(filledChecker);
+          fillUnits();
         } else {
           return;
         }
-
-        // If adblocker is enabled, load the ad units
-        fillUnits();
       }, 300)
     })
   })
