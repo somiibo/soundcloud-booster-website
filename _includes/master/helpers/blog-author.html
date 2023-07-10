@@ -1,0 +1,8 @@
+
+{% for member in site.team %}
+  {% if member.id contains include.author %}
+    {% assign author = member %}
+  {% endif %}
+{% endfor %}    
+
+<a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}">{{ author.author.name }}</a>
