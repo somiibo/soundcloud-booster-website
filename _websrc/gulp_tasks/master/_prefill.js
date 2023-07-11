@@ -139,7 +139,7 @@ gulp.task('_prefill', async () => {
         //   '---' + '\n'
         // );
 
-        await createFile(`./_team/samantha.md`, await readFile('./_websrc/templates/master/placeholder/team/example-member.md'));
+        await createFile(`./_team/alex.md`, await readFile('./_websrc/templates/master/placeholder/team/example-member.md'));
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
         await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());

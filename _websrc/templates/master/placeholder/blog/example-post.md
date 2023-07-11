@@ -9,7 +9,7 @@ post:
   title: Example post number {id}
   excerpt: This is a sample excerpt for post number {id}
   description: This is a sample excerpt for post number {id}
-  author: samantha
+  author: alex
   id: {id}
   tags: [tag, tag2, tag3]
   categories: [marketing, business]
