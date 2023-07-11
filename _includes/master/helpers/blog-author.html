@@ -10,4 +10,8 @@
   {% endif %}
 {% endfor %}    
 
-<a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}">{{ author.author.name }}</a>
+{%- if include.mode == null or include.mode == 'link' -%}
+  <a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}">{{ author.author.name }}</a>
+{%- elsif include.mode == 'content' -%}
+  {{ author | markdownify }}
+{%- endif -%}
