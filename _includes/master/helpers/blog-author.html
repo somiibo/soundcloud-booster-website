@@ -7,11 +7,17 @@
 {% for member in site.team %}
   {% if member.id contains author-id %}
     {% assign author = member %}
+    {% assign author-id = member.id | replace: "/team/", ""  %}
   {% endif %}
-{% endfor %}    
+{% endfor %}
 
 {%- if include.mode == null or include.mode == 'link' -%}
-  <a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}">{{ author.author.name }}</a>
+  <a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}">{{ author.member.name }}</a>
 {%- elsif include.mode == 'content' -%}
   {{ author | markdownify }}
+{%- elsif include.mode == 'image' -%}
+  {% capture path %}/assets/images/blog/authors/{{ author-id }}/profile.jpg{% endcapture %}
+  {% capture alt %}{{ author.member.name }}'s Profile Picture{% endcapture %}
+
+  {%- include /master/helpers/image.html src=path class=include.class alt=alt style=include.style max_width="1024" width=include.width height=include.height -%}
 {%- endif -%}
