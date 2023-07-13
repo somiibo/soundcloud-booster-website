@@ -30,6 +30,7 @@ We at {{ site.brand.name }} are a great company and would love to design an intu
 - [About]({{ site.url }}/about)
 - [Blog]({{ site.url }}/blog)
 - [Team]({{ site.url }}/team)
+- [Careers]({{ site.url }}/careers)
 - [Terms of Service]({{ site.url }}/terms)
 - [Privacy Policy]({{ site.url }}/privacy)
 - [Cookie Policy]({{ site.url }}/cookies)
