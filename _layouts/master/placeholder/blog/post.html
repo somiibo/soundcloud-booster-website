@@ -52,7 +52,9 @@ layout: master/placeholder/global/default
     <div class="col-md-8">
       <article class="blog-post">
         <h1 class="blog-post-title mb-1">{{ page.post.title }}</h1>
-        <p class="blog-post-meta">{{ page.date | date_to_string }} by <a href="{{ site.url }}/team/{{ page.post.author }}">{{ page.post.author }}</a></p>
+        <p class="blog-post-meta">
+          {{ page.date | date_to_string }} by {%- include /master/helpers/blog-author.html author=post.post.author -%}
+        </p>
 
         <div>
           {%- include /master/helpers/blog-image.html class="img-fluid rounded-lg" -%}

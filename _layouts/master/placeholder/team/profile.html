@@ -1,38 +1,32 @@
 ---
-layout: null
+### ALL PAGES ###
+layout: master/placeholder/plain/default
+
+### REGULAR PAGES ###
+meta:
+  title: "{{ page.member.name }}"
+  description: "{{ page.member.excerpt }}"
+  breadcrumb: "{{ page.member.name }}"
 ---
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {%- include /master/global/head.html -%}
-  </head>
+<article class="">
 
-  <body>
-    <!-- CONTENT START -->
-    <article class="">
+  {% capture path %}{{ site.url }}/assets/images/team/{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
+  {%- include /master/helpers/image.html src=path -%}
+  <header class="">
+    <h1 class="">{{ page.member.name }}</h1>
+    <p class="">Joined: {{ page.member.joined }}</p>
+    <p class="">Skills: {{ page.member.skills }}</p>
+    <p class="">Location: {{ page.member.location }}</p>
+    <p class="">{{ page.member.excerpt }}</p>
+  </header>
 
-      {% capture path %}{{ site.url }}/assets/images/team/{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
-      {%- include /master/helpers/image.html src=path -%}
-      <header class="">
-        <h1 class="">{{ page.member.name }}</h1>
-        <p class="">Joined: {{ page.member.joined }}</p>
-        <p class="">Skills: {{ page.member.skills }}</p>
-        <p class="">Location: {{ page.member.location }}</p>
-        <p class="">{{ page.member.excerpt }}</p>
-      </header>
+  <div class="" itemprop="articleBody">
+    {{ content }}
+  </div>
 
-      <div class="" itemprop="articleBody">
-        {{ content }}
-      </div>
+  <h3>Socials</h3>
+  <ul>
+    <li>{{ page.member.instagram }}</li>
+  </ul>
 
-      <h3>Socials</h3>
-      <ul>
-        <li>{{ page.member.instagram }}</li>
-      </ul>
-
-    </article>
-
-    <!-- CONTENT END -->
-    {%- include /master/global/foot.html -%}
-  </body>
-</html>
+</article>

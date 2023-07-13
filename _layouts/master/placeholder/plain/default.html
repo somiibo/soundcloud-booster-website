@@ -24,8 +24,8 @@ layout: master/placeholder/global/default
 <main class="container">
   <div class="p-4 p-md-5 mb-4 rounded text-bg-dark">
     <div class="col-px-0">
-      <h1 class="display-4 fst-italic">{{ page.meta.title | liquify }}</h1>
-      <p class="lead my-3">{{ page.meta.description | liquify }}</p>
+      <h1 class="display-4 fst-italic">{{ page.meta.title | default: layout.meta.title | default: site.meta.title | liquify }}</h1>
+      <p class="lead my-3">{{ page.meta.description | default: layout.meta.description | default: site.meta.description | liquify }}</p>
     </div>
   </div>
 

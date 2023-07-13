@@ -1,28 +1,23 @@
 ---
-layout: null
+### ALL PAGES ###
+layout: master/placeholder/plain/default
+
+### REGULAR PAGES ###
+meta:
+  title: "{{ page.member.name }}"
+  description: "{{ page.member.excerpt }}"
+  breadcrumb: "{{ page.member.name }}"
 ---
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {%- include /master/global/head.html -%}
-  </head>
-
-  <body>
-    <!-- CONTENT START -->
-    <h1 class="">Team Members</h1>
-    {% for member in site.team %}
-      <article class="">
-        {% capture path %}{{ site.url }}/assets/images/team/{{ member.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
-        {%- include /master/helpers/image.html src=path -%}
-        <h2>{{ member.member.name }}</h2>
-        <p class="">Joined: {{ member.member.joined }}</p>
-        <p class="">Skills: {{ member.member.skills }}</p>
-        <p class="">Location: {{ member.member.location }}</p>
-        <p class="">{{ member.member.excerpt }}</p>
-      </article>
-    {% endfor %}
-
-    <!-- CONTENT END -->
-    {%- include /master/global/foot.html -%}
-  </body>
-</html>
+<!-- CONTENT START -->
+<h1 class="">Team Members</h1>
+{% for member in site.team %}
+  <article class="">
+    {% capture path %}{{ site.url }}/assets/images/team/{{ member.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
+    {%- include /master/helpers/image.html src=path -%}
+    <h2>{{ member.member.name }}</h2>
+    <p class="">Joined: {{ member.member.joined }}</p>
+    <p class="">Skills: {{ member.member.skills }}</p>
+    <p class="">Location: {{ member.member.location }}</p>
+    <p class="">{{ member.member.excerpt }}</p>
+  </article>
+{% endfor %}
