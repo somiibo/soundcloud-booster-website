@@ -10,14 +10,28 @@ meta:
 ---
 <!-- CONTENT START -->
 <h1 class="">Team Members</h1>
-{% for member in site.team %}
-  <article class="">
-    {% capture path %}{{ site.url }}/assets/images/team/{{ member.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
-    {%- include /master/helpers/image.html src=path -%}
-    <h2>{{ member.member.name }}</h2>
-    <p class="">Joined: {{ member.member.joined }}</p>
-    <p class="">Skills: {{ member.member.skills }}</p>
-    <p class="">Location: {{ member.member.location }}</p>
-    <p class="">{{ member.member.excerpt }}</p>
-  </article>
-{% endfor %}
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  {% for member in site.team %}
+    <div class="col">
+      <article class="">
+
+        {% assign member-id = member.id | replace: "/team/", ""  %}
+
+        <div class="card h-100">
+          {%- include /master/helpers/blog-author.html mode="image" class="card-img-top" -%}
+
+          <div class="card-body">
+            <h5 class="card-title">{{ member.member.name }}</h5>
+            <p class="card-text">{{ member.member.excerpt }}</p>
+            <a href="{%- include /master/helpers/blog-author.html author=member-id mode="url" class="card-img-top" -%}">View profile</a>
+          </div>
+          <div class="card-footer">
+            <small class="text-body-secondary">Joined: {{ member.member.joined }}</small>
+          </div>
+        </div>    
+
+      </article>
+    </div>
+  {% endfor %}
+</div>
