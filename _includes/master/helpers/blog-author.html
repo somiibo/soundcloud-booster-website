@@ -19,6 +19,8 @@
 
 {%- if include.mode == null or include.mode == 'link' -%}
   <a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}"> {{ author.member.name }}</a>
+{%- elsif include.mode == 'url' -%}
+  {{ site.url }}{{ author.url }}
 {%- elsif include.mode == 'content' -%}
   {{ author | markdownify }}
 {%- elsif include.mode == 'image' -%}
