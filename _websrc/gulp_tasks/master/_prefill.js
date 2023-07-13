@@ -150,7 +150,7 @@ gulp.task('_prefill', async () => {
 
         // Create base team member
         await createFile(`./_team/alex.md`, await readFile('./_websrc/templates/master/placeholder/team/alex.md'));
-        await copyFile('./_websrc/templates/master/placeholder/team/alex.jpg', `./assets/_src/images/team/profile.jpg`);
+        await copyFile('./_websrc/templates/master/placeholder/team/alex.jpg', `./assets/_src/images/team/alex/profile.jpg`);
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
         await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
