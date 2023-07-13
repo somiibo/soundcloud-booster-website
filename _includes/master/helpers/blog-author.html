@@ -22,7 +22,7 @@
 {%- elsif include.mode == 'content' -%}
   {{ author | markdownify }}
 {%- elsif include.mode == 'image' -%}
-  {% capture path %}/assets/images/blog/authors/{{ author-id }}/profile.jpg{% endcapture %}
+  {% capture path %}/assets/images/team/{{ author-id }}/profile.jpg{% endcapture %}
   {% capture alt %}{{ author.member.name }}'s Profile Picture{% endcapture %}
 
   {%- include /master/helpers/image.html src=path class=_header-class alt=alt style=include.style max_width="1024" width=include.width height=include.height -%}
