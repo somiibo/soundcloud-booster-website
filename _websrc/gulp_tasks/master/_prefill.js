@@ -291,8 +291,6 @@ async function copyFile(from, to) {
     error: null,
   }
 
-  console.log('---copy', from, to);
-
   return new Promise(function(resolve, reject) {
     try {
       if (fs.exists(to)) {
