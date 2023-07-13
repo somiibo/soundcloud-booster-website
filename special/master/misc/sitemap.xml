@@ -4,45 +4,17 @@ permalink: /sitemap.xml
 sitemap:
   include: false
 ---
-{%- if site.sitemap.enable != false -%}
-  <?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    {% assign default_time = site.time | date_to_xmlschema %}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {% assign pages = site.pages %}
+  {% assign posts = site.posts %}
+  {% assign data = pages | concat: posts %}  
+  {% assign default_time = site.time | date_to_xmlschema %}
+  
+  {%- if site.sitemap.enable != false -%}
+    {% for page in data %}
 
-    {% for post in site.posts %}
-      <url>
-        <loc>{{ site.url }}{{ post.url }}</loc>
-
-        {%- if post.sitemap.lastmod == null -%}
-          <lastmod>{{ default_time }}</lastmod>
-        {%- else -%}
-          <lastmod>{{ post.sitemap.lastmod | date_to_xmlschema }}</lastmod>
-        {%- endif -%}
-
-        {%- if post.sitemap.changefreq == null -%}
-          <changefreq>weekly</changefreq>
-        {%- else -%}
-          <changefreq>{{ post.sitemap.changefreq }}</changefreq>
-        {%- endif -%}
-
-        {%- if post.sitemap.priority == null -%}
-          <priority>0.7</priority>
-        {%- else -%}
-          <priority>{{ post.sitemap.priority }}</priority>
-        {%- endif -%}
-      </url>
-    {% endfor %}
-    {% for page in site.pages %}
-      {% assign include = true %}
-
-      {%- if page.layout.sitemap.include != null -%}
-        {% assign include = layout.sitemap.include %}
-      {%- endif -%}
-      {%- if page.sitemap.include != null -%}
-        {% assign include = page.sitemap.include %}
-      {%- endif -%}
-
-      {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or include == false -%}
+      {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or page.layout.sitemap.include == false or page.sitemap.include == false -%}
         {%- continue -%}
       {%- endif -%}
 
@@ -68,7 +40,7 @@ sitemap:
         {%- else -%}
           <priority>{{ page.sitemap.priority }}</priority>
         {%- endif -%}
-       </url>      
+      </url>
     {% endfor %}
-  </urlset>
-{%- endif -%}
+  {%- endif -%}  
+</urlset>

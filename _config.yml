@@ -148,6 +148,7 @@ settings:
   include-socialsharekit: true # true | false
   include-debug-performance: false # true | false
   blog-post-image-class: "" # class will be applied to all blog post images using the master include
+  blog-author-image-class: "" # class will be applied to all blog author images using the master include
   manager-configuration: "
     {
       libraries: {

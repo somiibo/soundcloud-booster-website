@@ -63,12 +63,13 @@ gulp.task('_prefill', async () => {
         )
         
         if ((!fs.exists('./pages/index.md') && !fs.exists('./pages/index.html')) || tools.isTemplate) {
-          await fs.write('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
           await fs.write('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
-          await fs.write('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
           await fs.write('./pages/blog.md', await readFile('./_websrc/templates/master/placeholder/blog.md'))
+          await fs.write('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
           await fs.write('./pages/download.md', await readFile('./_websrc/templates/master/placeholder/download.md'))
           await fs.write('./pages/extension.md', await readFile('./_websrc/templates/master/placeholder/extension.md'))
+          await fs.write('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
+          await fs.write('./pages/team.md', await readFile('./_websrc/templates/master/placeholder/team.md'))
         }
 
         if ((!fs.exists('./pages/404.md') && !fs.exists('./pages/404.html')) || tools.isTemplate) {
@@ -114,14 +115,22 @@ gulp.task('_prefill', async () => {
         // if (posts.find(function (name) {
         //   return name.indexOf('example-post') > -1;
         // })) {
-        if ((await listFiles('./_posts') || []).length === 0) {
+        const totalPosts = (await listFiles('./_posts') || []).length;
+        if (totalPosts < 1 || (tools.isTemplate && totalPosts < 7)) {
           const now = new Date();
-          const postTemplate = await readFile('./_websrc/templates/master/placeholder/blog/example-post.md');
+          const postTemplate = await readFile('./_websrc/templates/master/placeholder/blog/post.md');
+          // const postTeaser = await readFile();
+
           for (var i = 1; i < 8; i++) {
-            await createFile(`./_posts/${now.getFullYear()}-01-0${i}-example-post-${i}.md`,
+            const postId = Math.round(now.getTime() / 1000) + i;
+            const postTitle = `example-post-${i}`;
+
+            await createFile(`./_posts/${now.getFullYear()}-01-0${i}-${postTitle}.md`,
               postTemplate
-                .replace(/{id}/ig, i)
+                .replace(/{id}/ig, postId)
+                .replace(/{count}/ig, i)
             )
+            await copyFile('./_websrc/templates/master/placeholder/blog/post.jpg', `./assets/_src/images/blog/posts/post-${postId}/${postTitle}.jpg`);
           }
         }
 
@@ -139,7 +148,9 @@ gulp.task('_prefill', async () => {
         //   '---' + '\n'
         // );
 
-        await createFile(`./_team/samantha.md`, await readFile('./_websrc/templates/master/placeholder/team/example-member.md'));
+        // Create base team member
+        await createFile(`./_team/alex.md`, await readFile('./_websrc/templates/master/placeholder/team/alex.md'));
+        await copyFile('./_websrc/templates/master/placeholder/team/alex.jpg', `./assets/_src/images/team/profile.jpg`);
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
         await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
@@ -173,6 +184,7 @@ gulp.task('_prefill', async () => {
 
         fs.dir('./@output/lighthouse');
         fs.remove('./@output/build/build.json');
+
         await createFile('./@output/build/build.json', build_json);
       }
 
@@ -186,6 +198,8 @@ gulp.task('_prefill', async () => {
         await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', gitignore_ph);
         await createFile(config.assets + config.assetsSubpath + '/images/blog/.gitignore', gitignore_ph);
+        await createFile(config.assets + config.assetsSubpath + '/images/team/.gitignore', gitignore_ph);
+
         await createFile('./_includes/app/misc/.gitignore', gitignore_ph);
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
@@ -248,10 +262,11 @@ function generateCommonModules() {
 }
 
 async function createFile(file, contents) {
-  var response = {
+  const response = {
     exists: false,
     error: null,
   }
+
   return new Promise(function(resolve, reject) {
     try {
       if (fs.exists(file)) {
@@ -259,6 +274,30 @@ async function createFile(file, contents) {
         resolve(response)
       } else {
        fs.write(file, contents);
+       response.exists = false;
+       resolve(response);
+      }
+    } catch (e) {
+      response.error = e;
+      reject(response);
+    }
+  });
+}
+
+
+async function copyFile(from, to) {
+  const response = {
+    exists: false,
+    error: null,
+  }
+
+  return new Promise(function(resolve, reject) {
+    try {
+      if (fs.exists(to)) {
+        response.exists = true;
+        resolve(response)
+      } else {
+       fs.copy(from, to);
        response.exists = false;
        resolve(response);
       }
