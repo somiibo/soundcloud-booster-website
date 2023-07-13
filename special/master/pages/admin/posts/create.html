@@ -1374,7 +1374,7 @@ admin:
     dom.select('#categories').setValue((fields.categories || '').toString().replace(/,/g, ', ').replace(/\s\s+/g, ' '));
     dom.select('#excerpt').setValue(fields.excerpt || '');
     dom.select('#replaceImagesIncludeTag').setValue(fields.replaceImagesIncludeTag || '');
-    dom.select('#path').setValue('./_posts/guest/' + date.getFullYear());
+    dom.select('#path').setValue('./_posts/' + date.getFullYear() + '/guest');
 
     // special
     var serverDev = siteUrl + '/_post.json';
