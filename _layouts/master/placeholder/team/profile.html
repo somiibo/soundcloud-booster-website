@@ -10,8 +10,12 @@ meta:
 ---
 <article class="">
 
-  {% capture path %}{{ site.url }}/assets/images/team/{{ page.title | replace: " ", "-" | downcase }}/profile.jpg{% endcapture %}
-  {%- include /master/helpers/image.html src=path -%}
+  <div class="row">
+    <div class="col-12">
+      {%- include /master/helpers/blog-author.html mode="image" class="img-fluid" -%}
+    </div>
+  </div>
+
   <header class="">
     <h1 class="">{{ page.member.name }}</h1>
     <p class="">Joined: {{ page.member.joined }}</p>
