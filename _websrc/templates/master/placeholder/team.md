@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/plain/default
+layout: master/placeholder/team/index
 permalink: /team/
 sitemap:
   include: true
