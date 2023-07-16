@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/index
+layout: master/placeholder/pricing
 permalink: /pricing/
 sitemap:
   include: true
