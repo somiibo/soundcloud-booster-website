@@ -1,10 +1,12 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/plain/default
+layout: master/placeholder/global/plain
+sitemap:
+  include: false
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ page.member.name }}"
+  title: "{{ page.member.name }} - {{ site.brand.name }}"
   description: "{{ page.member.excerpt }}"
   breadcrumb: "{{ page.member.name }}"
 ---
@@ -12,25 +14,30 @@ meta:
 
   <div class="row">
     <div class="col-12">
-      {%- include /master/helpers/blog-author.html mode="image" class="img-fluid" -%}
     </div>
   </div>
 
-  <header class="">
-    <h1 class="">{{ page.member.name }}</h1>
-    <p class="">Joined: {{ page.member.joined }}</p>
-    <p class="">Skills: {{ page.member.skills }}</p>
-    <p class="">Location: {{ page.member.location }}</p>
-    <p class="">{{ page.member.excerpt }}</p>
-  </header>
-
   <div class="" itemprop="articleBody">
-    {{ content }}
+    <div class="card" style="max-width: 36rem;">
+      {%- include /master/helpers/blog-author.html mode="image" class="card-img-top img-fluid" -%}
+      <div class="card-body">
+        <h5 class="card-title">{{ page.member.name }}</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <p class=""><span class="badge text-bg-secondary">Joined:</span> {{ page.member.joined }}</p>
+        <p class=""><span class="badge text-bg-secondary">Skills:</span> {{ page.member.skills }}</p>
+        <p class=""><span class="badge text-bg-secondary">Location:</span> {{ page.member.location }}</p>
+        
+
+        <h6>About Me</h6>
+        {{ content }}
+
+        <h6>Socials</h6>
+        <a href="https://www.linkedin.com/in/{{ page.member.linkedin | default: site.socials.linkedin }}" class="btn btn-primary">LinkedIn</a>
+        <a href="https://www.instagram.com/{{ page.member.instagram | default: site.socials.instagram }}" class="btn btn-primary">Instagram</a>
+      </div>
+    </div>  
   </div>
 
-  <h3>Socials</h3>
-  <ul>
-    <li>{{ page.member.instagram }}</li>
-  </ul>
+
 
 </article>

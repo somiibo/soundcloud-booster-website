@@ -144,8 +144,14 @@ settings:
       <div class="card card-lg mb-5">
         <div class="card-body">
 
-          <div class="d-flex justify-content-center">
-            <div id="spinner" class="spinner-border text-primary mb-3" role="status"></div>
+          <div id="spinner">
+            <div class="d-flex justify-content-center flex-column text-center">
+              <h1 class="display-5">Welcome to {{ site.brand.name }}</h1>
+              <p>One moment while we get everything ready...</p>
+            </div>            
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
           </div>
 
           <div class="d-grid">
@@ -154,7 +160,7 @@ settings:
             <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
           </div>
 
-          <div id="auth-container" class="animation-slide-up" hidden>
+          <div id="auth-container" class="animation-fade-in" hidden>
             <!-- Form -->
             {%- if is-sign-up-page == true or is-sign-in-page == true -%}
             <form class="" onsubmit="return false;">

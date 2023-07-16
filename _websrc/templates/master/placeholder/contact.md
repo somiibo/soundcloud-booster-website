@@ -1,13 +1,13 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/contact/default
+layout: master/placeholder/contact
 permalink: /contact/
 sitemap:
   include: true
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ site.brand.name }} - Contact"
-  description: "Contact {{ site.brand.name }} if you need assistance with anything."
-  breadcrumb: "Contact"  
+  title: null
+  description: null
+  breadcrumb: null
 ---

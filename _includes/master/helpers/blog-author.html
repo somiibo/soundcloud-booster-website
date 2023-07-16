@@ -1,7 +1,9 @@
 {%- if include.author != null -%}
   {% assign author-id = include.author %}
-{%- else -%}
+{%- elsif page.post.author != null -%}
   {% assign author-id = page.post.author %}
+{%- elsif page.member.name != null -%}
+  {% assign author-id = page.id %}
 {%- endif -%}
 
 {% for member in site.team %}
@@ -25,7 +27,7 @@
   {{ author | markdownify }}
 {%- elsif include.mode == 'image' -%}
   {% capture path %}/assets/images/team/{{ author-id }}/profile.jpg{% endcapture %}
-  {% capture alt %}{{ author.member.name }}'s Profile Picture{% endcapture %}
+  {% capture alt %}{{ author.member.name }}'s profile picture{% endcapture %}
 
   {%- include /master/helpers/image.html src=path class=_header-class alt=alt style=include.style max_width="1024" width=include.width height=include.height -%}
 {%- endif -%}

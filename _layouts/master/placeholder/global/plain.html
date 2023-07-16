@@ -31,7 +31,7 @@ layout: master/placeholder/global/default
 
   <div class="row g-5">
     <div class="col-md-8">
-      {{ content | liquify }}
+      {{ content | liquify | markdownify }}
     </div>
 
     <div class="col-md-4">
