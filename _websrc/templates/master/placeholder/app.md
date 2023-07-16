@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/about
+layout: master/placeholder/app
 permalink: /app/
 sitemap:
   include: true
