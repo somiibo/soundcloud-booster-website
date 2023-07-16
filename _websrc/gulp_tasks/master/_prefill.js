@@ -72,6 +72,7 @@ gulp.task('_prefill', async () => {
           'download',
           'extension',
           'index',
+          'pricing',
           'team',
           'legal/terms',
           'legal/privacy',

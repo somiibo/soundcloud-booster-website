@@ -1,7 +1,6 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/global/plain
-permalink: /extension/
 sitemap:
   include: true
 
