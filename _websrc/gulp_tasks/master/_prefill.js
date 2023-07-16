@@ -62,24 +62,10 @@ gulp.task('_prefill', async () => {
           ""
         )
         
-        // if ((!fs.exists('./pages/index.md') && !fs.exists('./pages/index.html')) || tools.isTemplate) {
-        //   await fs.write('./pages/about.md', await readFile('./_websrc/templates/master/placeholder/about.md'))
-        //   await fs.write('./pages/blog.md', await readFile('./_websrc/templates/master/placeholder/blog.md'))
-        //   await fs.write('./pages/careers.md', await readFile('./_websrc/templates/master/placeholder/careers.md'))
-        //   await fs.write('./pages/contact.md', await readFile('./_websrc/templates/master/placeholder/contact.md'))
-        //   await fs.write('./pages/download.md', await readFile('./_websrc/templates/master/placeholder/download.md'))
-        //   await fs.write('./pages/extension.md', await readFile('./_websrc/templates/master/placeholder/extension.md'))
-        //   await fs.write('./pages/index.md', await readFile('./_websrc/templates/master/placeholder/index.md'))
-        //   await fs.write('./pages/team.md', await readFile('./_websrc/templates/master/placeholder/team.md'))
-        // }
-
-        // if ((!fs.exists('./pages/404.md') && !fs.exists('./pages/404.html')) || tools.isTemplate) {
-        //   await fs.write('./pages/404.md', await readFile('./_websrc/templates/master/placeholder/404.md'))
-        // }
-
         const pages = [
           '404',
           'about',
+          'app',
           'blog',
           'careers',
           'contact',
@@ -95,12 +81,6 @@ gulp.task('_prefill', async () => {
         pages.forEach(async function(page) {
           await createPageIfNoExist(page);
         });
-
-        // if ((!fs.exists('./pages/legal')) || tools.isTemplate) {
-        //   await fs.write('./pages/legal/terms.md', await readFile('./_websrc/templates/master/placeholder/legal/terms.md'))
-        //   await fs.write('./pages/legal/privacy.md', await readFile('./_websrc/templates/master/placeholder/legal/privacy.md'))
-        //   await fs.write('./pages/legal/cookies.md', await readFile('./_websrc/templates/master/placeholder/legal/cookies.md'))
-        // }
 
         await createFile(config.assets + config.assetsSubpath + '/js/app/service-worker.js',
           "// app service-worker.js code" + "\n" +
