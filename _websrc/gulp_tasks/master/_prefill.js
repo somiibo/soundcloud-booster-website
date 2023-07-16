@@ -353,7 +353,6 @@ function createPageIfNoExist(page, contentsPath) {
   return new Promise(async function(resolve, reject) {
     const path = `./pages/${page}`;
 
-    console.log('---', path);
     if (
       (!fs.exists(`${path}.md`) && !fs.exists(`${path}.html`))
       || tools.isTemplate
@@ -364,7 +363,6 @@ function createPageIfNoExist(page, contentsPath) {
         : '.html';
       const contents = await readFile(`${parent}${ext}`);
 
-      console.log('---path', fs.exists(`${parent}.md`), `${parent}${ext}`, contents);
       fs.write(`${path}${ext}`, contents)
     }
 
