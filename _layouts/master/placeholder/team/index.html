@@ -1,12 +1,14 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/plain/default
+layout: master/placeholder/global/plain
+sitemap:
+  include: false
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ page.member.name }}"
-  description: "{{ page.member.excerpt }}"
-  breadcrumb: "{{ page.member.name }}"
+  title: "Team Members - {{ site.brand.name }}"
+  description: "Meet our amazing team and learn more about them."
+  breadcrumb: "Team"
 ---
 <!-- CONTENT START -->
 <h1 class="">Team Members</h1>
@@ -19,7 +21,7 @@ meta:
         {% assign member-id = member.id | replace: "/team/", ""  %}
 
         <div class="card h-100">
-          {%- include /master/helpers/blog-author.html mode="image" class="card-img-top" -%}
+          {%- include /master/helpers/blog-author.html author=member-id mode="image" class="card-img-top" -%}
 
           <div class="card-body">
             <h5 class="card-title">{{ member.member.name }}</h5>

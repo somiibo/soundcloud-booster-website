@@ -6,9 +6,9 @@ sitemap:
   
 ### POST ONLY ###
 post:
-  title: Example post number {count}
-  excerpt: This is a sample excerpt for post number {count}
-  description: This is a sample excerpt for post number {count}
+  title: "Example post number {count}"
+  excerpt: "This is a sample excerpt for post number {count}"
+  description: "This is a sample excerpt for post number {count}"
   author: alex
   id: {id}
   tags: [tag, tag2, tag3]

@@ -1,14 +1,13 @@
 ---
 ### ALL PAGES ###
-layout: master/placeholder/plain/default
+layout: master/placeholder/about
 permalink: /about/
 sitemap:
   include: true
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ site.brand.name }} - About"
-  description: "Discover {{ site.brand.name }} and learn what we're all about"
-  breadcrumb: "About"  
+  title: null
+  description: null
+  breadcrumb: null
 ---
-We are a company {{ site.brand.name }} located in {{ site.brand.address-locality }}! Our main focus is {{ site.brand.description }}.

@@ -7,7 +7,7 @@ sitemap:
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ site.brand.name }} - Team"
-  description: "Meet our amazing team and learn more about them."
-  breadcrumb: "Team"  
+  title: null
+  description: null
+  breadcrumb: null
 ---

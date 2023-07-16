@@ -36,7 +36,7 @@ permalink: /feeds/posts.xml
       <logo>{{ site.url }}/assets/images/blog/posts/post-{{ post.post.id }}/{{ post.url | split: "/" | last }}.jpg</logo>
       <content type="html" xml:base="{{ site.url }}{{ post.url }}">
         {% comment %}
-        {{ post.content | liquify }}
+        {{ post.content | liquify | markdownify }}
         {% endcomment %}
         {{ post.content }}
       </content>

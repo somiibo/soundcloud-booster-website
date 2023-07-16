@@ -7,7 +7,7 @@ sitemap:
 
 ### REGULAR PAGES ###
 meta:
-  title: "{{ site.brand.name }} - Blog"
-  description: "Stay up to date with the latest {{ site.brand.name }} news and best practices."
-  breadcrumb: "Blog"  
+  title: null
+  description: null
+  breadcrumb: null
 ---

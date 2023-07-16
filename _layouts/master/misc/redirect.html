@@ -48,8 +48,8 @@ settings:
     }
   "
 ---
-{% capture url %}{{ page.redirect.url | default: site.url | liquify }}{% endcapture %}
-{% capture querystring %}{{ page.redirect.querystring }}{% endcapture %}
+{% capture url %}{{ page.redirect.url | default: layout.redirect.url | default: site.url | liquify }}{% endcapture %}
+{% capture querystring %}{{ page.redirect.querystring | default: layout.redirect.querystring }}{% endcapture %}
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
