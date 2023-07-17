@@ -238,93 +238,33 @@
 {% elsif layout.schema.breadcrumbs == false %}
 {% elsif site.schema.breadcrumbs == false %}
 {% else %}
-  {% comment %}
-  <div class="hidden" hidden>
-    <ol itemscope itemtype="http://schema.org/BreadcrumbList">
-    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-      <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}/" title="Return home">
-        <span itemprop="name">Home</span>
-      </a><meta itemprop="position" content="1" />
-    </li>
-    {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
-    {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
-    {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
-    {%- for i in (1..forLoopMaxInt) -%}
-        {%- assign pos = forloop.index -%}
-        {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
-        {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
-        {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
-        {%- for breadcrumb_page in site.pages -%}
-            {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
-            {% assign j = forLoopMaxInt | plus: 0 %}
-                <li {% if i == j %}class="active"{% endif %} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                    {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-                    <a itemtype="http://schema.org/Thing" itemprop="item" href="{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}" title="Visit {{ breadcrumb_page.breadcrumb }}">
-                      <span itemprop="name">{{ breadcrumb_page.meta.breadcrumb | liquify}}</span>
-                      <meta itemprop="position" content="{{ pos | plus: 1 }}" />
-                    </a>
-                </li>
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endfor -%}
-    </ol>
-  </div>
-  {% endcomment %}
-
   <script id="uj-breadcrumbs-json" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "name": "{{ site.brand.name }}",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "item": {
-            "@id": "{{ site.url }}",
-            "name": "Home"
-          }          
-        }
-        {%- capture page_url_without_index_html %}{{ page.url | remove: "/index.html" }}{% endcapture -%}
-        {%- assign splitted_url_parts = page_url_without_index_html | split: '/' -%}
-        {%- capture forLoopMaxInt %}{{ splitted_url_parts.size | minus:1 }}{% endcapture -%}
-        {%- for i in (1..forLoopMaxInt) -%}
-          {%- assign pos = forloop.index -%}
-          {%- capture current_breadcrumb_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/index.html{%- endcapture -%}
-          {%- capture current_breadcrumb_md_url -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}/{%- endcapture -%}
-          {%- capture next_prepender -%}{{ next_prepender }}/{{ splitted_url_parts[i] }}{%- endcapture -%}
-          
-          {%- for breadcrumb_page in site.pages -%}
-            {%- if current_breadcrumb_url == breadcrumb_page.url or current_breadcrumb_md_url == breadcrumb_page.url -%}
-              {% assign j = forLoopMaxInt | plus: 0 %}
-              {% capture breadcrumb_page_page_url_without_index_html %}{{ breadcrumb_page.url | remove: "index.html" }}{% endcapture %}
-              {% capture comma %}{% if i != j %},{% endif %}{% endcapture %}
-              ,{
-                "@type": "ListItem",
-                "position": {{ pos | plus: 1 }},
-                "item": {
-                  "@id": "{{ site.url }}{{ breadcrumb_page_page_url_without_index_html }}",
-                  "name": "{{ breadcrumb_page.meta.breadcrumb | liquify}}"
-                }
+        {% assign breadcrumbs = page.permalink | split: "/" %}
+        {% assign breadcrumbs = page.url | split: "/" %}
+        {% assign breadcrumbs_size = breadcrumbs | size | minus: 1 %}
+        {% assign breadcrumb-url = site.url %}
+
+        {%- for breadcrumb in breadcrumbs -%}
+          {%- unless breadcrumb == "" -%}
+            {%- capture breadcrumb-url -%}{{ breadcrumb-url }}/{{ breadcrumb }}{%- endcapture -%}
+            {
+              "@type": "ListItem",
+              "position": {{ forloop.index | minus: 1 }},
+              "item": {
+                "@id": "{{ breadcrumb-url }}",
+                "name": "{{ breadcrumb }}"
               }
-            {%- endif -%}        
-
-          {%- endfor -%}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endunless -%}
         {%- endfor -%}
-
-        {%- if page_is_post == true -%}
-          ,{
-            "@type": "ListItem",
-            "position": {{ pos | plus: 1 }},
-            "item": {
-              "@id": "{{ site.url }}{{ page.url }}",
-              "name": "{{ page.post.title | liquify }}"
-            }
-          }              
-        {%- endif -%}        
       ]
     }
-  </script>
+  </script>  
 {% endif %}
 
 <!-- Schema - Brand -->
@@ -333,98 +273,98 @@
 {% elsif site.schema.brand == false %}
 {% else %}
   <script id="uj-brand-json" type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "{{ site.brand.type }}",
-    "@id": "{{ site.url }}#{{ site.brand.type }}",
-    "url": "{{ site.url }}",
-    "name": "{{ site.brand.name }}",
-    "description": "{{ site.brand.description }}",
-    "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
-    "sameAs": [
-      {%- assign facebook_truthy = site.socials.facebook | istruthy -%}
-      {%- if facebook_truthy -%}
-      "https://www.facebook.com/{{ site.socials.facebook }}/",
-      {%- endif -%}
+    {
+      "@context": "http://schema.org",
+      "@type": "{{ site.brand.type }}",
+      "@id": "{{ site.url }}#{{ site.brand.type }}",
+      "url": "{{ site.url }}",
+      "name": "{{ site.brand.name }}",
+      "description": "{{ site.brand.description }}",
+      "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
+      "sameAs": [
+        {%- assign facebook_truthy = site.socials.facebook | istruthy -%}
+        {%- if facebook_truthy -%}
+        "https://www.facebook.com/{{ site.socials.facebook }}/",
+        {%- endif -%}
 
-      {%- assign twitter_truthy = site.socials.twitter | istruthy -%}
-      {%- if twitter_truthy -%}
-      "https://twitter.com/{{ site.socials.twitter }}",
-      {%- endif -%}
+        {%- assign twitter_truthy = site.socials.twitter | istruthy -%}
+        {%- if twitter_truthy -%}
+        "https://twitter.com/{{ site.socials.twitter }}",
+        {%- endif -%}
 
-      {%- assign linkedin_truthy = site.socials.linkedin | istruthy -%}
-      {%- if linkedin_truthy -%}
-      "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
-      {%- endif -%}
+        {%- assign linkedin_truthy = site.socials.linkedin | istruthy -%}
+        {%- if linkedin_truthy -%}
+        "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
+        {%- endif -%}
 
-      {%- assign youtube_truthy = site.socials.youtube | istruthy -%}
-      {%- if youtube_truthy -%}
-      "https://www.youtube.com/c/{{ site.socials.youtube }}",
-      {%- endif -%}
+        {%- assign youtube_truthy = site.socials.youtube | istruthy -%}
+        {%- if youtube_truthy -%}
+        "https://www.youtube.com/c/{{ site.socials.youtube }}",
+        {%- endif -%}
 
-      {%- assign instagram_truthy = site.socials.instagram | istruthy -%}
-      {%- if instagram_truthy -%}
-      "https://www.instagram.com/{{ site.socials.instagram }}/",
-      {%- endif -%}
+        {%- assign instagram_truthy = site.socials.instagram | istruthy -%}
+        {%- if instagram_truthy -%}
+        "https://www.instagram.com/{{ site.socials.instagram }}/",
+        {%- endif -%}
 
-      {%- assign tumblr_truthy = site.socials.tumblr | istruthy -%}
-      {%- if tumblr_truthy -%}
-      "https://{{ site.socials.tumblr }}.tumblr.com/",
-      {%- endif -%}
+        {%- assign tumblr_truthy = site.socials.tumblr | istruthy -%}
+        {%- if tumblr_truthy -%}
+        "https://{{ site.socials.tumblr }}.tumblr.com/",
+        {%- endif -%}
 
-      {%- assign slack_truthy = site.socials.slack | istruthy -%}
-      {%- if slack_truthy -%}
-      "https://{{ site.socials.slack }}.slack.com/",
-      {%- endif -%}
+        {%- assign slack_truthy = site.socials.slack | istruthy -%}
+        {%- if slack_truthy -%}
+        "https://{{ site.socials.slack }}.slack.com/",
+        {%- endif -%}
 
-      {%- assign discord_truthy = site.socials.discord | istruthy -%}
-      {%- if discord_truthy -%}
-      "https://discord.gg/{{ site.socials.discord }}",
-      {%- endif -%}
+        {%- assign discord_truthy = site.socials.discord | istruthy -%}
+        {%- if discord_truthy -%}
+        "https://discord.gg/{{ site.socials.discord }}",
+        {%- endif -%}
 
-      {%- assign github_truthy = site.socials.github | istruthy -%}
-      {%- if github_truthy -%}
-      "https://github.com/{{ site.socials.github }}",
-      {%- endif -%}
+        {%- assign github_truthy = site.socials.github | istruthy -%}
+        {%- if github_truthy -%}
+        "https://github.com/{{ site.socials.github }}",
+        {%- endif -%}
 
-      {%- assign dev_truthy = site.socials.dev | istruthy -%}
-      {%- if dev_truthy -%}
-      "https://dev.to/{{ site.socials.dev }}",
-      {%- endif -%}
+        {%- assign dev_truthy = site.socials.dev | istruthy -%}
+        {%- if dev_truthy -%}
+        "https://dev.to/{{ site.socials.dev }}",
+        {%- endif -%}
 
-      {%- assign tiktok_truthy = site.socials.tiktok | istruthy -%}
-      {%- if tiktok_truthy -%}
-      "https://www.tiktok.com/@{{ site.socials.tiktok }}",
-      {%- endif -%}
+        {%- assign tiktok_truthy = site.socials.tiktok | istruthy -%}
+        {%- if tiktok_truthy -%}
+        "https://www.tiktok.com/@{{ site.socials.tiktok }}",
+        {%- endif -%}
 
-      {%- assign twitch_truthy = site.socials.twitch | istruthy -%}
-      {%- if twitch_truthy -%}
-      "https://www.twitch.tv/{{ site.socials.twitch }}",
-      {%- endif -%}
+        {%- assign twitch_truthy = site.socials.twitch | istruthy -%}
+        {%- if twitch_truthy -%}
+        "https://www.twitch.tv/{{ site.socials.twitch }}",
+        {%- endif -%}
 
-      {%- assign soundcloud_truthy = site.socials.soundcloud | istruthy -%}
-      {%- if soundcloud_truthy -%}
-      "https://soundcloud.com/{{ site.socials.soundcloud }}",
-      {%- endif -%}
+        {%- assign soundcloud_truthy = site.socials.soundcloud | istruthy -%}
+        {%- if soundcloud_truthy -%}
+        "https://soundcloud.com/{{ site.socials.soundcloud }}",
+        {%- endif -%}
 
-      {%- assign spotify_truthy = site.socials.spotify | istruthy -%}
-      {%- if spotify_truthy -%}
-      "https://open.spotify.com/artist/{{ site.socials.spotify }}",
-      {%- endif -%}
+        {%- assign spotify_truthy = site.socials.spotify | istruthy -%}
+        {%- if spotify_truthy -%}
+        "https://open.spotify.com/artist/{{ site.socials.spotify }}",
+        {%- endif -%}
 
-      {%- assign mixcloud_truthy = site.socials.mixcloud | istruthy -%}
-      {%- if mixcloud_truthy -%}
-      "https://www.mixcloud.com/{{ site.socials.mixcloud }}/",
-      {%- endif -%}
+        {%- assign mixcloud_truthy = site.socials.mixcloud | istruthy -%}
+        {%- if mixcloud_truthy -%}
+        "https://www.mixcloud.com/{{ site.socials.mixcloud }}/",
+        {%- endif -%}
 
-      "{{ site.url }}"
-    ],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "{{ site.brand.address-locality }}",
-      "addressCountry": "{{ site.brand.address-country }}"
+        "{{ site.url }}"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ site.brand.address-locality }}",
+        "addressCountry": "{{ site.brand.address-country }}"
+      }
     }
-  }
   </script>
 {% endif %}
 
