@@ -15,14 +15,15 @@ permalink: /feeds/posts.xml
   </subtitle>
 
   {% assign sortedFeed = site.posts | limit:10 | sort: 'date' | reverse %}
+  
   {% for post in sortedFeed %}
-  {%- capture post-title -%}
-    {%- if post.meta.title -%}
-      {{ post.meta.title }}
-    {%- else -%}
-      {{ post.post.title }}
-    {%- endif -%}
-  {%- endcapture -%}
+    {%- capture post-title -%}
+      {%- if post.meta.title -%}
+        {{ post.meta.title }}
+      {%- else -%}
+        {{ post.post.title }}
+      {%- endif -%}
+    {%- endcapture -%}
 
     <entry>
       <title type="html">{{ post-title }}</title>
@@ -35,10 +36,7 @@ permalink: /feeds/posts.xml
       <icon>{{ site.url }}/assets/images/blog/posts/post-{{ post.post.id }}/{{ post.url | split: "/" | last }}.jpg</icon>
       <logo>{{ site.url }}/assets/images/blog/posts/post-{{ post.post.id }}/{{ post.url | split: "/" | last }}.jpg</logo>
       <content type="html" xml:base="{{ site.url }}{{ post.url }}">
-        {% comment %}
         {{ post.content | liquify | markdownify }}
-        {% endcomment %}
-        {{ post.content }}
       </content>
       <author>
         <name>{{ site.brand.name }}</name>

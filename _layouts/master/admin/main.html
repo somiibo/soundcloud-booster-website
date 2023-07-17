@@ -282,24 +282,36 @@ settings:
                   Manager.ready(function () {
                     var breadcrumbs = document.getElementById('uj-breadcrumbs-json');
                     var breadcrumbsEl = document.getElementById('breadcrumbs-list');
-                    var html = ''
+                    var html = '';
+
+                    function set(name, link) {
+                      var base = '<li class="breadcrumb-item">{inside}</li>';
+                      var href = '<a class="breadcrumb-link" href="{href}">{name}</a>';
+
+                      // Capitilize first letter
+                      name = name.charAt(0).toUpperCase() + name.slice(1);
+
+                      if (link) {
+                        base = base.replace(/{inside}/g, href)
+                      }
+
+                      base = base
+                        .replace(/{inside}|{name}/g, name)
+                        .replace(/{href}/g, link)
+                      
+                      return base;
+                    }
+
                     if (breadcrumbs) {
                       breadcrumbs = JSON.parse(breadcrumbs.innerText);
                       breadcrumbs.itemListElement
                       .forEach((item, i) => {
-                        if (item.name) {
-                          var name = item.name;
-                          var link = item.item;
-                          if (item.item) {
-                            // name = name === 'Home' ? Manager.properties.global.brand.name : name;
-                            if (name === 'Home') {
-                              name = 'Dashboard';
-                              link = '{{ site.url }}/admin/dashboard';
-                            }
-                            html += '<li class="breadcrumb-item"><a class="breadcrumb-link" href="' + link + '">' + name + '</a></li>'
-                          } else {
-                            html += '<li class="breadcrumb-item active" aria-current="page">' + name + '</li>'
-                          }
+                        var name = Manager.utilities().get(item, 'item.name');
+                        var link = Manager.utilities().get(item, 'item.@id');
+                        var isLast = i === breadcrumbs.itemListElement.length - 1;
+
+                        if (name) {
+                          html += set(name, isLast ? '' : link)
                         }
                       });
 
