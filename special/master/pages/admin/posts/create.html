@@ -744,9 +744,6 @@ admin:
     // console.log('----lastPost.lastId', lastPost.lastId);
 
     if (lastPost.lastId) {
-      if (fields.id <= lastPost.lastId) {
-        fields.id = lastPost.lastId + 1;
-      }
       Manager.dom().select('#previous-post-container').removeAttribute('hidden');
       Manager.dom().select('#previous-post-id').setInnerHTML(lastPost.lastId);
       // Manager.dom().select('#previous-post-id').setInnerHTML(Math.round(new Date().getTime() / 1000));
@@ -757,546 +754,520 @@ admin:
 
     // console.log('----FINAL', fields.id);
 
-
-    fetch(siteUrl + '/@output/build/build.json', {
+    WonderfulFetch(siteUrl + '/@output/build/build.json', {
       method: 'GET',
+      response: 'json',
     })
-    .then(function (res) {
-      if (res.status >= 200 && res.status < 300) {
-        res.json()
-        .then(function (data) {
-          var invoiceEmailEl = document.getElementById('invoiceEmail')
-          console.log('Success', data);
-          // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+    .then(function (data) {
+      var invoiceEmailEl = document.getElementById('invoiceEmail');
 
-          buildFile = data;
-          dom = Manager.dom();
-          blockNavigation();
-          setupStackedit();
-          setupForm();
+      console.log('Success', data);
+      // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+
+      buildFile = data;
+      dom = Manager.dom();
+      blockNavigation();
+      setupStackedit();
+      setupForm();
+      countChars();
+      countCharactersAndWords();
+      handleChangeEvent();
+      // dom.select('#body').setValue()
+
+      var newDropdownHTML = '<a class="dropdown-item disabled" href="#" disabled>None</a>';
+      var invoiceDropdownEl = document.getElementById('invoiceEmailDropdownList');
+      Manager.storage().get('admin.post.invoiceEmails', [])
+      .forEach((item, i) => {
+        if (item) {
+          newDropdownHTML = '<a class="dropdown-item insert-invoice-email" href="#" data-invoice-email="' + item + '">' + item + '</a>';
+        }
+      });
+
+      if (invoiceDropdownEl) {
+        invoiceDropdownEl.insertAdjacentHTML('beforeend', newDropdownHTML)
+      }
+
+      // Manager.dom().select('#invoiceNote').setValue(Manager.storage().get('admin.post.invoiceNote', ''));
+
+      dom.select('body').on('click', function(event) {
+        // allowLeave = false;
+        if (event.target.matches('#stackedit-edit')) {
+          // Open the iframe
+          stackedit.openFile({
+            name: 'Filename', // with an optional filename
+            content: {
+              text: stackEditElement.value, // and the Markdown content.
+            }
+          });
+        } else if (event.target.matches('#url-format-btn')) {
+          event.preventDefault();
+          triggerTitleChange('url')
+        } else if (event.target.matches('.insert-invoice-email')) {
+          event.preventDefault();
+          invoiceEmailEl.value = event.target.dataset.invoiceEmail;
+        } else if (event.target.matches('#randomize-preview-image')) {
+          randomizeHeaderImage();
+        } else if (event.target.matches('.btn-copy')) {
+          Manager.utilities().clipboardCopy(document.querySelector(event.target.dataset.copy));
+          Admin().elements.toastCopy.show();
+        }
+      });
+
+      dom.select('body').on('change', function (event) {
+        setTimeout(function () {
           countChars();
           countCharactersAndWords();
-          handleChangeEvent();
-          // dom.select('#body').setValue()
+          handleChangeEvent()
+        }, 1);
+        allowLeave = false;
+      });
 
-          var newDropdownHTML = '<a class="dropdown-item disabled" href="#" disabled>None</a>';
-          var invoiceDropdownEl = document.getElementById('invoiceEmailDropdownList');
-          Manager.storage().get('admin.post.invoiceEmails', [])
-          .forEach((item, i) => {
-            if (item) {
-              newDropdownHTML = '<a class="dropdown-item insert-invoice-email" href="#" data-invoice-email="' + item + '">' + item + '</a>';
+      dom.select('body').on('keydown', function (event) {
+        setTimeout(function () {
+          countChars();
+          countCharactersAndWords();
+        }, 1);
+        allowLeave = false;
+      });
+
+      dom.select('body').on('paste', function (event) {
+        setTimeout(function () {
+          countChars();
+          countCharactersAndWords();
+        }, 1);
+        allowLeave = false;
+      });
+
+      dom.select('body').on('cut', function (event) {
+        setTimeout(function () {
+          countChars();
+          countCharactersAndWords();
+        }, 1);
+        allowLeave = false;
+      });
+
+      dom.select('#post-creator-form').on('submit', function (event) {
+        blockNavigation();
+        displayWaiting();
+        // var endpoint = '{{ site.url }}/admin/post/create.json';
+        var endpoint = dom.select('#processingAddy').getValue();
+        var postHandlerEndpoint = 'https://us-central1-{projectId}.cloudfunctions.net/bm_api'
+          .replace(/{projectId}/igm, Manager.properties.options.libraries.firebase_app.config.projectId)
+
+        var token = '';
+        firebase.auth().currentUser.getIdToken(true)
+        .then(function(tkn) {
+          token = tkn;
+
+          var data = getFormData();
+
+          data.postHandlerEndpoint = postHandlerEndpoint;
+
+          Manager.log('#post-creator-form', endpoint, data);
+
+          if (data.enableInvoice && (!data.invoiceEmail || !data.invoicePrice)) {
+            displayError('If invoice is enabled then email and price must also be filled');
+            return;
+          }
+
+          data.invoicePrice = parseInt(data.invoicePrice) + '.00';
+
+          if (data.url !== encodeURIComponent(data.url)) {
+            displayError('There is an unsafe character in your url: ' + data.url);
+            return;
+          }
+
+          // Check for invalid things
+          if (data.body.indexOf('[](') > -1) {
+            var bodyLines = data.body.split('\n');
+            var lineNum = 0;
+            var colNum = 0;
+            for (var i = 0; i < bodyLines.length; i++) {
+              var tempIndex = bodyLines[i].indexOf('[](');
+              if (tempIndex > -1) {
+                lineNum = i + 1;
+                colNum = tempIndex;
+                break;
+              }
             }
-          });
-
-          if (invoiceDropdownEl) {
-            invoiceDropdownEl.insertAdjacentHTML('beforeend', newDropdownHTML)
+            displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
+            return;
           }
 
-          // Manager.dom().select('#invoiceNote').setValue(Manager.storage().get('admin.post.invoiceNote', ''));
+          // Fix excerpt
+          data.excerpt = data.excerpt
+            // Remove double quotes
+            .replace(/"/img, '\'')
 
-          dom.select('body').on('click', function(event) {
-            // allowLeave = false;
-            if (event.target.matches('#stackedit-edit')) {
-              // Open the iframe
-              stackedit.openFile({
-                name: 'Filename', // with an optional filename
-                content: {
-                  text: stackEditElement.value, // and the Markdown content.
-                }
-              });
-            } else if (event.target.matches('#url-format-btn')) {
-              event.preventDefault();
-              triggerTitleChange('url')
-            } else if (event.target.matches('.insert-invoice-email')) {
-              event.preventDefault();
-              invoiceEmailEl.value = event.target.dataset.invoiceEmail;
-            } else if (event.target.matches('#randomize-preview-image')) {
-              randomizeHeaderImage();
-            } else if (event.target.matches('.btn-copy')) {
-              Manager.utilities().clipboardCopy(document.querySelector(event.target.dataset.copy));
-              Admin().elements.toastCopy.show();
+          // Fix title
+          data.title = data.title
+            // Remove double quotes
+            .replace(/"/img, '\'')
+
+          if (data.excerpt.match(/\[*.\]\(/)) {
+            displayError('There is a link or image in the excerpt');
+            return;
+          }
+
+          var lastUrl = '/blog/' + data.url;
+          Manager.storage().set('admin.post.lastId', data.id)
+          Manager.storage().set('admin.post.lastSlug', lastUrl)
+          Manager.storage().set('admin.post.lastUrl', publicSiteUrl + lastUrl)
+          Manager.storage().set('admin.post.lastInvoice', 'Manual')
+
+          var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
+          existingInvoiceEmails.unshift(data.invoiceEmail);
+          Manager.storage().set('admin.post.invoiceEmails', existingInvoiceEmails)
+          Manager.storage().set('admin.post.invoiceNote', data.invoiceNote)
+
+          triggerUnsplashDownload();
+
+          WonderfulFetch(endpoint, {
+            method: 'POST',
+            response: 'json',
+            body: {
+              authenticationToken: token,
+              command: 'admin:create-post',
+              payload: data,
+            },
+          })
+          .then(function (data) {
+            console.log('Success', data, JSON.stringify(data));
+
+            if (data.postHandler.success && data.postHandler.data.invoice && data.postHandler.data.invoice.success) {
+              Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.invoice.data.href)
+            // } else {
+              // Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
             }
-          });
 
-          dom.select('body').on('change', function (event) {
-            setTimeout(function () {
-              countChars();
-              countCharactersAndWords();
-              handleChangeEvent()
-            }, 1);
-            allowLeave = false;
-          });
+            // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
 
-          dom.select('body').on('keydown', function (event) {
-            setTimeout(function () {
-              countChars();
-              countCharactersAndWords();
-            }, 1);
-            allowLeave = false;
-          });
+            // console.log(one,two,three);
+            displayError();
 
-          dom.select('body').on('paste', function (event) {
-            setTimeout(function () {
-              countChars();
-              countCharactersAndWords();
-            }, 1);
-            allowLeave = false;
-          });
+            window.refreshTimer = 2;
+            allowLeave = true;
 
-          dom.select('body').on('cut', function (event) {
-            setTimeout(function () {
-              countChars();
-              countCharactersAndWords();
-            }, 1);
-            allowLeave = false;
-          });
-
-          dom.select('#post-creator-form').on('submit', function (event) {
-            blockNavigation();
-            displayWaiting();
-            // var endpoint = '{{ site.url }}/admin/post/create.json';
-            var endpoint = dom.select('#processingAddy').getValue();
-            var postHandlerEndpoint = 'https://us-central1-{projectId}.cloudfunctions.net/bm_api'
-              .replace(/{projectId}/igm, Manager.properties.options.libraries.firebase_app.config.projectId)
-
-            var token = '';
-            firebase.auth().currentUser.getIdToken(true)
-            .then(function(tkn) {
-              token = tkn;
-
-              var data = getFormData();
-
-              data.postHandlerEndpoint = postHandlerEndpoint;
-
-              Manager.log('#post-creator-form', endpoint, data);
-
-              if (data.enableInvoice && (!data.invoiceEmail || !data.invoicePrice)) {
-                displayError('If invoice is enabled then email and price must also be filled');
-                return;
+            setInterval(function () {
+              Manager.log('Refreshing in...', window.refreshTimer);
+              dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
+              window.refreshTimer--;
+              if (window.refreshTimer <= 0) {
+                allowLeave = true;
+                window.location.href = window.location.href;
               }
-
-              data.invoicePrice = parseInt(data.invoicePrice) + '.00';
-
-              if (data.url !== encodeURIComponent(data.url)) {
-                displayError('There is an unsafe character in your url: ' + data.url);
-                return;
-              }
-
-              // Check for invalid things
-              if (data.body.indexOf('[](') > -1) {
-                var bodyLines = data.body.split('\n');
-                var lineNum = 0;
-                var colNum = 0;
-                for (var i = 0; i < bodyLines.length; i++) {
-                  var tempIndex = bodyLines[i].indexOf('[](');
-                  if (tempIndex > -1) {
-                    lineNum = i + 1;
-                    colNum = tempIndex;
-                    break;
-                  }
-                }
-                displayError('There is an empty link tag or image tag at line ' + lineNum + ':' + colNum);
-                return;
-              }
-
-              // Fix excerpt
-              data.excerpt = data.excerpt
-                // Remove double quotes
-                .replace(/"/img, '\'')
-
-              // Fix title
-              data.title = data.title
-                // Remove double quotes
-                .replace(/"/img, '\'')
-
-              if (data.excerpt.match(/\[*.\]\(/)) {
-                displayError('There is a link or image in the excerpt');
-                return;
-              }
-
-              var lastUrl = '/blog/' + data.url;
-              Manager.storage().set('admin.post.lastId', data.id)
-              Manager.storage().set('admin.post.lastSlug', lastUrl)
-              Manager.storage().set('admin.post.lastUrl', publicSiteUrl + lastUrl)
-              Manager.storage().set('admin.post.lastInvoice', 'Manual')
-
-              var existingInvoiceEmails = Manager.storage().get('admin.post.invoiceEmails', []).filter(e => e !== data.invoiceEmail);
-              existingInvoiceEmails.unshift(data.invoiceEmail);
-              Manager.storage().set('admin.post.invoiceEmails', existingInvoiceEmails)
-              Manager.storage().set('admin.post.invoiceNote', data.invoiceNote)
-
-              fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  authenticationToken: token,
-                  command: 'admin:create-post',
-                  payload: data,
-                }),
-              })
-              .then(function (res) {
-                if (res.status >= 200 && res.status < 300) {
-                  res.json()
-                  .then(function (data) {
-                    console.log('Success', data, JSON.stringify(data));
-
-                    if (data.postHandler.success && data.postHandler.data.invoice && data.postHandler.data.invoice.success) {
-                      Manager.storage().set('admin.post.lastInvoice', data.postHandler.data.invoice.data.href)
-                    // } else {
-                      // Manager.storage().set('admin.post.lastInvoice', data.postHandler.data)
-                    }
-
-                    // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
-
-                    // console.log(one,two,three);
-                    displayError();
-
-                    window.refreshTimer = 2;
-                    allowLeave = true;
-                    setInterval(function () {
-                      Manager.log('Refreshing in...', window.refreshTimer);
-                      dom.select('#refresh-timer').setInnerHTML(window.refreshTimer);
-                      window.refreshTimer--;
-                      if (window.refreshTimer <= 0) {
-                        allowLeave = true;
-                        window.location.href = window.location.href;
-                      }
-                    }, 1000);
-                  })
-                } else {
-                  return res.text()
-                  .then(function (data) {
-                    throw new Error(data || res.statusText || 'Unknown error.')
-                  })
-                }
-              })
-              .catch(function (e) {
-                console.error(e);
-                displayError(e);
-              })
-
-            })
-            .catch(function(e) {
-              console.error(e);
-              displayError('Failed to get firebase token: ' + e);
-            })
-          });
-
-          function triggerTitleChange(source) {
-            var urlEl = dom.select('#url');
-            var titleEl = dom.select('#title');
-            var val = source === 'url' ? urlEl.getValue() : titleEl.getValue();
-
-            urlEl.setValue(
-              val
-              .toLowerCase()
-              .trim()
-              .replace(/\s/g, '-') // replace spaces with dashes
-              .replace(/[^a-zA-Z0-9\u00C0-\u017F-]+/g, '') // remove non-alphanumeric characters except dashes
-              .replace(/-+/g, '-') // if there are multiple dashes, replace with one
-              .replace(/(^-|-$)/g, '') // remove dashes from end
-            )
-          }
-
-          dom.select('#title').on('change', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('title')
-            }, 1);
+            }, 1000);
+          })
+          .catch(function (e) {
+            console.error(e);
+            displayError(e);
           })
 
-          dom.select('#title').on('keydown', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('title')
-            }, 1);
-          })
-
-          dom.select('#title').on('paste', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('title')
-            }, 1);
-          })
-
-          dom.select('#title').on('cut', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('title')
-            }, 1);
-          })
-
-          dom.select('#title').on('change', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('title')
-            }, 1);
-          })
-
-          dom.select('#url').on('blur', function(event) {
-            setTimeout(function () {
-              triggerTitleChange('url')
-            }, 1);
-          })          
-
-          // 
-          dom.select('#headerImageURL').on('keydown', function(event) {
-            setTimeout(function () {
-              setHeaderImagePreview()
-            }, 1);
-          })
-
-          dom.select('#headerImageURL').on('paste', function(event) {
-            setTimeout(function () {
-              setHeaderImagePreview()
-            }, 1);
-          })
-
-          dom.select('#headerImageURL').on('cut', function(event) {
-            setTimeout(function () {
-              setHeaderImagePreview()
-            }, 1);
-          })       
-          
-          function displayWaiting() {
-            clearTimeout(waitingTimeout);
-            dom.select('#response .alert-danger').hide()
-            dom.select('#response .alert-success').hide()
-
-            dom.select('#response .alert-info').show()
-            dom.select('#response').show()
-            dom.select('#post-submit-btn').setAttribute('disabled', true);
-            waitingTimeout = setTimeout(function () {
-              displayError(new Error('Failed to recieve a response. You can try resubmitting now.'));
-            }, 15000);
-          }
-
-          function displayError(error) {
-            clearTimeout(waitingTimeout);
-            dom.select('#response .alert-info').hide()
-            dom.select('#post-submit-btn').removeAttribute('disabled');
-            if (error) {
-              dom.select('#response').show()
-              dom.select('#response .alert-success').hide()
-              dom.select('#response .alert-danger').show()
-              dom.select('#main-response-code').setInnerHTML(error)
-            } else {
-              dom.select('#response').show()
-              dom.select('#response .alert-success').show()
-              dom.select('#response .alert-danger').hide()
-            }
-          }
-
-          function toTitleCase(str) {
-            var lowerCaseWords = [
-              // short conjunctions
-              "and", "as", "but", "for", "if", "nor", "or", "so", "yet", "although", "because", "since", "unless",
-
-              // articles
-              "a", "an", "the",
-
-              // short prepositions
-              "as", "at", "by", "for", "in", "of", "off", "on", "per", "to", "up", "via", "with", "from", "over", "under", "about", "after", "against", "between", "during", "into", "through", "upon", "within",
-
-              // other common short words
-              "is", "are", "was", "be", "am", "do"
-            ];            
-
-            return str
-              .split(' ')
-              .map(function (word, i, arr) {
-                if (i === 0 || i === arr.length - 1 || !lowerCaseWords.includes(word.toLowerCase())) {
-                  return word[0].toUpperCase() + word.substr(1).toLowerCase();
-                } else {
-                  return word.toLowerCase();
-                }
-              })
-              .join(' ');
-          }          
-
-          dom.select('#google-doc-form').on('submit', function (event) {
-            var formData = {};
-            dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
-              var curField = dom.select(el);
-              formData[curField.getAttribute('name')] = curField.getValue();
-            })
-
-            Manager.log('#google-doc-form', formData);
-
-            dom.select('#import-btn').setAttribute('disabled', true);
-
-            fetch(formData.importUrl, {
-              method: 'GET',
-            })
-            .then(function (res) {
-              if (res.status >= 200 && res.status < 300) {
-                res.text()
-                .then(function (data) {
-                  // console.log('Success', data);
-                  // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
-                  //temp
-                  // var query = query || {};
-
-                  // Clean
-                  var body = data.match(/<div id="contents"[^>]*>((.|[\n\r])*)<\/div>/im)[1]; // extract body
-                  // var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
-                  // body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
-                  body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
-                  // body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
-
-                  var title = (data.match(/<div id="title"[^>]*>((.|[\n\r])*?)<\/div>/im) || [])[1]; // extract title
-                  title = (title || '')
-                    .replace('.docx', '')
-                    .replace('.doc', '')
-                    .replace(/[^a-zA-Z0-9\u00C0-\u017F-:\s]+/g, '') // remove non-alphanumeric characters except dashes
-                    .replace(/\s+/g, ' ') // replace multiple spaces with one
-                    .trim();
-
-                  // Set title casing
-                  title = toTitleCase(title);
-
-                  dom.select('#title').setValue(turndownService.turndown(title))
-
-                  // Fix no spaces with links
-                  // body = body.replace(/><a/img, '> <a');
-                  // body = body.replace(/><\/a/img, '> </a');
-                  // body = body.replace(/<\/a></img, ' </a><');
-                  // setTimeout(function () {
-                  triggerTitleChange('title')
-                  // }, 300);
-
-                  // https://github.com/domchristie/turndown
-                  var markdown = turndownService.turndown(body);
-
-                  document.getElementById('markdown-holder').value = markdown; // just to see what it looks like before processing
-
-                  // Remove whitespace
-                  // markdown = markdown
-                  //   .replace(/^\n\s*/gm, '');
-
-                  // Fix no spaces with links
-                  markdown = markdown
-                    .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
-                    .replace(/(\))([a-zA-Z0-9])/g, '$1 $2') // add space when there are parenthesis
-
-                  // Fixes
-                  markdown = markdown
-                    .replace(/ \. /img, '. ') // fix periods
-                    .replace(/ \, /img, ', ') // fix periods
-                    .replace(/\)\s\s+/img, ') ') // fix double space
-                    .replace(/\s\s+\[/img, ' [') // fix double space
-
-                  // Clear promo stuff
-                  // markdown = markdown
-                    // .replace(/Published using Google Docs \[.*\)/img, '') // remove google
-                    // .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
-
-                  // Remove hr breaks
-                  // console.log('---formData.replaceHeadings', formData.replaceHeadings);
-                  if (formData.replaceHeadings) {
-                    markdown = markdown
-                      .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
-                      .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2') // replace - with ##
-                      .replace(/(\n|^)(={3,}).*(={3,})/img, '') // remove extra =
-                      .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
-                  }
-                  markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
-
-                  // Remove links from titles
-                  markdown = markdown
-                    .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
-
-                  var links = [];
-                  links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
-                  // Fix Google Links
-                  for (var i = 0; i < links.length; i++) {
-                    if (markdown.indexOf('!' + links[i]) === -1) {
-                      var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
-                      var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
-                      var newLink = false;
-                      var needsReplacing = link.indexOf('url?q=') !== -1;
-                      if (needsReplacing) {
-                        newLink = new URLSearchParams(link.split('?')[1]).get('q');
-                        // console.log('Extracted link:', newLink);
-                      }
-                      if (needsReplacing) {
-                        markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
-                      }
-                    }
-                  }
-
-                  // Clean lines
-                  markdown = markdown
-                    .replace(/^\n/g, '') // fix start line-breaks
-                    .replace(/^\n/m, '') // fix start line-breaks stragler
-                    .replace(/\n$/g, '') // fix end line-breaks
-                    .replace(/\n$/g, '') // fix end line-breaks
-
-                  // Remove header if its first
-                  markdown = markdown.replace(/^#(.*?)\n/im, '')
-
-                  // remove first image and set it to the main image field
-                  var imageMatchingRegex = /!\[\]\((.*?)\)/im
-                  var firstImage = (markdown.match(imageMatchingRegex) || [])[1]
-                  markdown = markdown.replace(imageMatchingRegex, '');
-
-                  dom.select('#headerImageURL').setValue(firstImage || '');
-
-                  // Get rid of source images
-                  markdown = markdown.replace(/Image source: (.*?)\s/img, '\n');
-
-                  // Insert ads
-                  markdown = splice(markdown, getPos(markdown, '\n', 1, false), 0, '\n\n{{ page.post-vars.ad }}\n\n')
-                  markdown = splice(markdown, getPos(markdown, '\n', 5, true), 0, '\n\n{{ page.post-vars.ad }}\n\n')
-
-                  // Replace extra line breaks to make it look nice
-                  markdown = markdown.replace(/\n{3,}/g,'\n\n')
-
-                  // Trim
-                  markdown = markdown.trim()
-
-                  // Extract excerpt
-                  var excerpt = markdown
-                    // Remove images and links
-                    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
-                    // Separate by line breaks
-                    .match(/(?:.*?\.){2}/)[0] || '';
-
-                  // Set exceprt
-                  dom.select('#excerpt').setValue(excerpt);
-
-                  dom.select('#body').setValue(markdown);
-                  dom.select('#google-doc-error').hide();
-
-                  $('#importGoogleDoc').modal('toggle');
-                  dom.select('#import-btn').removeAttribute('disabled');
-
-                  if (!dom.select('#headerImageURL').getValue()) {
-                    randomizeHeaderImage();
-                  }
-
-                  setHeaderImagePreview()
-                  countChars();
-                  countCharactersAndWords();
-                })
-              } else {
-                return res.text()
-                .then(function (data) {
-                  throw new Error(data || res.statusText || 'Unknown error.')
-                })
-              }
-
-            })
-            .catch(function (e) {
-              console.error(e);
-              dom.select('#google-doc-error').show();
-              dom.select('#google-response-code').setInnerHTML(e);
-              dom.select('#import-btn').removeAttribute('disabled');
-            })
-
-          })
         })
-      } else {
-        return res.text()
-        .then(function (data) {
-          throw new Error(data || res.statusText || 'Unknown error.')
+        .catch(function(e) {
+          console.error(e);
+          displayError('Failed to get firebase token: ' + e);
         })
+      });
+
+      function triggerTitleChange(source) {
+        var urlEl = dom.select('#url');
+        var titleEl = dom.select('#title');
+        var val = source === 'url' ? urlEl.getValue() : titleEl.getValue();
+
+        urlEl.setValue(
+          val
+          .toLowerCase()
+          .trim()
+          .replace(/\s/g, '-') // replace spaces with dashes
+          .replace(/[^a-zA-Z0-9\u00C0-\u017F-]+/g, '') // remove non-alphanumeric characters except dashes
+          .replace(/-+/g, '-') // if there are multiple dashes, replace with one
+          .replace(/(^-|-$)/g, '') // remove dashes from end
+        )
       }
+
+      dom.select('#title').on('change', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('title')
+        }, 1);
+      })
+
+      dom.select('#title').on('keydown', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('title')
+        }, 1);
+      })
+
+      dom.select('#title').on('paste', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('title')
+        }, 1);
+      })
+
+      dom.select('#title').on('cut', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('title')
+        }, 1);
+      })
+
+      dom.select('#title').on('change', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('title')
+        }, 1);
+      })
+
+      dom.select('#url').on('blur', function(event) {
+        setTimeout(function () {
+          triggerTitleChange('url')
+        }, 1);
+      })          
+
+      // 
+      dom.select('#headerImageURL').on('keydown', function(event) {
+        setTimeout(function () {
+          setHeaderImagePreview()
+        }, 1);
+      })
+
+      dom.select('#headerImageURL').on('paste', function(event) {
+        setTimeout(function () {
+          setHeaderImagePreview()
+        }, 1);
+      })
+
+      dom.select('#headerImageURL').on('cut', function(event) {
+        setTimeout(function () {
+          setHeaderImagePreview()
+        }, 1);
+      })       
+      
+      function displayWaiting() {
+        clearTimeout(waitingTimeout);
+        dom.select('#response .alert-danger').hide()
+        dom.select('#response .alert-success').hide()
+
+        dom.select('#response .alert-info').show()
+        dom.select('#response').show()
+        dom.select('#post-submit-btn').setAttribute('disabled', true);
+        waitingTimeout = setTimeout(function () {
+          displayError(new Error('Failed to recieve a response. You can try resubmitting now.'));
+        }, 15000);
+      }
+
+      function displayError(error) {
+        clearTimeout(waitingTimeout);
+        dom.select('#response .alert-info').hide()
+        dom.select('#post-submit-btn').removeAttribute('disabled');
+        if (error) {
+          dom.select('#response').show()
+          dom.select('#response .alert-success').hide()
+          dom.select('#response .alert-danger').show()
+          dom.select('#main-response-code').setInnerHTML(error)
+        } else {
+          dom.select('#response').show()
+          dom.select('#response .alert-success').show()
+          dom.select('#response .alert-danger').hide()
+        }
+      }
+
+      function toTitleCase(str) {
+        var lowerCaseWords = [
+          // short conjunctions
+          "and", "as", "but", "for", "if", "nor", "or", "so", "yet", "although", "because", "since", "unless",
+
+          // articles
+          "a", "an", "the",
+
+          // short prepositions
+          "as", "at", "by", "for", "in", "of", "off", "on", "per", "to", "up", "via", "with", "from", "over", "under", "about", "after", "against", "between", "during", "into", "through", "upon", "within",
+
+          // other common short words
+          "is", "are", "was", "be", "am", "do"
+        ];            
+
+        return str
+          .split(' ')
+          .map(function (word, i, arr) {
+            if (i === 0 || i === arr.length - 1 || !lowerCaseWords.includes(word.toLowerCase())) {
+              return word[0].toUpperCase() + word.substr(1).toLowerCase();
+            } else {
+              return word.toLowerCase();
+            }
+          })
+          .join(' ');
+      }          
+
+      dom.select('#google-doc-form').on('submit', function (event) {
+        var formData = {};
+        dom.select('#google-doc-form input, #google-doc-form select, #google-doc-form textarea').each(function (el, i) {
+          var curField = dom.select(el);
+          formData[curField.getAttribute('name')] = curField.getValue();
+        })
+
+        Manager.log('#google-doc-form', formData);
+
+        dom.select('#import-btn').setAttribute('disabled', true);
+
+        WonderfulFetch(formData.importUrl, {
+          method: 'GET',
+          response: 'text',
+        })
+        .then(function (data) {
+          // console.log('Success', data);
+          // Manager.dom().select('#result').setInnerHTML(res.status + '\n' + JSON.stringify(data, undefined, 2)); // Set setInnerHTML
+          //temp
+          // var query = query || {};
+
+          // Clean
+          var body = data.match(/<div id="contents"[^>]*>((.|[\n\r])*)<\/div>/im)[1]; // extract body
+          // var body = data.match(/<body[^>]*>((.|[\n\r])*)<\/body>/im)[1]; // extract body
+          // body = body.replace(/<script[^>]*>((.|[\n\r])*)<\/script>/im, ''); // Remove script
+          body = body.replace(/<style[^>]*>((.|[\n\r])*)<\/style>/im, ''); // Remove style
+          // body = body.replace(/<div id="header"[^>]*>((.|[\n\r])*?)<\/div>/im, ''); // Remove style
+
+          var title = (data.match(/<div id="title"[^>]*>((.|[\n\r])*?)<\/div>/im) || [])[1]; // extract title
+          title = (title || '')
+            .replace('.docx', '')
+            .replace('.doc', '')
+            .replace(/[^a-zA-Z0-9\u00C0-\u017F-:\s]+/g, '') // remove non-alphanumeric characters except dashes
+            .replace(/\s+/g, ' ') // replace multiple spaces with one
+            .trim();
+
+          // Set title casing
+          title = toTitleCase(title);
+
+          dom.select('#title').setValue(turndownService.turndown(title))
+
+          // Fix no spaces with links
+          // body = body.replace(/><a/img, '> <a');
+          // body = body.replace(/><\/a/img, '> </a');
+          // body = body.replace(/<\/a></img, ' </a><');
+          // setTimeout(function () {
+          triggerTitleChange('title')
+          // }, 300);
+
+          // https://github.com/domchristie/turndown
+          var markdown = turndownService.turndown(body);
+
+          document.getElementById('markdown-holder').value = markdown; // just to see what it looks like before processing
+
+          // Remove whitespace
+          // markdown = markdown
+          //   .replace(/^\n\s*/gm, '');
+
+          // Fix no spaces with links
+          markdown = markdown
+            .replace(/([a-zA-Z0-9])(\[)/g, '$1 $2') // add space when there are brackets
+            .replace(/(\))([a-zA-Z0-9])/g, '$1 $2') // add space when there are parenthesis
+
+          // Fixes
+          markdown = markdown
+            .replace(/ \. /img, '. ') // fix periods
+            .replace(/ \, /img, ', ') // fix periods
+            .replace(/\)\s\s+/img, ') ') // fix double space
+            .replace(/\s\s+\[/img, ' [') // fix double space
+
+          // Clear promo stuff
+          // markdown = markdown
+            // .replace(/Published using Google Docs \[.*\)/img, '') // remove google
+            // .replace(/Updated automatically.*every 5 minutes/img, '') // remove google
+
+          // Remove hr breaks
+          // console.log('---formData.replaceHeadings', formData.replaceHeadings);
+          if (formData.replaceHeadings) {
+            markdown = markdown
+              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n={3,})/img, '$1# $2') // replace = with #
+              .replace(/(\n|^)([a-zA-Z0-9].+).*?(\n-{3,})/img, '$1## $2') // replace - with ##
+              .replace(/(\n|^)(={3,}).*(={3,})/img, '') // remove extra =
+              .replace(/(\n|^)(-{3,}).*(-{3,})/img, '') // remove extra -
+          }
+          markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
+
+          // Remove links from titles
+          markdown = markdown
+            .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
+
+          var links = [];
+          links = markdown.match(/(?:\[(.*?)\]\((.*?)\))/img) || [];
+          // Fix Google Links
+          for (var i = 0; i < links.length; i++) {
+            if (markdown.indexOf('!' + links[i]) === -1) {
+              var alt = ((links[i].match(/\[(.*?)\]/img)|| [])[0]+'').replace(/(\[|\])/img, '');
+              var link = ((links[i].match(/\((.*?)\)/img)|| [])[0]+'').replace(/(\(|\))/img, '').replace(/\s.*?"(.*?)"\s*/g,'');
+              var newLink = false;
+              var needsReplacing = link.indexOf('url?q=') !== -1;
+              if (needsReplacing) {
+                newLink = new URLSearchParams(link.split('?')[1]).get('q');
+                // console.log('Extracted link:', newLink);
+              }
+              if (needsReplacing) {
+                markdown = markdown.replace(`[${alt}](${link})`, `[${alt}](${newLink})`)
+              }
+            }
+          }
+
+          // Clean lines
+          markdown = markdown
+            .replace(/^\n/g, '') // fix start line-breaks
+            .replace(/^\n/m, '') // fix start line-breaks stragler
+            .replace(/\n$/g, '') // fix end line-breaks
+            .replace(/\n$/g, '') // fix end line-breaks
+
+          // Remove header if its first
+          markdown = markdown.replace(/^#(.*?)\n/im, '')
+
+          // remove first image and set it to the main image field
+          var imageMatchingRegex = /!\[\]\((.*?)\)/im
+          var firstImage = (markdown.match(imageMatchingRegex) || [])[1]
+          markdown = markdown.replace(imageMatchingRegex, '');
+
+          dom.select('#headerImageURL').setValue(firstImage || '');
+
+          // Get rid of source images
+          markdown = markdown.replace(/Image source: (.*?)\s/img, '\n');
+
+          // Insert ads
+          markdown = splice(markdown, getPos(markdown, '\n', 1, false), 0, '\n\n{{ page.post-vars.ad }}\n\n')
+          markdown = splice(markdown, getPos(markdown, '\n', 5, true), 0, '\n\n{{ page.post-vars.ad }}\n\n')
+
+          // Replace extra line breaks to make it look nice
+          markdown = markdown.replace(/\n{3,}/g,'\n\n')
+
+          // Trim
+          markdown = markdown.trim()
+
+          // Extract excerpt
+          var excerpt = markdown
+            // Remove images and links
+            .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+            // Separate by line breaks
+            .match(/(?:.*?\.){2}/)[0] || '';
+
+          // Set exceprt
+          dom.select('#excerpt').setValue(excerpt);
+
+          dom.select('#body').setValue(markdown);
+          dom.select('#google-doc-error').hide();
+
+          $('#importGoogleDoc').modal('toggle');
+          dom.select('#import-btn').removeAttribute('disabled');
+
+          if (!dom.select('#headerImageURL').getValue()) {
+            randomizeHeaderImage();
+          }
+
+          setHeaderImagePreview()
+          countChars();
+          countCharactersAndWords();
+        })
+        .catch(function (e) {
+          console.error(e);
+          dom.select('#google-doc-error').show();
+          dom.select('#google-response-code').setInnerHTML(e);
+          dom.select('#import-btn').removeAttribute('disabled');
+        })
+
+      })
     })
     .catch(function (e) {
       console.error(e);
@@ -1411,7 +1382,9 @@ admin:
     .then(function (json) {
       console.log('Unsplash image', json);
 
-      dom.select('#headerImageURL').setValue(json.urls.regular);
+      dom.select('#headerImageURL')
+        .setValue(json.urls.regular)
+        .setAttribute('data-download-attribution', json.links.download_location)
 
       $unsplashCredits.removeAttribute('hidden');
       $unsplashCreditsArtist.setAttribute('href', 'https://unsplash.com/@' + json.user.username + '?utm_source=ultimate-jekyll&utm_medium=referral');
@@ -1419,6 +1392,24 @@ admin:
 
       setHeaderImagePreview();
     })
+  }
+
+  function triggerUnsplashDownload() {
+    var url = dom.select('#headerImageURL').getAttribute('data-download-attribution');
+
+    if (url) {
+      url = new URL(url);
+
+      url.searchParams.set('client_id', UNSPLASH_API_KEY);
+
+      WonderfulFetch(url, {
+        method: 'GET',
+        response: 'json',
+      })
+      .then(function (json) {
+        console.log('Triggered Unsplash download', json);
+      })      
+    }
   }
 
   function setHeaderImagePreview() {
