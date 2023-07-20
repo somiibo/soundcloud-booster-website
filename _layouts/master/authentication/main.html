@@ -77,8 +77,9 @@ settings:
 ---
 {% assign is-sign-up-page = false %}
 {% assign is-sign-in-page = false %}
-{% assign is-forgot-page = false %}
 {% assign is-sign-out-page = false %}
+{% assign is-forgot-page = false %}
+{% assign is-success-page = false %}
 {% assign is-other-page = false %}
 
 {% assign subtitle-middle-word = 'for' %}
@@ -104,6 +105,10 @@ settings:
   {% assign is-forgot-page = true %}
   {% assign secondary-title = 'Recover your account' %}
   {% capture secondary-subtitle %}Reset your password for <strong>{{ site.brand.name }}</strong>{% endcapture %}
+{%- elsif page.permalink == '/authentication-success/' -%}
+  {% assign is-success-page = true %}
+  {% assign secondary-title = 'Successful Login' %}
+  {% capture secondary-subtitle %}You have successfully logged in to <strong>{{ site.brand.name }}</strong>{% endcapture %}
 {%- else -%}
   {% assign is-other-page = true %}
   {% assign secondary-title = 'Account required' %}
@@ -312,10 +317,9 @@ settings:
               <div class="text-center">
                 <div class="mb-5">
                   <h1 class="display-5">{{ secondary-title }}</h1>
-                  {{ secondary-subtitle }}
+                  <span class="auth-page-message-element">{{ secondary-subtitle }}</span>
                 </div>
               </div>
-
 
               {%- if is-sign-out-page -%}
                 <div class="d-grid">
@@ -335,7 +339,13 @@ settings:
                 <div class="text-center">
                   <span class="divider-center text-muted mb-4">OR</span>
                   <div class="">
-                    <p>Ready to log in? <a class="link" href="{{ site.url }}/signin">Sign in</a></p>
+                    <span>Ready to log in? <a class="link" href="{{ site.url }}/signin">Sign in</a></span>
+                  </div>
+                </div>
+              {%- elsif is-success-page -%}
+                <div class="text-center">
+                  <div class="">
+                    <a class="btn btn-sm btn-primary" href="{{ site.url }}">Return home</a>
                   </div>
                 </div>
               {%- else -%}
@@ -345,7 +355,7 @@ settings:
                 <div class="text-center">
                   <span class="divider-center text-muted mb-4">OR</span>
                   <div class="">
-                    <p>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in</a></p>
+                    <span>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in</a></span>
                   </div>
                 </div>
               {%- endif -%}
@@ -428,6 +438,7 @@ settings:
   var qsToken;
   var qsSource;
   var qsDestination;
+  var qsMessage;
   var $authErrorModal;
   var $authErrorModalMessage;
 
@@ -444,6 +455,7 @@ settings:
     qsToken = decodeURIComponent(url.searchParams.get('token') || '');
     qsSource = decodeURIComponent(url.searchParams.get('source') || '');
     qsDestination = decodeURIComponent(url.searchParams.get('destination') || '');
+    qsMessage = decodeURIComponent(url.searchParams.get('message') || '');
 
     redirectUrl = qsDestination || url.origin;
     // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
@@ -454,6 +466,10 @@ settings:
     $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {
     })
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
+
+    dom.select('.auth-page-message-element').each(function ($el) {
+      $el.innerText = qsMessage || $el.innerText;
+    })
 
     // Process the auth
     firebase.auth()
