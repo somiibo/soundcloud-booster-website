@@ -430,7 +430,7 @@ settings:
 </div>
 
 <script type="text/javascript">
-  var dom;
+  var select;
   var url;
   var serverApiURL;
   var providerDetails = {}
@@ -439,11 +439,15 @@ settings:
   var qsSource;
   var qsDestination;
   var qsMessage;
+  var qsEmail;
   var $authErrorModal;
   var $authErrorModalMessage;
+  var $authLinks;
+  var $emailInput;
+  var updateTimeout;
 
   Manager.auth().ready(function () {
-    dom = Manager.dom();
+    select = Manager.dom().select;
     var user = firebase.auth().currentUser;
     url = new URL(window.location.href);
     var action = false;
@@ -456,6 +460,7 @@ settings:
     qsSource = decodeURIComponent(url.searchParams.get('source') || '');
     qsDestination = decodeURIComponent(url.searchParams.get('destination') || '');
     qsMessage = decodeURIComponent(url.searchParams.get('message') || '');
+    qsEmail = decodeURIComponent(url.searchParams.get('email') || '');
 
     redirectUrl = qsDestination || url.origin;
     // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
@@ -466,145 +471,10 @@ settings:
     $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {
     })
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
+    $authLinks = select('a[href*="/signin"], a[href*="/signup"]');
+    $emailInput = select('.auth-email-input');
 
-    dom.select('.auth-page-message-element').each(function ($el) {
-      $el.innerText = qsMessage || $el.innerText;
-    })
-
-    // Process the auth
-    firebase.auth()
-      .getRedirectResult()
-      .then(function (result) {
-        console.log('----result', result);
-        display('loading');
-
-        if (!action) {
-          display('hidden');
-          if (url.searchParams.get('signout')) {
-            console.log('----SIGNOUT');
-            action = true;
-            firebase.auth().signOut()
-            .catch(function (e) {
-              console.error('Error signing out', e);
-              display(e);
-            })
-            .finally(function () {
-              url.searchParams.delete('signout')
-              redirect(url.toString())
-            })
-          } else {
-
-
-            if (url.pathname.match(/signout/img)) {
-              if (!user) {
-                url.pathname = 'signin';
-                return redirect(url.toString());
-              } else {
-                firebase.auth().onAuthStateChanged(function (user) {
-                  if (!user) {
-                    url.pathname = 'signin';
-                    return redirect(url.toString());
-                  }
-                })
-                display('waiting');
-                return
-              }
-            }
-
-            // console.log('----qsToken', qsToken);
-            // qsToken can be set on its own to simply sign in with it
-            if (qsToken) {
-              console.log('signInWithCustomToken(qsToken)', qsToken);
-              firebase.auth().signInWithCustomToken(qsToken)
-              .then(function (r) {
-                redirect()
-              })
-              .catch(function (e) {
-                display(e);
-              })
-            } else if (result && result.user) {
-              console.log('----result.user', result.user);
-              createCustomToken({user: result.user})
-            } else {
-              action = true;
-              console.log('----READY');
-              var provider = url.searchParams.get('provider');
-              if (provider) {
-                firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
-                .catch(function (e) {
-                  display(e);
-                })
-              } else {
-
-                // Get provider details
-                fetch(serverApiURL, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    command: 'firebase:get-providers',
-                    payload: {},
-                  }),
-                })
-                .then(function (res) { // This function runs only on success
-                  if (res.ok) {
-                    res.json()
-                    .then(function (data) {
-                      var providerCount = 0;
-                      providerDetails = data;
-
-                      Object.values(providerDetails)
-                      .forEach(function (value, i) {
-                        providerCount += value ? 1 : 0;
-                      });
-
-                      if (providerCount < 1) {
-                        document.getElementById('auth-provider-buttons').setAttribute('hidden', true)
-                      }
-
-                      firebase.auth().onAuthStateChanged(function (user) {
-                        if (user) {
-                          console.log('---onAuthStateChanged createCustomToken', user);
-                          display('hidden');
-                          createCustomToken({user: user})
-                        }
-                      })
-                      display('waiting')
-                    })
-                  } else {
-                    return res.text()
-                    .then(function (data) {
-                      throw new Error(data || res.statusText || 'Unknown error.')
-                    })
-                  }
-                })
-                .catch(function (e) { // This function runs only on error
-                  console.error('Fail', e);
-                  display(e);
-                })
-
-              }
-            }
-          }
-        }
-      })
-      .catch(function (e) {
-        console.error('----e', e);
-        display(e);
-      });
-
-
-
-    console.log('----FIRST', url.toString());
-    console.log('----user', user);
-
-
-
-
-    /*
-      firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider('google.com'))
-      http://localhost:4000/oauth2/?provider=google.com&signout=true&development=true
-    */
-
+    // Handle clicks
     document.addEventListener('click', function (event) {
       if (event.target.matches('#relaunch-btn')) {
         display('hidden');
@@ -626,8 +496,171 @@ settings:
       }
     })
 
+    // Handle changes on the email field
+    var events = ['change', 'cut', 'paste', 'keydown']
+    events.forEach(function (event) {
+      document.addEventListener(event, function (event) {
+        if (event.target.matches('.auth-email-input')) {
+          clearTimeout(updateTimeout);
+          updateTimeout = setTimeout(function () {
+            updateLinksWithEmail(event.target.value);
+          }, 333);
+        }
+      })
+    })
 
+    // Set the email field to the qsEmail if it exists
+    if (qsEmail) {
+      $emailInput.each(function ($el) {
+        $el.value = qsEmail;
+      })
+    }
+
+    select('.auth-page-message-element').each(function ($el) {
+      $el.innerText = qsMessage || $el.innerText;
+    })
+  
+    // If we're on the success page, just stay here
+    if (url.pathname.match(/authentication-success/img)) {
+      return display('waiting')
+    }
+
+    // Process the auth
+    firebase.auth()
+      .getRedirectResult()
+      .then(function (result) {
+        console.log('----result', result);
+        display('loading');
+
+        if (action) {
+          return
+        }
+
+        display('hidden');
+        if (url.searchParams.get('signout')) {
+          console.log('----SIGNOUT');
+          action = true;
+          firebase.auth().signOut()
+          .catch(function (e) {
+            console.error('Error signing out', e);
+            display(e);
+          })
+          .finally(function () {
+            url.searchParams.delete('signout')
+            redirect(url.toString())
+          })
+        } else {
+          if (url.pathname.match(/signout/img)) {
+            if (!user) {
+              url.pathname = 'signin';
+              return redirect(url.toString());
+            } else {
+              firebase.auth().onAuthStateChanged(function (user) {
+                if (!user) {
+                  url.pathname = 'signin';
+                  return redirect(url.toString());
+                }
+              })
+              display('waiting');
+              return
+            }
+          }
+
+          // console.log('----qsToken', qsToken);
+          // qsToken can be set on its own to simply sign in with it
+          if (qsToken) {
+            console.log('signInWithCustomToken(qsToken)', qsToken);
+            firebase.auth().signInWithCustomToken(qsToken)
+            .then(function (r) {
+              redirect()
+            })
+            .catch(function (e) {
+              display(e);
+            })
+          } else if (result && result.user) {
+            console.log('----result.user', result.user);
+            createCustomToken({user: result.user})
+          } else {
+            action = true;
+            console.log('----READY');
+            var provider = url.searchParams.get('provider');
+            if (provider) {
+              firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
+              .catch(function (e) {
+                display(e);
+              })
+            } else {
+
+              // Get provider details
+              fetch(serverApiURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  command: 'firebase:get-providers',
+                  payload: {},
+                }),
+              })
+              .then(function (res) { // This function runs only on success
+                if (res.ok) {
+                  res.json()
+                  .then(function (data) {
+                    var providerCount = 0;
+                    providerDetails = data;
+
+                    Object.values(providerDetails)
+                    .forEach(function (value, i) {
+                      providerCount += value ? 1 : 0;
+                    });
+
+                    if (providerCount < 1) {
+                      document.getElementById('auth-provider-buttons').setAttribute('hidden', true)
+                    }
+
+                    firebase.auth().onAuthStateChanged(function (user) {
+                      if (user) {
+                        console.log('---onAuthStateChanged createCustomToken', user);
+                        display('hidden');
+                        createCustomToken({user: user})
+                      }
+                    })
+                    display('waiting')
+                  })
+                } else {
+                  return res.text()
+                  .then(function (data) {
+                    throw new Error(data || res.statusText || 'Unknown error.')
+                  })
+                }
+              })
+              .catch(function (e) { // This function runs only on error
+                console.error('Fail', e);
+                display(e);
+              })
+
+            }
+          }
+        }
+      })
+      .catch(function (e) {
+        console.error('----e', e);
+        display(e);
+      });
+
+
+    console.log('----FIRST', url.toString());
+    console.log('----user', user);
   })
+
+  function updateLinksWithEmail(email) {
+    $authLinks.each(function ($el) {
+      var href = $el.getAttribute('href');
+      if (href) {
+        href = new URL(href);
+        href.searchParams.set('email', email);
+        $el.setAttribute('href', href.toString());
+      }
+    })
+  }
 
   function signUpHandler(token) {
     return new Promise(function(resolve, reject) {
@@ -676,7 +709,6 @@ settings:
   }
 
   function _redirect(url) {
-    console.log('_RE', url);
     if (window.electronManager) {
       window.electronManager().processCustomToken(window.tokenResult);
     } else {
@@ -708,7 +740,7 @@ settings:
       if (qsSource === 'app') {
         console.log('Source is app, so launching app');
         setTimeout(function () {
-          display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
+          display('success', 'ASuccess! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
         }, 1000);
       } else {
         console.log('Source is NOT app, so just redirecting');
@@ -798,7 +830,7 @@ settings:
             .then(function (data) {
               console.log('Custom token', data.token);
               window.tokenResult = data.token;
-              // launch();
+
               redirect();
             })
           } else {
@@ -818,16 +850,16 @@ settings:
   window.createCustomToken = createCustomToken;
 
   function display(type, msg) {
-    var alertEl = dom.select('#result')
-    var spinnerEl = dom.select('#spinner')
-    var resendBtn = dom.select('#relaunch-btn')
-    var authContainer = dom.select('#auth-container')
-    var providerBtnEl = dom.select('a[data-provider]')
-    var authProviderPass = dom.select('#auth-provider-password')
-    var authOrSeparatorEl = dom.select('#auth-separator')
+    var alertEl = select('#result')
+    var spinnerEl = select('#spinner')
+    var resendBtn = select('#relaunch-btn')
+    var authContainer = select('#auth-container')
+    var providerBtnEl = select('a[data-provider]')
+    var authProviderPass = select('#auth-provider-password')
+    var authOrSeparatorEl = select('#auth-separator')
 
-    var authProviderPassBtns = dom.select('#auth-provider-password-buttons')
-    var authProviderGlobalBtns = dom.select('#auth-provider-global-buttons')
+    var authProviderPassBtns = select('#auth-provider-password-buttons')
+    var authProviderGlobalBtns = select('#auth-provider-global-buttons')
 
     if (type instanceof Error) {
       console.error('display()', type, msg);
@@ -874,7 +906,6 @@ settings:
     // providerDetails.password = false;
 
     function _enableLogin() {
-
       authOrSeparatorEl
         .removeAttribute('hidden');
 
@@ -914,7 +945,12 @@ settings:
           el.setAttribute('disabled', true);
           el.classList.add('disabled');
         }
-      })      
+      })  
+
+      $emailInput.each(function ($el) {
+        // $el.select();
+        $el.focus();
+      })    
     }
 
     if (type === 'waiting') {
