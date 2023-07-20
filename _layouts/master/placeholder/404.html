@@ -23,14 +23,11 @@ meta:
             <h1>Oops!</h1>
             <p class="mb-0">This page doesn't exist. Please let us know so we can fix the broken link.</p>
             <div>
-              <strong>URL:</strong> <code>{{ site.url }}{{ page.url }}</code>
+              <strong>URL:</strong> <code id="page-url">{{ site.url }}{{ page.url }}</code>
             </div>
             <div class="w-50 mt-3">
               <a id="launch-button" class="btn btn-primary mb-1 mr-1" href="{{ site.url }}">Return home</a>
             </div>
-            <!-- <a id="launch-button" class="btn btn-outline-primary mb-1 mr-1" href="{{ site.app }}://dashboard">Launch {{ site.brand.name }}</a> -->
-            <!-- <a id="download-button" class="btn btn-primary mb-1 mr-1" href="{{ site.url }}/download">Download {{ site.brand.name }}</a> -->
-                      
           </div>
         </div>
 			</div>
@@ -42,4 +39,7 @@ meta:
   Manager.ready(function () {
     Manager.sentry().captureException(new Error('404 at: ' + window.location.href));
   })
+
+  // Set page URL
+  document.getElementById('page-url').innerHTML = window.location.href;
 </script>
