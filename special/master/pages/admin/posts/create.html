@@ -1183,6 +1183,10 @@ admin:
           }
           markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
 
+          // Fix headings where numbers come before the hashtags such as 1. #, 2. ##
+          markdown = markdown
+            .replace(/(\n|^)([0-9]+\.)(\s*)(#*)/img, '$4 $2')
+
           // Remove links from titles
           markdown = markdown
             .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
@@ -1232,6 +1236,9 @@ admin:
 
           // Replace extra line breaks to make it look nice
           markdown = markdown.replace(/\n{3,}/g,'\n\n')
+
+          // Replace any multiple spaces with one
+          markdown = markdown.replace(/\s+/g, ' ');
 
           // Trim
           markdown = markdown.trim()
