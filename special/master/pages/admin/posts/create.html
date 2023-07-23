@@ -1238,7 +1238,7 @@ admin:
           markdown = markdown.replace(/\n{3,}/g,'\n\n')
 
           // Replace any multiple spaces with one
-          markdown = markdown.replace(/\s+/g, ' ');
+          markdown = markdown.replace(/ +/g, ' ');
 
           // Trim
           markdown = markdown.trim()
