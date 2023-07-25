@@ -589,7 +589,14 @@ admin:
       </div>
 
       <div class="col-12">
-        <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post!</button>
+        <div class="alert alert-warning" role="alert">
+          <h4 class="alert-heading">Posting to {{ site.brand.name }}</h4>
+          <span>You are about to post this to <strong>{{ site.brand.name }}</strong>, are you sure?</span>
+        </div>
+      </div>      
+
+      <div class="col-12">
+        <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post to {{ site.brand.name }}!</button>
       </div>
     </div>
   </form>
