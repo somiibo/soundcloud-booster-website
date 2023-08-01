@@ -13,9 +13,9 @@
           </span>
         </div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-      </div>      
+      </div>
     </div>
-  </div> 
+  </div>
 '>
 </div>
 
@@ -34,16 +34,16 @@
                 <button type="submit" class="btn btn-primary">
                   <span class="dashboard-display-loader" hidden>
                     <div class="spinner-border spinner-border-sm text-light" role="status"></div>
-                  </span>                    
+                  </span>
                   Save
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
-  </div> 
+  </div>
 '>
 </div>
 
@@ -69,7 +69,7 @@
     });
 
     return result;
-  }  
+  }
 
   function Dashboard() {
     var self = this;
@@ -134,14 +134,18 @@
 
     self.element.loader = {
       parent: select(options.loader.parent),
-    };    
+    };
 
     DashboardManager[self.id] = {
       allowLeave: self.allowLeave,
     };
 
-    // Handler
-    $(id).on('change, keydown', 'input, textarea, select', function (event) {
+    // Change handler
+    var events = ['change', 'keydown'];
+    var elements = ['input', 'textarea', 'select'];
+    var $form = self.element.id.get(0);
+
+    function _changeHandler(event) {
       setTimeout(function () {
         if (event.key === 'Enter') {
           return
@@ -159,6 +163,17 @@
 
         self._handler.onChange(event, self.getFormData());
       }, 1);
+    }
+
+    elements.forEach(function (event) {
+      $form.querySelectorAll(event)
+      .forEach(function (el) {
+        events.forEach(function (event) {
+          el.addEventListener(event, function (event) {
+            _changeHandler(event);
+          });
+        });
+      });
     })
 
     self.element.id.get(0).addEventListener('submit', function (event) {
@@ -234,7 +249,7 @@
         toasts.push(new bootstrap.Toast(el, {}))
       })
     } catch (e) {
-      
+
     }
 
     // Show error message
@@ -264,14 +279,14 @@
     if (status === 'success') {
       self.setAllowLeave(true);
     }
-    
+
     return self;
   };
 
   Dashboard.prototype.getFormData = function () {
     var self = this;
     var data = {};
-    
+
     self.element.id.get(0).querySelectorAll(inputAndSubmit)
     .forEach(function (el) {
       var $el = Manager.dom().select(el);
@@ -279,16 +294,16 @@
       var value = $el.getValue();
 
       set(data, name, value);
-    }); 
-    
+    });
+
     return data;
-  };    
+  };
 
   Dashboard.prototype.onSubmit = function (fn) {
     var self = this;
 
     self._handler.onSubmit = fn;
-    
+
     return self;
   };
 
@@ -296,9 +311,9 @@
     var self = this;
 
     self._handler.onChange = fn;
-    
+
     return self;
-  };   
+  };
 
   window.Dashboard = Dashboard;
 
@@ -307,8 +322,8 @@
 </script>
 
 
-<!-- 
-  Make a dashboard suite 
+<!--
+  Make a dashboard suite
   - include an error toast
   - a success toast
   - a popup toast to save changes

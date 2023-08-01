@@ -24,7 +24,7 @@ head:
       body {
         opacity: 0;
       }
-      */      
+      */
     </style>
   '
 
@@ -118,11 +118,11 @@ settings:
 {% capture auth-buttons %}
   {%- if is-sign-up-page == true -%}
   <div class="d-grid gap-2">
-    <button type="submit" class="btn btn-primary btn-lg auth-signup-email-btn">Create an account</button>
+    <button type="submit" class="btn btn-primary btn-md auth-signup-email-btn">Create an account</button>
   </div>
   {% else %}
   <div class="d-grid gap-2">
-    <button type="submit" class="btn btn-primary btn-lg auth-signin-email-btn">Sign in</button>
+    <button type="submit" class="btn btn-primary btn-md auth-signin-email-btn">Sign in</button>
   </div>
   {% endif %}
 {% endcapture %}
@@ -140,20 +140,20 @@ settings:
 
   <!-- Content -->
   <div class="container py-5 py-sm-7">
-    <a class="d-flex justify-content-center mb-5 animation-slide-up" href="{{ site.url }}" target="_blank">
+    <a class="d-flex justify-content-center mb-3 animation-slide-up" href="{{ site.url }}" target="_blank">
       <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
     </a>
 
     <div class="mx-auto animation-slide-up" style="max-width: 30rem;">
       <!-- Card -->
       <div class="card card-lg mb-5">
-        <div class="card-body">
+        <div class="card-body p-5">
 
           <div id="spinner">
             <div class="d-flex justify-content-center flex-column text-center">
               <h1 class="display-5">Welcome to {{ site.brand.name }}</h1>
               <p>One moment while we get everything ready...</p>
-            </div>            
+            </div>
             <div class="d-flex justify-content-center">
               <div class="spinner-border text-primary" role="status"></div>
             </div>
@@ -170,7 +170,7 @@ settings:
             {%- if is-sign-up-page == true or is-sign-in-page == true -%}
             <form class="" onsubmit="return false;">
               <div class="text-center">
-                <div class="mb-5">
+                <div class="mb-3">
                   <h1 class="display-5">{{ page.meta.breadcrumb }} {{ subtitle-middle-word }} {{ site.brand.name }}</h1>
                   {%- if is-sign-up-page == true -%}
                     <p>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in here</a></p>
@@ -180,44 +180,44 @@ settings:
                 </div>
 
                 <div id="auth-provider-buttons">
-                  <div class="d-grid mb-4">
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="google.com" hidden>
+                  <div class="d-grid mb-3">
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="google.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg" alt="Google Logo">
                         {{ page.meta.breadcrumb }} with Google
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="facebook.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="facebook.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg" alt="Facebook Logo">
                         {{ page.meta.breadcrumb }} with Facebook
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="twitter.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="twitter.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg" alt="Twitter Logo">
                         {{ page.meta.breadcrumb }} with Twitter
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="github.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="github.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/github.svg" alt="GitHub Logo">
                         {{ page.meta.breadcrumb }} with GitHub
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="apple.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="apple.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg" alt="Apple Logo">
                         {{ page.meta.breadcrumb }} with Apple
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="microsoft.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="microsoft.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg" alt="Microsoft Logo">
                         {{ page.meta.breadcrumb }} with Microsoft
                       </span>
                     </a>
-                    <a class="btn btn-white btn-lg mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="yahoo.com" hidden>
+                    <a class="btn btn-white btn-md mb-1 {{ auth-btn-class }}" href="javascript:;" data-provider="yahoo.com" hidden>
                       <span class="d-flex justify-content-center align-items-center">
                         <img class="avatar avatar-xss me-2" src="https://cdn.itwcreativeworks.com/assets/general/images/brands/color/yahoo-y.svg" alt="Yahoo Logo">
                         {{ page.meta.breadcrumb }} with Yahoo
@@ -228,21 +228,21 @@ settings:
               </div>
 
               <div id="auth-separator">
-                <span class="divider-center text-muted mb-4">OR</span>
+                <span class="divider-center text-muted mb-3">OR</span>
               </div>
 
               <div id="auth-provider-password">
 
                 <!-- Form -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label class="form-label" for="signupSrEmail">Your email</label>
-                  <input type="email" class="form-control form-control-lg auth-email-input" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                  <input type="email" class="form-control form-control-md auth-email-input" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
                   <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
                 </div>
                 <!-- End Form -->
 
                 <!-- Form -->
-                <div class="mb-4">
+                <div class="mb-3">
                   {%- if is-sign-up-page == true -%}
                     <label class="form-label" for="signupSrPassword">Password</label>
                   {%- else -%}
@@ -255,7 +255,7 @@ settings:
                   {%- endif -%}
 
                   <div class="input-group input-group-merge">
-                    <input type="password" class="form-control form-control-lg auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
+                    <input type="password" class="form-control form-control-md auth-password-input" id="signupSrPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="current-password">
                     <a class="input-group-append input-group-text toggle-password-visibility-btn" href="javascript:;" tabindex="-1">
                       <i class="bi-eye pointer-none"></i>
                     </a>
@@ -267,11 +267,11 @@ settings:
 
                 {%- if is-sign-up-page == true -%}
                 <!-- Form -->
-                <div class="mb-4">
+                <div class="mb-3">
                   <label class="form-label" for="signupSrConfirmPassword">Confirm password</label>
 
                   <div class="input-group input-group-merge">
-                    <input type="password" class="form-control form-control-lg auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
+                    <input type="password" class="form-control form-control-md auth-password-confirm-input" id="signupSrConfirmPassword" placeholder="8+ characters required" aria-label="8+ characters required" required minlength="8" autocomplete="new-password">
                     <a class="input-group-append input-group-text toggle-password-visibility-btn" href="javascript:;" tabindex="-1">
                       <i class="bi-eye pointer-none"></i>
                     </a>
@@ -290,14 +290,14 @@ settings:
 
               {%- if is-sign-up-page == true -%}
               <!-- Form Check -->
-              <div class="form-check mb-4">
+              <div class="form-check mb-3">
                 <input class="form-check-input auth-newsletter-input" type="checkbox" value="" id="newsletterCheckbox">
                 <label class="form-check-label" for="newsletterCheckbox">
                   I agree to sign up for account promotions and receive marketing newsletters. Learn more in our <a href="{{ site.url }}/privacy">Privacy Policy</a>.
                 </label>
                 <span class="invalid-feedback">Please accept our Terms and Conditions.</span>
               </div>
-              <div class="form-check mb-4">
+              <div class="form-check mb-3">
                 <input class="form-check-input auth-terms-input" type="checkbox" value="" id="termsCheckbox" required>
                 <label class="form-check-label" for="termsCheckbox">
                   I accept the <a href="{{ site.url }}/terms">Terms and Conditions</a>.
@@ -327,17 +327,17 @@ settings:
                 </div>
               {%- elsif is-forgot-page -%}
                 <form class="" onsubmit="return false;">
-                  <div class="d-grid mb-4">
-                    <div class="mb-4">
+                  <div class="d-grid mb-3">
+                    <div class="mb-3">
                       <label class="form-label" for="forgotSrEmail">Your email</label>
-                      <input type="email" class="form-control form-control-lg auth-email-input" id="forgotSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                      <input type="email" class="form-control form-control-md auth-email-input" id="forgotSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
                       <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
                     </div>
                     <button id="" class="btn btn-primary auth-forgot-email-btn" type="submit">Reset password</button>
                   </div>
                 </form>
                 <div class="text-center">
-                  <span class="divider-center text-muted mb-4">OR</span>
+                  <span class="divider-center text-muted mb-3">OR</span>
                   <div class="">
                     <span>Ready to log in? <a class="link" href="{{ site.url }}/signin">Sign in</a></span>
                   </div>
@@ -349,11 +349,11 @@ settings:
                   </div>
                 </div>
               {%- else -%}
-                <div class="d-grid gap-2 mb-4">
+                <div class="d-grid gap-2 mb-3">
                   <a id="" class="btn btn-primary" href="{{ site.url }}/signup">Sign up for an account</a>
                 </div>
                 <div class="text-center">
-                  <span class="divider-center text-muted mb-4">OR</span>
+                  <span class="divider-center text-muted mb-3">OR</span>
                   <div class="">
                     <span>Already have an account? <a class="link" href="{{ site.url }}/signin">Sign in</a></span>
                   </div>
@@ -417,7 +417,7 @@ settings:
       </div>
       <div class="modal-body">
         <div class="d-grid">
-          <div id="auth-error-modal-message" class="alert alert-danger" role="alert"> 
+          <div id="auth-error-modal-message" class="alert alert-danger" role="alert">
 
           </div>
         </div>
@@ -487,7 +487,7 @@ settings:
         if ($input.type === 'password') {
           $input.type = 'text';
           $icon.classList.remove('bi-eye');
-          $icon.classList.add('bi-eye-slash');          
+          $icon.classList.add('bi-eye-slash');
         } else {
           $input.type = 'password';
           $icon.classList.remove('bi-eye-slash');
@@ -519,7 +519,7 @@ settings:
     select('.auth-page-message-element').each(function ($el) {
       $el.innerText = qsMessage || $el.innerText;
     })
-  
+
     // If we're on the success page, just stay here
     if (url.pathname.match(/authentication-success/img)) {
       return display('waiting')
@@ -901,8 +901,8 @@ settings:
       .setAttribute('hidden', true)
 
     authProviderGlobalBtns
-      .setAttribute('hidden', true)    
-      
+      .setAttribute('hidden', true)
+
     // providerDetails.password = false;
 
     function _enableLogin() {
@@ -945,12 +945,12 @@ settings:
           el.setAttribute('disabled', true);
           el.classList.add('disabled');
         }
-      })  
+      })
 
       $emailInput.each(function ($el) {
         // $el.select();
         $el.focus();
-      })    
+      })
     }
 
     if (type === 'waiting') {
