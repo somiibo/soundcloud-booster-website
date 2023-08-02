@@ -8,14 +8,14 @@
 
 
 <!-- Prefetch -->
-<link rel="dns-prefetch" href="https://fonts.gstatic.com/" >
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net/" >
-<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/" >
+<link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/">
 
 <!-- Meta -->
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 {% if site.meta.viewport != '' and site.meta.viewport != false and site.meta.viewport != null %}
   <meta name="viewport" content="{{ site.meta.viewport }}">
 {% else %}
@@ -24,6 +24,7 @@
 {% endif %}
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
+<meta name="generator" content="Ultimate Jekyll">
 
 <link rel="canonical" href="{{ site.url }}{{ page-url-stripped }}">
 
@@ -52,8 +53,8 @@
   {% assign page-title = site.meta.title | liquify %}
 {%- endif -%}
 <title>{{ page-title }}</title>
-<meta name="twitter:title" content="{{ page-title }}" />
-<meta property="og:title" content="{{ page-title }}" />
+<meta name="twitter:title" content="{{ page-title }}">
+<meta property="og:title" content="{{ page-title }}">
 
 <!-- Description -->
 {%- if page_is_post and page.post.excerpt != null and page.post.excerpt != '' -%}
@@ -66,8 +67,8 @@
   {% assign page-description = site.meta.description | liquify %}
 {%- endif -%}
 <meta name="description" content="{{ page-description }}">
-<meta name="twitter:description" content="{{ page-description }}" />
-<meta property="og:description" content="{{ page-description }}" />
+<meta name="twitter:description" content="{{ page-description }}">
+<meta property="og:description" content="{{ page-description }}">
 
 <!-- Image -->
 {%- if page_is_post and page.post.id != null and page.post.id != '' -%}
@@ -77,22 +78,22 @@
 {%- else -%}
   {% capture page-image %}{%- if site.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ site.meta.og-image }}{% endcapture %}
 {%- endif -%}
-<meta name="twitter:image" content="{{ page-image }}" />
-<meta property="og:image" content="{{ page-image }}" />
+<meta name="twitter:image" content="{{ page-image }}">
+<meta property="og:image" content="{{ page-image }}">
 
 <!-- OG: Twitter -->
-<meta name="twitter:card" content="summary" />
-<meta name="twitter:site" content="{{ site.socials.twitter }}" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="{{ site.socials.twitter }}">
 <meta name="twitter:widgets:theme" content="light">
 
 <!-- OG: Facebook / Open Graph -->
-<meta property="og:url" content="{{ site.url }}{{ page-url-stripped }}" />
+<meta property="og:url" content="{{ site.url }}{{ page-url-stripped }}">
 {%- if page_is_post -%}
   {% assign og-type = 'article' %}
 {%- else -%}
   {% assign og-type = 'website' %}
 {%- endif -%}
-<meta property="og:type" content="{{ og-type }}" />
+<meta property="og:type" content="{{ og-type }}">
 
 <!-- Main Feed -->
 <link href="{{ site.url }}/feeds/posts.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
@@ -319,7 +320,7 @@
     // Add development click handler
     document.addEventListener('click', function (event) {
       Manager.log('Click', event.target);
-    })    
+    })
   })
 </script>
 {% endif %}
