@@ -54,9 +54,6 @@ socials:
   spotify: "" # string, example: somiibo
   mixcloud: "" # string, example: somiibo
 
-comments:
-  disqus: "" # string, example: somiibo
-
 download:
   mac: '' # string, example: https://github.com/somiibo/download-server/releases/download/installer/Somiibo.dmg
   windows: '' # string, example: https://github.com/somiibo/download-server/releases/download/installer/Somiibo-Setup.exe
@@ -71,6 +68,12 @@ extension:
   opera: '' # string, example: https://addons.opera.com/en/extensions/details/somiibo
   safari: '' # string, example: https://apps.apple.com/us/app/somiibo/id999999999
   edge: '' # string, example: https://microsoftedge.microsoft.com/addons/detail/somiibo/opidlipnbfhpdenbnanplcalbdgoplnc
+
+comments:
+  gisqus-repo: "Distalk/giscus" # string, example: somiibo/giscus
+  gisqus-repo-id: "R_kgDOJ-chGA" # string, example: R_kgDOJ-chGA
+  gisqus-category: "Giscus" # string, example: Giscus
+  gisqus-category-id: "DIC_kwDOJ-chGM4CYD4O" # string, example: DIC_kwDOJ-chGM4CYD4O
 
 tracking:
   google-analytics: G-9LBNCESVK6 # false to disable, example: UA-123456789

@@ -19,15 +19,19 @@
   {% assign _header-class = site.settings.blog-author-image-class %}
 {%- endif -%}
 
+{% capture path %}/assets/images/team/{{ author-id }}/profile.jpg{% endcapture %}
+{% capture alt %}{{ author.member.name }}'s profile picture{% endcapture %}
+
 {%- if include.mode == null or include.mode == 'link' -%}
   <a href="{{ site.url }}{{ author.url }}" class="{{ include.class }}"> {{ author.member.name }}</a>
+{%- elsif include.mode == 'name' -%}
+  {{ author.member.name }}
 {%- elsif include.mode == 'url' -%}
   {{ site.url }}{{ author.url }}
 {%- elsif include.mode == 'content' -%}
   {{ author | markdownify }}
 {%- elsif include.mode == 'image' -%}
-  {% capture path %}/assets/images/team/{{ author-id }}/profile.jpg{% endcapture %}
-  {% capture alt %}{{ author.member.name }}'s profile picture{% endcapture %}
-
   {%- include /master/helpers/image.html src=path class=_header-class alt=alt style=include.style max_width="1024" width=include.width height=include.height -%}
+{%- elsif include.mode == 'image-url' -%}
+  {{ site.url }}{{ path }}
 {%- endif -%}

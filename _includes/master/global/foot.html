@@ -4,6 +4,12 @@
   {% assign page_is_post = false %}
 {% endif %}
 
+{%- if page.member.name != null and page.member.name != '' -%}
+  {% assign page_is_team_member = true %}
+{% else %}
+  {% assign page_is_team_member = false %}
+{% endif %}
+
 {%- capture analytics-unused-ga %}
   <script type="text/javascript">
     function gtag() {};
@@ -401,19 +407,34 @@
       "description": "{{ page.post.excerpt | liquify }} ",
       "headline": "{{ page.post.title | liquify }}",
       "datePublished": "{{ page.date | date_to_xmlschema }}",
+      "dateModified": "{{ site.time | date_to_xmlschema }}",
       "author": {
-        "@id": "{{ site.url }}/team/{{ page.post.author }}"
+        "@id": "{{ site.url }}/team/{{ page.post.author }}#Person"
       },
       "publisher": {
-        "@id": "{{ site.url }}"
+        "@id": "{{ site.url }}#{{ site.brand.type }}"
       },
       "isPartOf": {
         "@id": "{{ site.url }}{{ page.url }}"
       },
-      "image": {
-        "@id": "{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page.url | split: "/" | last }}.jpg"
-      },
+      "image": [
+        "{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page.url | split: "/" | last }}.jpg"
+      ],
       "inLanguage": "en-US"
+    }
+  </script>
+{% endif %}
+
+<!-- Schema - Person -->
+{%- if page_is_team_member == true -%}
+  <script id="uj-person-json" type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "Person",
+      "@id": "{%- include /master/helpers/blog-author.html author=post.post.author mode="url" -%}#Person",
+      "url": "{%- include /master/helpers/blog-author.html author=post.post.author mode="url" -%}",
+      "name": "{%- include /master/helpers/blog-author.html author=post.post.author mode="name" -%}",
+      "image": "{%- include /master/helpers/blog-author.html author=post.post.author mode="image-url" -%}"
     }
   </script>
 {% endif %}
