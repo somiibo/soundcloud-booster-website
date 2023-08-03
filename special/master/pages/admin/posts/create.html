@@ -589,7 +589,14 @@ admin:
       </div>
 
       <div class="col-12">
-        <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post!</button>
+        <div class="alert alert-warning" role="alert">
+          <h4 class="alert-heading">Posting to {{ site.brand.name }}</h4>
+          <span>You are about to post this to <strong>{{ site.brand.name }}</strong>, are you sure?</span>
+        </div>
+      </div>      
+
+      <div class="col-12">
+        <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post to {{ site.brand.name }}!</button>
       </div>
     </div>
   </form>
@@ -1183,6 +1190,10 @@ admin:
           }
           markdown = markdown.replace(/(\n|^)(#+.+)(\n\n*)/img, '$1$2\n'); // remove linebreaks after headings
 
+          // Fix headings where numbers come before the hashtags such as 1. #, 2. ##
+          markdown = markdown
+            .replace(/(\n|^)([0-9]+\.)(\s*)(#*)/img, '$4 $2')
+
           // Remove links from titles
           markdown = markdown
             .replace(/(#+\s.+?)(\s\[)/g, '$1\n$2')
@@ -1232,6 +1243,9 @@ admin:
 
           // Replace extra line breaks to make it look nice
           markdown = markdown.replace(/\n{3,}/g,'\n\n')
+
+          // Replace any multiple spaces with one
+          markdown = markdown.replace(/ +/g, ' ');
 
           // Trim
           markdown = markdown.trim()

@@ -73,6 +73,10 @@ sitemap:
       </article>
 
 
+      <div class="mb-3">
+        {%- include /master/modules/engagement/social-share-kit.html -%}
+      </div>      
+
       <nav class="blog-pagination" aria-label="Pagination">
         {% if page.previous.url %}
           <a href="{{ page.previous.url }}" class="btn btn-outline-primary rounded-pill">Previous post</a>
@@ -84,8 +88,12 @@ sitemap:
           <a href="{{ page.next.url }}" class="btn btn-outline-primary rounded-pill">Next post</a>
         {% else %}        
           <a class="btn btn-outline-secondary rounded-pill disabled">Next post</a>
-        {% endif %}        
+        {% endif %}
       </nav>
+
+      <div class="">
+        {%- include /master/modules/engagement/giscus.html -%}
+      </div>
 
     </div>
 
