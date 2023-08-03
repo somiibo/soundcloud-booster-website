@@ -29,3 +29,8 @@ This is an `adsense-in-article.html` ad:
 This is an `adsense-in-feed.html` ad:
 
 {% include /master/modules/adunits/adsense-in-feed.html index="1" %}
+
+## Multiplex ads
+This is an `adsense-multiplex.html` ad:
+
+{% include /master/modules/adunits/adsense-multiplex.html index="1" %}

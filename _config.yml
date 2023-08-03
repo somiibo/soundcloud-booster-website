@@ -78,11 +78,12 @@ tracking:
   tiktok-pixel: false # false to disable, example: D4829D83H38929384H48
 
 advertising:
-  google-adsense: "pub-7372939085773564" # false to disable, example: ca-pub-7372999999999999
-  google-adsense-display-slot: "" # example: 7372999999999999
-  google-adsense-in-article-slot: "" # example: 7372999999999999
-  google-adsense-in-feed-slot: "" # example: 7372999999999999
-  cse-site-id: "" # example: 2814939217 (create on: https://www.google.com/adsense/new/u/5/pub-7372939085773564/main/myads-viewall-adunits?product=SELF_SERVICE_SEARCH_ADS)
+  google-adsense: "pub-7372939085773564" # false to disable, example: ca-pub-7372939085773564
+  google-adsense-display-slot: "9023354299" # example: 9023354299
+  google-adsense-in-article-slot: "7329067043" # example: 7329067043
+  google-adsense-in-feed-slot: "5986127415" # example: 5986127415
+  google-adsense-multiplex-slot: "8772072856" # example: 8772072856
+  cse-site-id: "5ad46a4c7412db0ae" # example: 5ad46a4c7412db0ae
 
 email-marketing: # Get this information from Mailchimp > Audience > Manage Audience > Signup forms > Embedded forms > Then look at code
   mailchimp-user-id: "06dd652b8c707fdf51ebcff20" # string, example: 06dd652b8c707fdf51ebcff20
