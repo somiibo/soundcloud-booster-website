@@ -18,6 +18,8 @@
 
     var $iframeVertTemplate = select('#vert-template').get(0).getAttribute('data-template');
 
+    var qsDebug = new URLSearchParams(window.location.search).get('debug');
+
     var slotId = new Date().getTime();
 
     var vertSlotsSelector = '.uj-vert-unit';
@@ -48,7 +50,7 @@
     // Fill the units
     function fillUnits() {
       var $vertSlots = select(vertSlotsSelector);
-      var adURL = Manager.properties.meta.environment === 'development'
+      var adURL = qsDebug === 'true'
         ? 'http://localhost:4001/verts/main'
         : 'https://promo-server.itwcreativeworks.com/verts/main'
 
