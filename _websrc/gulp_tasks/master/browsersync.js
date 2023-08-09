@@ -7,7 +7,10 @@ const tools       = new (require('../../libraries/tools.js'));
 const Global      = require('../../libraries/global.js');
 
 const browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
+const urlType = 'external'; // local or external
 let externalUrl;
+let localUrl;
+let workingUrl;
 
 /**
  * Wait for jekyll-build, then launch the Server
@@ -44,7 +47,7 @@ gulp.task('browsersync', async function () {
           next();
         }
       },
-      open: 'external',
+      open: urlType,
       ghostMode: false,
       // open: false,
       // https: true, // some stuff fails if this is true (like service workers)
@@ -65,8 +68,10 @@ gulp.task('browsersync', async function () {
     browsersync.init(settings, function (error, instance) {
       // cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
       if (!error) {
+        localUrl = instance.options.get('urls').get('local');
         externalUrl = instance.options.get('urls').get('external');
-        fs.write('@output/.temp/_config_browsersync.yml', `url: ${externalUrl}`)
+        workingUrl = (urlType === 'local') ? localUrl : externalUrl;
+        fs.write('@output/.temp/_config_browsersync.yml', `url: ${workingUrl}`)
       } else {
         console.error('Browsersync error:', error);
       }
@@ -79,6 +84,7 @@ gulp.task('browsersync', async function () {
       //   console.log('polling EXISTS', exists);
       //   return exists;
       // }, {timeout: 60000});
+
 
       // Launch ngrok if enabled
       if (!error && argv.ngrokOpen === 'true') {
@@ -111,6 +117,7 @@ gulp.task('browsersync', async function () {
  */
 gulp.task('browser-reload', ['jekyll-build'], function () {
   browsersync.notify('Rebuilded Jekyll');
-  console.log(`Rebuilding site on: ${externalUrl}`);
+  console.log(`Internal URL: ${localUrl}`);
+  console.log(`External URL: ${externalUrl}`);
   browsersync.reload();
 });
