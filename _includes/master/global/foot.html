@@ -10,18 +10,21 @@
   {% assign page_is_team_member = false %}
 {% endif %}
 
+<!-- Initialize GA -->
 {%- capture analytics-unused-ga %}
   <script type="text/javascript">
     function gtag() {};
   </script>
 {% endcapture -%}
 
+<!-- Initialize Meta -->
 {%- capture analytics-unused-meta %}
   <script type="text/javascript">
     function fbq() {};
   </script>
 {% endcapture -%}
 
+<!-- Initialize TikTok -->
 {%- capture analytics-unused-tiktok %}
   <script type="text/javascript">
     window.ttq = {
@@ -126,7 +129,7 @@
   <!-- <script type="text/javascript" src="{{ '/assets/js/slapform-processor.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ slapform_optimization }}></script> -->
 {% endif %}
 
-
+<!-- Script - Bundle -->
 {%- if include.post-bundle-script != null -%}
   {{ include.post-bundle-script | liquify }}
 {%- elsif page.foot.post-bundle-script != null -%}
@@ -240,21 +243,24 @@
 {% endif %}
 
 <!-- Schema - Breadcrumbs -->
+<!-- Only include the https://schema.org if size > -1 because it throws an error on Google Search Console if the itemListElement is empty -->
 {%- if page.schema.breadcrumbs == false -%}
 {% elsif layout.schema.breadcrumbs == false %}
 {% elsif site.schema.breadcrumbs == false %}
 {% else %}
+  {% assign breadcrumbs = page.permalink | split: "/" %}
+  {% assign breadcrumbs = page.url | split: "/" %}
+  {% assign breadcrumbs_size = breadcrumbs | size | minus: 1 %}
+  {% assign breadcrumb-url = site.url %}
+
   <script id="uj-breadcrumbs-json" type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "name": "{{ site.brand.name }}",
+      {%- if breadcrumbs_size > -1 -%}
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "name": "{{ site.brand.name }}",
+      {% endif %}
       "itemListElement": [
-        {% assign breadcrumbs = page.permalink | split: "/" %}
-        {% assign breadcrumbs = page.url | split: "/" %}
-        {% assign breadcrumbs_size = breadcrumbs | size | minus: 1 %}
-        {% assign breadcrumb-url = site.url %}
-
         {%- for breadcrumb in breadcrumbs -%}
           {%- unless breadcrumb == "" -%}
             {%- capture breadcrumb-url -%}{{ breadcrumb-url }}/{{ breadcrumb }}{%- endcapture -%}
