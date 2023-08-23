@@ -83,13 +83,13 @@ head:
 <script type="text/javascript">
   Manager.auth().ready(function(user) {
     var searchParams = Manager.properties.page.queryString;
-    var qsDestination = searchParams.get('destination');
-    var qsAuthRequired = searchParams.get('authRequired');
     var qsProductId = searchParams.get('productId') || 'unknown';
     var qsType = searchParams.get('type') || 'unknown';
     var qsFrequency = searchParams.get('frequency') || 'unknown';
     var qsPrice = parseFloat(searchParams.get('price') || '0.00');
     var qsCacheBreaker = searchParams.get('cb') || new Date().getTime();
+    var qsDestination = searchParams.get('destination');
+    var qsAuthRequired = searchParams.get('authRequired');
     var qsDevelopment = searchParams.get('development');
 
     var storageKey = 'checkout.' + qsProductId + '.cart' + '._' + qsCacheBreaker;
@@ -125,8 +125,11 @@ head:
       alreadyTracked = false;
     }
 
+    // Log
+    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, currentUser);
+
     if (!alreadyTracked) {
-      console.log('Tracking checkout');
+      console.log('tracking(): Sending tracking events');
 
       // Google Analytics
       gtag('event', 'begin_checkout', {
@@ -192,7 +195,7 @@ head:
         ],
       });
     } else {
-      console.log('Skipping tracking checkout');
+      console.log('tracking(): Skipping tracking events');
     }
 
     // Set the storage key to false so that the user can navigate back to the checkout page
@@ -200,7 +203,7 @@ head:
 
     // Development
     if (qsDevelopment) {
-      return console.log('Not navigating because in development: ', newURL.toString());
+      return console.log('main(): Not navigating because in development: ', newURL.toString());
     }
 
     // Navigate to checkout

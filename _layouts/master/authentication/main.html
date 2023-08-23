@@ -159,10 +159,20 @@ settings:
             </div>
           </div>
 
-          <div class="d-grid">
-            <!-- <div id="" class="alert alert-danger auth-error-message-element" role="alert" hidden> </div> -->
-            <!-- <div id="result" class="alert" role="alert" hidden> </div> -->
-            <a id="relaunch-btn" href="#" class="btn btn-primary" hidden>Resend credentials to the {{ site.brand.name }} app</a>
+          <div id="relaunch-parent" hidden>
+            <div class="d-grid text-center">
+              <div class="col mb-3">
+                <div class="">Welcome, <strong class="auth-email-element">valued customer</strong>!</div>
+              </div>
+              <div class="col">
+                <a id="relaunch-btn" href="#" class="btn btn-primary">Resend credentials to the {{ site.brand.name }} app</a>
+              </div>
+              <div class="col">
+                <div class="">
+                  <a href="{{ site.url }}/signin?signout=true" class="btn btn-link">Sign in to a different account</a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div id="auth-container" class="animation-fade-in" hidden>
@@ -526,6 +536,12 @@ settings:
       return display('waiting')
     }
 
+    firebase.auth().onAuthStateChanged(function (user) {
+      console.log('onAuthStateChanged():', user);
+    })
+
+    console.log('main(): Initial state', url.toString(), user);
+
     // Process the auth
     firebase.auth()
       .getRedirectResult()
@@ -541,13 +557,13 @@ settings:
 
         // If there is a signout query param, sign out and quit
         if (url.searchParams.get('signout')) {
-          console.log('----SIGNOUT');
+          console.log('getRedirectResult(): Signing out...');
 
           action = true;
 
           firebase.auth().signOut()
           .catch(function (e) {
-            console.error('Error signing out', e);
+            console.error('getRedirectResult(): Error signing out', e);
             display(e);
           })
           .finally(function () {
@@ -581,7 +597,8 @@ settings:
         // console.log('----qsToken', qsToken);
         // qsToken can be set on its own to simply sign in with it
         if (qsToken) {
-          console.log('signInWithCustomToken(qsToken)', qsToken);
+          console.log('getRedirectResult(): signInWithCustomToken(qsToken)', qsToken);
+
           firebase.auth().signInWithCustomToken(qsToken)
           .then(function (r) {
             trackSignupOrSignin();
@@ -591,13 +608,16 @@ settings:
             display(e);
           })
         } else if (result && result.user) {
-          console.log('----result.user', result.user);
+          console.log('getRedirectResult(): createCustomToken(result.user)', result.user);
           createCustomToken({user: result.user})
         } else {
           action = true;
-          console.log('----READY');
+          console.log('getRedirectResult(): Getting provider data...');
+
           var provider = url.searchParams.get('provider');
           if (provider) {
+            console.log('getRedirectResult(): signInWithRedirect', provider);
+
             firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
             .catch(function (e) {
               display(e);
@@ -638,9 +658,10 @@ settings:
                 document.getElementById('auth-provider-buttons').setAttribute('hidden', true)
               }
 
+              console.log('getRedirectResult(): Got provider data', providerDetails);
+
               firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
-                  console.log('---onAuthStateChanged createCustomToken', user);
                   display('hidden');
                   createCustomToken({user: user})
                 }
@@ -656,13 +677,9 @@ settings:
         }
       })
       .catch(function (e) {
-        console.error('----e', e);
+        console.error('getRedirectResult(): Error', e);
         display(e);
       });
-
-
-    console.log('----FIRST', url.toString());
-    console.log('----user', user);
   })
 
   function trackSignupOrSignin(user) {
@@ -771,7 +788,7 @@ settings:
     var delay = Manager.storage().get('auth.redirectDelay', 0);
     url = url || redirectUrl;
 
-    console.log('Redirecting with delay...', delay, url);
+    console.log('redirect():', delay, url);
 
     if (delay) {
       setTimeout(function () {
@@ -796,29 +813,35 @@ settings:
       }
       url = url.toString();
 
-      if (!Manager.isValidRedirectUrl(url)) {
+      var isValid = Manager.isValidRedirectUrl(url)
+
+      console.log('redirect():', isValid, qsSource, url);
+
+      if (!isValid) {
         var invalidError = new Error('This URL is not valid: ' + url);
 
-        display(invalidError)
+        display(invalidError);
+
+        console.log('redirect(): Signing out...');
 
         firebase.auth().signOut()
         .then(function () {
-          console.log('Signed out because invalid URL');
+          console.log('redirect(): Signing out');
         })
         .catch(function (e) {
-          console.error('Error signing out', e);
+          console.error('redirect(): Error signing out', e);
         })
+
         return
       }
 
       if (qsSource === 'app') {
-        console.log('Source is app, so launching app');
+        console.log('redirect(): Launching app...', );
         setTimeout(function () {
           display('success', 'Success! Please allow this webpage to open the {{ site.brand.name }} app. <br><br> After you are logged in, you can close this tab.')
         }, 1000);
       } else {
-        console.log('Source is NOT app, so just redirecting');
-        // display('success', 'Success! Redirecting you now...')
+        console.log('redirect(): Redirecting...', );
       }
 
       window.location.href = url;
@@ -930,6 +953,7 @@ settings:
   function display(type, msg) {
     var alertEl = select('#result')
     var spinnerEl = select('#spinner')
+    var $relaunchParent = select('#relaunch-parent')
     var resendBtn = select('#relaunch-btn')
     var authContainer = select('#auth-container')
     var providerBtnEl = select('a[data-provider]')
@@ -945,7 +969,7 @@ settings:
       console.log('display()', type, msg);
     }
 
-    console.log('providerDetails', providerDetails);
+    console.log('display():', type, msg, providerDetails)
 
     $authErrorModal.hide();
 
@@ -955,7 +979,7 @@ settings:
       .removeClass('alert-success')
     spinnerEl
       .removeAttribute('hidden')
-    resendBtn
+    $relaunchParent
       .setAttribute('hidden', true)
     authContainer
       .removeAttribute('hidden')
@@ -1065,7 +1089,7 @@ settings:
         spinnerEl
           .setAttribute('hidden', true)
         if (qsSource === 'app') {
-          resendBtn
+          $relaunchParent
             .removeAttribute('hidden')
         }
 
