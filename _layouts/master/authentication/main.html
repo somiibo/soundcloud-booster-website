@@ -445,6 +445,7 @@ settings:
   var $authLinks;
   var $emailInput;
   var updateTimeout;
+  var trackedSignupHandled = false;
 
   Manager.auth().ready(function () {
     select = Manager.dom().select;
@@ -529,7 +530,7 @@ settings:
     firebase.auth()
       .getRedirectResult()
       .then(function (result) {
-        console.log('----result', result);
+        console.log('getRedirectResult():', result);
         display('loading');
 
         if (action) {
@@ -537,9 +538,13 @@ settings:
         }
 
         display('hidden');
+
+        // If there is a signout query param, sign out and quit
         if (url.searchParams.get('signout')) {
           console.log('----SIGNOUT');
+
           action = true;
+
           firebase.auth().signOut()
           .catch(function (e) {
             console.error('Error signing out', e);
@@ -549,96 +554,105 @@ settings:
             url.searchParams.delete('signout')
             redirect(url.toString())
           })
-        } else {
-          if (url.pathname.match(/signout/img)) {
-            if (!user) {
-              url.pathname = 'signin';
-              return redirect(url.toString());
-            } else {
-              firebase.auth().onAuthStateChanged(function (user) {
-                if (!user) {
-                  url.pathname = 'signin';
-                  return redirect(url.toString());
-                }
-              })
-              display('waiting');
-              return
-            }
-          }
 
-          // console.log('----qsToken', qsToken);
-          // qsToken can be set on its own to simply sign in with it
-          if (qsToken) {
-            console.log('signInWithCustomToken(qsToken)', qsToken);
-            firebase.auth().signInWithCustomToken(qsToken)
-            .then(function (r) {
-              redirect()
+          return;
+        }
+
+        // If on signout page, handle separately
+        if (url.pathname.match(/signout/img)) {
+          if (!user) {
+            url.pathname = 'signin';
+
+            return redirect(url.toString());
+          } else {
+            firebase.auth().onAuthStateChanged(function (user) {
+              if (!user) {
+                url.pathname = 'signin';
+                return redirect(url.toString());
+              }
             })
+
+            display('waiting');
+
+            return
+          }
+        }
+
+        // console.log('----qsToken', qsToken);
+        // qsToken can be set on its own to simply sign in with it
+        if (qsToken) {
+          console.log('signInWithCustomToken(qsToken)', qsToken);
+          firebase.auth().signInWithCustomToken(qsToken)
+          .then(function (r) {
+            trackSignupOrSignin();
+            redirect();
+          })
+          .catch(function (e) {
+            display(e);
+          })
+        } else if (result && result.user) {
+          console.log('----result.user', result.user);
+          createCustomToken({user: result.user})
+        } else {
+          action = true;
+          console.log('----READY');
+          var provider = url.searchParams.get('provider');
+          if (provider) {
+            firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
             .catch(function (e) {
               display(e);
             })
-          } else if (result && result.user) {
-            console.log('----result.user', result.user);
-            createCustomToken({user: result.user})
-          } else {
-            action = true;
-            console.log('----READY');
-            var provider = url.searchParams.get('provider');
-            if (provider) {
-              firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
-              .catch(function (e) {
-                display(e);
-              })
-            } else {
 
-              // Get provider details
-              fetch(serverApiURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  command: 'firebase:get-providers',
-                  payload: {},
-                }),
-              })
-              .then(function (res) { // This function runs only on success
-                if (res.ok) {
-                  res.json()
-                  .then(function (data) {
-                    var providerCount = 0;
-                    providerDetails = data;
+            return
+          }
 
-                    Object.values(providerDetails)
-                    .forEach(function (value, i) {
-                      providerCount += value ? 1 : 0;
-                    });
+          // Get provider details
+          fetch(serverApiURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              command: 'firebase:get-providers',
+              payload: {},
+            }),
+          })
+          .then(function (res) { // This function runs only on success
+            if (!res.ok) {
+              return res.text()
+                .then(function (data) {
+                  throw new Error(data || res.statusText || 'Unknown error.')
+                })
+            }
 
-                    if (providerCount < 1) {
-                      document.getElementById('auth-provider-buttons').setAttribute('hidden', true)
-                    }
+            // Get the response body
+            res.json()
+            .then(function (data) {
+              var providerCount = 0;
+              providerDetails = data;
 
-                    firebase.auth().onAuthStateChanged(function (user) {
-                      if (user) {
-                        console.log('---onAuthStateChanged createCustomToken', user);
-                        display('hidden');
-                        createCustomToken({user: user})
-                      }
-                    })
-                    display('waiting')
-                  })
-                } else {
-                  return res.text()
-                  .then(function (data) {
-                    throw new Error(data || res.statusText || 'Unknown error.')
-                  })
+              Object.values(providerDetails)
+              .forEach(function (value, i) {
+                providerCount += value ? 1 : 0;
+              });
+
+              if (providerCount < 1) {
+                document.getElementById('auth-provider-buttons').setAttribute('hidden', true)
+              }
+
+              firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                  console.log('---onAuthStateChanged createCustomToken', user);
+                  display('hidden');
+                  createCustomToken({user: user})
                 }
               })
-              .catch(function (e) { // This function runs only on error
-                console.error('Fail', e);
-                display(e);
-              })
+              display('waiting')
+            })
+          })
+          .catch(function (e) { // This function runs only on error
+            console.error('Fail', e);
+            display(e);
+          })
 
-            }
-          }
         }
       })
       .catch(function (e) {
@@ -650,6 +664,61 @@ settings:
     console.log('----FIRST', url.toString());
     console.log('----user', user);
   })
+
+  function trackSignupOrSignin(user) {
+    user = user || firebase.auth().currentUser;
+
+    if (!user || !user.uid || trackedSignupHandled) { return; }
+
+    var trackedSignup = Manager.storage().get('auth.trackedSignup', false);
+
+    var now = new Date();
+    var signupDate = new Date(parseInt(user.metadata.a));
+
+    var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
+    var providerData = Manager.utilities().get(user, 'providerData', [{providerId: 'password'}]);
+    var providerId = providerData[providerData.length - 1].providerId;
+
+    console.log('trackSignupOrSignin():', providerId, accountAgeSeconds, trackedSignup);
+
+    if (accountAgeSeconds < 30 && !trackedSignup) {
+      // Google Analytics
+      gtag('event', 'sign_up', {
+        method: providerId,
+      });
+
+      // Meta Pixel
+      fbq('track', 'CompleteRegistration', {
+        content_name: providerId,
+        value: 0,
+        currency: 'USD',
+        status: true,
+      });
+
+      // TikTok Pixel
+      ttq.track('CompleteRegistration', {
+        content_id: providerId,
+        value: 0,
+        currency: 'USD',
+        content_type: 'product',
+      });
+    } else {
+      // Google Analytics
+      gtag('event', 'login', {
+        method: providerId,
+      });
+
+      // Meta Pixel
+      // ...
+
+      // TikTok Pixel
+      // ...
+    }
+
+    // Set the trackedSignup flag
+    trackedSignupHandled = true;
+    Manager.storage().set('auth.trackedSignup', true);
+  }
 
   function updateLinksWithEmail(email) {
     $authLinks.each(function ($el) {
@@ -664,12 +733,19 @@ settings:
 
   function signUpHandler(token) {
     return new Promise(function(resolve, reject) {
-      setTimeout(function () {
-        return resolve();
-      }, 3000);
+      console.log('signUpHandler():', token);
+
+      // If not a signup, resolve
       if (url.searchParams.get('isSignup') !== 'true') {
         return resolve();
       }
+
+      // Resolve automatically after 100ms
+      setTimeout(function () {
+        return resolve();
+      }, 100);
+
+      // Make request
       fetch(serverApiURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -682,13 +758,11 @@ settings:
           }
         }),
       })
-      .catch(function (e) {
-        console.log('Fail', e);
-        return resolve();
+      .then(function () {
+        console.error('signUpHandler(): Complete');
       })
-      .finally(function () {
-        console.log('Completed signup');
-        return resolve();
+      .catch(function (e) {
+        console.error('signUpHandler(): Fail', e);
       })
     });
   }
@@ -809,13 +883,16 @@ settings:
   // }
 
   function createCustomToken(payload) {
-    console.log('---createCustomToken', payload);
+    console.log('createCustomToken():', payload);
+
+    trackSignupOrSignin();
+
     payload.user.getIdToken(true)
     .then(function (token) {
-      console.log('---token', token);
+      console.log('createCustomToken(): token', token);
+
       signUpHandler(token)
       .then(function () {
-        console.log('');
         fetch(serverApiURL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -825,23 +902,24 @@ settings:
           }),
         })
         .then(function (res) { // This function runs only on success
-          if (res.status >= 200 && res.status < 300) {
-            res.json()
-            .then(function (data) {
-              console.log('Custom token', data.token);
-              window.tokenResult = data.token;
-
-              redirect();
-            })
-          } else {
+          if (!res.ok) {
             return res.text()
             .then(function (data) {
               throw new Error(data || res.statusText || 'Unknown error.')
             })
           }
+
+          res.json()
+          .then(function (data) {
+            console.log('createCustomToken(): data.token', data.token);
+
+            window.tokenResult = data.token;
+
+            redirect();
+          })
         })
         .catch(function (e) { // This function runs only on error
-          console.error('Fail', e);
+          console.error('createCustomToken(): Error', e);
           display(e);
         })
       })

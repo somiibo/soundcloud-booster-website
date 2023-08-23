@@ -73,7 +73,7 @@ Slapform.prototype.process = function (event) {
     if (slapType === 'form') {
       var newURL = new URL(action)
       Object.keys(formData)
-      .forEach((key, i) => {
+      .forEach(function (key, i) {
         newURL.searchParams.set(key, formData[key])
       });
       window.location.href = newURL.toString();

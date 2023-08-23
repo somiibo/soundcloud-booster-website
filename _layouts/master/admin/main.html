@@ -34,7 +34,7 @@ head:
       }
       .text-purple {
         color: rgb(155, 89, 182, 1)!important;
-      }    
+      }
       .bg-soft-purple {
         background-color: rgba(155, 89, 182, 0.1)!important;
       }
@@ -86,7 +86,7 @@ settings:
           required: '/signin/',
           prohibited: '/admin/dashboard/',
         }
-      },      
+      },
       libraries: {
         cookieconsent: {
           enabled: false,
@@ -298,14 +298,14 @@ settings:
                       base = base
                         .replace(/{inside}|{name}/g, name)
                         .replace(/{href}/g, link)
-                      
+
                       return base;
                     }
 
                     if (breadcrumbs) {
                       breadcrumbs = JSON.parse(breadcrumbs.innerText);
                       breadcrumbs.itemListElement
-                      .forEach((item, i) => {
+                      .forEach(function(item, i) {
                         var name = Manager.utilities().get(item, 'item.name');
                         var link = Manager.utilities().get(item, 'item.@id');
                         var isLast = i === breadcrumbs.itemListElement.length - 1;

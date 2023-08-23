@@ -1,5 +1,7 @@
+// Initiate the web manager
 Manager = new (require('web-manager'));
 
 Manager.init(Configuration, function() {
-  Manager.log('Init master.js');
+  // Initialize core.js
+  require('./core.js');
 });

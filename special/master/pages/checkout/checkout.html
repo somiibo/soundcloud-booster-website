@@ -7,9 +7,9 @@ sitemap:
 
 ### REGULAR PAGES ###
 meta:
-  title: "Checkout"
-  description: "Checkout with our product."
-  breadcrumb: "Checkout"
+  title: "{{ site.brand.name }} Checkout"
+  description: "{{ site.brand.name }} checkout page."
+  breadcrumb: "{{ site.brand.name }} Checkout"
   index: false
 
 foot:
@@ -85,6 +85,15 @@ head:
     var searchParams = Manager.properties.page.queryString;
     var qsDestination = searchParams.get('destination');
     var qsAuthRequired = searchParams.get('authRequired');
+    var qsProductId = searchParams.get('productId') || 'unknown';
+    var qsType = searchParams.get('type') || 'unknown';
+    var qsFrequency = searchParams.get('frequency') || 'unknown';
+    var qsPrice = parseFloat(searchParams.get('price') || '0.00');
+    var qsCacheBreaker = searchParams.get('cb') || new Date().getTime();
+    var qsDevelopment = searchParams.get('development');
+
+    var storageKey = 'checkout.' + qsProductId + '.cart' + '._' + qsCacheBreaker;
+    var alreadyTracked = Manager.storage().get(storageKey, false);
 
     var currentUser = firebase.auth().currentUser;
 
@@ -94,7 +103,7 @@ head:
       return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
     } else if (!qsDestination) {
       // return window.history.back();
-      return window.location.href = '{{ site.url }}';
+      return window.location.href = '{{ site.url }}/pricing';
     }
 
     // Delete parameters used just on this page
@@ -111,11 +120,92 @@ head:
       newURL.searchParams.set(key, value)
     })
 
+    // If in development mode, reset the track storage
+    if (Manager.properties.meta.environment === 'development') {
+      alreadyTracked = false;
+    }
+
+    if (!alreadyTracked) {
+      console.log('Tracking checkout');
+
+      // Google Analytics
+      gtag('event', 'begin_checkout', {
+        currency: 'USD',
+        value: qsPrice,
+        items: [
+          {
+            item_id: qsProductId,
+            item_name: qsProductId,
+            affiliation: 'ITW Creative Works',
+            // coupon: '15OFF',
+            // discount: 0.00,
+            index: 0,
+            item_brand: '{{ site.brand.name }}',
+            item_category: qsType,
+            // item_category2: 'Adult',
+            // item_category3: 'Shirts',
+            // item_category4: 'Crew',
+            // item_category5: 'Short sleeve',
+            // item_list_id: 'related_products',
+            // item_list_name: 'Related Products',
+            item_variant: qsFrequency,
+            // location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+            price: qsPrice,
+            quantity: 1,
+          }
+        ]
+      });
+
+      // Meta Pixel
+      fbq('track', 'InitiateCheckout', {
+        content_type: 'product',
+        value: qsPrice,
+        currency: 'USD',
+        contents: [
+          {
+            content_id: qsProductId,
+            content_name: qsProductId,
+            content_category: qsType + ' > ' + qsFrequency,
+            brand: '{{ site.brand.name }}',
+            variant: qsFrequency,
+            price: qsPrice,
+            quantity: 1,
+          }
+        ],
+      });
+
+      // TikTok Pixel
+      ttq.track('InitiateCheckout', {
+        content_type: 'product',
+        value: qsPrice,
+        currency: 'USD',
+        contents: [
+          {
+            content_id: qsProductId,
+            content_name: qsProductId,
+            content_category: qsType + ' > ' + qsFrequency,
+            brand: '{{ site.brand.name }}',
+            variant: qsFrequency,
+            price: qsPrice,
+            quantity: 1,
+          }
+        ],
+      });
+    } else {
+      console.log('Skipping tracking checkout');
+    }
+
+    // Set the storage key to false so that the user can navigate back to the checkout page
+    Manager.storage().set(storageKey, true);
+
     // Development
-    if (searchParams.get('development')) {
+    if (qsDevelopment) {
       return console.log('Not navigating because in development: ', newURL.toString());
     }
 
-    window.location.href = newURL.toString();
+    // Navigate to checkout
+    setTimeout(function () {
+      window.location.href = newURL.toString();
+    }, 10);
   });
 </script>
