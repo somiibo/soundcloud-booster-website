@@ -179,18 +179,22 @@ head:
       var hasFocus = document.hasFocus && document.hasFocus();
 
       if (!hasFocus) {
+        console.log('redirect(): Navigating due to lack of focus');
+
         window.location.href = qsUrl;
       }
     }, 60000);
-
 
     // If in development mode, reset the track storage
     if (Manager.properties.meta.environment === 'development') {
       alreadyTracked = false;
     }
 
+    // Log
+    console.log('main():', qsOrderId, qsProductId, qsProductIdGlobal, qsOrderType, qsOrderFreq, qsOrderTotal, qsUrlText, qsUrl, storageKey, alreadyTracked);
+
     if (!alreadyTracked) {
-      console.log('Tracking checkout');
+      console.log('tracking(): Sending tracking events');
 
       // Google Analytics
       gtag('event', 'purchase', {
@@ -260,11 +264,10 @@ head:
         ],
       });
     } else {
-      console.log('Skipping tracking checkout');
+      console.log('tracking(): Skipping tracking events');
     }
 
     // Set the storage key so we don't track this again
     Manager.storage().set(storageKey, true);
-
   })
 </script>
