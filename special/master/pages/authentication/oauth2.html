@@ -152,7 +152,7 @@ head:
     // apply the provider's default params
     currentURL
     .searchParams
-    .forEach((value, key) => {
+    .forEach(function (value, key) {
       newPayload[key] = value;
     })
 

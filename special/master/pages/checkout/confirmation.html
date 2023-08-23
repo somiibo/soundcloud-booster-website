@@ -67,7 +67,7 @@ head:
         font-size: 0.875rem;
         font-weight: 400;
         line-height: 1.6;
-      }      
+      }
 
     </style>
   '
@@ -156,21 +156,20 @@ head:
 <script type="text/javascript">
   Manager.ready(function () {
     var url = new URL(window.location.href);
-    var qsOrderId = url.searchParams.get('orderId') || 'unknown';
-    var qsOrderTotal = parseFloat(url.searchParams.get('orderTotal') || '0.00');
-    var qsOrderFreq = url.searchParams.get('orderFreq');
-    var qsProductId = url.searchParams.get('productId') || 'unknown';
-    var qsProductIdGlobal = url.searchParams.get('productIdGlobal') || 'unknown';
-    var qsUrlText = url.searchParams.get('urlText') || 'Continue';
-    var qsUrl = url.searchParams.get('url') || '{{ site.url }}';
+    var searchParams = url.searchParams;
+    var qsOrderId = searchParams.get('orderId') || 'unknown';
+    var qsProductId = searchParams.get('productId') || 'unknown';
+    var qsProductIdGlobal = searchParams.get('productIdGlobal') || 'unknown';
+    var qsOrderType = searchParams.get('orderType');
+    var qsOrderFreq = searchParams.get('orderFreq');
+    var qsOrderTotal = parseFloat(searchParams.get('orderTotal') || '0.00');
+    var qsUrlText = searchParams.get('urlText') || 'Continue';
+    var qsUrl = searchParams.get('url') || '{{ site.url }}';
 
-    // console.log('---qsOrderId', qsOrderId);
-    // console.log('---qsOrderTotal', qsOrderTotal);
-    // console.log('---qsOrderFreq', qsOrderFreq);
-    // console.log('---qsProductId', qsProductId);
-    // console.log('---qsUrlText', qsUrlText);
-    // console.log('---qsUrl', qsUrl);
+    var storageKey = 'checkout.' + qsProductIdGlobal + '.purchased' + '.' + qsOrderId;
+    var alreadyTracked = Manager.storage().get(storageKey, false);
 
+    // Set the order ID and URL
     document.getElementById('checkout-step-status-success-order-id').innerText = qsOrderId;
     document.getElementById('checkout-step-status-success-url-text').innerText = qsUrlText
     document.getElementById('checkout-step-status-success-url').setAttribute('href', qsUrl);
@@ -178,87 +177,94 @@ head:
     // Navigate away if the user is not on the page so we avoid double-counting the analytics events
     setInterval(function () {
       var hasFocus = document.hasFocus && document.hasFocus();
-      
+
       if (!hasFocus) {
         window.location.href = qsUrl;
       }
     }, 60000);
 
-    try {
-      var storageKey = '_orders.' + qsOrderId;
 
-      if (Manager.properties.meta.environment === 'development') {
-        Manager.storage().set(storageKey, false);
-      }
-
-      var currentValue = Manager.storage().get(storageKey);
-
-      if (!currentValue) {
-        console.log('Saving order to storage and reporting to analytics');
-
-        gtag('event', 'purchase', {
-          transaction_id: qsOrderId,
-          // affiliation: 'Google online store',
-          value: qsOrderTotal,
-          currency: 'USD',
-          tax: 0,
-          shipping: 0,
-          items: [
-            {
-              id: qsProductIdGlobal,
-              name: qsProductIdGlobal,
-              // list_name: 'Search Results',
-              // brand: 'Google',
-              // category: 'Apparel/T-Shirts',
-              variant: qsOrderFreq,
-              // list_position: 1,
-              quantity: 1,
-              price: qsOrderTotal,
-            }
-          ]
-        });
-
-        Manager.storage().set(storageKey, 'done');
-      } else {
-        console.log('Already reported order to analytics');
-      }
-
-    } catch (e) {
-      console.error('Error sending analytics', e);
+    // If in development mode, reset the track storage
+    if (Manager.properties.meta.environment === 'development') {
+      alreadyTracked = false;
     }
 
-    // gtag('event', 'purchase', {
-    //   "transaction_id": "24.031608523954162",
-    //   "affiliation": "Google online store",
-    //   "value": 23.07,
-    //   "currency": "USD",
-    //   "tax": 1.24,
-    //   "shipping": 0,
-    //   "items": [
-    //     {
-    //       "id": "P12345",
-    //       "name": "Android Warhol T-Shirt",
-    //       "list_name": "Search Results",
-    //       "brand": "Google",
-    //       "category": "Apparel/T-Shirts",
-    //       "variant": "Black",
-    //       "list_position": 1,
-    //       "quantity": 2,
-    //       "price": '2.0'
-    //     },
-    //     {
-    //       "id": "P67890",
-    //       "name": "Flame challenge TShirt",
-    //       "list_name": "Search Results",
-    //       "brand": "MyBrand",
-    //       "category": "Apparel/T-Shirts",
-    //       "variant": "Red",
-    //       "list_position": 2,
-    //       "quantity": 1,
-    //       "price": '3.0'
-    //     }
-    //   ]
-    // });
+    if (!alreadyTracked) {
+      console.log('Tracking checkout');
+
+      // Google Analytics
+      gtag('event', 'purchase', {
+        transaction_id: qsOrderId,
+        value: qsOrderTotal,
+        tax: 0,
+        shipping: 0,
+        currency: 'USD',
+        // coupon: 'SUMMER_SALE',
+        items: [
+          {
+            item_id: qsProductIdGlobal,
+            item_name: qsProductIdGlobal,
+            affiliation: 'ITW Creative Works',
+            // coupon: 'SUMMER_FUN',
+            // discount: 2.22,
+            index: 0,
+            item_brand: '{{ site.brand.name }}',
+            item_category: qsOrderType,
+            // item_category2: 'Adult',
+            // item_category3: 'Shirts',
+            // item_category4: 'Crew',
+            // item_category5: 'Short sleeve',
+            // item_list_id: 'related_products',
+            // item_list_name: 'Related Products',
+            item_variant: qsOrderFreq,
+            // location_id: 'ChIJIQBpAG2ahYAR_6128GcTUEo',
+            price: qsOrderTotal,
+            quantity: 1,
+          }
+        ]
+      });
+
+      // Meta Pixel
+      fbq('track', 'Purchase', {
+        content_type: 'product',
+        value: qsOrderTotal,
+        currency: 'USD',
+        contents: [
+          {
+            content_id: qsProductIdGlobal,
+            content_name: qsProductIdGlobal,
+            content_category: qsOrderType + ' > ' + qsOrderFreq,
+            brand: '{{ site.brand.name }}',
+            variant: qsOrderFreq,
+            price: qsOrderTotal,
+            quantity: 1,
+          }
+        ],
+      });
+
+      // TikTok Pixel
+      ttq.track('Purchase', {
+        content_type: 'product',
+        value: qsOrderTotal,
+        currency: 'USD',
+        contents: [
+          {
+            content_id: qsProductIdGlobal,
+            content_name: qsProductIdGlobal,
+            content_category: qsOrderType + ' > ' + qsOrderFreq,
+            brand: '{{ site.brand.name }}',
+            variant: qsOrderFreq,
+            price: qsOrderTotal,
+            quantity: 1,
+          }
+        ],
+      });
+    } else {
+      console.log('Skipping tracking checkout');
+    }
+
+    // Set the storage key so we don't track this again
+    Manager.storage().set(storageKey, true);
 
   })
 </script>

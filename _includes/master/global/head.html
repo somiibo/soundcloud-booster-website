@@ -8,7 +8,8 @@
 
 
 <!-- Prefetch -->
-<link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
 <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com/">
 
@@ -26,12 +27,15 @@
 <meta name="MobileOptimized" content="320">
 <meta name="generator" content="Ultimate Jekyll">
 
+<!-- Canonical -->
 <link rel="canonical" href="{{ site.url }}{{ page-url-stripped }}">
 
+<!-- Robots -->
 {%- if page.meta.index == false or layout.meta.index == false or site.meta.index == false -%}
   <meta name="robots" content="noindex">
 {% endif %}
 
+<!-- Keywords -->
 {%- if page.meta.keywords != null and page.meta.keywords != '' -%}
   <meta name="keywords" content="{{ page.meta.keywords }}">
 {%- elsif site.meta.keywords != null and site.meta.keywords != '' -%}
@@ -98,11 +102,16 @@
 <!-- Main Feed -->
 <link href="{{ site.url }}/feeds/posts.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
 
+<!-- Language Tags -->
+<link rel="alternate" href="{{ site.url }}" hreflang="x-default">
+<link rel="alternate" hreflang="en" href="{{ site.url }}">
+<!-- <link rel="alternate" hreflang="es" href="{{ site.url }}/es/"> -->
+
+<!-- Performance Metrics -->
 {%- if page.settings.include-debug-performance == false -%}
 {% elsif layout.settings.include-debug-performance == false %}
 {% elsif site.settings.include-debug-performance == false %}
 {% else %}
-  <!-- Performance Metrics -->
   <script type="text/javascript">
     {% include /master/assets/scripts/debug/performance-metrics.js %}
   </script>
@@ -147,6 +156,11 @@
         safari: '{{ site.extension.safari }}',
         edge: '{{ site.extension.edge }}',
       },
+      tracking: {
+        googleAnalytics: '{{ site.tracking.google-analytics }}',
+        facebookPixel: '{{ site.tracking.facebook-pixel }}',
+        tikTokPixel: '{{ site.tracking.tiktok-pixel }}',
+      },
       validRedirectHosts: ['itwcreativeworks.com'],
       // tracking: {
       //   googleAnalytics: '{{ site.tracking.google-analytics }}',
@@ -163,7 +177,6 @@
 {%- else -%}
   {% assign favicon_path = '/assets/images/favicon' %}
 {%- endif -%}
-
 <link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ favicon_path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ favicon_path }}/favicon-16x16.png?cb={{ site.time | date: '%s' }}">
@@ -325,7 +338,6 @@
 </script>
 {% endif %}
 
-
 <!-- Master - Styles -->
 <style media="screen">
   /* Alert box */
@@ -416,7 +428,6 @@
 <!--[if lte IE 8]>
 <link rel="stylesheet" type="text/css" href="/assets/css/master/lte-ie8.css?cb={{ site.time | date: '%s' }}">
 <![endif]-->
-
 
 <!-- App - Head Content -->
 {%- if page.settings.include-app-head == false -%}

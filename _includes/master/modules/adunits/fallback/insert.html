@@ -1,11 +1,11 @@
 <div id="vert-template" data-template='
-  <iframe 
-    id="{id}" 
-    name="{id}" 
-    style="max-height: 300px;" 
-    sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" 
-    width="100%" height="100%" 
-    frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" 
+  <iframe
+    id="{id}"
+    name="{id}"
+    style="max-height: 300px;"
+    sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+    width="100%" height="100%"
+    frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no"
     src="{src}"
   ></iframe>
 '>
@@ -17,6 +17,8 @@
     var $adblockerDetector = select('#uj-antivert-detector');
 
     var $iframeVertTemplate = select('#vert-template').get(0).getAttribute('data-template');
+
+    var qsDebug = new URLSearchParams(window.location.search).get('debug');
 
     var slotId = new Date().getTime();
 
@@ -48,7 +50,7 @@
     // Fill the units
     function fillUnits() {
       var $vertSlots = select(vertSlotsSelector);
-      var adURL = Manager.properties.meta.environment === 'development'
+      var adURL = qsDebug === 'true'
         ? 'http://localhost:4001/verts/main'
         : 'https://promo-server.itwcreativeworks.com/verts/main'
 
@@ -74,15 +76,19 @@
         $el.innerHTML = $iframeVertTemplate
           .replace(/{id}/g, 'uj-vert-' + slotId++)
           .replace(/{src}/g, finalURL)
-      })      
+      })
     }
 
-    window.addEventListener('message', messageHandler, false);    
+    window.addEventListener('message', messageHandler, false);
 
     // Load the adblocker detector
-    Manager.dom().loadScript({src: '/assets/js/taboola_ads.js'})
+    // Manager.dom().loadScript({src: '/assets/js/taboola_ads.js'})
+    Manager.dom().loadScript({src: '/assets/js/pagead.js'})
+    .then(function (e) {
+      console.log('Loaded antivert checker', e);
+    })
     .catch(function (e) {
-      console.error('Failed to load adblock checker', e);
+      console.error('Failed to load antivert checker', e);
     })
     .finally(function () {
       var filledChecker = setInterval(function () {
@@ -93,13 +99,18 @@
         // Set the global adblocker enabled flag
         Manager.properties.global.isAdblockerEnabled = !select('#uj-antivert-detector').elements.exists;
 
-        var needsCustomVerts = isUnfilledVertSlots 
+        var needsCustomVerts = isUnfilledVertSlots
           || Manager.properties.global.isAdblockerEnabled
           || Manager.properties.meta.environment === 'development';
 
-        console.log('Adblock enabled', Manager.properties.global.isAdblockerEnabled, 'isOGVertsLoaded', isOGVertsLoaded, 'Unfilled vert slots', isUnfilledVertSlots, 'Needs custom verts', needsCustomVerts);
+        console.log(
+          'isAdblockerEnabled', Manager.properties.global.isAdblockerEnabled,
+          'isOGVertsLoaded', isOGVertsLoaded,
+          'isUnfilledVertSlots', isUnfilledVertSlots,
+          'needsCustomVerts', needsCustomVerts,
+        );
 
-        if (!isOGVertsLoaded && !Manager.properties.global.isAdblockerEnabled) {
+        if (!Manager.properties.global.isAdblockerEnabled && !isOGVertsLoaded) {
           return;
         }
 

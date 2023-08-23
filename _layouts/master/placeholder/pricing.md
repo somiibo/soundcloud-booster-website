@@ -16,20 +16,32 @@ At {{ site.brand.name }}, we understand that every user has unique needs. That's
 
 ## Basic Plan
 
+Price: <span class="pricing-amount" data-plan-id="basic">0.00</span>
+
 Perfect for individuals or businesses just getting started. Here's what you get:
 - Access to Basic Features
 - Community Support
 - Single User Account
 
-## Premium Plan
+<a href="" class="btn btn-primary pricing-btn" data-plan-id="basic" disabled>Get Basic</a>
+
+
+## Professional Plan
+
+Price: <span class="pricing-amount" data-plan-id="professional">0.00</span>
 
 Designed for those who need a little extra. All the benefits of the Free plan, plus:
-- Access to Premium Features
+- Access to Professional Features
 - Priority Customer Support
 - Multiple User Accounts
 - Advanced Analytics
 
+<a href="" class="btn btn-primary pricing-btn" data-plan-id="professional" disabled>Get Professional</a>
+
+
 ## Custom Enterprise Plan
+
+Price: <span class="pricing-amount" data-plan-id="enterprise-1">0.00</span>
 
 For large businesses and corporations seeking tailor-made solutions. This includes everything in the Premium plan, plus:
 - Customizable Premium Features
@@ -37,6 +49,9 @@ For large businesses and corporations seeking tailor-made solutions. This includ
 - Unlimited User Accounts
 - Dedicated Account Manager
 - Comprehensive Analytics and Reporting
+
+<a href="" class="btn btn-primary pricing-btn" data-plan-id="enterprise-1" disabled>Get Enterprise</a>
+
 
 Remember, every package we offer at {{ site.brand.name }} is built to provide you with the necessary tools to excel. No matter which one you choose, we're committed to ensuring you get the best value and experience.
 

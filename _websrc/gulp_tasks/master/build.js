@@ -53,18 +53,20 @@ gulp.task('jekyll-build', async function () {
     }, {timeout: 1000 * 60 * 3, interval: 1000});
 
     let jekyllConfig = config.jekyll.config.default;
-    jekyllConfig += config.jekyll.config.app ? ',' + config.jekyll.config.app : '';
+    jekyllConfig += config.jekyll.config.app ? `,${config.jekyll.config.app}` : '';
 
     if (argv.jekyllEnv === 'production') {
       process.env.JEKYLL_ENV = 'production';
-      jekyllConfig += config.jekyll.config.production ? ',' + config.jekyll.config.production : '';
+      jekyllConfig += config.jekyll.config.production ? `,${config.jekyll.config.production}` : '';
     } else {
       await tools.poll(function () {
         return Global.get('browserSyncStatus') === 'done';
       }, {timeout: 120000});
-      jekyllConfig += config.jekyll.config.development ? ',' + config.jekyll.config.development : '';
+      jekyllConfig += config.jekyll.config.development ? `,${config.jekyll.config.development}` : '';
       jekyllConfig += ',' + '@output/.temp/_config_browsersync.yml';
     }
+
+    jekyllConfig += tools.isTemplate ? `,_websrc/templates/master/_config_template.yml` : '';
 
     // Create build log JSON
     try {
