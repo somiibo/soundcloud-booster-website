@@ -81,7 +81,8 @@ head:
 </div>
 
 <script type="text/javascript">
-  Manager.auth().ready(function(user) {
+  Manager.auth().ready(function() {
+    var _ = Manager.utilities();
     var searchParams = Manager.properties.page.queryString;
     var qsProductId = searchParams.get('productId') || 'unknown';
     var qsType = searchParams.get('type') || 'unknown';
@@ -95,11 +96,11 @@ head:
     var storageKey = 'checkout.' + qsProductId + '.cart' + '._' + qsCacheBreaker;
     var alreadyTracked = Manager.storage().get(storageKey, false);
 
-    var currentUser = firebase.auth().currentUser;
+    var user = firebase.auth().currentUser;
 
     var newURL;
 
-    if (!currentUser && qsAuthRequired !== 'false') {
+    if (!user && qsAuthRequired !== 'false') {
       return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
     } else if (!qsDestination) {
       // return window.history.back();
@@ -111,8 +112,8 @@ head:
     searchParams.delete('authRequired');
 
     // Add the paramaters needed for some checkouts
-    searchParams.set('uid', currentUser.uid);
-    searchParams.set('email', encodeURIComponent(currentUser.email));
+    searchParams.set('uid', _.get(user, 'uid', ''));
+    searchParams.set('email', _.get(user, 'email', ''));
 
     // Set up and navigate to the actual destination checkout page
     newURL = new URL(qsDestination);
@@ -126,7 +127,7 @@ head:
     }
 
     // Log
-    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, currentUser);
+    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, user);
 
     if (!alreadyTracked) {
       console.log('tracking(): Sending tracking events');
