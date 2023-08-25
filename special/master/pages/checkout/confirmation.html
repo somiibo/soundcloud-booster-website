@@ -169,6 +169,14 @@ head:
     var storageKey = 'checkout.' + qsProductIdGlobal + '.purchased' + '.' + qsOrderId;
     var alreadyTracked = Manager.storage().get(storageKey, false);
 
+    // If in development mode, reset the track storage
+    if (Manager.properties.meta.environment === 'development') {
+      alreadyTracked = false;
+    }
+
+    // Log
+    console.log('main():', qsOrderId, qsProductId, qsProductIdGlobal, qsOrderType, qsOrderFreq, qsOrderTotal, qsUrlText, qsUrl, storageKey, alreadyTracked);
+
     // Set the order ID and URL
     document.getElementById('checkout-step-status-success-order-id').innerText = qsOrderId;
     document.getElementById('checkout-step-status-success-url-text').innerText = qsUrlText
@@ -184,14 +192,6 @@ head:
         window.location.href = qsUrl;
       }
     }, 60000);
-
-    // If in development mode, reset the track storage
-    if (Manager.properties.meta.environment === 'development') {
-      alreadyTracked = false;
-    }
-
-    // Log
-    console.log('main():', qsOrderId, qsProductId, qsProductIdGlobal, qsOrderType, qsOrderFreq, qsOrderTotal, qsUrlText, qsUrl, storageKey, alreadyTracked);
 
     if (!alreadyTracked) {
       console.log('tracking(): Sending tracking events');

@@ -100,9 +100,21 @@ head:
 
     var newURL;
 
+    // If in development mode, reset the track storage
+    if (Manager.properties.meta.environment === 'development') {
+      alreadyTracked = false;
+    }
+
+    // Log
+    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, user);
+
     if (!user && qsAuthRequired !== 'false') {
+      console.log('main(): User not logged in, redirecting to signup page...');
+
       return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
     } else if (!qsDestination) {
+      console.log('main(): No destination provided, redirecting to pricing page...');
+
       // return window.history.back();
       return window.location.href = '{{ site.url }}/pricing';
     }
@@ -120,14 +132,6 @@ head:
     searchParams.forEach(function (value, key) {
       newURL.searchParams.set(key, value)
     })
-
-    // If in development mode, reset the track storage
-    if (Manager.properties.meta.environment === 'development') {
-      alreadyTracked = false;
-    }
-
-    // Log
-    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, user);
 
     if (!alreadyTracked) {
       console.log('tracking(): Sending tracking events');
