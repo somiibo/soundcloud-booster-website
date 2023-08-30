@@ -67,9 +67,9 @@ function setupTracking(config) {
 
   // TikTok Pixel
   ttq.identify({
-    external_id: config.uid,
-    email: config.email,
-    phone_number: '+' + phone,
+    external_id: config.uid || '',
+    email: config.email || '',
+    phone_number: phone ? '+' + phone : '',
   })
 
   setup = true;
