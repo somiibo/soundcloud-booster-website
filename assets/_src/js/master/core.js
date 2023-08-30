@@ -33,7 +33,7 @@ dom.select('form.slapform')
 
 // Setup Tracking
 var storage = Manager.storage();
-var auth = storage.get('auth') || {};
+var auth = storage.get('user.auth') || {};
 var setup = false;
 
 if (auth && auth.uid && auth.email) {
@@ -43,14 +43,15 @@ if (auth && auth.uid && auth.email) {
 Manager.auth().ready(function (user) {
   setupTracking(user);
 
-  storage.set('auth.uid', user.uid);
-  storage.set('auth.email', user.email);
+  storage.set('user.auth.uid', user.uid);
+  storage.set('user.auth.email', user.email);
 })
 
 function setupTracking(config) {
   if (setup) { return; }
 
   var tracking = window.Configuration.global.tracking;
+  var phone = config.phone ? parseInt(config.phone.replace(/\+/ig, '')) : null;
 
   // Google Analytics
   gtag('set', 'user_id', config.uid);
@@ -59,7 +60,7 @@ function setupTracking(config) {
   fbq('init', tracking.facebookPixel, {
     external_id: config.uid,
     em: config.email,
-    ph: config.phone,
+    ph: phone,
     // fn: 'first_name',
     // ln: 'last_name',
   });
@@ -68,7 +69,7 @@ function setupTracking(config) {
   ttq.identify({
     external_id: config.uid,
     email: config.email,
-    phone_number: '+' + config.phone,
+    phone_number: '+' + phone,
   })
 
   setup = true;
