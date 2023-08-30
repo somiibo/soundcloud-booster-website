@@ -81,7 +81,8 @@ head:
 </div>
 
 <script type="text/javascript">
-  Manager.auth().ready(function(user) {
+  Manager.auth().ready(function() {
+    var _ = Manager.utilities();
     var searchParams = Manager.properties.page.queryString;
     var qsProductId = searchParams.get('productId') || 'unknown';
     var qsType = searchParams.get('type') || 'unknown';
@@ -95,13 +96,25 @@ head:
     var storageKey = 'checkout.' + qsProductId + '.cart' + '._' + qsCacheBreaker;
     var alreadyTracked = Manager.storage().get(storageKey, false);
 
-    var currentUser = firebase.auth().currentUser;
+    var user = firebase.auth().currentUser;
 
     var newURL;
 
-    if (!currentUser && qsAuthRequired !== 'false') {
+    // If in development mode, reset the track storage
+    if (Manager.properties.meta.environment === 'development') {
+      alreadyTracked = false;
+    }
+
+    // Log
+    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, user);
+
+    if (!user && qsAuthRequired !== 'false') {
+      console.log('main(): User not logged in, redirecting to signup page...');
+
       return window.location.href = '{{ site.url }}/signup?auth_redirect=' + encodeURIComponent(window.location.href);
     } else if (!qsDestination) {
+      console.log('main(): No destination provided, redirecting to pricing page...');
+
       // return window.history.back();
       return window.location.href = '{{ site.url }}/pricing';
     }
@@ -111,22 +124,14 @@ head:
     searchParams.delete('authRequired');
 
     // Add the paramaters needed for some checkouts
-    searchParams.set('uid', currentUser.uid);
-    searchParams.set('email', encodeURIComponent(currentUser.email));
+    searchParams.set('uid', _.get(user, 'uid', ''));
+    searchParams.set('email', _.get(user, 'email', ''));
 
     // Set up and navigate to the actual destination checkout page
     newURL = new URL(qsDestination);
     searchParams.forEach(function (value, key) {
       newURL.searchParams.set(key, value)
     })
-
-    // If in development mode, reset the track storage
-    if (Manager.properties.meta.environment === 'development') {
-      alreadyTracked = false;
-    }
-
-    // Log
-    console.log('main():', qsProductId, qsType, qsFrequency, qsPrice, qsCacheBreaker, qsDestination, qsAuthRequired, qsDevelopment, storageKey, alreadyTracked, currentUser);
 
     if (!alreadyTracked) {
       console.log('tracking(): Sending tracking events');
@@ -143,7 +148,7 @@ head:
             // coupon: '15OFF',
             // discount: 0.00,
             index: 0,
-            item_brand: '{{ site.brand.name }}',
+            item_brand: Manager.properties.global.brand.name,
             item_category: qsType,
             // item_category2: 'Adult',
             // item_category3: 'Shirts',
@@ -169,7 +174,7 @@ head:
             content_id: qsProductId,
             content_name: qsProductId,
             content_category: qsType + ' > ' + qsFrequency,
-            brand: '{{ site.brand.name }}',
+            brand: Manager.properties.global.brand.name,
             variant: qsFrequency,
             price: qsPrice,
             quantity: 1,
@@ -187,7 +192,7 @@ head:
             content_id: qsProductId,
             content_name: qsProductId,
             content_category: qsType + ' > ' + qsFrequency,
-            brand: '{{ site.brand.name }}',
+            brand: Manager.properties.global.brand.name,
             variant: qsFrequency,
             price: qsPrice,
             quantity: 1,
