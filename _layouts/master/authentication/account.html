@@ -27,7 +27,7 @@ head:
       body {
         opacity: 0;
       }
-      */      
+      */
     </style>
     <style media="screen">
       .fs-badge {
@@ -43,7 +43,7 @@ head:
         font-size: 0.875rem;
         font-weight: 400;
         line-height: 1.6;
-      }      
+      }
     </style>
   '
 
@@ -98,7 +98,7 @@ settings:
         sends: {
           required: '/signup/',
         },
-      },      
+      },
       libraries: {
         cookieconsent: {
           enabled: false,
@@ -175,7 +175,7 @@ settings:
                  }'>
              <li class="nav-item">
                <a class="nav-link active" href="#content">
-                 <i class="bi-person nav-icon"></i> Account details                 
+                 <i class="bi-person nav-icon"></i> Account details
                </a>
              </li>
               <li class="nav-item">
@@ -229,7 +229,7 @@ settings:
                 <a class="nav-link link-danger auth-signout-all-btn" href="javascript:;">
                   <i class="bi-door-open nav-icon" style="pointer-events: none;"></i> Sign out
                 </a>
-              </li>              
+              </li>
             </ul>
           </div>
           <!-- End Navbar Collapse -->
@@ -599,10 +599,10 @@ settings:
                   </thead>
 
                   <tbody id="usage-table">
-                 
+
                   </tbody>
                 </table>
-              </div>              
+              </div>
               <!-- End Body -->
             </div>
             <!-- End Card -->
@@ -803,7 +803,7 @@ settings:
 
                     <input type="email" class="form-control" name="email" id="accountEmailLabel" placeholder="Enter account email" aria-label="Enter account email" autocomplete="email" required>
                     <small class="form-text">Confirm the email you use to log in to to your {{ site.brand.name }} account.</small>
-                  </div>                  
+                  </div>
                   <!-- End Form -->
 
                   <div class="alert alert-soft-success" role="alert" hidden>
@@ -982,7 +982,7 @@ settings:
         <!-- Dynamically filled -->
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>      
+    </div>
   </div>
 </div>
 
@@ -1045,7 +1045,7 @@ settings:
         <div class="flex-shrink-0">
           {icon} {platform} {online}
         </div>
-        
+
       </td>
       <td>
         <a href="{ipUrl}" target="_blank" rel="nofollow">{ip} <i class="bi-box-arrow-up-right ms-1"></i></a>
@@ -1094,7 +1094,7 @@ settings:
     <td class="align-items-center">{metric}</td>
     <td>{used}</td>
     <td>{allowed}</td>
-  </tr>   
+  </tr>
 '></div>
 
 <script>
@@ -1171,7 +1171,7 @@ settings:
 
     var $usageTable = document.getElementById('usage-table')
     var $usageReset = document.getElementById('usage-reset')
-    
+
     var $authUserProfileParent = document.getElementById('auth-user-profile-parent')
     var $authUserProfileImg = document.getElementById('auth-user-profile-img')
 
@@ -1274,7 +1274,7 @@ settings:
         })
         .catch(function (e) {
           return reject(e);
-        })        
+        })
       });
     }
 
@@ -1294,11 +1294,11 @@ settings:
           })
           .catch(function (e) {
             return reject(e);
-          })          
+          })
         })
         .catch(function (e) {
           return reject(e);
-        })        
+        })
       });
     }
 
@@ -1374,7 +1374,7 @@ settings:
         if (accountData.roles.blogger) {
           // badgesHtml += '<i class="fa-solid fa-book fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
           badgesHtml += '<i class="fa-solid fa-pen-clip fs-badge text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Blogger"></i>';
-        }                    
+        }
 
         if (accountData.roles.betaTester) {
           // badgesHtml += '<i class="bi-lightning-fill fs-badge me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Beta tester" style="color: #6f42c1"></i>';
@@ -1410,6 +1410,9 @@ settings:
             .replace(/{date}/, new Date(referral.timestamp).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
         });
 
+        console.log('user.providerData', user.providerData);
+
+        // Fill signin methods
         user.providerData
         .forEach(function (provider, i) {
           if (provider.providerId === 'password') {
@@ -1425,6 +1428,7 @@ settings:
 
         console.log('providersArray', providersArray);
 
+        // Fill signin methods
         providersArray
         .forEach(function (provider, i) {
           var plainId = provider.replace('.com', '');
@@ -1494,7 +1498,7 @@ settings:
           var icon;
           var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
           var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
-          
+
           if (platform.match(/(mac|darwin)/ig)) {
             platformHuman = 'macOS';
             icon = iconHtml.replace(/{icon}/ig, sessionsMap.mac);
@@ -1503,7 +1507,7 @@ settings:
             icon = iconHtml.replace(/{icon}/ig, sessionsMap.windows);
           } else if (platform.match(/linux/ig)) {
             platformHuman = 'Linux';
-            icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);                        
+            icon = iconHtml.replace(/{icon}/ig, sessionsMap.linux);
           } else {
             platformHuman = 'Unknown';
             icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
@@ -1577,7 +1581,7 @@ settings:
         var nowDate = new Date();
         var resetDate = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 1);
         var Difference_In_Time = resetDate.getTime() - nowDate.getTime();
-        var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));   
+        var Difference_In_Days = Math.round(Difference_In_Time / (1000 * 3600 * 24));
         var isAnS = Difference_In_Days === 1 ? '' : 's';
         $usageReset.innerHTML = resetDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' (' + Difference_In_Days + ' day' + isAnS + ')'
 
@@ -1671,7 +1675,7 @@ settings:
             hashEl.click();
           }
         }
-        
+
       })
     })
     .catch(function (e) {
@@ -1789,7 +1793,7 @@ settings:
         })
         .catch(function (e) {
           _result(e)
-        })        
+        })
       }
     }
 
@@ -1818,20 +1822,27 @@ settings:
         }
       }
 
-      $toast.show();
+      setTimeout(function () {
+        $toast.show();
+      }, 300);
+
     }
 
     function handleClick(event) {
       // if (event.target.getAttribute('href') === 'javascript:;' && event.target.getAttribute('target') === '_blank') {
       //   event.preventDefault();
       // }
+      var user = firebase.auth().currentUser;
+
       if (event.target.matches('.auth-link-provider-btn')) {
         var $el = select(event.target);
         var provider = event.target.dataset.provider;
 
         console.log('Linking', provider);
 
-        firebase.auth().currentUser.linkWithPopup(new firebase.auth.OAuthProvider(provider))
+        if (!user) {return}
+
+        user.linkWithPopup(new firebase.auth.OAuthProvider(provider))
         .then(function (result) {
           $el.removeClass('auth-link-provider-btn').addClass('auth-unlink-provider-btn').setInnerHTML('Disconnect')
           toast('success', 'Successfully connected ' + provider + '!')
@@ -1845,7 +1856,13 @@ settings:
 
         console.log('Unlinking', provider);
 
-        firebase.auth().currentUser.unlink(provider)
+        if (!user) {return}
+
+        if (user.providerData.length <= 1) {
+          return toast(new Error('You must have at least one signin method linked to your account'))
+        }
+
+        user.unlink(provider)
         .then(function (result) {
           $el.removeClass('auth-unlink-provider-btn').addClass('auth-link-provider-btn').setInnerHTML('Connect')
           toast('success', 'Successfully disconnected ' + provider + '!')
@@ -2081,7 +2098,7 @@ settings:
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }  
+  }
 
   // document.addEventListener('click', function (event) {
   //   console.log('---1');

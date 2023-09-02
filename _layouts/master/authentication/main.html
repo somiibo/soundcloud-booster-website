@@ -441,6 +441,7 @@ settings:
 
 <script type="text/javascript">
   var select;
+  var _;
   var url;
   var serverApiURL;
   var providerDetails = {}
@@ -459,6 +460,7 @@ settings:
 
   Manager.auth().ready(function () {
     select = Manager.dom().select;
+    _ = Manager.utilities();
     var user = firebase.auth().currentUser;
     url = new URL(window.location.href);
     var action = false;
@@ -693,8 +695,8 @@ settings:
     var signupDate = new Date(parseInt(user.metadata.a));
 
     var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
-    var providerData = Manager.utilities().get(user, 'providerData', [{providerId: 'password'}]);
-    var providerId = providerData[providerData.length - 1].providerId;
+    var providerData = _.get(user, 'providerData', []);
+    var providerId = _.get(providerData, Math.max(providerData.length - 1, 0) + '.providerId', 'password');
 
     console.log('trackSignupOrSignin():', providerId, accountAgeSeconds, trackedSignup);
 
