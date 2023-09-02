@@ -195,6 +195,7 @@ settings:
             settings: {
               openChatButton: {
                 background: '#237afc',
+                text: '#fff',
               },
             },
           },
