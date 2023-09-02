@@ -206,7 +206,7 @@ settings:
             release: 'ultimate-jekyll-website',
           },
         },
-      }
+      },
     }
   " # javascript object to set the Configuration object for Web Manager
 
