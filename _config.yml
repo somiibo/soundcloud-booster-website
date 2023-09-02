@@ -163,28 +163,49 @@ settings:
             storageBucket: 'ultimate-jekyll.appspot.com',
             messagingSenderId: '837186164890',
             appId: '1:837186164890:web:f1f59569d661078c',
-            measurementId: ''
-          }
+            measurementId: 'G-FR3X7X4KYN',
+          },
+        },
+        firebase_appCheck: {
+          enabled: true,
+          config: {
+            siteKey: '6Lf7FvInAAAAANGWIztSF32IyC_78ONof3QcwCzQ',
+          },
         },
         cookieconsent: {
           enabled: true,
-          config: {}
+          config: {
+            palette: {
+              popup: {
+                background: '#237afc',
+                text: '#fff',
+              },
+              button: {
+                background: '#fff',
+                text: '#237afc',
+              },
+            },
+          },
         },
         chatsy: {
           enabled: true,
           config: {
             accountId: 'pLnXvh03xRQOHWAurn5EBnobC5H3',
             chatId: 't4IJJsOMNc4hiH',
-            settings: {},
-          }
+            settings: {
+              openChatButton: {
+                background: '#237afc',
+              },
+            },
+          },
         },
         sentry: {
           enabled: true,
           config: {
             dsn: '',
-            release: 'ultimate-jekyll-website'
-          }
-        }
+            release: 'ultimate-jekyll-website',
+          },
+        },
       }
     }
   " # javascript object to set the Configuration object for Web Manager
