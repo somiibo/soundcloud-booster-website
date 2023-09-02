@@ -131,29 +131,29 @@ try {
 }
 
 // Load PromoServer
-try {
-  // Import libraries
-  importScripts('https://cdn.jsdelivr.net/npm/promo-server@latest/dist/index.min.js');
+// try {
+//   // Import libraries
+//   importScripts('https://cdn.jsdelivr.net/npm/promo-server@latest/dist/index.min.js');
 
-  // Register and handle
-  setTimeout(function () {
-    SWManager.libraries.promoServer = new PromoServer({
-      app: SWManager.app, // <any string>
-      platform: 'web', // web | electron | extension
-      log: true, // true | false
-      alwaysRun: SWManager.environment === 'development',
-      libraries: {
-        firebase: firebase, // reference to firebase (one will be implied if not provided)
-      },      
-    });
+//   // Register and handle
+//   setTimeout(function () {
+//     SWManager.libraries.promoServer = new PromoServer({
+//       app: SWManager.app, // <any string>
+//       platform: 'web', // web | electron | extension
+//       log: true, // true | false
+//       alwaysRun: SWManager.environment === 'development',
+//       libraries: {
+//         firebase: firebase, // reference to firebase (one will be implied if not provided)
+//       },
+//     });
 
-    SWManager.libraries.promoServer.handle();
-    log('master-service-worker.js handling PromoServer.');
-  }, SWManager.environment === 'development' ? 1 : 30000);
-  log('master-service-worker.js initialized PromoServer.');
-} catch (e) {
-  console.error('master-service-worker.js failed to import promo-server.js', e);
-}
+//     SWManager.libraries.promoServer.handle();
+//     log('master-service-worker.js handling PromoServer.');
+//   }, SWManager.environment === 'development' ? 1 : 30000);
+//   log('master-service-worker.js initialized PromoServer.');
+// } catch (e) {
+//   console.error('master-service-worker.js failed to import promo-server.js', e);
+// }
 
 // Send messages: https://stackoverflow.com/questions/35725594/how-do-i-pass-data-like-a-user-id-to-a-web-worker-for-fetching-additional-push
 // more messaging: http://craig-russell.co.uk/2016/01/29/service-worker-messaging.html#.XSKpRZNKiL8
