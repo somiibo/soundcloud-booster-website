@@ -26,7 +26,6 @@ foot:
 
   <body>
     <script>
-      console.log('---1');
       document.addEventListener('click', function (event) {
         navigator.bluetooth.requestDevice({
           acceptAllDevices: true,
@@ -44,7 +43,6 @@ foot:
           console.log('Error: ' + error);
         });
       })
-      console.log('---2');
     </script>
   </body>
 
