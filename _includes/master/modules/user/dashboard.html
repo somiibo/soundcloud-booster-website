@@ -184,7 +184,19 @@
       self._handler.onSubmit(event, self.getFormData());
     });
 
-    self.display('loading');
+    // Set templates
+    options.template = options.template || {};
+    select('.dashboard-template').each(function ($el) {
+      var id = $el.getAttribute('data-template-id');
+      var body = $el.getAttribute('data-template-body');
+
+      if (id && body) {
+        options.template[id] = body;
+      }
+    })
+
+    // self.display('loading');
+    self.display('initializing');
 
     self.options = options;
 
@@ -204,9 +216,9 @@
   Dashboard.prototype.display = function (status) {
     var self = this;
 
-    // status = ready, loading, success, error
     var _error;
 
+    // status: initializing | ready | loading | success | error
     if (status instanceof Error) {
       _error = status;
       status = 'error';
@@ -219,25 +231,35 @@
     // Enable or disable all inputs and submit buttons
     elements
     .forEach(function (el) {
-      var $el = Manager.dom().select(el);
+      var $el = select(el);
 
-      if (status === 'loading' && (!el.classList.contains('disabled') || !el.hasAttribute('disabled'))) {
-        $el.addClass('disabled').setAttribute('disabled', 'true');
-      } else if (el.classList.contains('disabled') || el.hasAttribute('disabled')) {
+      if (
+        ['initializing', 'loading'].includes(status)
+        && (!el.classList.contains('disabled') || !el.hasAttribute('disabled'))
+      ) {
+        $el.addClass('disabled').setAttribute('disabled', true);
+      } else if (
+        el.classList.contains('disabled')
+        || el.hasAttribute('disabled')
+      ) {
         $el.removeClass('disabled').removeAttribute('disabled');
       }
     });
 
+    // Set dynamic status
+    select('.dashboard-status-listener').setAttribute('hidden', true);
+    select('.dashboard-status-listener[data-status="' + status + '"]').removeAttribute('hidden');
+
     // Show spinner or hide
-    if (status === 'loading') {
+    if (['initializing', 'loading'].includes(status)) {
       self.element.loader.parent.removeAttribute('hidden');
     } else {
-      self.element.loader.parent.setAttribute('hidden', 'true');
+      self.element.loader.parent.setAttribute('hidden', true);
     }
 
     // Remove unsaved changes popup
-    if (status === 'success' || status === 'error') {
-      self.element.unsaved.parent.setAttribute('hidden', 'true');
+    if (['success', 'error'].includes(status)) {
+      self.element.unsaved.parent.setAttribute('hidden', true);
     }
 
     // Show error message
@@ -276,7 +298,7 @@
     }
 
     // Set allow leave
-    if (status === 'success') {
+    if (['success'].includes(status)) {
       self.setAllowLeave(true);
     }
 
@@ -289,7 +311,7 @@
 
     self.element.id.get(0).querySelectorAll(inputAndSubmit)
     .forEach(function (el) {
-      var $el = Manager.dom().select(el);
+      var $el = select(el);
       var name = $el.getAttribute('name');
       var value = $el.getValue();
 
