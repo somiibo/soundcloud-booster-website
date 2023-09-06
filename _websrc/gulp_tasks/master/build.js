@@ -39,6 +39,8 @@ function areTasksCompleted() {
  */
 gulp.task('jekyll-build', async function () {
   return new Promise(async function(resolve, reject) {
+    tools.quitIfBadBuildEnvironment();
+
     await tools.poll(function () {
       return Global.get('prefillStatus') === 'done';
     }, {timeout: 120000, interval: 1000});

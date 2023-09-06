@@ -49,6 +49,8 @@ gulp.task('imageminResponsive', async function () {
 
   tools.startTask('imageminResponsive');
 
+  tools.quitIfBadBuildEnvironment();
+
   let images = await getBlogImages();
   const regex = /(\.jpg|\.jpeg|\.png)/img;
 

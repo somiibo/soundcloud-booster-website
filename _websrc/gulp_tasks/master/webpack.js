@@ -23,6 +23,8 @@ gulp.task('webpack', async function () {
 
   tools.startTask('webpack');
 
+  tools.quitIfBadBuildEnvironment();
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 60000});

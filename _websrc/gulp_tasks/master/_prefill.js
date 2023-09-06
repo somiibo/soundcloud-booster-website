@@ -61,7 +61,7 @@ gulp.task('_prefill', async () => {
           "});" + "\n" +
           ""
         )
-        
+
         const pages = [
           '404',
           'about',

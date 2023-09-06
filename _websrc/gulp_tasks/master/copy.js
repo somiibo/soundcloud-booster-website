@@ -30,6 +30,8 @@ gulp.task('copyCss', async function () {
 
   tools.startTask('copyCss');
 
+  tools.quitIfBadBuildEnvironment();
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
@@ -56,6 +58,8 @@ gulp.task('copyImages', async function () {
 
   tools.startTask('copyImages');
 
+  tools.quitIfBadBuildEnvironment();
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
@@ -79,6 +83,8 @@ gulp.task('copyJs', async function () {
 
   tools.startTask('copyJs');
 
+  tools.quitIfBadBuildEnvironment();
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});
@@ -92,7 +98,7 @@ gulp.task('copyJs', async function () {
     (await fs.read('./_websrc/templates/master/js/master-service-worker.js')).replace(/{firebase-version}/img,
       require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '')
     )
-  );  
+  );
 
   return es.merge(
     gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
@@ -113,6 +119,8 @@ gulp.task('copyUncompiled', async function () {
   }
 
   tools.startTask('copyUncompiled');
+
+  tools.quitIfBadBuildEnvironment();
 
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';

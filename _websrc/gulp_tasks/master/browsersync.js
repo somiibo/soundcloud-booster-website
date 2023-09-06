@@ -18,6 +18,8 @@ let workingUrl;
 // gulp.task('browsersync', ['jekyll-build'], function () {
 gulp.task('browsersync', async function () {
   return new Promise(async function(resolve, reject) {
+    tools.quitIfBadBuildEnvironment();
+
     await tools.poll(function () {
       return Global.get('prefillStatus') === 'done';
     }, {timeout: 120000});
@@ -116,6 +118,8 @@ gulp.task('browsersync', async function () {
  * Rebuild Jekyll & do page reload
  */
 gulp.task('browser-reload', ['jekyll-build'], function () {
+  tools.quitIfBadBuildEnvironment();
+
   browsersync.notify('Rebuilded Jekyll');
   console.log(`Internal URL: ${localUrl}`);
   console.log(`External URL: ${externalUrl}`);

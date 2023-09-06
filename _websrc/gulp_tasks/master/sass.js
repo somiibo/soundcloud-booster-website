@@ -12,6 +12,8 @@ gulp.task('sass', async function () {
 
   tools.startTask('sass');
 
+  tools.quitIfBadBuildEnvironment();
+
   await tools.poll(function () {
     return Global.get('prefillStatus') === 'done';
   }, {timeout: 120000});

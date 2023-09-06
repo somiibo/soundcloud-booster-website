@@ -112,7 +112,7 @@ gulp.task('template:update', async function () {
   .then(data => {
     console.log(data)
   })
-  .catch(e => {})  
+  .catch(e => {})
 });
 
 gulp.task('template:setup', async function () {
