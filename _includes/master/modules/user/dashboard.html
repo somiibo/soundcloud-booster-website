@@ -223,10 +223,10 @@
       _error = status;
       status = 'error';
     }
-
+    var state = status === 'initializing' ? 'initializing' : 'initialized';
     var elements = self.element.id.get(0).querySelectorAll(inputAndSubmit);
 
-    console.log('[Dashboard]', self.id, 'display', status);
+    console.log('[Dashboard] display', self.id, 'status', status, 'state', state);
 
     // Enable or disable all inputs and submit buttons
     elements
@@ -246,9 +246,9 @@
       }
     });
 
-    // Set dynamic status
-    select('.dashboard-status-listener').setAttribute('hidden', true);
-    select('.dashboard-status-listener[data-status="' + status + '"]').removeAttribute('hidden');
+    // Set dynamic state
+    select('.dashboard-state-listener').setAttribute('hidden', true);
+    select('.dashboard-state-listener[data-state="' + state + '"]').removeAttribute('hidden');
 
     // Show spinner or hide
     if (['initializing', 'loading'].includes(status)) {
