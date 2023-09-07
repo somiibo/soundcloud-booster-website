@@ -322,6 +322,11 @@
         var name = $el.getAttribute('name');
         var value = select('#' + $form.id + ' [name="' + name + '"]').getValue();
 
+        if (name === '') {
+          console.warn('[Dashboard]', self.id, 'input has no name', value, $el);
+          return;
+        }
+
         set(data, name, value);
       });
 
