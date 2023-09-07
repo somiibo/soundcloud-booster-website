@@ -1,7 +1,7 @@
 const through  = require('through2');
 const Global   = require('./global.js');
 const argv     = require('yargs').argv;
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 
 function Tools() {
   const self = this;
@@ -85,6 +85,16 @@ Tools.prototype.execute = function (cmd) {
 
       return resolve(stdout.trim());
     });
+  });
+};
+
+Tools.prototype.spawn = function (cmd, args) {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    cp.spawn(cmd, args, {stdio: 'inherit', env: process.env})
+      .on('close', resolve)
+      .on('error', reject);
   });
 };
 

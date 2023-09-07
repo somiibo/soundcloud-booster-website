@@ -4,12 +4,14 @@ const newer    = require('gulp-newer');
 const argv     = require('yargs').argv;
 const tools    = new (require('../../libraries/tools.js'));
 
-gulp.task('copyFontAwesome', function () {
+gulp.task('copyFontAwesome', async () => {
   tools.startTask('copyFontAwesome');
 
-  tools.quitIfBadBuildEnvironment();
+  await tools.quitIfBadBuildEnvironment();
 
   return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
     .pipe(gulp.dest(`${config.assets}/webfonts`))
     .pipe(tools.completeTask('copyFontAwesome'))
+    .on('end', resolve)
+    .on('error', reject);
 });

@@ -15,113 +15,95 @@ let workingUrl;
 /**
  * Wait for jekyll-build, then launch the Server
  */
-// gulp.task('browsersync', ['jekyll-build'], function () {
-gulp.task('browsersync', async function () {
-  return new Promise(async function(resolve, reject) {
-    tools.quitIfBadBuildEnvironment();
+gulp.task('browsersync', async () => {
+  await tools.quitIfBadBuildEnvironment();
 
-    await tools.poll(function () {
-      return Global.get('prefillStatus') === 'done';
-    }, {timeout: 120000});
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
-    if (!fs.exists(`${config.jekyll.dest}/index.html`)) {
-      fs.write(`${config.jekyll.dest}/index.html`, `<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <title>Initializing...</title> <meta name="description" content="Initializing..."> </head> <body> Initializing... <a href="#" onclick="window.location.href = window.location.href">refresh</a></body> </html>`)
-    }
+  if (!fs.exists(`${config.jekyll.dest}/index.html`)) {
+    fs.write(`${config.jekyll.dest}/index.html`, `<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <title>Initializing...</title> <meta name="description" content="Initializing..."> </head> <body> Initializing... <a href="#" onclick="window.location.href = window.location.href">refresh</a></body> </html>`)
+  }
 
-    // options: https://www.browsersync.io/docs/options
-    let settings = {
-      port: config.port,
-      browser: browser,
-      cors: true,
-      server: {
-        baseDir: config.jekyll.dest,
-        middleware: async function (req, res, next) {
-          if (/_post.json/.test(req.url)) {
-            const createPost = require('./create-post.js');
-            let post = new createPost();
-            return await post.create({
-              req: req,
-              res: res,
-            })
-            // res.write(JSON.stringify({test: 'penis'}));
-            // return res.end();
-          }
-          next();
+  // options: https://www.browsersync.io/docs/options
+  let settings = {
+    port: config.port,
+    browser: browser,
+    cors: true,
+    server: {
+      baseDir: config.jekyll.dest,
+      middleware: async function (req, res, next) {
+        if (/_post.json/.test(req.url)) {
+          const createPost = require('./create-post.js');
+          let post = new createPost();
+          return await post.create({
+            req: req,
+            res: res,
+          })
         }
-      },
-      open: urlType,
-      ghostMode: false,
-      // open: false,
-      // https: true, // some stuff fails if this is true (like service workers)
-      // proxy: "https://mysite.dev",
-    };
-    if (argv.https) {
-      if (!fs.exists('./@output/.temp/certificate/localhost.key.pem') || !fs.exists('./@output/.temp/certificate/localhost.cert.pem')) {
-        setTimeout(function () {
-          process.exit(1)
-        }, 1);
-        return reject(new Error("To run the site on HTTPS you first need to execute: npm run create:cert"));
+        next();
       }
-      settings.https = {
-        key: "./@output/.temp/certificate/localhost.key.pem",
-        cert: "./@output/.temp/certificate/localhost.cert.pem",
-      }
+    },
+    open: urlType,
+    ghostMode: false,
+    // open: false,
+    // https: true, // some stuff fails if this is true (like service workers)
+    // proxy: "https://mysite.dev",
+  };
+  if (argv.https) {
+    if (!fs.exists('./@output/.temp/certificate/localhost.key.pem') || !fs.exists('./@output/.temp/certificate/localhost.cert.pem')) {
+      setTimeout(function () {
+        process.exit(1)
+      }, 1);
+      return reject(new Error("To run the site on HTTPS you first need to execute: npm run create:cert"));
     }
-    browsersync.init(settings, function (error, instance) {
-      // cmd.run(`mkdir -p @output/.temp/ && echo 'url: ${instance.options.get('urls').get('external')}' >@output/.temp/_config_browsersync.yml`);
-      if (!error) {
-        localUrl = instance.options.get('urls').get('local');
-        externalUrl = instance.options.get('urls').get('external');
-        workingUrl = (urlType === 'local') ? localUrl : externalUrl;
-        fs.write('@output/.temp/_config_browsersync.yml', `url: ${workingUrl}`)
-      } else {
-        console.error('Browsersync error:', error);
-      }
+    settings.https = {
+      key: "./@output/.temp/certificate/localhost.key.pem",
+      cert: "./@output/.temp/certificate/localhost.cert.pem",
+    }
+  }
 
-      // tools.poll(function () {
-      //   var exists = fs.exists('./_site/index.html');
-      //   if (exists) {
-      //     browsersync.reload('/');
-      //   }
-      //   console.log('polling EXISTS', exists);
-      //   return exists;
-      // }, {timeout: 60000});
+  browsersync.init(settings, async (error, instance) => {
+    if (!error) {
+      localUrl = instance.options.get('urls').get('local');
+      externalUrl = instance.options.get('urls').get('external');
+      workingUrl = (urlType === 'local') ? localUrl : externalUrl;
+      fs.write('@output/.temp/_config_browsersync.yml', `url: ${workingUrl}`)
+    } else {
+      console.error('Browsersync error:', error);
+    }
 
-
-      // Launch ngrok if enabled
-      if (!error && argv.ngrokOpen === 'true') {
-        const ngrok = require('/usr/local/lib/node_modules/ngrok');
-        (async function() {
-          const url = await ngrok.connect(instance.options.get('port'));
-          console.log('\x1b[40m\x1b[35m');
-          console.log('');
-          console.log('');
-          console.log('******* ngrok url *******');
-          console.log(url);
-          console.log('*************************');
-          console.log('');
-          console.log('\x1b[0m');
-          // cmd.run(`mkdir -p @output/ngrok/ && echo '<meta http-equiv="Refresh" content="0; url=${url}" />' >@output/ngrok/index.html`);
-          fs.write('@output/ngrok/index.html', `<meta http-equiv="Refresh" content="0; url=${url}" />`)
-          Global.set('browserSyncStatus', 'done');
-          return resolve();
-        })();
-      } else {
-        Global.set('browserSyncStatus', 'done');
-        return resolve();
-      }
-    });
+    // Launch ngrok if enabled
+    if (!error && argv.ngrokOpen === 'true') {
+      const ngrok = require('/usr/local/lib/node_modules/ngrok');
+      const url = await ngrok.connect(instance.options.get('port'));
+      console.log('\x1b[40m\x1b[35m');
+      console.log('');
+      console.log('');
+      console.log('******* ngrok url *******');
+      console.log(url);
+      console.log('*************************');
+      console.log('');
+      console.log('\x1b[0m');
+      fs.write('@output/ngrok/index.html', `<meta http-equiv="Refresh" content="0; url=${url}" />`)
+      Global.set('browserSyncStatus', 'done');
+      return Promise.resolve();
+    } else {
+      Global.set('browserSyncStatus', 'done');
+      return Promise.resolve();
+    }
   });
 });
 
 /**
  * Rebuild Jekyll & do page reload
  */
-gulp.task('browser-reload', ['jekyll-build'], function () {
-  tools.quitIfBadBuildEnvironment();
+gulp.task('browser-reload', ['jekyll-build'], async () => {
+  await tools.quitIfBadBuildEnvironment();
 
-  browsersync.notify('Rebuilded Jekyll');
+  browsersync.notify('Rebuilt Jekyll');
   console.log(`Internal URL: ${localUrl}`);
   console.log(`External URL: ${externalUrl}`);
   browsersync.reload();
+
+  return Promise.resolve();
 });

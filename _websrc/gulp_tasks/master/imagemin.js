@@ -10,21 +10,6 @@ const glob       = require('glob');
 const jetpack    = require('fs-jetpack');
 const tools      = new (require('../../libraries/tools.js'));
 
-// const pngquant   = require('imagemin-pngquant');
-// const imagemin   = require('gulp-imagemin');
-
-// gulp.task('imagemin', function () {
-//   return gulp.src([config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/**/*.svg', '!' + config.assets + config.assetsSubpath + '/' + config.imagemin.src + '/favicon/**/*'])
-//     .pipe(plumber())
-//     .pipe(newer(config.assets + '/' + config.imagemin.dest))
-//     .pipe(imagemin({
-//       progressive: config.imagemin.progressive,
-//       svgoPlugins: config.imagemin.svgoPlugins,
-//       use:         [pngquant()],
-//     }))
-//     .pipe(gulp.dest(config.assets + '/' + config.imagemin.dest));
-// });
-
 function getBlogImages() {
   return new Promise(function(resolve, reject) {
     let getDirectories = function (src, callback) {
@@ -41,7 +26,7 @@ function getBlogImages() {
   });
 }
 
-gulp.task('imageminResponsive', async function () {
+gulp.task('imageminResponsive', async () => {
   if (argv.skipImageMin === 'true') {
     console.log('Skipping imageminResponsive');
     return Promise.resolve();
@@ -49,13 +34,14 @@ gulp.task('imageminResponsive', async function () {
 
   tools.startTask('imageminResponsive');
 
-  tools.quitIfBadBuildEnvironment();
+  await tools.quitIfBadBuildEnvironment();
 
   let images = await getBlogImages();
   const regex = /(\.jpg|\.jpeg|\.png)/img;
 
   tools.log('Fixing undersized images...');
 
+  // Fix undersized images
   for (var i = 0, l = images.length; i < l; i++) {
     const imgPath = images[i];
     const imgPathNew = imgPath.replace(regex, '-new$1');
@@ -81,18 +67,10 @@ gulp.task('imageminResponsive', async function () {
             tools.error('Failed to fix image (resize)', imgPath, e);
           })
       }
-      // if (image && image.bitmap && image.bitmap.width < 1024) {
-      //   console.log('Fixing image', imgPath);
-      //   const ratio = (1024 / image.bitmap.width);
-      //   await image.resize(Math.floor(image.bitmap.width * ratio), Math.floor(image.bitmap.height * ratio));
-      //   // await image.quality(quality);
-      //   await image.writeAsync(imgPath);
-      // }
     })
     .catch(e => {
       tools.error('Failed to fix image (meta)', imgPath, e);
     })
-
   }
 
   tools.log('Finished fixing undersized images');

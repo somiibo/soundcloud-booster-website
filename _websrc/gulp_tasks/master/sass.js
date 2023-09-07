@@ -7,16 +7,14 @@ const es           = require('event-stream');
 const tools        = new (require('../../libraries/tools.js'));
 const Global       = require('../../libraries/global.js');
 
-gulp.task('sass', async function () {
-  const prePath = config.assets + config.assetsSubpath + '/' + config.sass.src;
+gulp.task('sass', async () => {
+  const prePath = `${config.assets}${config.assetsSubpath}/${config.sass.src}`;
 
   tools.startTask('sass');
 
-  tools.quitIfBadBuildEnvironment();
+  await tools.quitIfBadBuildEnvironment();
 
-  await tools.poll(function () {
-    return Global.get('prefillStatus') === 'done';
-  }, {timeout: 120000});
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   return es.merge(
     gulp.src([`${prePath}/**/*.scss`, `!${prePath}/${config.sass.entry[0]}`])
@@ -38,5 +36,5 @@ gulp.task('sass', async function () {
       .pipe(gulp.dest(`${config.assets}/${config.sass.dest}`)),
   )
   .pipe(tools.completeTask('sass'))
-
 });
+
