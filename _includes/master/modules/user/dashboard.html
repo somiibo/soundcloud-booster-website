@@ -83,12 +83,14 @@
       onSubmit: function () {},
       onChange: function () {},
     }
+    self._triggeredInitialOnChangeEvent = false;
 
     // Set global libraries
     select = Manager.dom().select;
     get = Manager.utilities().get;
     set = Manager.utilities().set;
     storage = Manager.storage();
+
 
     return self;
   }
@@ -144,6 +146,7 @@
     var events = ['change', 'keydown'];
     var elements = ['input', 'textarea', 'select'];
     var $form = self.element.id.get(0);
+    var $anyInput = null;
 
     function _changeHandler(event) {
       setTimeout(function () {
@@ -167,9 +170,10 @@
 
     elements.forEach(function (event) {
       $form.querySelectorAll(event)
-      .forEach(function (el) {
+      .forEach(function ($el) {
+        $anyInput = $el;
         events.forEach(function (event) {
-          el.addEventListener(event, function (event) {
+          $el.addEventListener(event, function (event) {
             _changeHandler(event);
           });
         });
@@ -199,6 +203,15 @@
     self.display('initializing');
 
     self.options = options;
+
+    // Trigger initial event manually
+    if (!self._triggeredInitialOnChangeEvent) {
+      if ($anyInput) {
+        $anyInput.dispatchEvent(new Event('change'));
+      }
+
+      self._triggeredInitialOnChangeEvent = true;
+    }
 
     return self;
   };
