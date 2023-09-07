@@ -321,12 +321,13 @@
   Dashboard.prototype.getFormData = function () {
     var self = this;
     var data = {};
+    var $form = self.element.id.get(0);
 
-    self.element.id.get(0).querySelectorAll(inputAndSubmit)
+    $form.querySelectorAll(inputAndSubmit)
     .forEach(function (el) {
       var $el = select(el);
       var name = $el.getAttribute('name');
-      var value = $el.getValue();
+      var value = select('#' + $form.id + ' [name="' + name + '"]').getValue();
 
       set(data, name, value);
     });
