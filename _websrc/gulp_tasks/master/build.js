@@ -38,7 +38,7 @@ function areTasksCompleted() {
  * Build the Jekyll Site
  */
 gulp.task('jekyll-build', async () => {
-  console.log('jekyll-build: precheck started', new Date());
+  // console.log('jekyll-build: precheck started', new Date());
 
   await tools.quitIfBadBuildEnvironment();
 
@@ -51,7 +51,7 @@ gulp.task('jekyll-build', async () => {
     return fs.exists('./assets/js/main.js') && fs.exists('./assets/css/main.css');
   }, {timeout: 1000 * 60 * 3});
 
-  console.log('jekyll-build: precheck complete', new Date());
+  // console.log('jekyll-build: precheck complete', new Date());
 
   // Set firstBuild to false
   firstBuild = false;
