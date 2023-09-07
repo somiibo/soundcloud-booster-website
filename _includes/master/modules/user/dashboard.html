@@ -84,6 +84,7 @@
       onChange: function () {},
     }
     self._triggeredInitialOnChangeEvent = false;
+    self._$manualChangeTriggerElement = null;
 
     // Set global libraries
     select = Manager.dom().select;
@@ -146,7 +147,6 @@
     var events = ['change', 'keydown'];
     var elements = ['input', 'textarea', 'select'];
     var $form = self.element.id.get(0);
-    var $anyInput = null;
 
     function _changeHandler(event) {
       setTimeout(function () {
@@ -171,7 +171,8 @@
     elements.forEach(function (event) {
       $form.querySelectorAll(event)
       .forEach(function ($el) {
-        $anyInput = $el;
+        self._$manualChangeTriggerElement = $el;
+
         events.forEach(function (event) {
           $el.addEventListener(event, function (event) {
             _changeHandler(event);
@@ -206,8 +207,8 @@
 
     // Trigger initial event manually
     if (!self._triggeredInitialOnChangeEvent) {
-      if ($anyInput) {
-        $anyInput.dispatchEvent(new Event('change'));
+      if (self._$manualChangeTriggerElement) {
+        self.triggerOnChange();
       }
 
       self._triggeredInitialOnChangeEvent = true;
@@ -215,6 +216,14 @@
 
     return self;
   };
+
+  Dashboard.prototype.triggerOnChange = function ($el) {
+    var self = this;
+    var $usableElement = $el || self._$manualChangeTriggerElement;
+
+    $usableElement.dispatchEvent(new Event('change'));
+  }
+
 
   Dashboard.prototype.setAllowLeave = function (state) {
     var self = this;
