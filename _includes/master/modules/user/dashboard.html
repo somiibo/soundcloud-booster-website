@@ -2,13 +2,30 @@
 <script src="https://cdn.jsdelivr.net/npm/node-powertools@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
 
 <!-- Default elements -->
-<div id="dashboard-template-display-error" data-template='
+<div id="dashboard-template-display-success" data-template='
   <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
-    <div class="dashboard-display-error toast bg-danger text-white">
+    <div class="dashboard-status-listener toast bg-success text-white" data-status="success">
       <div class="d-flex">
         <div class="toast-body">
-          <h4 class="text-white">Error</h4>
-          <span class="dashboard-display-error-message">
+          <h4 class="text-white">Success!</h4>
+          <span class="dashboard-status-listener-message" data-status="success">
+            Unknown success
+          </span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+'>
+</div>
+
+<div id="dashboard-template-display-error" data-template='
+  <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
+    <div class="dashboard-status-listener toast bg-danger text-white" data-status="error">
+      <div class="d-flex">
+        <div class="toast-body">
+          <h4 class="text-white">Error!</h4>
+          <span class="dashboard-status-listener-message" data-status="error">
             Unknown error
           </span>
         </div>
@@ -107,15 +124,8 @@
       // Set default options
       options = options || {};
 
-      options.error = options.error || {};
-      options.error.parent = options.error.parent || '.dashboard-display-error';
-      options.error.message = options.error.message || '.dashboard-display-error-message';
-
       options.unsaved = options.unsaved || {};
       options.unsaved.parent = options.unsaved.parent || '.dashboard-display-unsaved-popup';
-
-      options.loader = options.loader || {};
-      options.loader.parent = options.loader.parent || '.dashboard-display-loader';
 
       options.createDefaultElements = typeof options.createDefaultElements === 'undefined' ? true : options.createDefaultElements;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
@@ -125,21 +135,13 @@
       // Create default elements
       if (options.createDefaultElements) {
         self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-display-error').getAttribute('data-template'));
+        self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-display-success').getAttribute('data-template'));
         self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-unsaved-popup').getAttribute('data-template'));
       }
 
-      // Setup the reset of the elements
-      self.element.error = {
-        parent: select(options.error.parent),
-        message: select(options.error.message),
-      };
-
+      // Setup the rest of the elements
       self.element.unsaved = {
         parent: select(options.unsaved.parent),
-      };
-
-      self.element.loader = {
-        parent: select(options.loader.parent),
       };
 
       DashboardManager[self.id] = {
@@ -203,7 +205,7 @@
       return self;
     }
 
-    Dashboard.prototype.display = function (status) {
+    Dashboard.prototype.display = function (status, message) {
       var self = this;
 
       var _error;
@@ -216,7 +218,15 @@
       var state = status === 'initializing' ? 'initializing' : 'initialized';
       var elements = self.element.id.get(0).querySelectorAll(self._inputAndSubmit);
 
-      console.log('[Dashboard] display', self.id, 'status', status, 'state', state);
+      if (status === 'error') {
+        message = _error.message || 'Unknown error';
+      } else if (status === 'success') {
+        message = message || 'Successfully submitted';
+      } else {
+        message = message || '';
+      }
+
+      console.log('[Dashboard] display', self.id, 'status=', status, 'state=', state, 'message=', message);
 
       // Enable or disable all inputs and submit buttons
       elements
@@ -237,54 +247,55 @@
       });
 
       // Set dynamic state
-      select('.dashboard-state-listener').setAttribute('hidden', true);
-      select('.dashboard-state-listener[data-state="' + state + '"]').removeAttribute('hidden');
+      var $statusAll = select('.dashboard-status-listener');
+      var $statusMessage = select('.dashboard-status-listener-message[data-status="' + status + '"]');
 
-      // Show spinner or hide
-      if (['initializing', 'loading'].includes(status)) {
-        self.element.loader.parent.removeAttribute('hidden');
-      } else {
-        self.element.loader.parent.setAttribute('hidden', true);
-      }
+      var $stateAll = select('.dashboard-state-listener');
+      var $stateMessage = select('.dashboard-state-listener-message[data-state="' + state + '"]');
+
+      $statusAll
+      .each(function ($el) {
+        var s = $el.getAttribute('data-status');
+
+        if (s === status) {
+          $el.removeAttribute('hidden');
+
+          try {
+            var toast = new bootstrap.Toast($el, {})
+            toast.show();
+          } catch (e) {
+            // console.warn('[Dashboard] Unable to create error toast', e);
+          }
+
+          $statusMessage
+          .each(function ($el) {
+            $el.innerHTML = message;
+          })
+        } else {
+          $el.setAttribute('hidden', true);
+        }
+      })
+
+      // Set dynamic state
+      $stateAll
+      .each(function ($el) {
+        var s = $el.getAttribute('data-state');
+
+        if (s === state) {
+          $el.removeAttribute('hidden');
+
+          $stateMessage
+          .each(function ($el) {
+            $el.innerHTML = message;
+          })
+        } else {
+          $el.setAttribute('hidden', true);
+        }
+      })
 
       // Remove unsaved changes popup
       if (['success', 'error'].includes(status)) {
         self.element.unsaved.parent.setAttribute('hidden', true);
-      }
-
-      // Show error message
-      var toasts = [];
-
-      try {
-        self.element.error.parent
-        .each(function (el) {
-          toasts.push(new bootstrap.Toast(el, {}))
-        })
-      } catch (e) {
-
-      }
-
-      // Show error message
-      if (status === 'error') {
-        if (toasts.length > 0) {
-          toasts
-          .forEach(function (toast) {
-            toast.show();
-            toast._element.querySelector('.dashboard-display-error-message').innerHTML = _error.message;
-          });
-        } else {
-          self.element.error.parent.removeAttribute('hidden');
-          self.element.error.parent.querySelector('.dashboard-display-error-message').innerHTML = _error.message;
-        }
-      } else {
-        if (toasts.length > 0) {
-          toasts
-          .forEach(function (toast) {
-            toast.hide();
-          });
-        } else {
-          self.element.error.parent.setAttribute('hidden', true);
-        }
       }
 
       // Set allow leave
