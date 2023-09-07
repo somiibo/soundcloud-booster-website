@@ -322,8 +322,10 @@
         var name = $el.getAttribute('name');
         var value = select('#' + $form.id + ' [name="' + name + '"]').getValue();
 
-        if (name === '') {
-          console.warn('[Dashboard]', self.id, 'input has no name', value, $el);
+        if (el.tagName === 'BUTTON') {
+          return;
+        } else if (!name) {
+          console.warn('[Dashboard] field name is blank', self.id, name, value, $el);
           return;
         }
 
