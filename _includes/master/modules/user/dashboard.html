@@ -82,6 +82,7 @@
     self._handler = {
       onSubmit: function () {},
       onChange: function () {},
+      transformData: function (data) {return data},
     }
     self._triggeredInitialOnChangeEvent = false;
     self._$manualChangeTriggerElement = null;
@@ -341,7 +342,15 @@
       set(data, name, value);
     });
 
-    return data;
+    return self._handler.transformData(data);
+  };
+
+  Dashboard.prototype.transformData = function (fn) {
+    var self = this;
+
+    self._handler.transformData = fn;
+
+    return self;
   };
 
   Dashboard.prototype.onSubmit = function (fn) {
