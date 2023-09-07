@@ -6,7 +6,7 @@ const gulp      = require('gulp');
 const tools     = new (require('../../libraries/tools.js'));
 
 gulp.task('eslint', async () => {
-  if (argv.skipESLint !== 'true') {
+  if (argv.skipESLint === 'true') {
     return Promise.resolve();
   }
 
@@ -20,4 +20,3 @@ gulp.task('eslint', async () => {
     .pipe(eslint.failOnError())
     .pipe(tools.completeTask('eslint'))
 });
-

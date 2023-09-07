@@ -98,13 +98,14 @@ gulp.task('jekyll-build', async () => {
     console.error('Error updating build.json', e);
   }
 
+  // Skip Jekyll Build
   if (argv.skipJekyll === 'true') {
     return Promise.resolve();
-  } else {
-    await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
-
-    return Promise.resolve();
   }
+
+  // Run Jekyll Build
+  await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
+  return Promise.resolve();
 });
 
 
