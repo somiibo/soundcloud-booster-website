@@ -12,6 +12,4 @@ gulp.task('copyFontAwesome', async () => {
   return gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
     .pipe(gulp.dest(`${config.assets}/webfonts`))
     .pipe(tools.completeTask('copyFontAwesome'))
-    .on('end', resolve)
-    .on('error', reject);
 });
