@@ -166,8 +166,14 @@ settings:
             storageBucket: 'somiibo-91d13.appspot.com',
             messagingSenderId: '605660972329',
             appId: '1:605660972329:web:4860b3b7afb8591f',
-            measurementId: 'G-PM3ZKCHLMS'
-          }
+            measurementId: 'G-PM3ZKCHLMS',
+          },
+        },
+        firebase_appCheck: {
+          enabled: true,
+          config: {
+            siteKey: '6LcUQ_MnAAAAAOHVDHQHyyUKQRYrqRJDNjl3M4b3',
+          },
         },
         cookieconsent: {
           enabled: true,
@@ -175,14 +181,14 @@ settings:
             palette: {
               popup: {
                 background: '#1fb7f2',
-                text: '#fff'
+                text: '#fff',
               },
               button: {
                 background: '#fff',
-                text: '#1fb7f2'
-              }
-            }
-          }
+                text: '#1fb7f2',
+              },
+            },
+          },
         },
         chatsy: {
           enabled: true,
@@ -192,19 +198,20 @@ settings:
             settings: {
               openChatButton: {
                 background: '#1fb7f2',
+                text: '#fff',
               },
             },
-          }
+          },
         },
         sentry: {
           enabled: true,
           config: {
             dsn: '',
-            release: 'ultimate-jekyll-website'
-          }
-        }
-      }
-    }
+            release: '',
+          },
+        },
+      },
+}
   " # javascript object to set the Configuration object for Web Manager
 
 # Custom admin dashboard pages
