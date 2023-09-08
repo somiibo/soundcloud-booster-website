@@ -1,6 +1,7 @@
 const through  = require('through2');
 const Global   = require('./global.js');
 const argv     = require('yargs').argv;
+const { exec, spawn } = require('child_process');
 
 function Tools() {
   const self = this;
@@ -72,5 +73,51 @@ Tools.prototype.poll = function(fn, options) {
     })();
   });
 }
+
+Tools.prototype.execute = function (cmd) {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    exec(cmd, (e, stdout, stderr) => {
+      if (e) {
+        return reject(e);
+      }
+
+      return resolve(stdout.trim());
+    });
+  });
+};
+
+Tools.prototype.spawn = function (cmd, args) {
+  const self = this;
+
+  return new Promise(function(resolve, reject) {
+    cp.spawn(cmd, args, {stdio: 'inherit', env: process.env})
+      .on('close', resolve)
+      .on('error', reject);
+  });
+};
+
+Tools.prototype.getCurrentBranch = function () {
+  const self = this;
+
+  return self.execute('git symbolic-ref --short HEAD');
+};
+
+Tools.prototype.quitIfBadBuildEnvironment = function () {
+  const self = this;
+
+  return new Promise(async function(resolve, reject) {
+    const result = (await self.getCurrentBranch()) === 'template' && !self.isTemplate;
+
+    if (result) {
+      console.error('⛔️ Quitting because this is the template branch and we are working on a child project of the template.');
+
+      process.exit(1);
+    }
+
+    return resolve(result);
+  });
+};
 
 module.exports = Tools;

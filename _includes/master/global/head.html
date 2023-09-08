@@ -87,7 +87,7 @@
 
 <!-- OG: Twitter -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:site" content="{{ site.socials.twitter }}">
+<meta name="twitter:site" content="@{{ site.socials.twitter }}">
 <meta name="twitter:widgets:theme" content="light">
 
 <!-- OG: Facebook / Open Graph -->
@@ -103,9 +103,9 @@
 <link href="{{ site.url }}/feeds/posts.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
 
 <!-- Language Tags -->
-<link rel="alternate" href="{{ site.url }}" hreflang="x-default">
-<link rel="alternate" hreflang="en" href="{{ site.url }}">
-<!-- <link rel="alternate" hreflang="es" href="{{ site.url }}/es/"> -->
+<link rel="alternate" href="{{ site.url }}{{ page.url }}" hreflang="x-default">
+<link rel="alternate" href="{{ site.url }}{{ page.url }}" hreflang="en">
+<!-- <link rel="alternate" href="{{ site.url }}/es/" hreflang="es"> -->
 
 <!-- Performance Metrics -->
 {%- if page.settings.include-debug-performance == false -%}

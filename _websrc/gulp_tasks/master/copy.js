@@ -22,7 +22,8 @@ function doImagesExist(imgPath) {
   });
 }
 
-gulp.task('copyCss', async function () {
+// Copy CSS files
+gulp.task('copyCss', async () => {
   if (argv.skipCopyCss === 'true') {
     console.log('Skipping copyCss');
     return Promise.resolve();
@@ -30,48 +31,51 @@ gulp.task('copyCss', async function () {
 
   tools.startTask('copyCss');
 
-  await tools.poll(function () {
-    return Global.get('prefillStatus') === 'done';
-  }, {timeout: 120000});
+  await tools.quitIfBadBuildEnvironment();
+
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   return es.merge(
-    gulp.src([config.assets + config.assetsSubpath + '/sass/theme/**/*', '!./**/*.scss'])
-      .pipe(newer(config.assets + '/css/theme'))
-      .pipe(gulp.dest(config.assets + '/css/theme')),
+    gulp.src([`${config.assets}${config.assetsSubpath}/sass/theme/**/*`, '!./**/*.scss'])
+      .pipe(newer(`${config.assets}/css/theme`))
+      .pipe(gulp.dest(`${config.assets}/css/theme`)),
 
-    gulp.src([config.assets + config.assetsSubpath + '/sass/app/**/*', '!' + config.assets + config.assetsSubpath + '/sass/app/app.scss', '!./**/*.scss'])
-      .pipe(newer(config.assets + '/css/app'))
-      .pipe(gulp.dest(config.assets + '/css/app')),
+    gulp.src([`${config.assets}${config.assetsSubpath}/sass/app/**/*`, `!${config.assets}${config.assetsSubpath}/sass/app/app.scss`, '!./**/*.scss'])
+      .pipe(newer(`${config.assets}/css/app`))
+      .pipe(gulp.dest(`${config.assets}/css/app`)),
 
-    gulp.src([config.assets + config.assetsSubpath + '/sass/master/**/*', '!' + config.assets + config.assetsSubpath + '/sass/master/main.scss', '!./**/*.scss'])
-      .pipe(newer(config.assets + '/css/master'))
-      .pipe(gulp.dest(config.assets + '/css/master')),
+    gulp.src([`${config.assets}${config.assetsSubpath}/sass/master/**/*`, `!${config.assets}${config.assetsSubpath}/sass/master/main.scss`, '!./**/*.scss'])
+      .pipe(newer(`${config.assets}/css/master`))
+      .pipe(gulp.dest(`${config.assets}/css/master`))
   )
   .pipe(tools.completeTask('copyCss'))
 });
 
-gulp.task('copyImages', async function () {
-  const imgPath = config.assets + config.assetsSubpath + '/images/favicon/**/*';
+// Copy images
+gulp.task('copyImages', async () => {
+  const imgPath = `${config.assets}${config.assetsSubpath}/images/favicon/**/*`;
   const imgsExist = (await doImagesExist(imgPath)).length > 0;
 
   tools.startTask('copyImages');
 
-  await tools.poll(function () {
-    return Global.get('prefillStatus') === 'done';
-  }, {timeout: 120000});
+  await tools.quitIfBadBuildEnvironment();
+
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   if (!imgsExist) {
-    tools.completeTask('copyImages')
+    tools.completeTask('copyImages');
+
+    return Promise.resolve();
   }
 
   return gulp.src([imgPath])
-    .pipe(newer(config.assets + '/images/favicon'))
-    .pipe(gulp.dest(config.assets + '/images/favicon'))
+    .pipe(newer(`${config.assets}/images/favicon`))
+    .pipe(gulp.dest(`${config.assets}/images/favicon`))
     .pipe(tools.completeTask('copyImages'))
-
 });
 
-gulp.task('copyJs', async function () {
+// Copy JS files
+gulp.task('copyJs', async () => {
   if (argv.skipCopyJs === 'true') {
     console.log('Skipping copyJs');
     return Promise.resolve();
@@ -79,34 +83,29 @@ gulp.task('copyJs', async function () {
 
   tools.startTask('copyJs');
 
-  await tools.poll(function () {
-    return Global.get('prefillStatus') === 'done';
-  }, {timeout: 120000});
+  await tools.quitIfBadBuildEnvironment();
 
-  // gulp.src([config.assets + config.assetsSubpath + '/js/app/**/*', '!' + config.assets + config.assetsSubpath + '/js/app/app.js'])
-  //   .pipe(newer(config.assets + '/js/app'))
-  //   .pipe(gulp.dest(config.assets + '/js/app'));
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   // Create the master service worker
-  await fs.writeAsync('./special/master/misc/master-service-worker.js',
-    (await fs.read('./_websrc/templates/master/js/master-service-worker.js')).replace(/{firebase-version}/img,
-      require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '')
-    )
-  );  
+  const templateContent = await fs.read('./_websrc/templates/master/js/master-service-worker.js');
+  const firebaseVersion = require('web-manager/package.json').dependencies.firebase.replace(/\^|~/img, '');
+  await fs.writeAsync('./special/master/misc/master-service-worker.js', templateContent.replace(/{firebase-version}/img, firebaseVersion));
 
   return es.merge(
-    gulp.src([config.assets + config.assetsSubpath + '/js/theme/**/*'])
-      .pipe(newer(config.assets + '/js/theme'))
-      .pipe(gulp.dest(config.assets + '/js/theme')),
+    gulp.src([`${config.assets}${config.assetsSubpath}/js/theme/**/*`])
+      .pipe(newer(`${config.assets}/js/theme`))
+      .pipe(gulp.dest(`${config.assets}/js/theme`)),
 
-    gulp.src([config.assets + config.assetsSubpath + '/js/app/**/*'])
-      .pipe(newer(config.assets + '/js/app'))
-      .pipe(gulp.dest(config.assets + '/js/app')),
+    gulp.src([`${config.assets}${config.assetsSubpath}/js/app/**/*`])
+      .pipe(newer(`${config.assets}/js/app`))
+      .pipe(gulp.dest(`${config.assets}/js/app`))
   )
   .pipe(tools.completeTask('copyJs'))
 });
 
-gulp.task('copyUncompiled', async function () {
+// Copy uncompiled assets
+gulp.task('copyUncompiled', async () => {
   if (argv.skipCopyUncompiled === 'true') {
     console.log('Skipping copyUncompiled');
     return Promise.resolve();
@@ -114,13 +113,12 @@ gulp.task('copyUncompiled', async function () {
 
   tools.startTask('copyUncompiled');
 
-  await tools.poll(function () {
-    return Global.get('prefillStatus') === 'done';
-  }, {timeout: 120000});
+  await tools.quitIfBadBuildEnvironment();
 
-  return gulp.src([config.assets + config.assetsSubpathUncompiled + '/**/*'])
-    .pipe(newer(config.assets))
-    .pipe(gulp.dest(config.assets))
+  await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
+
+  gulp.src([`${config.assets}${config.assetsSubpathUncompiled}/**/*`])
+    .pipe(newer(`${config.assets}`))
+    .pipe(gulp.dest(`${config.assets}`))
     .pipe(tools.completeTask('copyUncompiled'))
-
 });

@@ -5,16 +5,18 @@ const eslint    = require('gulp-eslint');
 const gulp      = require('gulp');
 const tools     = new (require('../../libraries/tools.js'));
 
-gulp.task('eslint', function() {
-  if (argv.skipESLint !== 'true') {
-    tools.startTask('eslint');
-
-    return gulp.src([config.assets + config.assetsSubpath + '/' + config.js.src + '/**/*.js', '!node_modules/**'])
-      .pipe(eslint())
-      .pipe(eslint.format())
-      .pipe(eslint.failOnError())
-      .pipe(tools.completeTask('eslint'))
-  } else {
+gulp.task('eslint', async () => {
+  if (argv.skipESLint === 'true') {
     return Promise.resolve();
   }
+
+  tools.startTask('eslint');
+
+  await tools.quitIfBadBuildEnvironment();
+
+  return gulp.src([`${config.assets}${config.assetsSubpath}/${config.js.src}/**/*.js`, '!node_modules/**'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError())
+    .pipe(tools.completeTask('eslint'))
 });

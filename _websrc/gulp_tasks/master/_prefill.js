@@ -7,7 +7,7 @@ const tools      = new (require('../../libraries/tools.js'));
 const Global     = require('../../libraries/global.js');
 const fetch      = require('node-fetch');
 
-gulp.task('_prefill', async () => {
+gulp.task('_prefill', () => {
   return new Promise(async (resolve, reject) => {
 
     const gitignore_ph = await readFile('./_websrc/templates/master/gitignore/all');
@@ -61,7 +61,7 @@ gulp.task('_prefill', async () => {
           "});" + "\n" +
           ""
         )
-        
+
         const pages = [
           '404',
           'about',
