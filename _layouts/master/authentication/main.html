@@ -456,7 +456,6 @@ settings:
   var $authLinks;
   var $emailInput;
   var updateTimeout;
-  var trackedSignupHandled = false;
 
   Manager.auth().ready(function () {
     select = Manager.dom().select;
@@ -684,15 +683,15 @@ settings:
       });
   })
 
-  function trackSignupOrSignin(user) {
-    user = user || firebase.auth().currentUser;
+  function trackSignupOrSignin() {
+    var user = firebase.auth().currentUser;
 
-    if (!user || !user.uid || trackedSignupHandled) { return; }
+    if (!user || !user.uid) { return; }
 
-    var trackedSignup = Manager.storage().get('auth.trackedSignup', false);
+    var trackedSignup = Manager.storage().get('trackedSignup', false);
 
     var now = new Date();
-    var signupDate = new Date(parseInt(user.metadata.a));
+    var signupDate = new Date(parseInt(user.metadata.createdAt));
 
     var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
     var providerData = _.get(user, 'providerData', []);
@@ -735,8 +734,7 @@ settings:
     }
 
     // Set the trackedSignup flag
-    trackedSignupHandled = true;
-    Manager.storage().set('auth.trackedSignup', true);
+    Manager.storage().set('trackedSignup', true);
   }
 
   function updateLinksWithEmail(email) {
