@@ -691,7 +691,7 @@ settings:
     var trackedSignup = Manager.storage().get('trackedSignup', false);
 
     var now = new Date();
-    var signupDate = new Date(parseInt(user.metadata.createdAt));
+    var signupDate = new Date(+user.metadata.createdAt);
 
     var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
     var providerData = _.get(user, 'providerData', []);
