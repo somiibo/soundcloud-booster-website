@@ -83,6 +83,7 @@ head:
 <script type="text/javascript">
   Manager.auth().ready(function() {
     var _ = Manager.utilities();
+    var storage = Manager.storage();
     var searchParams = Manager.properties.page.queryString;
     var qsProductId = searchParams.get('productId') || 'unknown';
     var qsType = searchParams.get('type') || 'unknown';
@@ -94,7 +95,7 @@ head:
     var qsDevelopment = searchParams.get('development');
 
     var storageKey = 'checkout.' + qsProductId + '.cart' + '._' + qsCacheBreaker;
-    var alreadyTracked = Manager.storage().get(storageKey, false);
+    var alreadyTracked = storage.get(storageKey, false);
 
     var user = firebase.auth().currentUser;
 
@@ -132,6 +133,19 @@ head:
     searchParams.forEach(function (value, key) {
       newURL.searchParams.set(key, value)
     })
+
+    // Set UTM tagg
+    var utmTags = storage.get('utm.tags', {});
+    var utmTimestamp = new Date(storage.get('utm.timestamp', new Date()));
+    var daysDifference = Math.round((new Date() - utmTimestamp) / (1000 * 60 * 60 * 24));
+
+    console.log('main(): utm tag day difference', daysDifference);
+
+    if (daysDifference <= 30) {
+      Object.keys(utmTags).forEach(function (value, key) {
+        newURL.searchParams.set(value, utmTags[value])
+      })
+    }
 
     if (!alreadyTracked) {
       console.log('tracking(): Sending tracking events');
@@ -204,7 +218,7 @@ head:
     }
 
     // Set the storage key to false so that the user can navigate back to the checkout page
-    Manager.storage().set(storageKey, true);
+    storage.set(storageKey, true);
 
     // Development
     if (qsDevelopment) {

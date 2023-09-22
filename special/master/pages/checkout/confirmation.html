@@ -155,6 +155,7 @@ head:
 
 <script type="text/javascript">
   Manager.ready(function () {
+    var storage = Manager.storage();
     var url = new URL(window.location.href);
     var searchParams = url.searchParams;
     var qsOrderId = searchParams.get('orderId') || 'unknown';
@@ -167,7 +168,7 @@ head:
     var qsUrl = searchParams.get('url') || '{{ site.url }}';
 
     var storageKey = 'checkout.' + qsProductIdGlobal + '.purchased' + '.' + qsOrderId;
-    var alreadyTracked = Manager.storage().get(storageKey, false);
+    var alreadyTracked = storage.get(storageKey, false);
 
     // If in development mode, reset the track storage
     if (Manager.properties.meta.environment === 'development') {
@@ -268,6 +269,6 @@ head:
     }
 
     // Set the storage key so we don't track this again
-    Manager.storage().set(storageKey, true);
+    storage.set(storageKey, true);
   })
 </script>
