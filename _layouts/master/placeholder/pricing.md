@@ -16,32 +16,32 @@ At {{ site.brand.name }}, we understand that every user has unique needs. That's
 
 ## Basic Plan
 
-Price: <span class="pricing-amount" data-plan-id="basic">0.00</span>
+Price: <span class="pricing-amount" data-product-id="basic">0.00</span>
 
 Perfect for individuals or businesses just getting started. Here's what you get:
 - Access to Basic Features
 - Community Support
 - Single User Account
 
-<a href="" class="btn btn-primary pricing-btn" data-plan-id="basic" disabled>Get Basic</a>
+<a href="" class="btn btn-primary pricing-btn" data-product-id="basic" disabled>Get Basic</a>
 
 
-## Professional Plan
+## Starter Plan
 
-Price: <span class="pricing-amount" data-plan-id="professional">0.00</span>
+Price: <span class="pricing-amount" data-product-id="starter">0.00</span>
 
 Designed for those who need a little extra. All the benefits of the Free plan, plus:
-- Access to Professional Features
+- Access to Starter Features
 - Priority Customer Support
 - Multiple User Accounts
 - Advanced Analytics
 
-<a href="" class="btn btn-primary pricing-btn" data-plan-id="professional" disabled>Get Professional</a>
+<a href="" class="btn btn-primary pricing-btn" data-product-id="starter" disabled>Get Starter</a>
 
 
 ## Custom Enterprise Plan
 
-Price: <span class="pricing-amount" data-plan-id="enterprise-1">0.00</span>
+Price: <span class="pricing-amount" data-product-id="enterprise-1">0.00</span>
 
 For large businesses and corporations seeking tailor-made solutions. This includes everything in the Premium plan, plus:
 - Customizable Premium Features
@@ -50,7 +50,7 @@ For large businesses and corporations seeking tailor-made solutions. This includ
 - Dedicated Account Manager
 - Comprehensive Analytics and Reporting
 
-<a href="" class="btn btn-primary pricing-btn" data-plan-id="enterprise-1" disabled>Get Enterprise</a>
+<a href="" class="btn btn-primary pricing-btn" data-product-id="enterprise-1" disabled>Get Enterprise</a>
 
 
 Remember, every package we offer at {{ site.brand.name }} is built to provide you with the necessary tools to excel. No matter which one you choose, we're committed to ensuring you get the best value and experience.
