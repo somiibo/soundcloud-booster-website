@@ -295,7 +295,7 @@
     options = options || {};
 
     setTimeout(function () {
-      Manager.auth().ready(fn, options);
+      Manager.ready(fn, options);
     }, options.interval || 100);
   }
 
