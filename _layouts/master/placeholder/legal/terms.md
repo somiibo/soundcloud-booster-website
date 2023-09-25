@@ -100,8 +100,8 @@ All sales are final. If you experience issues, please contact {{ brand }}.
 
 If you request a refund we will determine the eligibility of your refund. Upon approval, you will be refunded by the same method of payment you originally used. -->
 
-### Trial Period Eligibility
-The availability and duration of the trial period are subject to change and may not be available at all times. The current trial and pricing information is available on our [pricing page]({{ site.url }}/pricing).
+### Free Trial Period Eligibility
+The availability and duration of the free trial period are subject to change and may not be available at all times. The current trial and pricing information is available on our [pricing page]({{ site.url }}/pricing).
 
 If you have not previously benefited from a free trial of our service, you may be eligible to receive a trial period at no cost.
 
@@ -113,7 +113,7 @@ Upon the conclusion of the trial period, you will automatically be charged the a
 You will not receive a notice from us that your trial period has ended or that the paying portion of your subscription has begun.
 
 ### Cancellation and Refund
-You are eligible for a full refund of the subscription fee if you cancel your subscription within the trial period. Failure to cancel within the trial period will result in the forfeiture of your eligibility for a refund.
+You are eligible for a full refund of the subscription fee if you cancel your subscription within the free trial period. Cancelling your subscription after the trial period or failure to cancel within the trial period will result in the forfeiture of your eligibility for a refund.
 
 If your subscription plan did not include a free trial period, you are not eligible for a refund on your subscription fee.
 
@@ -121,7 +121,7 @@ You may cancel your subscription at any time by visiting [{{ site.url }}/account
 
 Upon cancellation you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
 
-Any additional purchases, including one-time payments, add-ons, or other sales on our site, are final and non-refundable once processed.
+Any other purchases, including one-time payments, add-ons, or other sales on our site that do not include a free trial period are final and non-refundable once processed.
 
 Should you request a refund, we will determine the eligibility of your refund. If approved, you will be refunded via the same payment method you originally used.
 
