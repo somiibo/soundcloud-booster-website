@@ -1,4 +1,5 @@
 {%- if page.advertising.google-adsense == false -%}
+{%- elsif layout.advertising.google-adsense == false -%}
 {%- elsif site.advertising.google-adsense != false -%}
   <!-- Adunit - Adsense In-feed Ad-->
   {%- if include.include-adsense-script == true -%}
@@ -13,7 +14,7 @@
     {% assign layout-key = '-fb+5w+4e-db+86' %}
   {%- endif -%}
 
-  <div class="uj-vert-unit">
+  <div class="uj-vert-unit" data-plan-id="basic" data-plan-visibility="visible">
     <ins class="adsbygoogle"
         style="display:block; {{ include.style }}"
         data-ad-format="fluid"
