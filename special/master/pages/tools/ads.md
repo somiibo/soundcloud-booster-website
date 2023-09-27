@@ -34,3 +34,38 @@ This is an `adsense-in-feed.html` ad:
 This is an `adsense-multiplex.html` ad:
 
 {% include /master/modules/adunits/adsense-multiplex.html index="1" %}
+
+
+<script>
+  Manager.ready(function () {
+    Manager.account().import()
+    .then(function (Account) {
+      var account = new Account();
+
+      account.resolve()
+      .then(function (properties) {
+        accountData = properties;
+
+        console.log('.account().resolve()', accountData);
+
+        console.log('-----1')
+        account.handleAccount({
+          plan: {
+            id: 'premium',
+          }
+        })
+        console.log('-----2')
+
+        return resolve(accountData)
+      })
+      .catch(function (e) {
+        console.log('--- 1', e)
+        return reject(e);
+      })
+    })
+    .catch(function (e) {
+        console.log('--- 2', e)
+      return reject(e);
+    })
+  })
+</script>

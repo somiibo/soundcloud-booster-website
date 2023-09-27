@@ -1,11 +1,12 @@
 {%- if page.advertising.google-adsense == false -%}
+{%- elsif layout.advertising.google-adsense == false -%}
 {%- elsif site.advertising.google-adsense != false -%}
   <!-- Adunit - Adsense Multiplex Ad-->
   {%- if include.include-adsense-script == true -%}
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{{ site.advertising.google-adsense }}" crossorigin="anonymous"></script>
   {%- endif -%}
 
-  <div class="uj-vert-unit">
+  <div class="uj-vert-unit" data-plan-id="basic" data-plan-visibility="visible">
     <ins class="adsbygoogle"
         style="display:block; {{ include.style }}"
         data-ad-format="autorelaxed"

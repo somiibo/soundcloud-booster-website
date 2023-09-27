@@ -164,7 +164,7 @@ settings:
           <!-- End Navbar Toggle -->
 
           <!-- Navbar Collapse -->
-          <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
+          <div id="navbarVerticalNavMenu" class="collapse navbar-collapse animation-fade-in">
             <ul id="navbarSettings" class="js-sticky-block js-scrollspy card card-navbar-nav nav nav-tabs nav-lg nav-vertical" data-hs-sticky-block-options='{
                    "parentSelector": "#navbarVerticalNavMenu",
                    "targetSelector": "#header",
@@ -241,16 +241,17 @@ settings:
       </div>
 
       <div class="col-lg-9">
-        <div id="spinner-loader">
+        <div id="spinner-loader" class="animation-fade-in">
           <div class="card">
-            <div class="d-flex justify-content-center my-5">
+            <div class="d-flex flex-column align-items-center justify-content-center my-5">
+              <h4>Getting your account details ready...</h4>
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
           </div>
         </div>
-        <div id="account-parent" hidden>
+        <div id="account-parent" class="animation-slide-up" hidden>
           <div class="d-grid gap-3 gap-lg-5">
 
             <!-- Card -->

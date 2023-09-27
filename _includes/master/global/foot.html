@@ -43,7 +43,7 @@
 </div>
 
 <!-- Master - Chat Opener -->
-<a href="#" onclick="return false;" id="prechat-btn" style="display: none;">
+<a id="prechat-btn" class="animation-fade-in" href="#" onclick="return false;" style="display: none;">
   <svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 700 700" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs/>
     <g id="Untitled">
@@ -54,6 +54,30 @@
     </g>
   </svg>
 </a>
+
+<!-- Master - Exit Popip -->
+<div id="modal-exit-popup" class="modal fade" tabindex="-1" hidden>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {title}
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          {body}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="{okButton.link}" class="btn btn-primary">
+          {okButton.text}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Performance -->
 <script type="text/javascript">
