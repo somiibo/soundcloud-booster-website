@@ -219,7 +219,7 @@ settings:
           message: 'Get 15% off your purchase of our <strong>Premium plans</strong>. <br><br> Get access to all features and unlimited usage.',
           okButton: {
             text: 'Claim 15% Discount',
-            link: '/pricing?utm_source=exitpopup&utm_medium=popup&utm_campaign=exitpopup',
+            link: '/pricing?utm_source=exit-popup&utm_medium=popup&utm_campaign={pathname}',
           },
         },
       },
