@@ -157,7 +157,7 @@ settings:
           enabled: true,
           config: {
             apiKey: 'AIzaSyDzy5BG9-i9RmymyFx6mfwSgaRioyfa0Cc',
-            authDomain: 'template.itwcreativeworks.com',
+            authDomain: 'auth.template.itwcreativeworks.com',
             databaseURL: 'https://ultimate-jekyll.firebaseio.com',
             projectId: 'ultimate-jekyll',
             storageBucket: 'ultimate-jekyll.appspot.com',
