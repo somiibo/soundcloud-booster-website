@@ -23,23 +23,23 @@ module.exports = {
 
   browsersync: {
     browsers: [
-      // "Google Chrome Canary",
-      // "Google Chrome",
-      // "Firefox Nightly",
-      // "Firefox Developer Edition",
-      // "Firefox",
-      // "Safari Technology Preview",
-      // "Safari",
-      // "Opera",
-      // "Opera Developer",
+      // 'Google Chrome Canary',
+      // 'Google Chrome',
+      // 'Firefox Nightly',
+      // 'Firefox Developer Edition',
+      // 'Firefox',
+      // 'Safari Technology Preview',
+      // 'Safari',
+      // 'Opera',
+      // 'Opera Developer',
     ],
   },
 
   eslintLoader: {
-    enforce: "pre",
+    enforce: 'pre',
     test:    /\.js$/,
     exclude: /node_modules/,
-    loader:  "eslint-loader",
+    loader:  'eslint-loader',
   },
 
   imagemin: {
@@ -86,15 +86,15 @@ module.exports = {
 
   babel: {
     presets: [
-      ["@babel/preset-env", {
+      ['@babel/preset-env', {
         modules: false,
         targets: {
           browsers: [
-						"last 2 versions",
-						"IE >= 9"
+						'last 2 versions',
+						'IE >= 9'
 					]
         },
-        useBuiltIns: "usage",
+        useBuiltIns: 'usage',
       }]
     ]
   },
