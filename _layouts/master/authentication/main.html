@@ -446,11 +446,18 @@ settings:
   var serverApiURL;
   var providerDetails = {}
   var redirectUrl;
+
   var qsToken;
   var qsSource;
   var qsDestination;
   var qsMessage;
   var qsEmail;
+  var qsProvider;
+  var qsSignout;
+  var qsIsSignup;
+  var qsNewsletter;
+  var qsAffiliateCode;
+
   var $authErrorModal;
   var $authErrorModalMessage;
   var $authLinks;
@@ -468,20 +475,21 @@ settings:
       ? 'http://localhost:5001/PROJECT_ID/us-central1/bm_api'
       : 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
 
-    qsToken = decodeURIComponent(url.searchParams.get('token') || '');
-    qsSource = decodeURIComponent(url.searchParams.get('source') || '');
-    qsDestination = decodeURIComponent(url.searchParams.get('destination') || '');
-    qsMessage = decodeURIComponent(url.searchParams.get('message') || '');
-    qsEmail = decodeURIComponent(url.searchParams.get('email') || '');
+    qsToken = url.searchParams.get('token') || '';
+    qsSource = url.searchParams.get('source') || '';
+    qsDestination = url.searchParams.get('destination') || '';
+    qsMessage = url.searchParams.get('message') || '';
+    qsEmail = url.searchParams.get('email') || '';
+    qsProvider = url.searchParams.get('provider') || '';
+    qsSignout = url.searchParams.get('signout') || '';
+    qsIsSignup = url.searchParams.get('isSignup') || '';
+    qsNewsletter = url.searchParams.get('newsletter') || '';
+    qsAffiliateCode = url.searchParams.get('affiliateCode') || '';
 
     redirectUrl = qsDestination || url.origin;
-    // redirectUrl = decodeURIComponent(url.searchParams.get('destination') || url.searchParams.get('auth_redirect') || '{{ site.url }}');
-
-    // console.log('--redirectUrl', redirectUrl);
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
 
-    $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {
-    })
+    $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {})
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
     $authLinks = select('a[href*="/signin"], a[href*="/signup"]');
     $emailInput = select('.auth-email-input');
@@ -557,7 +565,7 @@ settings:
         display('hidden');
 
         // If there is a signout query param, sign out and quit
-        if (url.searchParams.get('signout')) {
+        if (qsSignout) {
           console.log('getRedirectResult(): Signing out...');
 
           action = true;
@@ -615,14 +623,15 @@ settings:
           action = true;
           console.log('getRedirectResult(): Getting provider data...');
 
-          var provider = url.searchParams.get('provider');
-          if (provider) {
-            console.log('getRedirectResult(): signInWithRedirect', provider);
+          if (qsProvider) {
+            console.log('getRedirectResult(): signInWithRedirect', qsProvider);
 
-            firebase.auth().signInWithRedirect(new firebase.auth.OAuthProvider(provider))
-            .catch(function (e) {
+            try {
+              select('.auth-signin-provider-btn[data-provider="' + qsProvider + '"]').get(0).click();
+            } catch (e) {
+              console.error('getRedirectResult(): Error clicking provider button', e);
               display(e);
-            })
+            }
 
             return
           }
@@ -753,7 +762,7 @@ settings:
       console.log('signUpHandler():', token);
 
       // If not a signup, resolve
-      if (url.searchParams.get('isSignup') !== 'true') {
+      if (qsIsSignup !== 'true') {
         return resolve();
       }
 
@@ -770,8 +779,8 @@ settings:
           authenticationToken: token,
           command: 'user:sign-up',
           payload: {
-            newsletterSignUp: url.searchParams.get('newsletter') === 'true',
-            affiliateCode: url.searchParams.get('affiliateCode'),
+            newsletterSignUp: qsNewsletter === 'true',
+            affiliateCode: qsAffiliateCode,
           }
         }),
       })
