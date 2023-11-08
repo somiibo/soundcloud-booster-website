@@ -239,7 +239,6 @@ gulp.task('_prefill', () => {
       //   process.exit(1)
       // })
 
-
       Global.set('prefillStatus', 'done');
       return resolve();
     } catch (e) {

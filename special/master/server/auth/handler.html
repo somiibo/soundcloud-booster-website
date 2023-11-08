@@ -1,0 +1,107 @@
+---
+### PURPOSE ###
+# This page is fetched/copied to the BEM server and used to authorize a user's account to connect it to a third-party provider.
+
+### ALL PAGES ###
+layout: master/global/default
+permalink: /server/auth/handler/
+sitemap:
+  include: false
+
+### REGULAR PAGES ###
+meta:
+  title: "Auth Handler - {{ site.brand.name }}"
+  description: "Auth Handler to {{ site.brand.name }}."
+  breadcrumb: "Auth Handler"
+  index: false
+---
+
+<script>
+  Manager.ready(function() {
+    var searchParams = Manager.properties.page.queryString;
+    var qsToken = searchParams.get('token');
+    var qsProvider = searchParams.get('provider');
+    var qsDestination = searchParams.get('destination');
+
+    console.log('main(): Initializing...', qsToken, qsProvider, qsDestination);
+
+    // Sign out if there is no token
+    attemptSignout(qsToken)
+    .then(function () {
+
+      // Sign in with the provider ID
+      attemptSignin(qsToken, qsProvider)
+      .then(function (signingIn) {
+
+        if (signingIn) {
+          console.log('main(): Signing in...');
+
+          // If we are signing in, then we need to wait for the redirect to
+          // complete before we can continue.
+          return;
+        } else {
+          console.log('main(): Not signing in, continuing...');
+
+          attemptRedirect(qsToken, qsDestination);
+        }
+      })
+    })
+  });
+
+  function attemptSignout(token) {
+    return new Promise(function(resolve, reject) {
+      if (token) {
+        console.log('attemptSignout(): Token present, so not signing out');
+        // If there is a token, we resolve with `false` to indicate no sign-out occurred.
+        resolve(false);
+      } else {
+        console.log('attemptSignout(): No token present, so signing out');
+        // Attempt to sign out and then resolve with `true` to indicate sign-out occurred.
+        firebase.auth().signOut()
+        .then(function() {
+          resolve(true); // Sign-out successful, resolve with `true`.
+        })
+        .catch(function(error) {
+          reject(error); // There was an error signing out.
+        });
+      }
+    });
+  }
+
+  function attemptSignin(token, provider) {
+    return new Promise(function(resolve, reject) {
+      if (token) {
+        console.log('attemptSignin(): Token present, not signing in');
+        resolve(false);
+      } else {
+        console.log('attemptSignin(): No token present, signing in');
+        var OAuthProvider = new firebase.auth.OAuthProvider(provider);
+
+        // Resolve to true immediately, indicating sign-in has begun.
+        resolve(true);
+
+        // Then, start the sign-in process.
+        firebase.auth().signInWithRedirect(OAuthProvider)
+        .catch(function(error) {
+          reject(error);
+        });
+      }
+    });
+  }
+
+  function attemptRedirect(token, destination) {
+    return new Promise(function(resolve, reject) {
+      if (token && destination) {
+        console.log('attemptRedirect(): Token present, redirecting');
+
+        resolve(true);
+
+        window.location.href = destination;
+      } else {
+        console.log('attemptRedirect(): No token present, not redirecting');
+
+        resolve(false);
+      }
+    });
+  }
+</script>

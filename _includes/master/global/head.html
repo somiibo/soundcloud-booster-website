@@ -162,11 +162,6 @@
         tikTokPixel: '{{ site.tracking.tiktok-pixel }}',
       },
       validRedirectHosts: ['itwcreativeworks.com'],
-      // tracking: {
-      //   googleAnalytics: '{{ site.tracking.google-analytics }}',
-      //   facebookPixel: '{{ site.tracking.facebook-pixel }}',
-      //   tikTokPixel: '{{ site.tracking.tiktok-pixel }}'
-      // }
     }
   };
 </script>
@@ -175,7 +170,7 @@
 {%- if site.favicon.path != null and site.favicon.path != '' -%}
   {% assign favicon_path = site.favicon.path %}
 {%- else -%}
-  {% assign favicon_path = '/assets/images/favicon' %}
+  {% assign favicon_path = site.url | append: '/assets/images/favicon' %}
 {%- endif -%}
 <link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ favicon_path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
@@ -259,7 +254,8 @@
 {% elsif layout.settings.include-css-bundle == false %}
 {% elsif site.settings.include-css-bundle == false %}
 {% else %}
-  <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}">
+  <!-- <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}"> -->
+  <link rel="stylesheet" type="text/css" href="{{ site.url }}{{ '/assets/css/main.css' }}?cb={{ site.time | date: '%s' }}">
 {% endif %}
 
 {%- if include.post-bundle-css != null -%}

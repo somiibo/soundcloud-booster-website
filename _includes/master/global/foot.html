@@ -114,7 +114,8 @@
   {%- else -%}
     {% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
   {% endif %}
-  <script type="text/javascript" src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
+  <!-- <script type="text/javascript" src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script> -->
+  <script type="text/javascript" src="{{ site.url }}{{ '/assets/js/main.js' }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
 {% endif %}
 
 <!-- TODO: FIX THIS -->
