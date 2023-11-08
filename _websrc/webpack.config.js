@@ -11,7 +11,11 @@ const path = require('path');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const argv   = require('yargs').argv;
-const timestamp = new Date().getTime();
+const yaml = require('js-yaml');
+const jetpack = require('fs-jetpack');
+
+const tools = new (require('./libraries/tools.js'));
+const configYML = yaml.load(jetpack.read('_config.yml'));
 
 module.exports = {
   mode: 'production',
@@ -22,8 +26,8 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        use: ["source-map-loader"],
-        enforce: "pre"
+        use: ['source-map-loader'],
+        enforce: 'pre',
       }
     ]
   },
@@ -40,7 +44,8 @@ module.exports = {
     // chunkFilename: './assets/js/[name].js',
     // chunkFilename: '[name].js',
     // path: '/assets/js/',
-    publicPath: '/assets/js/',
+    // publicPath: '/assets/js/',
+    publicPath: `${tools.isServer ? configYML.url : ''}/assets/js/`,
     // filename: '[name].js'
 
     // https://github.com/webpack/webpack/issues/959
@@ -50,15 +55,15 @@ module.exports = {
     },
     filename: (pathData) => {
       return '[name].js';
-    },    
-    
+    },
+
     // https://github.com/webpack/webpack/issues/2329
-    // chunkFilename: `chunk.[name].[chunkhash].js?cb=[chunkhash]`,    
+    // chunkFilename: `chunk.[name].[chunkhash].js?cb=[chunkhash]`,
 
 
     // https://stackoverflow.com/questions/39238163/how-to-use-cache-busting-with-webpack
     // filename: `[name].js?cb=${timestamp}`,
-    // chunkFilename: `chunk.[name].js?cb=${timestamp}`,    
+    // chunkFilename: `chunk.[name].js?cb=${timestamp}`,
     // path: '/assets/js/',
 
     // umdNamedDefine: false,
@@ -95,6 +100,13 @@ module.exports = {
     // providedExports: false,
     // usedExports: false,
   },
+
+  plugins: [
+    // This makes it possible for us to safely use env vars on our code
+    // new webpack.DefinePlugin({
+    //   'process.env.ASSET_PATH': JSON.stringify(ASSET_PATH),
+    // }),
+  ],
 
   /* CRITICAL CSS */
   // plugins: [
