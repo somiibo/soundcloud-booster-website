@@ -19,7 +19,7 @@ meta:
 foot:
   post-bundle-script: '
     <script src="https://cdn.jsdelivr.net/npm/wonderful-fetch@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
-    <script type="text/javascript" src="/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+    <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
   '
 
 settings:

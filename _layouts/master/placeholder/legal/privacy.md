@@ -14,7 +14,7 @@ Effective date: May 1, 2018
 
 Welcome to {{ site.brand.name }} ("{{ site.brand.name }}," "we," "us" or "our"). {{ site.brand.name }} is a platform/service/application that can be described as: {{ site.meta.description }}. By visiting our website ("the website", "the site"), using the {{ site.brand.name }} application ("the software"," "the application," "our software" or "our application"), accessing the information, resources, services, and tools that we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ page.meta.breadcrumb }} as stated in this policy. Our {{ page.meta.breadcrumb }} applies to all visitors, users, and others who access the Service ("Users").
 
-This {{ page.meta.breadcrumb }} describes how {{ site.brand.name }} and our affiliated entities collect, use, process, and share your personally identifiable information. Our {{ page.meta.breadcrumb }} is designed to provide transparency into our privacy practices and principles, in a format that our users can easily navigate, read, and understand. 
+This {{ page.meta.breadcrumb }} describes how {{ site.brand.name }} and our affiliated entities collect, use, process, and share your personally identifiable information. Our {{ page.meta.breadcrumb }} is designed to provide transparency into our privacy practices and principles, in a format that our users can easily navigate, read, and understand.
 
 We are dedicated to treating your personal information with care and respect. If there is anything that is not clear from this {{ page.meta.breadcrumb }} please feel free to contact our support team: [{{ site.url }}/contact]({{ site.url }}/contact).
 
@@ -74,4 +74,6 @@ Use of our site signifies your acceptance of this policy. If you do not accept t
 
 ## How to Contact Us:
 You can contact us at: [{{ site.url }}/contact]({{ site.url }}/contact)
+
+{{ content | liquify | markdownify }}
 

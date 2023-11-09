@@ -8,7 +8,7 @@ sitemap:
 meta:
   title: "{{ site.brand.name }} - App Launcher"
   description: "{{ site.brand.name }} app launcher"
-  breadcrumb: "Launcher"  
+  breadcrumb: "Launcher"
 ---
 {% assign download = null %}
 
@@ -31,7 +31,7 @@ meta:
 				<div class="py-5 text-center">
           <a class="d-flex justify-content-center" href="{{ site.url }}" target="_blank">
             <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
-          </a>          
+          </a>
 					<p class="lead">Welcome to the <strong>{{ site.brand.name }}</strong> app launcher!</p>
 					<a id="launch-button" class="btn btn-outline-primary mb-1 me-1" href="{{ site.app }}://dashboard">Launch {{ site.brand.name }}</a>
 					<a id="download-button" class="btn btn-primary mb-1" href="{{ download }}">Download {{ site.brand.name }}</a>
@@ -46,7 +46,7 @@ meta:
 	var launchButton = document.getElementById('launch-button');
 	var downloadButton = document.getElementById('download-button');
 	var newUrl;
-  
+
 	if (split[1]) {
 		split.shift();
 		newUrl = '{{ site.app }}://dashboard?' + split.join('?');
@@ -63,3 +63,6 @@ meta:
 		}, 5e3)
 	}
 </script>
+
+{{ content | liquify | markdownify }}
+

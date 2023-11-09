@@ -12,11 +12,11 @@ meta:
 
 foot:
   post-bundle-script: '
-    <script type="text/javascript" src="{{ "/assets/js/slapform-processor.js" | relative_url }}?cb={{ site.time | date: "%s" }}"></script>
+    <script type="text/javascript" src="{{ site.url }}/assets/js/slapform-processor.js?cb={{ site.time | date: "%s" }}"></script>
     <script>
       Manager.ready(function () {
         var Slapform = new _SlapformProcessor();
-        Slapform.init();        
+        Slapform.init();
       })
     </script>
   '
@@ -52,3 +52,5 @@ foot:
     </div>
   </div>
 </div>
+
+{{ content | liquify | markdownify }}

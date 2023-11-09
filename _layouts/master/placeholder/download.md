@@ -8,7 +8,7 @@ sitemap:
 meta:
   title: "{{ site.brand.name }} - Download"
   description: "{{ site.brand.name }} is free to use on Windows, Mac & Linux. Get started for free today!"
-  breadcrumb: "Download"  
+  breadcrumb: "Download"
 ---
 # Download {{ site.brand.name }} Free
 {{ layout.meta.description }}
@@ -46,3 +46,5 @@ If you encounter any issues during the download or have any questions about the 
 # Get Started with {{ site.brand.name }} Desktop App Today
 
 Elevate your productivity and take your {{ site.brand.name }} experience to the next level with our desktop app. Download now and unlock the full potential of our tools and services right from your desktop.
+
+{{ content | liquify | markdownify }}

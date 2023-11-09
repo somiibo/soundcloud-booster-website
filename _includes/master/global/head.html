@@ -254,8 +254,7 @@
 {% elsif layout.settings.include-css-bundle == false %}
 {% elsif site.settings.include-css-bundle == false %}
 {% else %}
-  <!-- <link rel="stylesheet" type="text/css" href="{{ '/assets/css/main.css' | relative_url }}?cb={{ site.time | date: '%s' }}"> -->
-  <link rel="stylesheet" type="text/css" href="{{ site.url }}{{ '/assets/css/main.css' }}?cb={{ site.time | date: '%s' }}">
+  <link rel="stylesheet" type="text/css" href="{{ site.url }}/assets/css/main.css?cb={{ site.time | date: '%s' }}">
 {% endif %}
 
 {%- if include.post-bundle-css != null -%}

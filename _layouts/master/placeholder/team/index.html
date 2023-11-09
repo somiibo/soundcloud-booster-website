@@ -31,9 +31,11 @@ meta:
           <div class="card-footer">
             <small class="text-body-secondary">Joined: {{ member.member.joined }}</small>
           </div>
-        </div>    
+        </div>
 
       </article>
     </div>
   {% endfor %}
 </div>
+
+{{ content | liquify | markdownify }}

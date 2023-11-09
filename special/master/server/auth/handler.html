@@ -14,78 +14,236 @@ meta:
   description: "Auth Handler to {{ site.brand.name }}."
   breadcrumb: "Auth Handler"
   index: false
+
+html:
+  attributes: 'class="h-100"'
+
+head:
+  post-bundle-css: '
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  '
+
+body:
+  class: "h-100"
+
+foot:
+  pre-bundle-script: '
+    <script src="https://cdn.jsdelivr.net/npm/wonderful-fetch@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
+  '
+  post-bundle-script: '
+    <!-- <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script> -->
+  '
+
+tracking:
+  google-analytics: false
+  facebook-pixel: false
+  tiktok-pixel: false
+
+advertising:
+  google-adsense: false
+
+settings:
+  include-app-foot: false
+  include-app-head: false
+  include-app-footer: false
+  include-app-header: false
+  include-script-bundle: true
+  include-script-core: false
+  include-css-bundle: false
+  manager-configuration: "
+    {
+      libraries: {
+        cookieconsent: {
+          enabled: false,
+        },
+        chatsy: {
+          enabled: false,
+        },
+        lazysizes: {
+          enabled: false,
+        },
+      },
+    }
+  "
 ---
 
-<script>
-  Manager.ready(function() {
-    var searchParams = Manager.properties.page.queryString;
-    var qsToken = searchParams.get('token');
-    var qsProvider = searchParams.get('provider');
-    var qsDestination = searchParams.get('destination');
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
+    <div class="d-flex justify-content-between">
+      <h3 class="mb-0">{{ site.brand.name }}</h3>
+      <nav class="nav nav-masthead">
+        <a class="nav-link fw-bold py-1 px-0 active" aria-current="page" href="{{ site.url }}">Return home</a>
+      </nav>
+    </div>
+  </header>
 
-    console.log('main(): Initializing...', qsToken, qsProvider, qsDestination);
+  <main class="px-3 text-center">
+    <div class="d-inline-flex justify-content-between align-items-center">
+      <h1>Logging you in...</h1>
+      <div class="spinner-border spinner-border-md text-primary ms-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <p class="lead">One moment while we get your account...</p>
+    <p class="lead">
+      <noscript>
+        <a href="{{ url }}" class="btn btn-lg btn-primary fw-bold">Take me there</a>
+      </noscript>
+    </p>
+  </main>
+
+  <footer class="mt-auto">
+  </footer>
+</div>
+
+<script>
+  var url;
+
+  Manager.auth().ready(function(user) {
+    url = new URL(window.location.href);
+
+    var qsSignout = url.searchParams.get('signout');
+    var qsProvider = url.searchParams.get('provider');
+    var qsDestination = url.searchParams.get('destination');
+
+    console.log('main(): Initializing...', qsSignout, qsProvider, qsDestination);
 
     // Sign out if there is no token
-    attemptSignout(qsToken)
+    attemptSignout(qsSignout)
     .then(function () {
 
       // Sign in with the provider ID
-      attemptSignin(qsToken, qsProvider)
-      .then(function (signingIn) {
+      attemptSignin(qsProvider)
+      .then(function (result) {
 
-        if (signingIn) {
+        console.log('main(): Result', result);
+
+        if (result.state === 'authenticating') {
           console.log('main(): Signing in...');
 
           // If we are signing in, then we need to wait for the redirect to
           // complete before we can continue.
           return;
-        } else {
-          console.log('main(): Not signing in, continuing...');
+        } else if (result.state === 'token') {
+          console.log('main(): Signing in complete, token present', result.token);
 
-          attemptRedirect(qsToken, qsDestination);
+          attemptRedirect(result.token, qsDestination);
+        } else {
         }
       })
     })
   });
 
-  function attemptSignout(token) {
+  function attemptSignout(signout) {
     return new Promise(function(resolve, reject) {
-      if (token) {
-        console.log('attemptSignout(): Token present, so not signing out');
-        // If there is a token, we resolve with `false` to indicate no sign-out occurred.
-        resolve(false);
-      } else {
-        console.log('attemptSignout(): No token present, so signing out');
+      if (signout) {
+        var user = firebase.auth().currentUser;
+
+        console.log('attemptSignout(): Signing out', user);
+
         // Attempt to sign out and then resolve with `true` to indicate sign-out occurred.
         firebase.auth().signOut()
         .then(function() {
-          resolve(true); // Sign-out successful, resolve with `true`.
+          url.searchParams.delete('signout');
+
+          window.location.href = url.toString();
         })
         .catch(function(error) {
           reject(error); // There was an error signing out.
-        });
+        })
+      } else {
+        console.log('attemptSignout(): Not signing out');
+        // We resolve with `false` to indicate no sign-out occurred.
+        resolve(false);
       }
     });
   }
 
-  function attemptSignin(token, provider) {
+  function attemptSignin(provider) {
     return new Promise(function(resolve, reject) {
-      if (token) {
-        console.log('attemptSignin(): Token present, not signing in');
-        resolve(false);
-      } else {
-        console.log('attemptSignin(): No token present, signing in');
-        var OAuthProvider = new firebase.auth.OAuthProvider(provider);
+      firebase.auth().getRedirectResult()
+      .then(function (result) {
+        console.log('attemptSignin(): getRedirectResult()', result.user);
 
-        // Resolve to true immediately, indicating sign-in has begun.
-        resolve(true);
+        if (result && result.user) {
+          console.log('attemptSignin(): createCustomToken(result.user)', result.user);
 
-        // Then, start the sign-in process.
-        firebase.auth().signInWithRedirect(OAuthProvider)
-        .catch(function(error) {
-          reject(error);
-        });
-      }
+          // Create a custom token for the user.
+          createCustomToken({user: result.user})
+          .then(function (token) {
+            return resolve({state: 'token', token: token});
+          })
+          .catch(function (e) {
+            return reject(e);
+          })
+        } else {
+          var OAuthProvider = new firebase.auth.OAuthProvider(provider);
+
+          console.log('attemptSignin(): No token present, signing in with', OAuthProvider);
+
+          // Then, start the sign-in process.
+          firebase.auth().signInWithRedirect(OAuthProvider)
+          .then(function(e) {
+            return resolve({state: 'authenticating'});
+          })
+          .catch(function(e) {
+            return reject(e);
+          });
+
+        }
+
+      })
+      .catch(function (e) {
+        return reject(e)
+      })
+      // if (token) {
+      //   console.log('attemptSignin(): Token present, not signing in');
+      //   resolve(false);
+      // } else {
+      //   var OAuthProvider = new firebase.auth.OAuthProvider(provider);
+
+      //   // Resolve to true immediately, indicating sign-in has begun.
+      //   resolve(true);
+
+      //   console.log('attemptSignin(): No token present, signing in with', OAuthProvider);
+
+      //   // Then, start the sign-in process.
+      //   // firebase.auth().signInWithRedirect(OAuthProvider)
+      //   // .catch(function(error) {
+      //   //   reject(error);
+      //   // });
+      // }
+    });
+  }
+
+  function createCustomToken(payload) {
+    return new Promise(function(resolve, reject) {
+      var url = 'https://us-central1-PROJECT_ID.cloudfunctions.net/bm_api'
+      url = url.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
+
+      payload.user.getIdToken(true)
+      .then(function (token) {
+        console.log('createCustomToken(): token', token);
+        console.log('createCustomToken(): url', url);
+
+        WonderfulFetch(url, {
+          method: 'post',
+          response: 'json',
+          body: {
+            command: 'user:create-custom-token',
+            authenticationToken: token,
+          },
+        })
+        .then(function (json) {
+          console.log('createCustomToken(): json.token', json.token);
+
+          return resolve(json.token);
+        })
+        .catch(function (e) {
+          return reject(e);
+        })
+      })
     });
   }
 

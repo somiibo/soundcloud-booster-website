@@ -114,3 +114,6 @@ Effective date: May 1, 2018
 <li>Email: {{ site.contact.email-support }}</li>
 
 </ul>
+
+{{ content | liquify | markdownify }}
+

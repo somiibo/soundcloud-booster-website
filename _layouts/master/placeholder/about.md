@@ -45,3 +45,5 @@ Behind {{ site.brand.name }} is a team of dedicated professionals, each bringing
 We invite you to join us on our journey as we continue to revolutionize the digital landscape. With {{ site.brand.name }}, the future is in your hands.
 
 Thank you for choosing {{ site.brand.name }}. We look forward to being a part of your success story.
+
+{{ content | liquify | markdownify }}
