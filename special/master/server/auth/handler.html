@@ -182,6 +182,10 @@ settings:
 
           console.log('attemptSignin(): No token present, signing in with', OAuthProvider);
 
+          if (!provider) {
+            return reject(new Error('No provider specified'))
+          }
+
           // Then, start the sign-in process.
           firebase.auth().signInWithRedirect(OAuthProvider)
           .then(function(e) {
