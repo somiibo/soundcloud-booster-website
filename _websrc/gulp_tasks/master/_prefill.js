@@ -239,6 +239,49 @@ gulp.task('_prefill', () => {
       //   process.exit(1)
       // })
 
+      // Get firebase-auth
+      const firebaseAuthFiles = [
+        'handler.html',
+        'handler.js',
+        'experiments.js',
+        'iframe.html',
+        'iframe.js',
+      ]
+      const firebaseAuthPrefix = '__/auth';
+      const firebaseAuthPromises = [];
+
+      // Clear files
+      fs.remove('./special/master/scripts/firebase-auth');
+
+      for (var i = 0; i < firebaseAuthFiles.length; i++) {
+        const file = firebaseAuthFiles[i];
+        const remoteFile = `https://ultimate-jekyll.firebaseapp.com/${firebaseAuthPrefix}/${file.replace('.html', '')}`;
+
+        // console.log(`Fetching ${remoteFile}`);
+
+        firebaseAuthPromises.push(
+          fetch(remoteFile)
+          .then(async (res) => {
+            if (res.ok) {
+              fs.write(`./special/master/scripts/firebase-auth/${file}`,
+                '---\n'
+                + `permalink: /${firebaseAuthPrefix}/${file}\n`
+                + '---\n'
+                + '\n'
+                + await res.text()
+              )
+            } else {
+              throw new Error(`Failed to get ${file}`)
+            }
+          })
+          // .catch(e => {
+          //   console.error(e);
+          // })
+        )
+      }
+
+      await Promise.all(firebaseAuthPromises);
+
       Global.set('prefillStatus', 'done');
       return resolve();
     } catch (e) {

@@ -1,10 +1,12 @@
 const argv        = require('yargs').argv;
 const browsersync = require('browser-sync').create();
-const config      = require('../../master.config.js');
 const fs          = require('fs-jetpack');
 const gulp        = require('gulp');
+const path        = require('path');
 const tools       = new (require('../../libraries/tools.js'));
 const Global      = require('../../libraries/global.js');
+
+const config      = require('../../master.config.js');
 
 const browser = (config.browsersync.browsers[0] != null) ? config.browsersync.browsers : 'default';
 const urlType = 'external'; // local or external
@@ -32,14 +34,27 @@ gulp.task('browsersync', async () => {
     server: {
       baseDir: config.jekyll.dest,
       middleware: async function (req, res, next) {
-        if (/_post.json/.test(req.url)) {
+        // console.log(`[Browsersync] Request ${req.url}`);
+
+        if (req.url.match(/_post.json/)) {
           const createPost = require('./create-post.js');
-          let post = new createPost();
+          const post = new createPost();
+
           return await post.create({
             req: req,
             res: res,
           })
         }
+
+        // Check if the URL is missing a trailing slash and does not have an extension
+        if (!req.url.endsWith('/') && !path.extname(req.url)) {
+          const newURL = `${req.url}.html`;
+          console.log(`[Browsersync] Rewriting ${req.url} to ${newURL}`);
+
+          // Rewrite it to serve the .html extension
+          req.url = newURL;
+        }
+
         next();
       }
     },
