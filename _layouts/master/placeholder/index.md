@@ -8,7 +8,7 @@ sitemap:
 meta:
   title: "{{ site.meta.title }}"
   description: "{{ site.meta.description }}"
-  breadcrumb: "Home"  
+  breadcrumb: "Home"
 ---
 # Welcome to {{ site.brand.name }}
 {{ site.meta.description }}
@@ -65,4 +65,6 @@ Our team is committed to your success. We provide round-the-clock support to ens
 
 Ready to take the first step towards streamlined success? Join the {{ site.brand.name }} community today. Our friendly customer service team is on hand to answer any questions and help you get started.
 
-Your journey towards greater efficiency starts here. Welcome to {{ site.brand.name }}. 
+Your journey towards greater efficiency starts here. Welcome to {{ site.brand.name }}.
+
+{{ content | liquify | markdownify }}

@@ -26,7 +26,7 @@ meta:
         <p class=""><span class="badge text-bg-secondary">Joined:</span> {{ page.member.joined }}</p>
         <p class=""><span class="badge text-bg-secondary">Skills:</span> {{ page.member.skills }}</p>
         <p class=""><span class="badge text-bg-secondary">Location:</span> {{ page.member.location }}</p>
-        
+
 
         <h6>About Me</h6>
         {{ content }}
@@ -35,9 +35,9 @@ meta:
         <a href="https://www.linkedin.com/in/{{ page.member.linkedin | default: site.socials.linkedin }}" class="btn btn-primary">LinkedIn</a>
         <a href="https://www.instagram.com/{{ page.member.instagram | default: site.socials.instagram }}" class="btn btn-primary">Instagram</a>
       </div>
-    </div>  
+    </div>
   </div>
 
-
-
 </article>
+
+{{ content | liquify | markdownify }}

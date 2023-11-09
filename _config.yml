@@ -160,7 +160,7 @@ settings:
           enabled: true,
           config: {
             apiKey: 'AIzaSyA3-YBkywbzpstijvMqUwn_a0GQTi3EZQc',
-            authDomain: 'auth.somiibo.com',
+            authDomain: 'somiibo.com',
             databaseURL: 'https://somiibo-91d13.firebaseio.com',
             projectId: 'somiibo-91d13',
             storageBucket: 'somiibo-91d13.appspot.com',

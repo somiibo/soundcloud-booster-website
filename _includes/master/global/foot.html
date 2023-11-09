@@ -114,8 +114,7 @@
   {%- else -%}
     {% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
   {% endif %}
-  <!-- <script type="text/javascript" src="{{ '/assets/js/main.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script> -->
-  <script type="text/javascript" src="{{ site.url }}{{ '/assets/js/main.js' }}?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
+  <script type="text/javascript" src="{{ site.url }}/assets/js/main.js?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
 {% endif %}
 
 <!-- TODO: FIX THIS -->
@@ -131,7 +130,7 @@
   {%- else -%}
     {% assign core_optimization = site.settings.include-script-core-optimization %}
   {% endif %}
-  <!-- <script type="text/javascript" src="{{ '/assets/js/master.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ core_optimization }}></script> -->
+  <!-- <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: '%s' }}" {{ core_optimization }}></script> -->
 {% endif %}
 
 <!-- TODO: FIX THIS -->
@@ -152,7 +151,7 @@
   {% endif %}
 {% endif %}
 {%- if slapform_include == true -%}
-  <!-- <script type="text/javascript" src="{{ '/assets/js/slapform-processor.js' | relative_url }}?cb={{ site.time | date: '%s' }}" {{ slapform_optimization }}></script> -->
+  <!-- <script type="text/javascript" src={{ site.url }}/assets/js/slapform-processor.js?cb={{ site.time | date: '%s' }}" {{ slapform_optimization }}></script> -->
 {% endif %}
 
 <!-- Script - Bundle -->

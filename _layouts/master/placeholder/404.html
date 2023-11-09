@@ -9,7 +9,7 @@ meta:
   title: "Oops! This page doesn't exist"
   description: "This page doesn't exist. Please let us know so we can fix the broken link."
   breadcrumb: "404"
-  index: false 
+  index: false
 ---
 <div class="container" style="height: 100vh;">
 	<div class="row h-100">
@@ -18,7 +18,7 @@ meta:
 				<div class="py-5 text-center">
           <a class="d-flex justify-content-center" href="{{ site.url }}">
             <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
-          </a>          
+          </a>
           <div class="d-flex justify-content-center align-items-center flex-column">
             <h1>Oops!</h1>
             <p class="mb-0">This page doesn't exist. Please let us know so we can fix the broken link.</p>
@@ -43,3 +43,5 @@ meta:
   // Set page URL
   document.getElementById('page-url').innerHTML = window.location.href;
 </script>
+
+{{ content | liquify | markdownify }}

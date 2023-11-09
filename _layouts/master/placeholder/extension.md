@@ -8,7 +8,7 @@ sitemap:
 meta:
   title: "{{ site.brand.name }} - Browser Extension"
   description: "The {{ site.brand.name }} browser extension is free to use on Chrome, Firefox & Opera. Get started for free today!"
-  breadcrumb: "Extension"  
+  breadcrumb: "Extension"
 ---
 # {{ site.brand.name }} Browser Extension
 {{ layout.meta.description }}
@@ -44,3 +44,5 @@ Having trouble with installation or have any questions? Our support team is avai
 # Enhance Your {{ site.brand.name }} Experience Today
 
 Upgrade your {{ site.brand.name }} experience with our powerful browser extension. Install now and explore the extended functionality of our services right from your browser. Welcome to a more efficient and integrated browsing experience with {{ site.brand.name }}.
+
+{{ content | liquify | markdownify }}

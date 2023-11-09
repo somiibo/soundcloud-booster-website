@@ -165,3 +165,5 @@ Unless otherwise expressed, {{ brand }} expressly disclaims all warranties and c
 ## Contact Information
 If you have any questions, comments, or concerns, please contact us: [{{ site.url }}/contact]({{ site.url }}/contact)
 
+{{ content | liquify | markdownify }}
+

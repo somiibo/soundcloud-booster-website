@@ -73,7 +73,7 @@ meta:
             </div>
           </div>
         {% endfor %}
-      </div>  
+      </div>
     </div>
 
     <div class="col-md-4">
@@ -121,3 +121,5 @@ meta:
     <a href="#">Back to top</a>
   </p>
 </footer> -->
+
+{{ content | liquify | markdownify }}

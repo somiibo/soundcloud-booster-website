@@ -3,7 +3,7 @@
 layout: master/placeholder/global/default
 sitemap:
   include: true
-  
+
 ### REGULAR PAGES ###
 ---
 <div class="container">
@@ -75,18 +75,18 @@ sitemap:
 
       <div class="mb-3">
         {%- include /master/modules/engagement/social-share-kit.html -%}
-      </div>      
+      </div>
 
       <nav class="blog-pagination" aria-label="Pagination">
         {% if page.previous.url %}
           <a href="{{ page.previous.url }}" class="btn btn-outline-primary rounded-pill">Previous post</a>
-        {% else %}        
+        {% else %}
           <a class="btn btn-outline-secondary rounded-pill disabled">Previous post</a>
-        {% endif %}  
-        
+        {% endif %}
+
         {% if page.next.url %}
           <a href="{{ page.next.url }}" class="btn btn-outline-primary rounded-pill">Next post</a>
-        {% else %}        
+        {% else %}
           <a class="btn btn-outline-secondary rounded-pill disabled">Next post</a>
         {% endif %}
       </nav>
@@ -142,3 +142,5 @@ sitemap:
     <a href="#">Back to top</a>
   </p>
 </footer> -->
+
+{{ content | liquify | markdownify }}
