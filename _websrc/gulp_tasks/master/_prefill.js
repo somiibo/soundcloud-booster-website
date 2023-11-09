@@ -255,7 +255,8 @@ gulp.task('_prefill', () => {
 
       for (var i = 0; i < firebaseAuthFiles.length; i++) {
         const file = firebaseAuthFiles[i];
-        const remoteFile = `https://ultimate-jekyll.firebaseapp.com/${firebaseAuthPrefix}/${file.replace('.html', '')}`;
+        const fileNoHTML = file.replace('.html', '');
+        const remoteFile = `https://ultimate-jekyll.firebaseapp.com/${firebaseAuthPrefix}/${fileNoHTML}`;
 
         // console.log(`Fetching ${remoteFile}`);
 
@@ -265,7 +266,7 @@ gulp.task('_prefill', () => {
             if (res.ok) {
               fs.write(`./special/master/scripts/firebase-auth/${file}`,
                 '---\n'
-                + `permalink: /${firebaseAuthPrefix}/${file}\n`
+                + `permalink: /${firebaseAuthPrefix}/${fileNoHTML}\n`
                 + '---\n'
                 + '\n'
                 + await res.text()
