@@ -66,7 +66,7 @@ foot:
 
     <!-- ITW CW -->
     <script src="https://cdn.jsdelivr.net/npm/wonderful-fetch@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
-    <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+    <script type="text/javascript" src="{{ site.url }}/assets/js/base.js?cb={{ site.time | date: "%s" }}" async defer></script>
     {%- include /master/misc/embed-manager.html -%}
   '
 
@@ -83,8 +83,8 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/signin/',
-          prohibited: '/admin/dashboard/',
+          required: '/signin',
+          prohibited: '/admin/dashboard',
         }
       },
       libraries: {

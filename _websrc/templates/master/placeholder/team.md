@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/team/index
-permalink: /team/
+permalink: /team
 sitemap:
   include: true
 

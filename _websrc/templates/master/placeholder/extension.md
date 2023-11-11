@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/extension
-permalink: /extension/
+permalink: /extension
 sitemap:
   include: true
 

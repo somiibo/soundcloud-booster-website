@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/legal/privacy
-permalink: /privacy/
+permalink: /privacy
 sitemap:
   include: true
 

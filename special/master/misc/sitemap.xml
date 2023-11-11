@@ -8,13 +8,17 @@ sitemap:
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% assign pages = site.pages %}
   {% assign posts = site.posts %}
-  {% assign data = pages | concat: posts %}  
+  {% assign data = pages | concat: posts %}
   {% assign default_time = site.time | date_to_xmlschema %}
-  
+
   {%- if site.sitemap.enable != false -%}
     {% for page in data %}
 
-      {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or page.layout.sitemap.include == false or page.sitemap.include == false -%}
+      {%- if page.url contains '/@reference' or page.layout contains 'redirect' or page.layout.sitemap.include == false or page.sitemap.include == false -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- if page.url contains '.js' -%}
         {%- continue -%}
       {%- endif -%}
 
@@ -36,11 +40,11 @@ sitemap:
         {%- if page.url == '/' -%}
           <priority>1.0</priority>
         {%- elsif page.sitemap.priority == null -%}
-          <priority>0.5</priority>          
+          <priority>0.5</priority>
         {%- else -%}
           <priority>{{ page.sitemap.priority }}</priority>
         {%- endif -%}
       </url>
     {% endfor %}
-  {%- endif -%}  
+  {%- endif -%}
 </urlset>

@@ -241,13 +241,13 @@ escapes:
   bracket-right: "]"
 
 # Blog & Pagination
-permalink: /blog/:title/
+permalink: /blog/:title
 pagination:
   enabled: true
   per_page: 6
   offset: 0
-  permalink: '/page/:num/'
-  title: ':title - page :num'
+  permalink: /page/:num
+  title: :title - page :num
   limit: 0
   sort_field: 'date'
   sort_reverse: true
@@ -262,7 +262,7 @@ defaults:
     path: ''
     type: team
   values:
-    permalink: "/team/:title/"
+    permalink: /team/:title
 
 # Build settings
 markdown: kramdown

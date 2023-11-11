@@ -36,12 +36,10 @@ meta:
 </div>
 
 <script>
-  Manager.ready(function () {
-    Manager.sentry().captureException(new Error('404 at: ' + window.location.href));
-  })
-
   // Set page URL
   document.getElementById('page-url').innerHTML = window.location.href;
 </script>
+
+{% include /master/helpers/404.html %}
 
 {{ content | liquify | markdownify }}

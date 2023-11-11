@@ -35,8 +35,10 @@ gulp.task('browsersync', async () => {
       baseDir: config.jekyll.dest,
       middleware: async function (req, res, next) {
         // console.log(`[Browsersync] Request ${req.url}`);
+        const url = new URL(`http://localhost:4000${req.url}`);
+        const pathname = url.pathname;
 
-        if (req.url.match(/_post.json/)) {
+        if (pathname.match(/_post.json/)) {
           const createPost = require('./create-post.js');
           const post = new createPost();
 
@@ -47,9 +49,9 @@ gulp.task('browsersync', async () => {
         }
 
         // Check if the URL is missing a trailing slash and does not have an extension
-        if (!req.url.endsWith('/') && !path.extname(req.url)) {
-          const newURL = `${req.url}.html`;
-          console.log(`[Browsersync] Rewriting ${req.url} to ${newURL}`);
+        if (!pathname.endsWith('/') && !path.extname(pathname)) {
+          const newURL = `${pathname}.html`;
+          console.log(`[Browsersync] Rewriting ${pathname} to ${newURL}`);
 
           // Rewrite it to serve the .html extension
           req.url = newURL;
