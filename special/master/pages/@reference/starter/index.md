@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /@reference/starter/index/
+permalink: /@reference/starter/index
 
 ### REGULAR PAGES ###
 meta:

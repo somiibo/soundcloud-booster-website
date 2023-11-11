@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /@reference/starter/blog/
+permalink: /@reference/starter/blog
 
 ### REGULAR PAGES ###
 meta:
@@ -55,9 +55,9 @@ meta:
             <ul class="">
               {% for num in (1..paginator.total_pages) %}
                 {% if num == 1 %}
-                  <li><a href="{{ site.url }}/blog{{ site.trailing }}" class="{% if paginator.page == num %}active{% endif %}">1</a></li>
+                  <li><a href="{{ site.url }}/blog}" class="{% if paginator.page == num %}active{% endif %}">1</a></li>
                 {% else %}
-                  <li><a href="{{ site.url }}/blog/page{{ num }}{{ site.trailing }}" class="{% if paginator.page == num %}active{% endif %}">{{ num }}</a></li>
+                  <li><a href="{{ site.url }}/blog/page{{ num }}" class="{% if paginator.page == num %}active{% endif %}">{{ num }}</a></li>
                 {% endif %}
               {% endfor %}
             </ul>

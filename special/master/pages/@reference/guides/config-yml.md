@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/guides/config-yml/
+permalink: /@reference/guides/config-yml
 sitemap:
   include: false
 ---

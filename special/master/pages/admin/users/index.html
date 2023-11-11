@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/main
-permalink: /admin/users/
+permalink: /admin/users
 sitemap:
   include: false
 
@@ -156,7 +156,7 @@ meta:
           <div class="mb-3">
             <label for="planLabel" class="form-label">Plan ID</label>
             <input type="text" class="form-control" name="plan" id="planLabel" value="premium">
-          </div>          
+          </div>
 
           <div class="mb-3">
             <label for="expLabel" class="form-label">Exp. Date</label>
@@ -167,7 +167,7 @@ meta:
           <button type="submit" class="btn btn-success"><i class="bi-star-fill"></i> Save</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
-      </form>     
+      </form>
     </div>
   </div>
 </div>
@@ -258,7 +258,7 @@ meta:
           } else if (event.target.matches('#datatable-premium-form')) {
             handlePremiumForm(event)
           }
-        })        
+        })
 
         document.addEventListener('click', function (event) {
           handleClick(event)
@@ -342,7 +342,7 @@ meta:
             if (item.data.roles[role]) {
               rolesHtml += rolesTemplate
               .replace(/{roleName}/ig, capitalizeFirstLetter(role))
-              .replace(/{roleClass}/ig, roleMap[role] || 'primary')            
+              .replace(/{roleClass}/ig, roleMap[role] || 'primary')
             }
           });
 
@@ -411,7 +411,7 @@ meta:
       if (event.target.matches('.user-open-btn')) {
         var uid = event.target.dataset.uid;
         $expandModal.querySelector('.modal-title').innerHTML = `Viewing <code>${uid}</code>`;
-        $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
+        $expandModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`
         expandModal.show();
       } else if (event.target.matches('.user-premium-btn')) {
         var uid = event.target.dataset.uid;
@@ -420,7 +420,7 @@ meta:
         $premiumModal.querySelector('.modal-title').innerHTML = `Editing <code>${uid}</code>`;
         $premiumModal.querySelector('input[name="uid"]').value = uid;
         $premiumModal.querySelector('input[name="expiration"]').value = new Date(date.setMonth(date.getMonth() + 1)).toISOString().substring(0, 10);
-        // $premiumModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`        
+        // $premiumModal.querySelector('.modal-body').innerHTML = `<pre><code>${JSON.stringify(allResponse[uid], null, 2)}</code></pre>`
         premiumModal.show();
       } else if (event.target.matches('.user-signout-btn')) {
         var uid = event.target.dataset.uid;

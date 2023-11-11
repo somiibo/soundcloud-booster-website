@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/main
-permalink: /admin/users/online/
+permalink: /admin/users/online
 sitemap:
   include: false
 
@@ -17,7 +17,7 @@ admin:
     <a class="btn btn-soft-primary refresh-users-btn" href="javascript:;">
       <i class="bi-arrow-clockwise me-1"></i> Refresh Users
     </a>
-  '  
+  '
 ---
 <div class="row loaded-false">
 	<div class="col-lg-8 offset-lg-2">
@@ -135,11 +135,11 @@ admin:
 						<th scope="col">Edit</th>
           </tr>
         </thead>
-  
+
         <tbody>
         </tbody>
       </table>
-    </div>   
+    </div>
 
     <div class="card-footer">
       <!-- Pagination -->
@@ -147,7 +147,7 @@ admin:
         <nav id="datatable-pagination" aria-label="Activity pagination"></nav>
       </div>
       <!-- End Pagination -->
-    </div>     
+    </div>
 	</div>
 </div>
 
@@ -179,10 +179,10 @@ admin:
           </li>
           <li class="">
             <a class="dropdown-item session-open-btn" href="javascript:;" data-session="{session}"><i class="bi-eye-fill me-2 pointer-none"></i>View session</a>
-          </li>          
+          </li>
         </ul>
       </div>
-    </td>    
+    </td>
   </tr>
 '></div>
 
@@ -216,19 +216,19 @@ admin:
     macOS: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/apple.svg',
     Windows: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/microsoft.svg',
     Linux: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/linux.svg',
-  }  
+  }
 
   var iconHtml = '<img class="avatar avatar-xs me-1" src="{icon}" alt="{platform}"> {platform}';
 
 	Manager.auth().ready(function () {
 
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
-    var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api'; 
-    // var serverApiURL = Manager.properties.meta.environment === 'development'   
-    var serverApiURL = Manager.properties.page.queryString.get('development') === 'true'   
+    var serverProdDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
+    // var serverApiURL = Manager.properties.meta.environment === 'development'
+    var serverApiURL = Manager.properties.page.queryString.get('development') === 'true'
       ? serverProdDev
       : serverProd;
-    
+
     var $table = document.getElementById('table-body');
     var $online = document.getElementById('online-count');
     var template = document.getElementById('table-template').getAttribute('data-template');
@@ -240,7 +240,7 @@ admin:
     var searchInput = document.getElementById('datatable-search-input')
     var searchForm = document.getElementById('datatable-search-form')
 
-    table = Admin().initializeTable();    
+    table = Admin().initializeTable();
 
 		dom = Manager.dom();
 		utilities = Manager.utilities();
@@ -257,13 +257,13 @@ admin:
       } else if (event.target.matches('.refresh-users-btn')) {
         refreshOnlineUsers()
       }
-    }) 
+    })
 
     function refreshOnlineUsers() {
       table.clear().draw();
 
       dom.select('.loaded-false').show();
-      dom.select('.loaded-true').hide();      
+      dom.select('.loaded-true').hide();
 
       firebase.auth().currentUser.getIdToken(true)
       .then(function (token) {
@@ -285,7 +285,7 @@ admin:
           },
         })
         .then(function (data) {
-          
+
           // Response
           allResponse = Object.assign(allResponse, data)
 
@@ -319,24 +319,24 @@ admin:
 
             searchForm.addEventListener('submit', function (event) {
               handleSearch(searchInput.value || '')
-            })            
+            })
 
           })
           .catch(function (e) {
             _alert('Failed to fetch: ' + e)
-          })   
+          })
 
         })
         .catch(function (e) {
           _alert('Failed to fetch: ' + e)
-        })   
+        })
 
       })
       .catch(function(e) {
         _alert(e);
-      })          
-      
-    }  
+      })
+
+    }
 
     // Helpers
     function _alert(e) {
@@ -358,7 +358,7 @@ admin:
       } else {
         platformHuman = 'Unknown';
         // icon = iconFont.replace(/{icon}/ig, 'question-octagon-fill');
-      }    
+      }
 
       return iconHtml
         .replace(/{icon}/ig, sessionsMap[platformHuman])
@@ -395,12 +395,12 @@ admin:
           )
         )
 
-      });   
+      });
 
       table.draw();
 
-      return count;   
-    }     
+      return count;
+    }
 
     function handleSearch(input) {
       console.log('---search...', input);
@@ -441,7 +441,7 @@ admin:
 
     // Refresh
     refreshOnlineUsers();
- 
+
 	}, {
 		waitFor: function () {
 			return true;

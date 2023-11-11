@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/guides/firebase-users/
+permalink: /@reference/guides/firebase-users
 sitemap:
   include: false
 ---
@@ -81,7 +81,7 @@ sitemap:
     expires: {
       timestamp: '2111-01-01T00:00:00Z',
       timestampUNIX: 1556503067000,
-    },    
+    },
   },
   // temp: false,
 }

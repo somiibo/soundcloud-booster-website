@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-permalink: /@reference/guides/query-string-keys/
+permalink: /@reference/guides/query-string-keys
 sitemap:
   include: false
 ---
