@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/download
-permalink: /download/
+permalink: /download
 sitemap:
   include: true
 

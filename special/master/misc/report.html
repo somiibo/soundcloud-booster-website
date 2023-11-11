@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /_report/
+permalink: /_report
 
 sitemap:
   include: false
@@ -17,7 +17,7 @@ meta:
   </head>
   <body>
     {% for page in site.pages %}
-      {%- if page.url contains '/@reference/' -%}
+      {%- if page.url contains '/@reference' -%}
       {%- continue -%}
       {%- endif -%}
 

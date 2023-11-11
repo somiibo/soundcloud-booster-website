@@ -46,7 +46,7 @@ foot:
     <script src="https://cdn.itwcreativeworks.com/assets/ultimate-jekyll/vendor/front-admin/v2/js/theme.min.js"></script>
 
     <!-- ITW CW -->
-    <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+    <script type="text/javascript" src="{{ site.url }}/assets/js/base.js?cb={{ site.time | date: "%s" }}" async defer></script>
     {%- include /master/misc/embed-manager.html -%}
 
   '
@@ -87,25 +87,25 @@ settings:
 {% assign secondary-subtitle = 'An account is required ' %}
 {% assign auth-btn-class = 'auth-signin-provider-btn' %}
 
-{%- if page.permalink == '/signup/' -%}
+{%- if page.permalink == '/signup' -%}
   {% assign is-sign-up-page = true %}
   {% assign subtitle-middle-word = 'for' %}
   <!-- DISABLED BECAUSE UX FOR THIS IS MEH -->
   <!-- {% assign auth-btn-class = 'auth-signup-provider-btn' %} -->
   {% assign auth-btn-class = 'auth-signin-provider-btn' %}
-{%- elsif page.permalink == '/signin/' -%}
+{%- elsif page.permalink == '/signin' -%}
   {% assign is-sign-in-page = true %}
   {% assign subtitle-middle-word = 'to' %}
   {% assign auth-btn-class = 'auth-signin-provider-btn' %}
-{%- elsif page.permalink == '/signout/' -%}
+{%- elsif page.permalink == '/signout' -%}
   {% assign is-sign-out-page = true %}
   {% assign secondary-title = 'Sign out' %}
   {% capture secondary-subtitle %}Sign out of <strong>{{ site.brand.name }}</strong>{% endcapture %}
-{%- elsif page.permalink == '/forgot/' -%}
+{%- elsif page.permalink == '/forgot' -%}
   {% assign is-forgot-page = true %}
   {% assign secondary-title = 'Recover your account' %}
   {% capture secondary-subtitle %}Reset your password for <strong>{{ site.brand.name }}</strong>{% endcapture %}
-{%- elsif page.permalink == '/authentication-success/' -%}
+{%- elsif page.permalink == '/authentication-success' -%}
   {% assign is-success-page = true %}
   {% assign secondary-title = 'Successful Login' %}
   {% capture secondary-subtitle %}You have successfully logged in to <strong>{{ site.brand.name }}</strong>{% endcapture %}

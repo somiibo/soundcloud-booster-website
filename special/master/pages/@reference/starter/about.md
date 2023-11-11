@@ -1,8 +1,8 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /@reference/starter/about/
-  
+permalink: /@reference/starter/about
+
 ### REGULAR PAGES ###
 meta:
   title: "About"

@@ -29,7 +29,7 @@ meta:
 
 
         <h6>About Me</h6>
-        {{ content }}
+        {{ content | liquify | markdownify }}
 
         <h6>Socials</h6>
         <a href="https://www.linkedin.com/in/{{ page.member.linkedin | default: site.socials.linkedin }}" class="btn btn-primary">LinkedIn</a>
@@ -40,4 +40,3 @@ meta:
 
 </article>
 
-{{ content | liquify | markdownify }}

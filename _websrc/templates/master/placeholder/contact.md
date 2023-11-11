@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/contact
-permalink: /contact/
+permalink: /contact
 sitemap:
   include: true
 

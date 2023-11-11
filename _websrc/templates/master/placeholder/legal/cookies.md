@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/legal/cookies
-permalink: /cookies/
+permalink: /cookies
 sitemap:
   include: true
 

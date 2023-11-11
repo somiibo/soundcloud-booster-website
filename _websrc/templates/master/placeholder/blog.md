@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/blog/index
-permalink: /blog/
+permalink: /blog
 sitemap:
   include: true
 

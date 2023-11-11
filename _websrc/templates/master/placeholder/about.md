@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/about
-permalink: /about/
+permalink: /about
 sitemap:
   include: true
 

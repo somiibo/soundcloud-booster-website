@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/app
-permalink: /app/
+permalink: /app
 sitemap:
   include: true
 

@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/admin/main
-permalink: /admin/posts/create/
+permalink: /admin/posts/create
 sitemap:
   include: false
 
@@ -40,7 +40,7 @@ admin:
       <div class="col-12">
         <h3 class="header-title mb-3 d-flex justify-content-center align-items-center">
           Total posts: <span id="total-posts" class="ms-1">0</span>
-        </h3>        
+        </h3>
       </div>
 
       <div class="col-12">
@@ -61,7 +61,7 @@ admin:
                 <div><strong>URL:</strong> <span id="previous-post-url">...</span> </div>
                 <div id="copy-main">
                   <div><strong>Slug:</strong> <span id="previous-post-slug">...</span> </div>
-                  <div><strong>Invoice:</strong> <span id="previous-post-invoice">...</span> </div>                      
+                  <div><strong>Invoice:</strong> <span id="previous-post-invoice">...</span> </div>
                 </div>
 
               </div>
@@ -235,7 +235,7 @@ admin:
                   Text preview of the post
                 </small>
                 <small class="text-muted word-and-character-count" data-count-source="#excerpt">(0 characters, 1 words)</small>
-              </div> 
+              </div>
 
               <textarea id="excerpt" name="excerpt" class="form-control" placeholder="My post preview" rows="4" spellcheck="true"></textarea>
             </div>
@@ -255,7 +255,7 @@ admin:
                 </small>
                 <input type="url" class="form-control" name="headerImageURL" id="headerImageURL" placeholder="https://unsplash.com/your-image" aria-label="https://unsplash.com/your-image" required>
               </div>
-              <!-- End Form -->                   
+              <!-- End Form -->
             </div>
           </div>
 
@@ -548,7 +548,7 @@ admin:
 
             </div>
             <!-- End Form -->
-          </div>          
+          </div>
         </div>
 
       </div>
@@ -567,14 +567,14 @@ admin:
               <h4 class="alert-heading">Waiting...</h4>
               <p class="mb-0">Hold up</p>
               <!-- <hr>
-              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
+              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog">{{ site.url }}/blog</a>) to see if it looks good!</p>
               <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p> -->
             </div>
             <div class="alert alert-success" role="alert" hidden>
               <h4 class="alert-heading">Well done!</h4>
               <p>Aww yeah, you successfully posted that amazing piece of work ;)</p>
               <hr>
-              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog/">{{ site.url }}/blog/</a>) to see if it looks good!</p>
+              <p class="mb-0">Be sure to check it out on the main blog page (<a href="{{ site.url }}/blog">{{ site.url }}/blog</a>) to see if it looks good!</p>
               <p class="mb-0">Refreshing in <span id="refresh-timer">3</span> seconds.</p>
             </div>
             <div class="alert alert-danger" role="alert" hidden>
@@ -593,7 +593,7 @@ admin:
           <h4 class="alert-heading">Posting to {{ site.brand.name }}</h4>
           <span>You are about to post this to <strong>{{ site.brand.name }}</strong>, are you sure?</span>
         </div>
-      </div>      
+      </div>
 
       <div class="col-12">
         <button class="btn btn-primary btn-lg w-100" id="post-submit-btn" type="submit">Post to {{ site.brand.name }}!</button>
@@ -1027,9 +1027,9 @@ admin:
         setTimeout(function () {
           triggerTitleChange('url')
         }, 1);
-      })          
+      })
 
-      // 
+      //
       dom.select('#headerImageURL').on('keydown', function(event) {
         setTimeout(function () {
           setHeaderImagePreview()
@@ -1046,8 +1046,8 @@ admin:
         setTimeout(function () {
           setHeaderImagePreview()
         }, 1);
-      })       
-      
+      })
+
       function displayWaiting() {
         clearTimeout(waitingTimeout);
         dom.select('#response .alert-danger').hide()
@@ -1090,7 +1090,7 @@ admin:
 
           // other common short words
           "is", "are", "was", "be", "am", "do"
-        ];            
+        ];
 
         return str
           .split(' ')
@@ -1102,7 +1102,7 @@ admin:
             }
           })
           .join(' ');
-      }          
+      }
 
       dom.select('#google-doc-form').on('submit', function (event) {
         var formData = {};
@@ -1370,7 +1370,7 @@ admin:
     dom.select('#processingAddy_prod').setInnerHTML(serverProd).setAttribute('value', serverProd);
     dom.select('#processingAddy').setValue(env === 'development' ? serverDev : serverProd);
     dom.select('#processingAddy_prodDev').setInnerHTML(serverProdDev).setAttribute('value', serverProdDev);
-    
+
     if (Manager.properties.meta.environment !== 'development') {
       dom.select('#processingAddy_prodDev').hide();
     }
@@ -1422,7 +1422,7 @@ admin:
       })
       .then(function (json) {
         console.log('Triggered Unsplash download', json);
-      })      
+      })
     }
   }
 

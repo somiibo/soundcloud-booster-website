@@ -78,7 +78,7 @@ foot:
     <script src="https://cdn.jsdelivr.net/npm/node-powertools@latest/dist/index.min.js?cb={{ site.time | date: "%s" }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.19.0/js/md5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/countries-list@2.6.1/dist/index.es5.min.js"></script>
-    <script type="text/javascript" src="{{ site.url }}/assets/js/master.js?cb={{ site.time | date: "%s" }}" async defer></script>
+    <script type="text/javascript" src="{{ site.url }}/assets/js/base.js?cb={{ site.time | date: "%s" }}" async defer></script>
     {%- include /master/misc/embed-manager.html -%}
 
   '
@@ -96,7 +96,7 @@ settings:
       auth: {
         state: 'required',
         sends: {
-          required: '/signup/',
+          required: '/signup',
         },
       },
       libraries: {
@@ -118,23 +118,16 @@ settings:
   <div class="content container-fluid">
     <!-- Page Header -->
     <div class="page-header">
-      <div class="row align-items-end">
-        <div class="col-sm mb-2 mb-sm-0">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-no-gutter">
-              <li class="breadcrumb-item"><a class="breadcrumb-link" href="{{ site.url }}">{{ site.brand.name }}</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Account</li>
-            </ol>
-          </nav>
-
-          <!-- <h1 class="page-header-title">Settings</h1> -->
-        </div>
-
-        <div class="col-sm-auto">
-          <a class="btn btn-ghost-primary" href="{{ site.url }}">
-            <i class="bi-arrow-left me-1"></i> Return home
-          </a>
-        </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-no-gutter">
+            <li class="breadcrumb-item"><a class="breadcrumb-link" href="{{ site.url }}">{{ site.brand.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Account</li>
+          </ol>
+        </nav>
+        <a class="btn btn-ghost-primary" href="{{ site.url }}">
+          <i class="bi-arrow-left me-1"></i> Return home
+        </a>
       </div>
     </div>
     <!-- End Page Header -->
@@ -175,12 +168,12 @@ settings:
                  }'>
              <li class="nav-item">
                <a class="nav-link active" href="#content">
-                 <i class="bi-person nav-icon"></i> Account details
+                 <i class="bi-person nav-icon"></i> Account Details
                </a>
              </li>
               <li class="nav-item">
                 <a class="nav-link" href="#personalInformation">
-                  <i class="bi-person-badge nav-icon"></i> Personal information
+                  <i class="bi-person-badge nav-icon"></i> Personal Information
                 </a>
               </li>
               <li class="nav-item">
@@ -206,28 +199,28 @@ settings:
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#signinMethods">
-                  <i class="bi-box-arrow-in-right nav-icon"></i> Signin methods
+                  <i class="bi-box-arrow-in-right nav-icon"></i> Signin Methods
                 </a>
               </li>
               <!-- <li class="nav-item" id="connectedAccountsNav" hidden> -->
               <li class="nav-item">
                 <a class="nav-link" href="#connectedAccounts">
-                  <i class="bi-link nav-icon"></i> Connected accounts
+                  <i class="bi-link nav-icon"></i> Connected Accounts
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#activeSessions">
-                  <i class="bi-toggle2-on nav-icon"></i> Active sessions
+                  <i class="bi-toggle2-on nav-icon"></i> Active Sessions
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#deleteAccount">
-                  <i class="bi-trash3 nav-icon"></i> Delete account
+                  <i class="bi-trash3 nav-icon"></i> Delete Account
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link link-danger auth-signout-all-btn" href="javascript:;">
-                  <i class="bi-door-open nav-icon" style="pointer-events: none;"></i> Sign out
+                  <i class="bi-door-open nav-icon" style="pointer-events: none;"></i> Sign Out
                 </a>
               </li>
             </ul>
@@ -321,7 +314,7 @@ settings:
             <!-- Card -->
             <div class="card">
               <div class="card-header">
-                <h2 class="card-title h4"><i class="bi-person nav-icon me-1"></i> Account details</h2>
+                <h2 class="card-title h4"><i class="bi-person nav-icon me-1"></i> Account Details</h2>
               </div>
 
               <!-- Body -->
@@ -381,7 +374,7 @@ settings:
             <div id="personalInformation" class="card">
               <div class="card-header">
                 <h2 class="card-title h4">
-                  <i class="bi-person-badge nav-icon me-1"></i> Personal information <i class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Personal information is not displayed publicly."></i>
+                  <i class="bi-person-badge nav-icon me-1"></i> Personal Information <i class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Personal information is not displayed publicly."></i>
                 </h2>
               </div>
 
@@ -558,13 +551,29 @@ settings:
               <!-- Body -->
               <div class="card-body">
                 <div class="row">
+                  <div class="auth-billing-suspended-message-element" hidden>
+                    <div class="alert alert-soft-danger" role="alert">
+                      <h4 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        Subscription Suspended!
+                      </h4>
+                      Your premium features have been disabled due to a failed payment.
+                      <br>
+                      <br>
+                      Please <a href="" class="auth-billing-update-btn" target="_blank">update your payment method</a> to continue using premium features.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
                   <div class="col-md mb-4 mb-md-0">
                     <div class="mb-1">
                       <span class="card-subtitle">Your plan<span class="auth-billing-frequency-element"></span>:</span>
                       <h3><span class="auth-billing-plan-id-element"></span><span class="auth-billing-start-date-element"></span></h3>
                     </div>
                     <div class="">
-                      <small class="text-cap text-danger auth-billing-expiration-date-element"></small>
+                      <small class="text-cap text-danger auth-billing-expiration-date-element" hidden></small>
+                      <small class="text-cap text-success auth-billing-trial-expiration-date-element" hidden></small>
                     </div>
 
                     <!-- <div>
@@ -830,7 +839,7 @@ settings:
             <!-- Card -->
             <div id="signinMethods" class="card">
               <div class="card-header">
-                <h4 class="card-title"><i class="bi-box-arrow-in-right nav-icon me-1"></i> Signin methods</h4>
+                <h4 class="card-title"><i class="bi-box-arrow-in-right nav-icon me-1"></i> Signin Methods</h4>
               </div>
 
               <!-- Body -->
@@ -849,7 +858,7 @@ settings:
             <!-- <div id="connectedAccounts" class="card" hidden> -->
             <div id="connectedAccounts" class="card">
               <div class="card-header">
-                <h4 class="card-title"><i class="bi-link nav-icon me-1"></i> Connected accounts</h4>
+                <h4 class="card-title"><i class="bi-link nav-icon me-1"></i> Connected Accounts</h4>
               </div>
 
               <!-- Body -->
@@ -879,7 +888,7 @@ settings:
               </div> -->
 
               <div class="card-header card-header-content-between">
-                <h4 class="card-header-title"><i class="bi-toggle2-on nav-icon me-1"></i> Active sessions</h4>
+                <h4 class="card-header-title"><i class="bi-toggle2-on nav-icon me-1"></i> Active Sessions</h4>
 
                 <!-- Dropdown -->
                 <div class="dropdown">
@@ -1147,9 +1156,10 @@ settings:
 
 <script type="text/javascript">
   Manager.auth().ready(function () {
-    var currentURL = new URL(window.location.href);
     var select = Manager.dom().select;
     var _ = Manager.utilities();
+    var currentURL = new URL(window.location.href);
+    var qsTestAccount = currentURL.searchParams.get('testAccount');
 
     var user = firebase.auth().currentUser;
     var email = user ? user.email : '';
@@ -1284,8 +1294,9 @@ settings:
         Manager.account().import()
         .then(function (Account) {
           var account = new Account();
+          var testAccount = getTestAccount();
 
-          account.resolve()
+          account.resolve(testAccount.account, testAccount.options)
           .then(function (properties) {
             accountData = properties;
 
@@ -1301,6 +1312,161 @@ settings:
           return reject(e);
         })
       });
+    }
+
+    function getTestAccount() {
+      var presentDate = new Date();
+      var futureDate = new Date((new Date().setDate(new Date().getDate() + 7)));
+      var pastDate = new Date((new Date().setDate(new Date().getDate() - 7)));
+      var zeroDate = '1970-01-01T00:00:00.000Z';
+
+      var dates = {
+        present: {
+          t: presentDate.toISOString(),
+          u: presentDate.getTime(),
+        },
+        future: {
+          t: futureDate.toISOString(),
+          u: futureDate.getTime(),
+        },
+        past: {
+          t: pastDate.toISOString(),
+          u: pastDate.getTime(),
+        },
+        zero: {
+          t: zeroDate,
+          u: 0,
+        },
+      }
+
+      var result = {
+        account: undefined,
+        options: {
+          fetchNewAccount: true,
+        },
+      }
+
+      if (qsTestAccount) {
+        result.options.fetchNewAccount = false;
+        result.account = {
+          auth: {
+            uid: 'uid-' + qsTestAccount,
+            email: 'email-' + qsTestAccount + '@gmail.com',
+          },
+          plan: {
+            id: 'premium',
+            expires: {
+              timestamp: undefined,
+              timestampUNIX: undefined,
+            },
+            status: undefined,
+            trial: {
+              activated: undefined,
+              expires: {
+                timestamp: undefined,
+                timestampUNIX: undefined,
+              }
+            },
+            payment: {
+              startDate: {
+                timestamp: undefined,
+                timestampUNIX: undefined,
+              },
+              frequency: 'monthly',
+              orderId: 'order-id-' + qsTestAccount,
+              resourceId: 'resource-id-' + qsTestAccount,
+              active: undefined,
+            }
+          }
+        }
+      }
+
+      // Active
+      if (qsTestAccount === 'active') {
+        result.account.plan.expires.timestamp = dates.future.t;
+        result.account.plan.expires.timestampUNIX = dates.future.u;
+
+        result.account.plan.status = 'active';
+
+        result.account.plan.trial.activated = false;
+
+        result.account.plan.trial.expires.timestamp = dates.future.t;
+        result.account.plan.trial.expires.timestampUNIX = dates.future.u;
+
+        result.account.plan.payment.startDate.timestamp = dates.present.t;
+        result.account.plan.payment.startDate.timestampUNIX = dates.present.u;
+        result.account.plan.payment.active = true;
+      }
+
+      // Trial
+      if (qsTestAccount === 'trial') {
+        result.account.plan.expires.timestamp = dates.future.t;
+        result.account.plan.expires.timestampUNIX = dates.future.u;
+
+        result.account.plan.status = 'active';
+
+        result.account.plan.trial.activated = true;
+
+        result.account.plan.trial.expires.timestamp = dates.future.t;
+        result.account.plan.trial.expires.timestampUNIX = dates.future.u;
+
+        result.account.plan.payment.startDate.timestamp = dates.present.t;
+        result.account.plan.payment.startDate.timestampUNIX = dates.present.u;
+        result.account.plan.payment.active = true;
+      }
+
+      // Expired
+      if (qsTestAccount === 'expired') {
+        result.account.plan.expires.timestamp = dates.zero.t;
+        result.account.plan.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.status = 'active';
+
+        result.account.plan.trial.activated = false;
+
+        result.account.plan.trial.expires.timestamp = dates.zero.t;
+        result.account.plan.trial.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.payment.startDate.timestamp = dates.present.t;
+        result.account.plan.payment.startDate.timestampUNIX = dates.present.u;
+        result.account.plan.payment.active = false;
+      }
+
+      // Suspended
+      if (qsTestAccount === 'suspended') {
+        result.account.plan.expires.timestamp = dates.zero.t;
+        result.account.plan.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.status = 'suspended';
+
+        result.account.plan.trial.activated = false;
+
+        result.account.plan.trial.expires.timestamp = dates.zero.t;
+        result.account.plan.trial.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.payment.startDate.timestamp = dates.present.t;
+        result.account.plan.payment.startDate.timestampUNIX = dates.present.u;
+        result.account.plan.payment.active = false;
+      }
+
+      // Cancelled
+      if (qsTestAccount === 'cancelled') {
+        result.account.plan.expires.timestamp = dates.zero.t;
+        result.account.plan.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.status = 'cancelled';
+
+        result.account.plan.trial.activated = false;
+
+        result.account.plan.trial.expires.timestamp = dates.zero.t;
+        result.account.plan.trial.expires.timestampUNIX = dates.zero.u;
+
+        result.account.plan.payment.startDate.timestamp = dates.present.t;
+        result.account.plan.payment.startDate.timestampUNIX = dates.present.u;
+        result.account.plan.payment.active = false;
+      }
+
+      return result;
     }
 
     Promise.all([

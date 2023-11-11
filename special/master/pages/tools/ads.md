@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/global/default
-permalink: /ads/
+permalink: /ads
 sitemap:
   include: false
 

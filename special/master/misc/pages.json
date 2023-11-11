@@ -5,7 +5,7 @@ sitemap:
   include: false
 
 meta:
-  index: false    
+  index: false
 ---
 {% assign pages = site.pages %}
 {% assign posts = site.posts %}
@@ -19,9 +19,13 @@ meta:
         {% assign page-type = 'post' %}
       {% else %}
         {% assign page-type = null %}
-      {% endif %}    
+      {% endif %}
 
-      {%- if page.url contains '/@reference/' or page.layout contains 'redirect' or page.search.enable == false -%}
+      {%- if page.url contains '/@reference' or page.layout contains 'redirect' or page.search.enable == false -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- if page.url contains '.js' -%}
         {%- continue -%}
       {%- endif -%}
 
