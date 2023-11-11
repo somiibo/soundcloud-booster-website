@@ -1,7 +1,7 @@
 const gulp       = require('gulp');
-const fs         = require('fs-jetpack');
+const jetpack    = require('fs-jetpack');
 const config     = require('../../master.config.js');
-const _configYml = require('js-yaml').load(fs.read('_config.yml'));
+const _configYml = require('js-yaml').load(jetpack.read('_config.yml'));
 const del        = require('del');
 const tools      = new (require('../../libraries/tools.js'));
 const Global     = require('../../libraries/global.js');
@@ -154,37 +154,37 @@ gulp.task('_prefill', () => {
         await copyFile('./_websrc/templates/master/placeholder/team/alex.jpg', `./assets/_src/images/team/alex/profile.jpg`);
 
         await createFile(`./_websrc/unit_tests/app/test.js`, await readFile('./_websrc/templates/master/tests/test.js'));
-        await fs.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
+        await jetpack.writeAsync(`./_websrc/generated/common-modules.scss`, generateCommonModules());
 
         // Create directories that get deleted through git
-        fs.dir(`./_includes/app/assets`);
-        fs.dir(`./_includes/app/elements`);
-        fs.dir(`./_includes/app/global`);
-        fs.dir(`./_includes/app/helpers`);
-        fs.dir(`./_includes/app/helpers`);
-        fs.dir(`./_includes/app/misc`);
-        fs.dir(`./_includes/app/modules`);
+        jetpack.dir(`./_includes/app/assets`);
+        jetpack.dir(`./_includes/app/elements`);
+        jetpack.dir(`./_includes/app/global`);
+        jetpack.dir(`./_includes/app/helpers`);
+        jetpack.dir(`./_includes/app/helpers`);
+        jetpack.dir(`./_includes/app/misc`);
+        jetpack.dir(`./_includes/app/modules`);
 
-        fs.dir(`./_layouts/app/blog`);
-        fs.dir(`./_layouts/app/global`);
+        jetpack.dir(`./_layouts/app/blog`);
+        jetpack.dir(`./_layouts/app/global`);
 
-        fs.dir(`./_websrc/templates/app`);
+        jetpack.dir(`./_websrc/templates/app`);
 
-        fs.dir(`./assets/_src/images/favicon`);
-        fs.dir(`./assets/_src/images/og`);
+        jetpack.dir(`./assets/_src/images/favicon`);
+        jetpack.dir(`./assets/_src/images/og`);
 
-        fs.dir(`./assets/_src/sass/theme`);
-        fs.dir(`./assets/_src/js/theme`);
+        jetpack.dir(`./assets/_src/sass/theme`);
+        jetpack.dir(`./assets/_src/js/theme`);
 
-        fs.dir(`./assets/_src-uncompiled`);
+        jetpack.dir(`./assets/_src-uncompiled`);
 
-        fs.dir(`./special/app/feeds`);
-        fs.dir(`./special/app/misc`);
-        fs.dir(`./special/app/pages`);
-        fs.dir(`./special/app/search`);
+        jetpack.dir(`./special/app/feeds`);
+        jetpack.dir(`./special/app/misc`);
+        jetpack.dir(`./special/app/pages`);
+        jetpack.dir(`./special/app/search`);
 
-        fs.dir('./@output/lighthouse');
-        fs.remove('./@output/build/build.json');
+        jetpack.dir('./@output/lighthouse');
+        jetpack.remove('./@output/build/build.json');
 
         await createFile('./@output/build/build.json', build_json);
       }
@@ -196,10 +196,10 @@ gulp.task('_prefill', () => {
 
       // only create these files if IS ON template and IS NOT server
       if (tools.isTemplate && !tools.isServer) {
-        await createFile(config.assets + config.assetsSubpath + '/sass/app/.gitignore', gitignore_ph);
-        await createFile(config.assets + config.assetsSubpath + '/js/app/.gitignore', gitignore_ph);
-        await createFile(config.assets + config.assetsSubpath + '/images/blog/.gitignore', gitignore_ph);
-        await createFile(config.assets + config.assetsSubpath + '/images/team/.gitignore', gitignore_ph);
+        await createFile(`${config.assets}${config.assetsSubpath}/sass/app/.gitignore`, gitignore_ph);
+        await createFile(`${config.assets}${config.assetsSubpath}/js/app/.gitignore`, gitignore_ph);
+        await createFile(`${config.assets}${config.assetsSubpath}/images/blog/.gitignore`, gitignore_ph);
+        await createFile(`${config.assets}${config.assetsSubpath}/images/team/.gitignore`, gitignore_ph);
 
         await createFile('./_includes/app/misc/.gitignore', gitignore_ph);
         await createFile('./_includes/app/global/.gitignore', gitignore_ph);
@@ -217,7 +217,7 @@ gulp.task('_prefill', () => {
         await createFile('./@output/build/.gitignore', gitignore_ph);
         await createFile('./special/master/misc/.gitignore', '/master-service-worker.js'+'\n'+'.gitignore'+'\n');
       } else {
-        await fs.removeAsync('./special/master/pages/@reference')
+        await jetpack.removeAsync('./special/master/pages/@reference')
         await createFile('./CNAME', new URL(_configYml.url).host);
       }
 
@@ -228,7 +228,7 @@ gulp.task('_prefill', () => {
       // await fetch('https://www.googletagmanager.com/gtag/js')
       // .then(async (res) => {
       //   if (res.ok) {
-      //     fs.write('./assets/_src/js/master/tracking/google-analytics.js', await res.text())
+      //     jetpack.write('./assets/_src/js/master/tracking/google-analytics.js', await res.text())
       //   } else {
       //     throw new Error('Failed to get gtag.js')
       //   }
@@ -249,9 +249,14 @@ gulp.task('_prefill', () => {
       ]
       const firebaseAuthPrefix = '__/auth';
       const firebaseAuthPromises = [];
+      const firebaseAuthDir = './special/master/scripts/firebase-auth';
 
       // Clear files
-      fs.remove('./special/master/scripts/firebase-auth');
+      jetpack.remove(firebaseAuthDir);
+
+      if (!tools.isServer) {
+        await createFile(`${firebaseAuthDir}/.gitignore`, gitignore_ph);
+      }
 
       for (var i = 0; i < firebaseAuthFiles.length; i++) {
         const file = firebaseAuthFiles[i];
@@ -264,7 +269,7 @@ gulp.task('_prefill', () => {
           fetch(remoteFile)
           .then(async (res) => {
             if (res.ok) {
-              fs.write(`./special/master/scripts/firebase-auth/${file}`,
+              jetpack.write(`${firebaseAuthDir}/${file}`,
                 '---\n'
                 + `permalink: /${firebaseAuthPrefix}/${fileNoHTML}\n`
                 + '---\n'
@@ -294,7 +299,7 @@ gulp.task('_prefill', () => {
 
 function generateCommonModules() {
   let contents = '';
-  if (fs.exists('./node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss')) {
+  if (jetpack.exists('./node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss')) {
     contents += `
       $fa-font-path: '../webfonts';
       $fa-font-display: swap;
@@ -313,11 +318,11 @@ async function createFile(file, contents) {
 
   return new Promise(function(resolve, reject) {
     try {
-      if (fs.exists(file)) {
+      if (jetpack.exists(file)) {
         response.exists = true;
         resolve(response)
       } else {
-       fs.write(file, contents);
+       jetpack.write(file, contents);
        response.exists = false;
        resolve(response);
       }
@@ -337,11 +342,11 @@ async function copyFile(from, to) {
 
   return new Promise(function(resolve, reject) {
     try {
-      if (fs.exists(to)) {
+      if (jetpack.exists(to)) {
         response.exists = true;
         resolve(response)
       } else {
-       fs.copy(from, to);
+       jetpack.copy(from, to);
        response.exists = false;
        resolve(response);
       }
@@ -354,7 +359,7 @@ async function copyFile(from, to) {
 
 // async function dirEmpty(dirname) {
 //   return new Promise(function(resolve, reject) {
-//     fs.readdirSync(dirname, function(err, files) {
+//     jetpack.readdirSync(dirname, function(err, files) {
 //         if (err) {
 //            // some sort of error
 //            console.error(err);
@@ -369,26 +374,26 @@ async function copyFile(from, to) {
 
 async function listFiles(path) {
   return new Promise(function(resolve, reject) {
-    // fs.list(path, (err, files) => {
+    // jetpack.list(path, (err, files) => {
     //   if (err) {
     //     reject(err);
     //   }
     //   resolve(files)
     // });
-    resolve(fs.list(path));
+    resolve(jetpack.list(path));
   });
 }
 
 async function readFile(path) {
   return new Promise(function(resolve, reject) {
-    // fs.readFile(path, 'utf8', function(err, contents) {
+    // jetpack.readFile(path, 'utf8', function(err, contents) {
     //   if (err) {
     //     reject(err);
     //   } else {
     //     resolve(contents);
     //   }
     // });
-    resolve(fs.read(path))
+    resolve(jetpack.read(path))
   });
 }
 
@@ -397,16 +402,16 @@ function createPageIfNoExist(page, contentsPath) {
     const path = `./pages/${page}`;
 
     if (
-      (!fs.exists(`${path}.md`) && !fs.exists(`${path}.html`))
+      (!jetpack.exists(`${path}.md`) && !jetpack.exists(`${path}.html`))
       || tools.isTemplate
     ) {
       const parent = `./_websrc/templates/master/placeholder/${page}`;
-      const ext = fs.exists(`${parent}.md`)
+      const ext = jetpack.exists(`${parent}.md`)
         ? '.md'
         : '.html';
       const contents = await readFile(`${parent}${ext}`);
 
-      fs.write(`${path}${ext}`, contents)
+      jetpack.write(`${path}${ext}`, contents)
     }
 
     return resolve();
