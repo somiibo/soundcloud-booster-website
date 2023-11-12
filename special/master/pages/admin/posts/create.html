@@ -263,7 +263,7 @@ admin:
             <img class="img-fluid img-thumbnail mb-1" id="headerImageURLPreview" src="" alt="" style="min-width: 100%; min-height: 10px">
             <span id="preview-icon-error" class="text-danger" hidden>Error loading image...</span>
             <div id="unsplash-credits" hidden>
-              Photo by <a id="unsplash-credits-artist" href="" target="_blank"></a> on <a id="unsplash-credits-website" href="https://unsplash.com/?utm_source=ultimate-jekyll&utm_medium=referral" target="_blank">Unsplash</a>
+              Photo by <a id="unsplash-credits-artist" href="" target="_blank"></a> on <a id="unsplash-credits-website" href="https://unsplash.com?utm_source=ultimate-jekyll&utm_medium=referral" target="_blank">Unsplash</a>
             </div>
             <div>
               <input type="text" class="form-control mb-1" name="headerImageKeywords" id="headerImageKeywords" placeholder="business, tech" aria-label="business, tech">
@@ -961,7 +961,7 @@ admin:
               window.refreshTimer--;
               if (window.refreshTimer <= 0) {
                 allowLeave = true;
-                window.location.href = window.location.href;
+                return window.location.reload(true);
               }
             }, 1000);
           })
