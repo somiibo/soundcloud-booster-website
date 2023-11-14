@@ -1,7 +1,7 @@
 ---
 ### ALL PAGES ###
 layout: master/placeholder/pricing
-permalink: /pricing/
+permalink: /pricing
 sitemap:
   include: true
 
