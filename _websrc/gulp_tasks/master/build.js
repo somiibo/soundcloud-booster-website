@@ -154,6 +154,7 @@ function postBuild() {
   return new Promise(function(resolve, reject) {
     // Move _site/blog/index.html to blog.html
     jetpack.move('_site/blog/index.html', '_site/blog.html');
+    jetpack.move('_site/blog.html', '_site/blog2.html');
 
     return resolve();
   });
