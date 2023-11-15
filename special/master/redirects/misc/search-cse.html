@@ -5,5 +5,14 @@ permalink: /search/cse
 
 ### REGULAR PAGES ###
 redirect:
-  url: "https://cse.google.com/cse?cx=partner-{{ site.advertising.google-adsense }}-{{ site.advertising.cse-site-id }}&ie=UTF-8&q="
+  url: "https://cse.google.com/cse?cx={{ site.advertising.cse-site-id }}"
+  modifier: "
+    function (url) {
+      var q = url.searchParams.get('q');
+
+      url.searchParams.set('q', 'site:' + window.location.origin + ' ' + q);
+
+      return url;
+    }
+  "
 ---

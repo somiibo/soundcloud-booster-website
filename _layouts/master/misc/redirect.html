@@ -50,6 +50,7 @@ settings:
 ---
 {% capture url %}{{ page.redirect.url | default: layout.redirect.url | default: site.url | liquify }}{% endcapture %}
 {% capture querystring %}{{ page.redirect.querystring | default: layout.redirect.querystring }}{% endcapture %}
+{% capture modifier %}{{ page.redirect.modifier | default: layout.redirect.modifier | default: '""' }}{% endcapture %}
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
@@ -87,7 +88,8 @@ settings:
     var url = new URL(window.location.href);
     var redirect = {
       url: '{{ url }}',
-      querystring: "{{ querystring }}" || true,
+      querystring: '{{ querystring }}' || true,
+      modifier: {{ modifier }} || function (url) { return url },
     };
     var isDevelopment = Manager.properties.meta.environment === 'development';
 
@@ -95,7 +97,7 @@ settings:
 
     // Set
     if (redirect.url) {
-      redirect.url = new URL(redirect.url.startsWith('http') ? redirect.url : host + redirect.url.replace(/^\//, ''))
+      redirect.url = new URL(redirect.url.startsWith('http') ? redirect.url : host.toString() + redirect.url.replace(/^\//, ''))
     } else {
       redirect.url = new URL(host);
     }
@@ -108,7 +110,7 @@ settings:
     }
 
     // Set final URL
-    var finalURL = redirect.url.toString();
+    var finalURL = redirect.modifier(redirect.url).toString();
 
     // Log
     console.log('Redirecting to: ' + finalURL);
