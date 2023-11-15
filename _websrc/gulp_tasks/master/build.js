@@ -45,6 +45,7 @@ gulp.task('jekyll-build', async () => {
   await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   // Other build tasks
+  // This part takes a while...
   await tools.poll(() => areTasksCompleted(), { timeout: 1000 * 60 * 3 });
 
   await tools.poll(() => {
@@ -105,6 +106,10 @@ gulp.task('jekyll-build', async () => {
 
   // Run Jekyll Build
   await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
+
+  // Jekyll post-build
+  await postBuild();
+
   return Promise.resolve();
 });
 
@@ -177,5 +182,14 @@ async function getGitInfo() {
       // console.error(`stderr: ${data}`);
       reject(data);
     });
+  });
+}
+
+function postBuild() {
+  return new Promise(function(resolve, reject) {
+    // Move _site/blog/index.html to blog.html
+    fs.move('_site/blog/index.html', '_site/blog.html');
+
+    return resolve();
   });
 }

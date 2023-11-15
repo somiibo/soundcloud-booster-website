@@ -10,6 +10,9 @@ if (url.includes('/pricing')) {
   dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/download-page-handler/index.js'})
 } else if (url.includes('/browser-extension') || url.includes('/extension')) {
   dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/browser-extension-page-handler/index.js'})
+} else if (window.location.pathname.endsWith('.html')) {
+  // Redirect and remove .html
+  return window.location.pathname = window.location.pathname.replace('.html', '');
 }
 
 // Load Slapform
@@ -40,6 +43,7 @@ if (auth && auth.uid && auth.email) {
   setupTracking(auth);
 }
 
+// Save user auth data
 Manager.auth().ready(function (user) {
   setupTracking(user);
 
