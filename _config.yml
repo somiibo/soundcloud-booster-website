@@ -246,9 +246,9 @@ pagination:
   enabled: true
   per_page: 6
   offset: 0
-  permalink: /page/:num
-  title: :title - page :num
   limit: 0
+  permalink: /page/:num.html
+  title: :title - page :num
   sort_field: 'date'
   sort_reverse: true
 
