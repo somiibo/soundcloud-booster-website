@@ -76,8 +76,7 @@ gulp.task('jekyll-build', async () => {
   // Create build log JSON
   try {
     let buildJSON = JSON.parse(fs.read('@output/build/build.json'));
-    buildJSON['npm-build'].timestamp_utc = now({offset: 0});
-    buildJSON['npm-build'].timestamp_pst = now({offset: -7});
+    buildJSON['npm-build'].timestamp = new Date().toISOString();
 
     let info = await getGitInfo();
 
