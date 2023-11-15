@@ -129,40 +129,6 @@ gulp.task('test', build);
 /**
  * Helper functions
  */
-function now(options) {
-    options = options || {};
-    options.offset = options.offset || 0;
-
-    var date = new Date();
-    date.setHours(date.getHours() + options.offset);
-    var aaaa = date.getFullYear();
-    var gg = date.getDate();
-    var mm = (date.getMonth() + 1);
-
-    if (gg < 10)
-        gg = "0" + gg;
-
-    if (mm < 10)
-        mm = "0" + mm;
-
-    var cur_day = aaaa + "-" + mm + "-" + gg;
-
-    var hours = date.getHours()
-    var minutes = date.getMinutes()
-    var seconds = date.getSeconds();
-
-    if (hours < 10)
-        hours = "0" + hours;
-
-    if (minutes < 10)
-        minutes = "0" + minutes;
-
-    if (seconds < 10)
-        seconds = "0" + seconds;
-
-    return cur_day + "T" + hours + ":" + minutes + ":" + seconds + "Z";
-}
-
 async function getGitInfo() {
   return new Promise(function(resolve, reject) {
     var exec = require('child_process').exec;
