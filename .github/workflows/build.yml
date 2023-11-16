@@ -93,8 +93,10 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: _site
           token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages
+          folder: _site
+          clean: true
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge
       - name: Purge Artifacts
