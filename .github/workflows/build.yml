@@ -23,12 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 80
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v3
       - name: Setup git config
         run: |
           git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config --global user.name "$GITHUB_ACTOR"
+      - name: Checkout main branch
+        uses: actions/checkout@v3
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -90,19 +90,25 @@ jobs:
       #   run: |
       #     git branch -D gh-pages
       #     git push origin --delete gh-pages
-      - name: Recreate the gh-pages branch
-        run: |
-          git checkout --orphan gh-pages
-          git reset --hard
-          git commit --allow-empty -m "Initial gh-pages commit"
-          git push origin gh-pages
-      - name: Deploy to gh-pages branch
-        uses: JamesIves/github-pages-deploy-action@v4
+      # - name: Recreate the gh-pages branch
+      #   run: |
+      #     git checkout --orphan gh-pages
+      #     git reset --hard
+      #     git commit --allow-empty -m "Initial gh-pages commit"
+      #     git push origin gh-pages
+      # - name: Deploy to gh-pages branch
+      #   uses: JamesIves/github-pages-deploy-action@v4
+      #   with:
+      #     token: ${{ secrets.GH_TOKEN }}
+      #     branch: gh-pages
+      #     folder: _site
+      #     clean: true
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: gh-pages
-          folder: _site
-          clean: true
+          github_token: ${{ secrets.GH_TOKEN }}
+          publish_dir: ./_site
+          keep_files: false
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge
       - name: Purge Artifacts
