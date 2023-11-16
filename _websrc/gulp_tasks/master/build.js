@@ -109,6 +109,9 @@ gulp.task('jekyll-build', async () => {
   // Jekyll post-build
   await postBuild();
 
+  // Run app post-build.js
+  await require('../app/build-post.js')();
+
   return Promise.resolve();
 });
 

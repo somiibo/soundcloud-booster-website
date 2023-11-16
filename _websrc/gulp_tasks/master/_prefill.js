@@ -21,22 +21,8 @@ gulp.task('_prefill', () => {
 
       // all versions need these files to run properly
       {
-        await createFile(config.assets + config.assetsSubpath + '/sass/app/app.scss',
-          "/*" + "\n" +
-            "  assets/_src/sass/app/app.scss" + "\n" +
-          "*/" + "\n" +
-          "" + "\n" +
-          "/*" + "\n" +
-            "  CHARSET" + "\n" +
-          "*/" + "\n" +
-          "" + "\n" +
-          '@charset "UTF-8";' + "\n" +
-          "" + "\n" +
-          "/*" + "\n" +
-          "  IMPORTS" + "\n" +
-          "*/" + "\n" +
-          ""
-        )
+        await createFile(`${config.assets}${config.assetsSubpath}/sass/app/app.scss`, await readFile('./_websrc/templates/master/css/app-entry.scss'))
+
         await createFile('./_includes/app/global/head.html', '<!-- App Head Content -->');
         await createFile('./_includes/app/global/head-pre-bundle.html', '<!-- App Head Content (pre-bundle) -->');
 
@@ -51,16 +37,7 @@ gulp.task('_prefill', () => {
         await createFile('./_includes/app/misc/manifest.json', '');
         await createFile('./_includes/app/misc/robots.txt', '');
 
-        await createFile(config.assets + config.assetsSubpath + '/js/app/app.js',
-          "Manager.ready(function() {" + "\n" +
-            "  Manager.log('app.js fired Manager.ready()');" + "\n" +
-            "" + "\n" +
-            "  // Add additional logic here!" + "\n" +
-            "  // var theme = require('../theme/theme.js');" + "\n" +
-            "" + "\n" +
-          "});" + "\n" +
-          ""
-        )
+        await createFile(`${config.assets}${config.assetsSubpath}/js/app/app.js`, await readFile('./_websrc/templates/master/js/app-entry.js'))
 
         const pages = [
           '404',
@@ -83,32 +60,14 @@ gulp.task('_prefill', () => {
           await createPageIfNoExist(page);
         });
 
-        await createFile(config.assets + config.assetsSubpath + '/js/app/service-worker.js',
-          "// app service-worker.js code" + "\n" +
-          "if (typeof log === 'undefined') {" + "\n" +
-            "  var log = function() {};" + "\n" +
-          "}" + "\n" +
-          "log('app service-worker.js loaded: ', self.location.pathname);" + "\n" +
-          "" + "\n" +
-          "// Note: any importScripts(); are relative to the master-service-worker.js location" + "\n" +
-          "// importScripts('../../app/service-worker.js');" + "\n" +
-          ''
-        )
-        await createFile('_websrc/gulp_tasks/app/main.js',
-          "const gulp     = require('gulp');" + "\n" +
-          "const newer    = require('gulp-newer');" + "\n" +
-          "const through  = require('through2');" + "\n" +
-          "const argv     = require('yargs').argv;" + "\n" +
-          "const fetch    = require('node-fetch');" + "\n" +
-          "const tools    = new (require('../../libraries/tools.js'));" + "\n" +
-          "" + "\n" +
-          "gulp.task('sample', function() {" + "\n" +
-            "  // write your first task here!" + "\n" +
-            "  // then set up 'watch' tasks in the app.config.js" + "\n" +
-          "});" + "\n" +
-          ""
-        )
+        // Create app service-worker.js
+        await createFile(`${config.assets}${config.assetsSubpath}/js/app/service-worker.js`, await readFile('./_websrc/templates/master/js/app-service-worker.js'));
 
+        // Create app gulp task
+        await createFile('_websrc/gulp_tasks/app/main.js', await readFile('./_websrc/templates/master/js/app-gulp-task.js'))
+
+        // Create build-post.js
+        await createFile('_websrc/gulp_tasks/app/build-post.js', await readFile('./_websrc/templates/master/js/build-post.js'))
 
         // post
         // const posts = await listFiles('./_posts') || [];
@@ -134,20 +93,6 @@ gulp.task('_prefill', () => {
             await copyFile('./_websrc/templates/master/placeholder/blog/post.jpg', `./assets/_src/images/blog/posts/post-${postId}/${postTitle}.jpg`);
           }
         }
-
-        // await createFile(`blog/index.html`,
-        //   '---' + '\n' +
-        //   '### ALL PAGES ###' + '\n' +
-        //   'layout: master/blog/index' + '\n' +
-        //   '---' + '\n'
-        // );
-        //
-        // await createFile(`./team/index.html`,
-        //   '---' + '\n' +
-        //   '### ALL PAGES ###' + '\n' +
-        //   'layout: master/team/index' + '\n' +
-        //   '---' + '\n'
-        // );
 
         // Create base team member
         await createFile(`./_team/alex.md`, await readFile('./_websrc/templates/master/placeholder/team/alex.md'));
@@ -206,7 +151,6 @@ gulp.task('_prefill', () => {
         await createFile('./_websrc/gulp_tasks/app/.gitignore', gitignore_ph);
         await createFile('./pages/.gitignore', `* \n!@reference`);
 
-
         // POST
         await createFile('./_posts/.gitignore', gitignore_ph);
         await createFile('./_team/.gitignore', gitignore_ph);
@@ -215,7 +159,7 @@ gulp.task('_prefill', () => {
       // Only for non-server environment
       if (!tools.isServer) {
         await createFile('./@output/build/.gitignore', gitignore_ph);
-        await createFile('./special/master/misc/.gitignore', '/master-service-worker.js'+'\n'+'.gitignore'+'\n');
+        await createFile('./special/master/misc/.gitignore', '/master-service-worker.js\n.gitignore\n');
       } else {
         await jetpack.removeAsync('./special/master/pages/@reference')
         await createFile('./CNAME', new URL(_configYml.url).host);
