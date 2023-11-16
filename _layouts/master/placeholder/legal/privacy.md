@@ -9,6 +9,15 @@ meta:
   title: "Privacy Policy - {{ site.brand.name }}"
   description: "This privacy policy has been compiled to better serve those who are concerned with how their personal information is being used online."
   breadcrumb: "Privacy Policy"
+
+settings:
+  manager-configuration: "
+    {
+      exitPopup: {
+        enabled: false,
+      },
+    }
+  "
 ---
 Effective date: May 1, 2018
 

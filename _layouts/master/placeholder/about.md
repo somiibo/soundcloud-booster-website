@@ -16,7 +16,7 @@ Welcome to the world of {{ site.brand.name }} – a place where innovation, effi
 
 ## Our Story
 
-Founded in [insert year], {{ site.brand.name }} began with a simple idea: to create a digital solution that would streamline everyday tasks and empower users to achieve more. Since then, our journey has been one of constant growth and innovation.
+{{ site.brand.name }} began with a simple idea: to create a digital solution that would streamline everyday tasks and empower users to achieve more. Since then, our journey has been one of constant growth and innovation.
 
 From our humble beginnings as a small startup, we have grown into a global leader in our industry, trusted by millions of users worldwide. Despite our growth, we've always remained true to our core mission: to empower every individual and organization to achieve more.
 
