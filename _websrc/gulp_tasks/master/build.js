@@ -152,12 +152,15 @@ async function getGitInfo() {
 
 function postBuild() {
   return new Promise(function(resolve, reject) {
-    if (tools.isServer) {
-      // Move _site/blog/index.html to blog.html
-      if (!jetpack.exists('_site/blog.html') && jetpack.exists('_site/blog/index.html')) {
-        jetpack.move('_site/blog/index.html', '_site/blog.html');
-      }
+    // Move _site/blog/index.html to blog.html
+    if (!jetpack.exists('_site/blog.html') && jetpack.exists('_site/blog/index.html')) {
+      jetpack.move('_site/blog/index.html', '_site/blog.html');
     }
+
+    // Write to blog.html
+    jetpack.write('_site/blog.html',
+      jetpack.read('_site/blog.html')
+    );
 
     return resolve();
   });
