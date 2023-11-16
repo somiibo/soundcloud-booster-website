@@ -94,7 +94,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _site
-          ssh-key: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge
       - name: Purge Artifacts
