@@ -53,7 +53,6 @@ jobs:
           echo "Dependencies: "
           npm list --depth=0 || echo ""
       - name: Run node build
-        # run: npm run build -- --buildLocation='server' --skipJekyll='true'
         run: npm run build -- --buildLocation='server'
       - name: Create build.json
         run: |
@@ -70,57 +69,19 @@ jobs:
           sed "s/%GHP_TIMESTAMP%/$timestamp/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path
 
           sed -n '1h;1!H;${;g;s/GEN>>>.*<<<GEN/<REDACTED FOR LIVE PUBLISH>/g;p;}' .gitignore > .gitignore
-      # - name: Deploy to gh-pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./_site
-      # - name: Deploy to gh-pages
-      #   run: |
-      #     git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      #     git config --global user.name "$GITHUB_ACTOR"
-      #     git checkout --orphan gh-pages
-      #     git reset --hard
-      #     git clean -df
-      #     cd _site
-      #     git add .
-      #     git commit -m "Deploy to gh-pages"
-      #     git push origin gh-pages --force
-      # - name: Delete old gh-pages branch
-      #   run: |
-      #     git branch -D gh-pages
-      #     git push origin --delete gh-pages
-      # - name: Recreate the gh-pages branch
-      #   run: |
-      #     git checkout --orphan gh-pages
-      #     git reset --hard
-      #     git commit --allow-empty -m "Initial gh-pages commit"
-      #     git push origin gh-pages
-      # - name: Deploy to gh-pages branch
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     token: ${{ secrets.GH_TOKEN }}
-      #     branch: gh-pages
-      #     folder: _site
-      #     clean: true
-
       - name: Delete gh-pages branch
-        run: |
-          git branch -D gh-pages
-          git push origin --delete gh-pages
-      # - name: Delete gh-pages branch
-      #   uses: dawidd6/action-delete-branch@v3
-      #   with:
-      #     github_token: ${{ secrets.GH_TOKEN }}
-      #     branches: gh-pages
-      - name: Deploy
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branches: gh-pages
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./_site
-      - name: Purge CloudFlare Cache
+      - name: Purge CloudFlare cache
         run: npm run cloudflare:purge
-      - name: Purge Artifacts
+      - name: Purge artifacts
         uses: kolpav/purge-artifacts-action@v1
         with:
           token: ${{ secrets.GH_TOKEN }}
