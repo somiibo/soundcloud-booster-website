@@ -34,9 +34,13 @@ gulp.task('browsersync', async () => {
     server: {
       baseDir: config.jekyll.dest,
       middleware: async function (req, res, next) {
-        // console.log(`[Browsersync] Request ${req.url}`);
         const url = new URL(`http://localhost:4000${req.url}`);
         const pathname = url.pathname;
+
+        // If the file has no ext, log it
+        if (!path.extname(pathname)) {
+          console.log(`[Browsersync] Serving ${pathname}`);
+        }
 
         if (pathname.match(/_post.json/)) {
           const createPost = require('./create-post.js');
@@ -47,14 +51,18 @@ gulp.task('browsersync', async () => {
             res: res,
           })
         }
-
         // Check if the URL is missing a trailing slash and does not have an extension
         if (!pathname.endsWith('/') && !path.extname(pathname)) {
           const newURL = `${pathname}.html`;
-          console.log(`[Browsersync] Rewriting ${pathname} to ${newURL}`);
+          // console.log(`[Browsersync] Rewriting ${pathname} to ${newURL}`);
 
           // Rewrite it to serve the .html extension
           req.url = newURL;
+        }
+
+        // Special case: Rewrite /blog/ to blog.html since Jekyll fucks it up locally
+        if (pathname === '/blog/') {
+          req.url = '/blog.html';
         }
 
         next();
@@ -71,11 +79,11 @@ gulp.task('browsersync', async () => {
       setTimeout(function () {
         process.exit(1)
       }, 1);
-      return reject(new Error("To run the site on HTTPS you first need to execute: npm run create:cert"));
+      return reject(new Error('To run the site on HTTPS you first need to execute: npm run create:cert'));
     }
     settings.https = {
-      key: "./@output/.temp/certificate/localhost.key.pem",
-      cert: "./@output/.temp/certificate/localhost.cert.pem",
+      key: './@output/.temp/certificate/localhost.key.pem',
+      cert: './@output/.temp/certificate/localhost.cert.pem',
     }
   }
 

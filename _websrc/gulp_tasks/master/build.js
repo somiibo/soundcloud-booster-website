@@ -157,10 +157,28 @@ function postBuild() {
       jetpack.move('_site/blog/index.html', '_site/blog.html');
     }
 
-    // Write to blog.html
+    // Fix things in blog.html file that get messed up during the move
     jetpack.write('_site/blog.html',
       jetpack.read('_site/blog.html')
+        // Blog
+        .replace(/(\/blog\/|\/blog\/index.html)"/g, '/blog"')
+        // BreadcrumbList
+        .replace(/"name": "index.html"/g, '"name": "home"')
     );
+
+    // Create temporary local blog since local Jekyll hates it for some reason
+    if (!tools.isServer) {
+      jetpack.copy('_site/blog.html', '_site/blog-local.html');
+    }
+
+    // Fix sitemap.xml
+    const sitemap = jetpack.read('_site/sitemap.xml');
+    if (sitemap) {
+      jetpack.write('_site/sitemap.xml',
+        sitemap
+          .replace(/\/blog\/index.html/g, '/blog')
+      );
+    }
 
     return resolve();
   });
