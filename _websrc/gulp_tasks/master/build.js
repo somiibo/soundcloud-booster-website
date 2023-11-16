@@ -159,8 +159,8 @@ function postBuild() {
       if (!jetpack.exists('_site/blog.html') && jetpack.exists('_site/blog/index.html')) {
     console.log('---3');
         jetpack.move('_site/blog/index.html', '_site/blog.html');
-        jetpack.copy('_site/blog.html', '_site/blog2.html');
       }
+      jetpack.copy('_site/blog.html', '_site/blog2.html');
     }
 
     return resolve();
