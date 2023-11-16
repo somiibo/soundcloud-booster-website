@@ -103,11 +103,16 @@ jobs:
       #     branch: gh-pages
       #     folder: _site
       #     clean: true
+
       - name: Delete gh-pages branch
-        uses: dawidd6/action-delete-branch@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branches: gh-pages
+        run: |
+          git branch -D gh-pages
+          git push origin --delete gh-pages
+      # - name: Delete gh-pages branch
+      #   uses: dawidd6/action-delete-branch@v3
+      #   with:
+      #     github_token: ${{ secrets.GH_TOKEN }}
+      #     branches: gh-pages
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
