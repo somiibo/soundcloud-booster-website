@@ -12,7 +12,7 @@ if (url.includes('/pricing')) {
   dom.loadScript({src: 'https://cdn.itwcreativeworks.com/assets/general/js/browser-extension-page-handler/index.js'})
 } else if (window.location.pathname.endsWith('.html')) {
   // Redirect and remove .html
-  return window.location.pathname = window.location.pathname.replace('.html', '');
+  window.location.pathname = window.location.pathname.replace('.html', '');
 }
 
 // Load Slapform
