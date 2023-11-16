@@ -152,12 +152,9 @@ async function getGitInfo() {
 
 function postBuild() {
   return new Promise(function(resolve, reject) {
-    console.log('---1');
     if (tools.isServer) {
-    console.log('---2');
       // Move _site/blog/index.html to blog.html
       if (!jetpack.exists('_site/blog.html') && jetpack.exists('_site/blog/index.html')) {
-    console.log('---3');
         jetpack.move('_site/blog/index.html', '_site/blog.html');
       }
       jetpack.copy('_site/blog.html', '_site/blog2.html');
