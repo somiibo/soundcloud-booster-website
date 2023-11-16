@@ -82,10 +82,10 @@ jobs:
       #     git add .
       #     git commit -m "Deploy to gh-pages"
       #     git push origin gh-pages --force
-      - name: Delete old gh-pages branch
-        run: |
-          git branch -D gh-pages
-          git push origin --delete gh-pages
+      # - name: Delete old gh-pages branch
+      #   run: |
+      #     git branch -D gh-pages
+      #     git push origin --delete gh-pages
       - name: Recreate the gh-pages branch
         run: |
           git checkout --orphan gh-pages
