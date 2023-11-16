@@ -71,34 +71,34 @@ jobs:
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
       #     publish_dir: ./_site
-      - name: Deploy to gh-pages
-        run: |
-          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          git config --global user.name "$GITHUB_ACTOR"
-          git checkout --orphan gh-pages
-          git reset --hard
-          git clean -df
-          cd _site
-          git add .
-          git commit -m "Deploy to gh-pages"
-          git push origin gh-pages --force
-      # - name: Delete old gh-pages branch
+      # - name: Deploy to gh-pages
       #   run: |
-      #     git branch -D gh-pages
-      #     git push origin --delete gh-pages
-      # - name: Recreate the gh-pages branch
-      #   run: |
+      #     git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      #     git config --global user.name "$GITHUB_ACTOR"
       #     git checkout --orphan gh-pages
       #     git reset --hard
-      #     git commit --allow-empty -m "Initial gh-pages commit"
-      #     git push origin gh-pages
-      # - name: Deploy to gh-pages branch
-      #   uses: JamesIves/github-pages-deploy-action@v4
-      #   with:
-      #     token: ${{ secrets.GH_TOKEN }}
-      #     branch: gh-pages
-      #     folder: _site
-      #     clean: true
+      #     git clean -df
+      #     cd _site
+      #     git add .
+      #     git commit -m "Deploy to gh-pages"
+      #     git push origin gh-pages --force
+      - name: Delete old gh-pages branch
+        run: |
+          git branch -D gh-pages
+          git push origin --delete gh-pages
+      - name: Recreate the gh-pages branch
+        run: |
+          git checkout --orphan gh-pages
+          git reset --hard
+          git commit --allow-empty -m "Initial gh-pages commit"
+          git push origin gh-pages
+      - name: Deploy to gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: gh-pages
+          folder: _site
+          clean: true
       - name: Purge CloudFlare Cache
         run: npm run cloudflare:purge
       - name: Purge Artifacts
