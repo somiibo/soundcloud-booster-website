@@ -50,6 +50,7 @@ gulp.task('watch', async () => {
       './**/*.html',
       './**/*.md',
       './**/*.markdown',
+      './**/*.jekyll',
       './**/*.js',
       './**/*.json',
       `${config.jekyll.data}/**/*`,
