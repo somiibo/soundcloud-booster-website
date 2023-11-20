@@ -1,13 +1,13 @@
 {%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
-  {% assign page_is_post = true %}
+  {% assign page-is-post = true %}
 {% else %}
-  {% assign page_is_post = false %}
+  {% assign page-is-post = false %}
 {% endif %}
 
 {%- if page.member.name != null and page.member.name != '' -%}
-  {% assign page_is_team_member = true %}
+  {% assign page-is-team-member = true %}
 {% else %}
-  {% assign page_is_team_member = false %}
+  {% assign page-is-team-member = false %}
 {% endif %}
 
 <!-- Initialize GA -->
@@ -108,13 +108,13 @@
 {% elsif site.settings.include-script-bundle == false %}
 {% else %}
   {%- if page.settings.include-script-bundle-optimization != null -%}
-    {% assign bundle_optimization = page.settings.include-script-bundle-optimization %}
+    {% assign bundle-optimization = page.settings.include-script-bundle-optimization %}
   {%- elsif site.settings.include-script-bundle-optimization == null -%}
-    {% assign bundle_optimization = 'async' %}
+    {% assign bundle-optimization = 'async' %}
   {%- else -%}
-    {% assign bundle_optimization = site.settings.include-script-bundle-optimization %}
+    {% assign bundle-optimization = site.settings.include-script-bundle-optimization %}
   {% endif %}
-  <script type="text/javascript" src="{{ site.url }}/assets/js/main.js?cb={{ site.time | date: '%s' }}" {{ bundle_optimization }}></script>
+  <script type="text/javascript" src="{{ site.url }}/assets/js/main.js?cb={{ site.time | date: '%s' }}" {{ bundle-optimization }}></script>
 {% endif %}
 
 <!-- TODO: FIX THIS -->
@@ -124,34 +124,34 @@
 {% elsif site.settings.include-script-core == false %}
 {% else %}
   {%- if page.settings.include-script-core-optimization != null -%}
-    {% assign core_optimization = page.settings.include-script-core-optimization %}
+    {% assign core-optimization = page.settings.include-script-core-optimization %}
   {%- elsif site.settings.include-script-core-optimization == null -%}
-    {% assign core_optimization = 'async' %}
+    {% assign core-optimization = 'async' %}
   {%- else -%}
-    {% assign core_optimization = site.settings.include-script-core-optimization %}
+    {% assign core-optimization = site.settings.include-script-core-optimization %}
   {% endif %}
-  <!-- <script type="text/javascript" src="{{ site.url }}/assets/js/base.js?cb={{ site.time | date: '%s' }}" {{ core_optimization }}></script> -->
+  <!-- <script type="text/javascript" src="{{ site.url }}/assets/js/base.js?cb={{ site.time | date: '%s' }}" {{ core-optimization }}></script> -->
 {% endif %}
 
 <!-- TODO: FIX THIS -->
 <!-- Script - Slapform -->
 {%- if page.settings.include-script-slapform == true -%}
-  {% assign slapform_include = true %}
+  {% assign slapform-include = true %}
 {% elsif layout.settings.include-script-slapform == true %}
-  {% assign slapform_include = true %}
+  {% assign slapform-include = true %}
 {% elsif site.settings.include-script-slapform == true %}
-  {% assign slapform_include = true %}
+  {% assign slapform-include = true %}
   {% else %}
   {%- if page.settings.include-script-slapform-optimization != null -%}
-    {% assign slapform_optimization = page.settings.include-script-slapform-optimization %}
+    {% assign slapform-optimization = page.settings.include-script-slapform-optimization %}
   {%- elsif site.settings.include-script-slapform-optimization == null -%}
-    {% assign slapform_optimization = 'async' %}
+    {% assign slapform-optimization = 'async' %}
   {%- else -%}
-    {% assign slapform_optimization = site.settings.include-script-slapform-optimization %}
+    {% assign slapform-optimization = site.settings.include-script-slapform-optimization %}
   {% endif %}
 {% endif %}
-{%- if slapform_include == true -%}
-  <!-- <script type="text/javascript" src={{ site.url }}/assets/js/slapform-processor.js?cb={{ site.time | date: '%s' }}" {{ slapform_optimization }}></script> -->
+{%- if slapform-include == true -%}
+  <!-- <script type="text/javascript" src={{ site.url }}/assets/js/slapform-processor.js?cb={{ site.time | date: '%s' }}" {{ slapform-optimization }}></script> -->
 {% endif %}
 
 <!-- Script - Bundle -->
@@ -232,26 +232,26 @@
 {% endif %}
 
 <!-- Script - Social Share Kit Script -->
-{% assign include_socialsharekitscript = false %}
-{%- if page_is_post == true -%}
+{% assign include-socialsharekitscript = false %}
+{%- if page-is-post == true -%}
   {%- if page.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- elsif layout.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- elsif site.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- else -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- endif -%}
 {%- else -%}
   {%- if page.settings.include-socialsharekit == true -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- elsif layout.settings.include-socialsharekit == true -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- endif -%}
 {%- endif -%}
 
-{% if include_socialsharekitscript == true %}
+{% if include-socialsharekitscript == true %}
   <script defer type="text/javascript">
     {% include /master/assets/scripts/social-share-kit.js %}
 
@@ -275,12 +275,12 @@
 {% else %}
   {% assign breadcrumbs = page.permalink | split: "/" %}
   {% assign breadcrumbs = page.url | split: "/" %}
-  {% assign breadcrumbs_size = breadcrumbs | size | minus: 1 %}
+  {% assign breadcrumbs-size = breadcrumbs | size | minus: 1 %}
   {% assign breadcrumb-url = site.url %}
 
   <script id="uj-breadcrumbs-json" type="application/ld+json">
     {
-      {%- if breadcrumbs_size > -1 -%}
+      {%- if breadcrumbs-size > -1 -%}
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "name": "{{ site.brand.name }}",
@@ -319,78 +319,78 @@
       "description": "{{ site.brand.description }}",
       "logo": "{%- if site.brand.logo-image contains '://' %}{%- else %}{{ site.url }}/assets/images/og{%- endif -%}{{ site.brand.logo-image }}",
       "sameAs": [
-        {%- assign facebook_truthy = site.socials.facebook | istruthy -%}
-        {%- if facebook_truthy -%}
+        {%- assign facebook-truthy = site.socials.facebook | istruthy -%}
+        {%- if facebook-truthy -%}
         "https://www.facebook.com/{{ site.socials.facebook }}/",
         {%- endif -%}
 
-        {%- assign twitter_truthy = site.socials.twitter | istruthy -%}
-        {%- if twitter_truthy -%}
+        {%- assign twitter-truthy = site.socials.twitter | istruthy -%}
+        {%- if twitter-truthy -%}
         "https://twitter.com/{{ site.socials.twitter }}",
         {%- endif -%}
 
-        {%- assign linkedin_truthy = site.socials.linkedin | istruthy -%}
-        {%- if linkedin_truthy -%}
+        {%- assign linkedin-truthy = site.socials.linkedin | istruthy -%}
+        {%- if linkedin-truthy -%}
         "https://www.linkedin.com/company/{{ site.socials.linkedin }}",
         {%- endif -%}
 
-        {%- assign youtube_truthy = site.socials.youtube | istruthy -%}
-        {%- if youtube_truthy -%}
+        {%- assign youtube-truthy = site.socials.youtube | istruthy -%}
+        {%- if youtube-truthy -%}
         "https://www.youtube.com/c/{{ site.socials.youtube }}",
         {%- endif -%}
 
-        {%- assign instagram_truthy = site.socials.instagram | istruthy -%}
-        {%- if instagram_truthy -%}
+        {%- assign instagram-truthy = site.socials.instagram | istruthy -%}
+        {%- if instagram-truthy -%}
         "https://www.instagram.com/{{ site.socials.instagram }}/",
         {%- endif -%}
 
-        {%- assign tumblr_truthy = site.socials.tumblr | istruthy -%}
-        {%- if tumblr_truthy -%}
+        {%- assign tumblr-truthy = site.socials.tumblr | istruthy -%}
+        {%- if tumblr-truthy -%}
         "https://{{ site.socials.tumblr }}.tumblr.com/",
         {%- endif -%}
 
-        {%- assign slack_truthy = site.socials.slack | istruthy -%}
-        {%- if slack_truthy -%}
+        {%- assign slack-truthy = site.socials.slack | istruthy -%}
+        {%- if slack-truthy -%}
         "https://{{ site.socials.slack }}.slack.com/",
         {%- endif -%}
 
-        {%- assign discord_truthy = site.socials.discord | istruthy -%}
-        {%- if discord_truthy -%}
+        {%- assign discord-truthy = site.socials.discord | istruthy -%}
+        {%- if discord-truthy -%}
         "https://discord.gg/{{ site.socials.discord }}",
         {%- endif -%}
 
-        {%- assign github_truthy = site.socials.github | istruthy -%}
-        {%- if github_truthy -%}
+        {%- assign github-truthy = site.socials.github | istruthy -%}
+        {%- if github-truthy -%}
         "https://github.com/{{ site.socials.github }}",
         {%- endif -%}
 
-        {%- assign dev_truthy = site.socials.dev | istruthy -%}
-        {%- if dev_truthy -%}
+        {%- assign dev-truthy = site.socials.dev | istruthy -%}
+        {%- if dev-truthy -%}
         "https://dev.to/{{ site.socials.dev }}",
         {%- endif -%}
 
-        {%- assign tiktok_truthy = site.socials.tiktok | istruthy -%}
-        {%- if tiktok_truthy -%}
+        {%- assign tiktok-truthy = site.socials.tiktok | istruthy -%}
+        {%- if tiktok-truthy -%}
         "https://www.tiktok.com/@{{ site.socials.tiktok }}",
         {%- endif -%}
 
-        {%- assign twitch_truthy = site.socials.twitch | istruthy -%}
-        {%- if twitch_truthy -%}
+        {%- assign twitch-truthy = site.socials.twitch | istruthy -%}
+        {%- if twitch-truthy -%}
         "https://www.twitch.tv/{{ site.socials.twitch }}",
         {%- endif -%}
 
-        {%- assign soundcloud_truthy = site.socials.soundcloud | istruthy -%}
-        {%- if soundcloud_truthy -%}
+        {%- assign soundcloud-truthy = site.socials.soundcloud | istruthy -%}
+        {%- if soundcloud-truthy -%}
         "https://soundcloud.com/{{ site.socials.soundcloud }}",
         {%- endif -%}
 
-        {%- assign spotify_truthy = site.socials.spotify | istruthy -%}
-        {%- if spotify_truthy -%}
+        {%- assign spotify-truthy = site.socials.spotify | istruthy -%}
+        {%- if spotify-truthy -%}
         "https://open.spotify.com/artist/{{ site.socials.spotify }}",
         {%- endif -%}
 
-        {%- assign mixcloud_truthy = site.socials.mixcloud | istruthy -%}
-        {%- if mixcloud_truthy -%}
+        {%- assign mixcloud-truthy = site.socials.mixcloud | istruthy -%}
+        {%- if mixcloud-truthy -%}
         "https://www.mixcloud.com/{{ site.socials.mixcloud }}/",
         {%- endif -%}
 
@@ -427,7 +427,7 @@
 {% endif %}
 
 <!-- Schema - BlogPosting -->
-{%- if page_is_post == true -%}
+{%- if page-is-post == true -%}
   <script id="uj-blogposting-json" type="application/ld+json">
     {
       "@context": "http://schema.org",
@@ -457,7 +457,7 @@
 {% endif %}
 
 <!-- Schema - Person -->
-{%- if page_is_team_member == true -%}
+{%- if page-is-team-member == true -%}
   <script id="uj-person-json" type="application/ld+json">
     {
       "@context": "http://schema.org",

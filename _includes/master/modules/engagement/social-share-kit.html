@@ -1,13 +1,13 @@
 <!-- Module - Social Share Kit -->
 {%- if page.layout contains 'post' and page.settings.include-socialsharekit == false -%}
-  {% assign include_socialsharekitscript = false %}
+  {% assign include-socialsharekitscript = false %}
 {%- elsif page.layout contains 'post' or page.settings.include-socialsharekit != false -%}
-  {% assign include_socialsharekitscript = true %}
+  {% assign include-socialsharekitscript = true %}
 {%- else -%}
-  {% assign include_socialsharekitscript = false %}
+  {% assign include-socialsharekitscript = false %}
 {%- endif -%}
 
-{%- if include_socialsharekitscript == true -%}
+{%- if include-socialsharekitscript == true -%}
 
   {%- if include.size != null -%}
     {% assign ssk_size = include.size %}
