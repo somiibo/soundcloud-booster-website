@@ -9,7 +9,7 @@ sitemap:
   {% assign pages = site.pages %}
   {% assign posts = site.posts %}
   {% assign data = pages | concat: posts %}
-  {% assign default_time = site.time | date_to_xmlschema %}
+  {% assign default-time = site.time | date_to_xmlschema %}
 
   {%- if site.sitemap.enable != false -%}
     {% for page in data %}
@@ -23,10 +23,14 @@ sitemap:
       {%- endif -%}
 
       <url>
-        <loc>{{ site.url }}{{ page.url }}</loc>
+        {%- if page.url == '/' -%}
+          <loc>{{ site.url }}</loc>
+        {%- else -%}
+          <loc>{{ site.url }}{{ page.url }}</loc>
+        {%- endif -%}
 
         {%- if page.sitemap.lastmod == null -%}
-          <lastmod>{{ default_time }}</lastmod>
+          <lastmod>{{ default-time }}</lastmod>
         {%- else -%}
           <lastmod>{{ page.sitemap.lastmod | date_to_xmlschema }}</lastmod>
         {%- endif -%}
