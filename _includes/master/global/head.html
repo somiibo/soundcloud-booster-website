@@ -1,9 +1,12 @@
 {% assign page-url-stripped = page.url | replace: 'index.html', '' %}
+{%- if page-url-stripped == '/' -%}
+  {% assign page-url-stripped = '' %}
+{% endif %}
 
 {%- if page.layout contains 'post' and page.post.id != null and page.post.id != '' -%}
-  {% assign page_is_post = true %}
+  {% assign page-is-post = true %}
 {% else %}
-  {% assign page_is_post = false %}
+  {% assign page-is-post = false %}
 {% endif %}
 
 
@@ -47,7 +50,7 @@
 <link rel="manifest" href="{{ site.url }}/manifest.json">
 
 <!-- Title -->
-{%- if page_is_post and page.post.title != null and page.post.title != '' -%}
+{%- if page-is-post and page.post.title != null and page.post.title != '' -%}
   {% assign page-title = page.post.title | liquify %}
 {%- elsif page.meta.title != null and page.meta.title != '' -%}
   {% assign page-title = page.meta.title | liquify %}
@@ -61,7 +64,7 @@
 <meta property="og:title" content="{{ page-title }}">
 
 <!-- Description -->
-{%- if page_is_post and page.post.excerpt != null and page.post.excerpt != '' -%}
+{%- if page-is-post and page.post.excerpt != null and page.post.excerpt != '' -%}
   {% assign page-description = page.post.excerpt | liquify %}
 {%- elsif page.meta.description != null and page.meta.description != '' -%}
   {% assign page-description = page.meta.description | liquify %}
@@ -75,7 +78,7 @@
 <meta property="og:description" content="{{ page-description }}">
 
 <!-- Image -->
-{%- if page_is_post and page.post.id != null and page.post.id != '' -%}
+{%- if page-is-post and page.post.id != null and page.post.id != '' -%}
   {% capture page-image %}{{ site.url }}/assets/images/blog/posts/post-{{ page.post.id }}/{{ page-url-stripped | split: '/' | last }}.jpg{% endcapture %}
 {%- elsif page.meta.og-image != null and page.meta.og-image != '' -%}
   {% capture page-image %}{%- if page.meta.og-image contains '://' -%}{%- else -%}{{ site.url }}/assets/images/og{%- endif -%}{{ page.meta.og-image }}{% endcapture %}
@@ -92,7 +95,7 @@
 
 <!-- OG: Facebook / Open Graph -->
 <meta property="og:url" content="{{ site.url }}{{ page-url-stripped }}">
-{%- if page_is_post -%}
+{%- if page-is-post -%}
   {% assign og-type = 'article' %}
 {%- else -%}
   {% assign og-type = 'website' %}
@@ -103,9 +106,9 @@
 <link href="{{ site.url }}/feeds/posts.xml" type="application/atom+xml" rel="alternate" title="{{ site.brand.name }} Feed">
 
 <!-- Language Tags -->
-<link rel="alternate" href="{{ site.url }}{{ page.url }}" hreflang="x-default">
-<link rel="alternate" href="{{ site.url }}{{ page.url }}" hreflang="en">
-<!-- <link rel="alternate" href="{{ site.url }}/es" hreflang="es"> -->
+<link rel="alternate" href="{{ site.url }}{{ page-url-stripped }}" hreflang="x-default">
+<link rel="alternate" href="{{ site.url }}{{ page-url-stripped }}" hreflang="en">
+<!-- <link rel="alternate" href="{{ site.url }}/es/{{ page-url-stripped }}" hreflang="es"> -->
 
 <!-- Performance Metrics -->
 {%- if page.settings.include-debug-performance == false -%}
@@ -124,7 +127,7 @@
   var Configuration = {
     page: {
       code: '{{ page.settings.page-code | default: page.meta.breadcrumb | default: page.post.breadcrumb | default: "" | liquify }}',
-      type: '{%- if page_is_post -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
+      type: '{%- if page-is-post -%}post{%- elsif page.settings.page-type -%}{{ page.settings.page-type }}{%- else -%}general{%- endif -%}',
       breadcrumb: '{{ page.meta.breadcrumb | default: page.post.breadcrumb | liquify }}',
       settings: {{ page.settings.manager-configuration | default: layout.settings.manager-configuration | default: empty-braces }}
     },
@@ -168,17 +171,17 @@
 
 <!-- Favicon -->
 {%- if site.favicon.path != null and site.favicon.path != '' -%}
-  {% assign favicon_path = site.favicon.path %}
+  {% assign favicon-path = site.favicon.path %}
 {%- else -%}
-  {% assign favicon_path = site.url | append: '/assets/images/favicon' %}
+  {% assign favicon-path = site.url | append: '/assets/images/favicon' %}
 {%- endif -%}
-<link rel="apple-touch-icon" sizes="180x180" href="{{ favicon_path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{ favicon_path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{ favicon_path }}/favicon-16x16.png?cb={{ site.time | date: '%s' }}">
-<link rel="mask-icon" href="{{ favicon_path }}/safari-pinned-tab.svg" color="{{ site.favicon.safari-pinned-tab }}">
-<link rel="shortcut icon" href="{{ favicon_path }}/favicon.ico?cb={{ site.time | date: '%s' }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ favicon-path }}/apple-touch-icon.png?cb={{ site.time | date: '%s' }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ favicon-path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ favicon-path }}/favicon-16x16.png?cb={{ site.time | date: '%s' }}">
+<link rel="mask-icon" href="{{ favicon-path }}/safari-pinned-tab.svg" color="{{ site.favicon.safari-pinned-tab }}">
+<link rel="shortcut icon" href="{{ favicon-path }}/favicon.ico?cb={{ site.time | date: '%s' }}">
 <meta name="msapplication-TileColor" content="{{ site.favicon.msapp-tile-color }}">
-<meta name="msapplication-config" content="{{ favicon_path }}/browserconfig.xml?cb={{ site.time | date: '%s' }}">
+<meta name="msapplication-config" content="{{ favicon-path }}/browserconfig.xml?cb={{ site.time | date: '%s' }}">
 <meta name="theme-color" content="{{ site.favicon.theme-color }}">
 
 <!-- CSS - Defaults-->
@@ -208,26 +211,26 @@
 </style>
 
 <!-- CSS - Social Share Kit Style -->
-{% assign include_socialsharekitscript = false %}
-{%- if page_is_post -%}
+{% assign include-socialsharekitscript = false %}
+{%- if page-is-post -%}
   {%- if page.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- elsif layout.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- elsif site.settings.include-socialsharekit == false -%}
-    {% assign include_socialsharekitscript = false %}
+    {% assign include-socialsharekitscript = false %}
   {%- else -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- endif -%}
 {%- else -%}
   {%- if page.settings.include-socialsharekit == true -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- elsif layout.settings.include-socialsharekit == true -%}
-    {% assign include_socialsharekitscript = true %}
+    {% assign include-socialsharekitscript = true %}
   {%- endif -%}
 {%- endif -%}
 
-{% if include_socialsharekitscript == true %}
+{% if include-socialsharekitscript == true %}
   <style type="text/css" media="screen">
     {% include /master/assets/css/social-share-kit.css %}
   </style>

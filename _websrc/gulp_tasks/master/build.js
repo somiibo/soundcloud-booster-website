@@ -1,12 +1,12 @@
 const argv         = require('yargs').argv;
 const config       = require('../../master.config.js');
 const appGulpTasks = require('../../app.config.js');
-const fs           = require('fs-jetpack');
+const jetpack      = require('fs-jetpack');
 const cp           = require('child_process');
 const gulp         = require('gulp');
 const tools        = new (require('../../libraries/tools.js'));
 const JSON5        = require('json5');
-const _configYml   = require('js-yaml').load(fs.read('_config.yml'));
+const _configYml   = require('js-yaml').load(jetpack.read('_config.yml'));
 const Global       = require('../../libraries/global.js');
 
 config.tasks = Object.assign(config.tasks, appGulpTasks.tasks);
@@ -45,10 +45,11 @@ gulp.task('jekyll-build', async () => {
   await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
   // Other build tasks
+  // This part takes a while...
   await tools.poll(() => areTasksCompleted(), { timeout: 1000 * 60 * 3 });
 
   await tools.poll(() => {
-    return fs.exists('./assets/js/main.js') && fs.exists('./assets/css/main.css');
+    return jetpack.exists('./assets/js/main.js') && jetpack.exists('./assets/css/main.css');
   }, {timeout: 1000 * 60 * 3});
 
   // console.log('jekyll-build: precheck complete', new Date());
@@ -74,9 +75,8 @@ gulp.task('jekyll-build', async () => {
 
   // Create build log JSON
   try {
-    let buildJSON = JSON.parse(fs.read('@output/build/build.json'));
-    buildJSON['npm-build'].timestamp_utc = now({offset: 0});
-    buildJSON['npm-build'].timestamp_pst = now({offset: -7});
+    let buildJSON = JSON.parse(jetpack.read('@output/build/build.json'));
+    buildJSON['npm-build'].timestamp = new Date().toISOString();
 
     let info = await getGitInfo();
 
@@ -93,7 +93,7 @@ gulp.task('jekyll-build', async () => {
     // Set custom admin dashboard pages
     buildJSON['admin-dashboard'] = JSON5.parse(_configYml['admin-dashboard']);
 
-    fs.write('@output/build/build.json', JSON.stringify(buildJSON, null, 2));
+    jetpack.write('@output/build/build.json', JSON.stringify(buildJSON, null, 2));
   } catch (e) {
     console.error('Error updating build.json', e);
   }
@@ -105,6 +105,13 @@ gulp.task('jekyll-build', async () => {
 
   // Run Jekyll Build
   await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
+
+  // Jekyll post-build
+  await postBuild();
+
+  // Run app post-build.js
+  await require('../app/build-post.js')();
+
   return Promise.resolve();
 });
 
@@ -125,40 +132,6 @@ gulp.task('test', build);
 /**
  * Helper functions
  */
-function now(options) {
-    options = options || {};
-    options.offset = options.offset || 0;
-
-    var date = new Date();
-    date.setHours(date.getHours() + options.offset);
-    var aaaa = date.getFullYear();
-    var gg = date.getDate();
-    var mm = (date.getMonth() + 1);
-
-    if (gg < 10)
-        gg = "0" + gg;
-
-    if (mm < 10)
-        mm = "0" + mm;
-
-    var cur_day = aaaa + "-" + mm + "-" + gg;
-
-    var hours = date.getHours()
-    var minutes = date.getMinutes()
-    var seconds = date.getSeconds();
-
-    if (hours < 10)
-        hours = "0" + hours;
-
-    if (minutes < 10)
-        minutes = "0" + minutes;
-
-    if (seconds < 10)
-        seconds = "0" + seconds;
-
-    return cur_day + "T" + hours + ":" + minutes + ":" + seconds + "Z";
-}
-
 async function getGitInfo() {
   return new Promise(function(resolve, reject) {
     var exec = require('child_process').exec;
@@ -177,5 +150,39 @@ async function getGitInfo() {
       // console.error(`stderr: ${data}`);
       reject(data);
     });
+  });
+}
+
+function postBuild() {
+  return new Promise(function(resolve, reject) {
+    // Move _site/blog/index.html to blog.html
+    if (!jetpack.exists('_site/blog.html') && jetpack.exists('_site/blog/index.html')) {
+      jetpack.move('_site/blog/index.html', '_site/blog.html');
+    }
+
+    // Fix things in blog.html file that get messed up during the move
+    jetpack.write('_site/blog.html',
+      jetpack.read('_site/blog.html')
+        // Blog
+        .replace(/(\/blog\/|\/blog\/index.html)"/g, '/blog"')
+        // BreadcrumbList
+        .replace(/"name": "index.html"/g, '"name": "home"')
+    );
+
+    // Create temporary local blog since local Jekyll hates it for some reason
+    if (!tools.isServer) {
+      jetpack.copy('_site/blog.html', '_site/blog-local.html');
+    }
+
+    // Fix sitemap.xml
+    const sitemap = jetpack.read('_site/sitemap.xml');
+    if (sitemap) {
+      jetpack.write('_site/sitemap.xml',
+        sitemap
+          .replace(/\/blog\/index.html/g, '/blog')
+      );
+    }
+
+    return resolve();
   });
 }

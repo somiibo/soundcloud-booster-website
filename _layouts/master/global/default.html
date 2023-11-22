@@ -4,11 +4,13 @@ layout: null
 <!DOCTYPE html>
 <html lang="en" {{ layout.html.attributes }} {{ page.html.attributes }}>
   <head>
+    <!-- Head -->
     {%- include /master/global/head.html -%}
   </head>
 
-  <body class="{{ layout.body.class }} {{ page.body.class }}">
+  <body class="{{ layout.body.class }} {{ page.body.class }}" {{ layout.body.attributes }} {{ page.body.attributes }}>
 
+    <!-- Header -->
     {%- if page.settings.include-app-header == false -%}
     {% elsif layout.settings.include-app-header == false %}
     {% elsif site.settings.include-app-header == false %}
@@ -16,10 +18,10 @@ layout: null
       {%- include /app/elements/header.html -%}
     {% endif %}
 
-    <!-- CONTENT START -->
+    <!-- Content -->
     {{ content }}
-    <!-- CONTENT END -->
 
+    <!-- Footer -->
     {%- if page.settings.include-app-footer == false -%}
     {% elsif layout.settings.include-app-footer == false %}
     {% elsif site.settings.include-app-footer == false %}
@@ -27,6 +29,7 @@ layout: null
       {%- include /app/elements/footer.html -%}
     {% endif %}
 
+    <!-- Foot -->
     {%- include /master/global/foot.html -%}
   </body>
 </html>

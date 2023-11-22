@@ -9,6 +9,15 @@ meta:
   title: "Cookie Policy - {{ site.brand.name }}"
   description: "This cookie policy has been compiled to better serve those who are concerned with how their personal information is being used online."
   breadcrumb: "Cookie Policy"
+
+settings:
+  manager-configuration: "
+    {
+      exitPopup: {
+        enabled: false,
+      },
+    }
+  "
 ---
 Effective date: May 1, 2018
 

@@ -9,6 +9,15 @@ meta:
   title: "Terms Of Service - {{ site.brand.name }}"
   description: "By accessing and using our products and services, you agree to comply with the Terms of Use listed here."
   breadcrumb: "Terms of Service"
+
+settings:
+  manager-configuration: "
+    {
+      exitPopup: {
+        enabled: false,
+      },
+    }
+  "
 ---
 {% capture brand %}{{ site.brand.name | liquify }}{% endcapture %}
 {% capture breadcrumb %}{{ page.meta.breadcrumb | default: layout.meta.breadcrumb | liquify }}{% endcapture %}
@@ -33,6 +42,11 @@ We reserve the right to change the {{ breadcrumb }} from time to time without no
 We reserve the right to collect overdue payments from you. You agree to pay all reasonable costs and expenses (including legal fees) incurred by us in collecting any such overdue amounts.
 
 Please check the {{ breadcrumb }} whenever you use a {{ brand }} Product. If you are not a Subscriber, we will treat your continued use of a {{ brand }} Product as acceptance of these changes from their effective date (as shown above). If you are a Subscriber, we will treat the first renewal date of your subscription after the changes as your acceptance of the changes. If you do not agree with the changes you should cancel your subscription before the renewal date.
+
+## Registration and Access
+You must be at least 13 years old or the minimum age required in your country to consent to use our services. If you are under 18 you must have your parent or legal guardian’s permission to use our services.
+
+You must provide accurate and complete information to register for an account to use our services. You may not share your account credentials or make your account available to anyone else and are responsible for all activities that occur under your account. If you create an account or use our servides on behalf of another person or entity, you must have the authority to accept these terms on their behalf.
 
 ## Responsible Use and Conduct
 By visiting our website and accessing the information, resources, services, products, and tools that {{ brand }} provides, you agree to use these resources for the purposes intended as permitted by the Terms of Service and by applicable laws, regulations and generally accepted online practices or guidelines.

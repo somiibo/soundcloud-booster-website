@@ -12,12 +12,12 @@ gem "jekyll", "~> 4.2.0"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
-  # MASTER PLUGINS
-  # gem "jekyll-feed", "~> 0.6"
+  # Master Plugins
   gem "jekyll-paginate-v2"
   gem "jekyll-liquify"
   gem "jekyll-truthyfalsy"
-  # PROJECT PLUGINS
+
+  # Project Plugins
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

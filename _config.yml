@@ -216,7 +216,7 @@ settings:
       exitPopup: {
         enabled: true,
         config: {
-          timeout: 3600000,
+          timeout: 1000 * 60 * 60 * 4,
           handler: null,
           title: 'Special Offer!',
           message: 'Get 15% off your purchase of our <strong>Premium plans</strong>. <br><br> Get access to all features and unlimited usage.',
