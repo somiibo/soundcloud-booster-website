@@ -47,12 +47,19 @@ jobs:
         run: npm install
       - name: Log dependency versions
         run: |
+          echo "Ubuntu Version: "
+          lsb_release -a
+
           echo "Ruby: $(ruby -v)"
           echo "Gem: $(gem -v)"
           echo "Bundler: $(bundle -v)"
           echo "Node: $(node -v)"
           echo "NPM: $(npm -v)"
-          echo "Dependencies: "
+
+          echo "Gem Versions: "
+          gem list
+
+          echo "NPM Dependeny Versions: "
           npm list --depth=0 || echo ""
       - name: Run node build
         run: npm run build -- --buildLocation='server'
