@@ -20,7 +20,8 @@ concurrency:
 jobs:
   build:
     # needs: nothing
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 80
     steps:
       - name: Setup git config
@@ -34,7 +35,7 @@ jobs:
         with:
           ruby-version: '3.0.0'
           bundler-cache: false
-      - name: Install Specific Bundler Version
+      - name: Install specific bundler version
         run: gem install bundler -v 2.4.21
       - name: Run bundle install
         run: |
@@ -47,6 +48,9 @@ jobs:
         run: npm install
       - name: Log dependency versions
         run: |
+          echo "Unix Version: "
+          uname -a
+
           echo "Ubuntu Version: "
           lsb_release -a
 
