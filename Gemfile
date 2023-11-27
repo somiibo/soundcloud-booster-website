@@ -13,9 +13,9 @@ gem "jekyll", "~> 4.2.0"
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   # Master Plugins
-  gem "jekyll-paginate-v2"
-  gem "jekyll-liquify"
-  gem "jekyll-truthyfalsy"
+  gem "jekyll-paginate-v2", "~> 3.0.0"
+  gem "jekyll-liquify", "~> 0.0.2"
+  gem "jekyll-truthyfalsy", "~> 1.0.2"
 
   # Project Plugins
 end
