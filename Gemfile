@@ -8,7 +8,6 @@ source "https://rubygems.org"
 #
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
-# gem "jekyll", "~> 4.2.0"
 gem "jekyll", "= 4.3.2"
 
 # If you have any plugins, put them here!
@@ -28,10 +27,8 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 # Required for Apple silicon
-# gem "webrick", "~> 1.7"
-gem "webrick", "= 1.7.0"
+# gem "webrick", "= 1.7.0"
 
 # Fix x86_64 / arm64e error
 # /Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.rb:1:in `require': dlopen(/Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle, 0x0009): tried: '/Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle' (mach-o file, but is an incompatible architecture (have (x86_64), need (arm64e))) - /Users/ian/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/redcarpet-3.6.0/lib/redcarpet.bundle (LoadError)
-# gem "redcarpet", "~> 3.5.1"
 gem "redcarpet", "= 3.5.1"
