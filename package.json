@@ -55,8 +55,8 @@
     "sharp": "0.23.1 (sometime before 2021ish): Hard lock because later versions had issues. Possibly solved in higher node versions"
   },
   "devDependencies": {
-    "@babel/core": "7.22.5",
-    "@babel/preset-env": "7.22.5",
+    "@babel/core": "7.23.5",
+    "@babel/preset-env": "7.23.5",
     "autoprefixer": "9.8.8",
     "browser-sync": "2.23.7",
     "del": "6.1.1",
@@ -86,8 +86,8 @@
     "through2": "4.0.2",
     "ultimate-jekyll-poster": "0.0.15",
     "vinyl-named": "1.1.0",
-    "web-manager": "3.2.17",
-    "webpack": "5.88.0",
+    "web-manager": "3.2.20",
+    "webpack": "5.89.0",
     "webpack-stream": "6.1.2",
     "wonderful-fetch": "1.0.1",
     "yargs": "16.2.0",
