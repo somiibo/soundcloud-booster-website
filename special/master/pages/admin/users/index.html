@@ -101,7 +101,7 @@ meta:
           <th>Email</th>
           <th>Active</th>
           <th>Roles</th>
-          <th>Edit</th>
+          <th>Manage</th>
         </tr>
       </thead>
 
@@ -200,7 +200,7 @@ meta:
       <td>
         <div class="dropdown">
           <a class="btn btn-white btn-sm dropdown-toggle dropdown-toggle-empty" href="#" role="button" id="dropdownMenuLink-{userUid}" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi-pencil me-2"></i> Edit
+            <i class="bi-pencil me-2"></i> Manage
           </a>
 
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink-{userUid}">
@@ -208,6 +208,8 @@ meta:
               <a class="dropdown-item user-open-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-eye-fill me-2 pointer-none"></i>View user</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item user-premium-btn" href="javascript:;" data-uid="{userUid}"><i class="bi-star-fill me-2 pointer-none"></i>Give premium</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item user-signin-as-btn text-primary" href="javascript:;" data-uid="{userUid}"><i class="bi-key-fill me-2 pointer-none"></i>Sign in as</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item user-signout-btn text-danger" href="javascript:;" data-uid="{userUid}"><i class="bi-door-open-fill me-2 pointer-none"></i>Sign out all sessions</a>
             </li>
@@ -239,50 +241,33 @@ meta:
 
     table = Admin().initializeTable();
 
-    firebase.firestore().collection('apps')
-      .get()
-      .then(function(snapshot) {
+    document.addEventListener('submit', function (event) {
+      if (event.target.matches('#datatable-search-form')) {
+        handleSearch(searchInput.value || '')
+      } else if (event.target.matches('#datatable-premium-form')) {
+        handlePremiumForm(event)
+      }
+    })
 
-        snapshot
-        .forEach(function (val, i) {
-          var data = val.data();
-          appMap[data.id] = {
-            name: data.name,
-            brandmark: data.images.brandmark,
-          };
-        });
+    document.addEventListener('click', function (event) {
+      handleClick(event)
+    })
 
-        document.addEventListener('submit', function (event) {
-          if (event.target.matches('#datatable-search-form')) {
-            handleSearch(searchInput.value || '')
-          } else if (event.target.matches('#datatable-premium-form')) {
-            handlePremiumForm(event)
-          }
-        })
+    if (qsQuery) {
+      searchInput.value = qsQuery;
+      handleSearch(qsQuery)
+    } else {
+      Admin().display('ready');
+    }
 
-        document.addEventListener('click', function (event) {
-          handleClick(event)
-        })
-
-        if (qsQuery) {
-          searchInput.value = qsQuery;
-          handleSearch(qsQuery)
-        } else {
-          Admin().display('ready');
-        }
-
-        if (Manager.properties.meta.environment === 'development') {
-          // handleSearch('100')
-        }
-
-      })
-      .catch(function(e) {
-
-      })
+    if (Manager.properties.meta.environment === 'development') {
+      // handleSearch('100')
+    }
 
     // HERE
     function handleSearch(input) {
-      console.log('---search...', input);
+      console.log('Search...', input);
+
       Admin().display('loading');
 
       if (input.length < 3) {
@@ -366,7 +351,7 @@ meta:
       .catch(function (e) {
         Admin().display(e);
       })
-  }
+    }
 
     function handlePremiumForm(event) {
       var uid = event.target.querySelector('input[name="uid"]').value;
@@ -426,6 +411,10 @@ meta:
         var uid = event.target.dataset.uid;
 
         handleSignOutAllSessions(uid);
+      } else if (event.target.matches('.user-signin-as-btn')) {
+        var uid = event.target.dataset.uid;
+
+        handleSignInAs(uid);
       }
     }
 
@@ -456,6 +445,58 @@ meta:
             .catch(function (e) {
               console.error('Error signing out all sessions for ' + uid, e);
               alert('Error signing out all sessions for ' + uid + ': ' + e)
+              return reject(e);
+            })
+          })
+      });
+    }
+
+    function handleSignInAs(uid) {
+      return new Promise(function (resolve, reject) {
+        var user = firebase.auth().currentUser;
+
+        console.log('handleSignInAs():', uid);
+
+        user.getIdToken(true)
+          .then(function (token) {
+            WonderfulFetch(serverProd, {
+              method: 'POST',
+              tries: 2,
+              timeout: 30000,
+              response: 'json',
+              body: {
+                authenticationToken: token,
+                command: 'user:create-custom-token',
+                payload: {
+                  uid: uid,
+                }
+              },
+            })
+            .then(function (json) {
+              var url = new URL(window.location.href);
+              var destination = new URL(window.location.href);
+
+              // Set up the signout URL
+              url.pathname = '/signin';
+              url.searchParams.set('signout', true);
+              url.searchParams.set('token', json.token);
+
+              // Create a new URL object for the destination
+              destination.pathname = '/account';
+
+              // Set the destination parameter to the destination URL
+              url.searchParams.set('destination', destination.toString());
+
+              console.log('handleSignInAs(): Successfully created custom token for ' + uid, json);
+
+              // Open the new URL in a new tab
+              window.open(url.toString(), '_blank');
+
+              return resolve(json);
+            })
+            .catch(function (e) {
+              console.error('handleSignInAs(): Error creating custom token for ' + uid, e);
+
               return reject(e);
             })
           })
