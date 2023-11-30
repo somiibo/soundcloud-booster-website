@@ -81,12 +81,12 @@ jobs:
           sed "s/%GHP_TIMESTAMP%/$timestamp/g" $build_log_path > "$build_log_path"-temp && mv "$build_log_path"-temp $build_log_path
 
           sed -n '1h;1!H;${;g;s/GEN>>>.*<<<GEN/<REDACTED FOR LIVE PUBLISH>/g;p;}' .gitignore > .gitignore
-      - name: Delete gh-pages branch
-        uses: dawidd6/action-delete-branch@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          branches: gh-pages
-          soft_fail: true
+      # - name: Delete gh-pages branch
+      #   uses: dawidd6/action-delete-branch@v3
+      #   with:
+      #     github_token: ${{ secrets.GH_TOKEN }}
+      #     branches: gh-pages
+      #     soft_fail: true
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
