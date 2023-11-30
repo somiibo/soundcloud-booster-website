@@ -172,6 +172,23 @@ meta:
   </div>
 </div>
 
+<div id="signin-as-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Signin As</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form onsubmit="return false;">
+        <div class="modal-body" style="max-height: 80vh; overflow: scroll;">
+          <p>
+            You have signed in as this user. You can now navigate to the <a id="signin-as-modal-url" href="#" class="text-primary" target="_blank">account page</a> to view this user's account.
+          </p>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript">
   var dataTemplate = `
     <tr>
@@ -233,8 +250,10 @@ meta:
 
     var $expandModal = document.getElementById('expand-modal');
     var $premiumModal = document.getElementById('premium-modal');
+    var $signinAsModal = document.getElementById('signin-as-modal');
     var expandModal = new bootstrap.Modal($expandModal, {});
     var premiumModal = new bootstrap.Modal($premiumModal, {});
+    var signinAsModal = new bootstrap.Modal($signinAsModal, {});
 
     // var serverDev = 'http://localhost:5001/' + Manager.properties.options.libraries.firebase_app.config.projectId + '/us-central1/bm_api';
     var serverProd = 'https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api';
@@ -488,6 +507,10 @@ meta:
               url.searchParams.set('destination', destination.toString());
 
               console.log('handleSignInAs(): Successfully created custom token for ' + uid, json);
+
+              signinAsModal.show();
+
+              document.getElementById('signin-as-modal-url').href = url.toString();
 
               // Open the new URL in a new tab
               window.open(url.toString(), '_blank');
