@@ -87,6 +87,13 @@ jobs:
       #     github_token: ${{ secrets.GH_TOKEN }}
       #     branches: gh-pages
       #     soft_fail: true
+      # - name: Delete gh-pages branch
+      #   continue-on-error: true
+      #   run: |
+      #     curl -L \
+      #       -X DELETE \
+      #       -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
+      #       https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/heads/gh-pages
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
