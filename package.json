@@ -7,7 +7,7 @@
     "preinstall": "bundle update && bundle install",
     "start": "npm run _start -- --skipImageMin='true' --skipESLint='true' --skipJSMin='true'",
     "_start": "bundle exec gulp clean:jekyll && bundle exec gulp",
-    "dist": "git add . && git commit -m 'Published pages' && git push origin master",
+    "dist": "git add . && git commit -m 'Published pages' && git push origin",
     "prototype": "npm start",
     "prototype:public": "npm start -- --ngrokOpen='true'",
     "prototype:https": "npm start -- --https='true'",
