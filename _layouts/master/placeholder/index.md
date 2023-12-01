@@ -68,6 +68,6 @@ Ready to take the first step towards streamlined success? Join the {{ site.brand
 Your journey towards greater efficiency starts here. Welcome to {{ site.brand.name }}.
 
 # Build Info
-Site built at {{ site.time | date: "%Y-%m-%d %H:%M:%S" }} UTC.
+Site built at [{{ site.time | date: "%Y-%m-%d %H:%M:%S" }} UTC]({{ site.url }}/@output/build/build.json).
 
 {{ content | liquify | markdownify }}
