@@ -1519,7 +1519,7 @@ settings:
 
         if (accountData.plan.id !== 'basic') {
           // premiumbadgeHtml += '<i class="bi-star-fill fs-2 text-primary me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(accountData.plan.id) + ' plan"></i>';
-          premiumbadgeHtml += '<i class="fa-solid fa-star fs-2 text-success me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + uppercase(accountData.plan.id) + ' plan"></i>';
+          premiumbadgeHtml += '<i class="fa-solid fa-star fs-2 text-success me-1" data-bs-toggle="tooltip" data-bs-placement="top" title="' + accountData.plan.id + ' plan"></i>';
         }
 
         if (accountData.roles.admin) {
