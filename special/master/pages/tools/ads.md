@@ -48,11 +48,11 @@ This is an `adsense-multiplex.html` ad:
 
         console.log('.account().resolve()', accountData);
 
-        account.handleAccount({
-          plan: {
-            id: 'premium',
-          }
-        })
+        // account.handleAccount({
+        //   plan: {
+        //     id: 'premium',
+        //   }
+        // })
 
         return;
       })
