@@ -452,7 +452,6 @@ settings:
   var qsEmail;
   var qsProvider;
   var qsSignout;
-  var qsIsSignup;
   var qsNewsletter;
   var qsAffiliateCode;
 
@@ -480,7 +479,6 @@ settings:
     qsEmail = url.searchParams.get('email') || '';
     qsProvider = url.searchParams.get('provider') || '';
     qsSignout = url.searchParams.get('signout') || '';
-    qsIsSignup = url.searchParams.get('isSignup') || '';
     qsNewsletter = url.searchParams.get('newsletter') || '';
     qsAffiliateCode = url.searchParams.get('affiliateCode') || '';
 
@@ -608,8 +606,10 @@ settings:
 
           firebase.auth().signInWithCustomToken(qsToken)
           .then(function (r) {
-            trackSignupOrSignin();
-            redirect();
+            handleAuthentication()
+            .then(function () {
+              redirect();
+            })
           })
           .catch(function (e) {
             display(e);
@@ -690,23 +690,44 @@ settings:
       });
   })
 
-  function trackSignupOrSignin() {
-    var user = firebase.auth().currentUser;
+  function handleAuthentication() {
+    return new Promise(function(resolve, reject) {
+      var user = firebase.auth().currentUser;
 
-    if (!user || !user.uid) { return; }
+      if (!user || !user.uid) { return resolve(); }
 
-    var trackedSignup = Manager.storage().get('trackedSignup', false);
+      var trackedSignupKey = 'trackedSignup.' + user.uid;
+      var trackedSignup = Manager.storage().get(trackedSignupKey, false);
 
-    var now = new Date();
-    var signupDate = new Date(+user.metadata.createdAt);
+      var now = new Date();
+      var signupDate = new Date(+user.metadata.createdAt);
 
-    var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
-    var providerData = _.get(user, 'providerData', []);
-    var providerId = _.get(providerData, Math.max(providerData.length - 1, 0) + '.providerId', 'password');
+      var accountAgeSeconds = Math.floor((now - signupDate) / 1000);
+      var providerData = _.get(user, 'providerData', []);
+      var providerId = _.get(providerData, Math.max(providerData.length - 1, 0) + '.providerId', 'password');
+      var isSignUp = accountAgeSeconds < 30 && !trackedSignup;
 
-    console.log('trackSignupOrSignin():', providerId, accountAgeSeconds, trackedSignup);
+      console.log('handleAuthentication():', providerId, accountAgeSeconds, trackedSignup, isSignUp);
 
-    if (accountAgeSeconds < 30 && !trackedSignup) {
+      // Set the trackedSignup flag
+      Manager.storage().set(trackedSignupKey, true);
+
+      // If it's not a sign up, just resolve
+      if (!isSignUp) {
+        // Google Analytics
+        gtag('event', 'login', {
+          method: providerId,
+        });
+
+        // Meta Pixel
+        // ...
+
+        // TikTok Pixel
+        // ...
+
+        return resolve();
+      }
+
       // Google Analytics
       gtag('event', 'sign_up', {
         method: providerId,
@@ -727,21 +748,37 @@ settings:
         currency: 'USD',
         content_type: 'product',
       });
-    } else {
-      // Google Analytics
-      gtag('event', 'login', {
-        method: providerId,
-      });
 
-      // Meta Pixel
-      // ...
+      // Send user:signup request
+      user.getIdToken(false)
+        .then(function(token) {
 
-      // TikTok Pixel
-      // ...
-    }
+          fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
+            method: 'POST',
+            body: JSON.stringify({
+              authenticationToken: token,
+              command: 'user:sign-up',
+              payload: {
+                newsletterSignUp: select('.auth-newsletter-input').getValue(),
+                affiliateCode: store.get('affiliateCode', ''),
+              },
+            }),
+          })
+          .catch(function (e) {
+            console.error('handleAuthentication(): Error sending user:signup request', e);
+          })
 
-    // Set the trackedSignup flag
-    Manager.storage().set('trackedSignup', true);
+          // We don't need to wait for the fetch to finish
+          setTimeout(function () {
+            return resolve();
+          }, 100);
+        })
+        .catch(function(e) {
+          console.error('handleAuthentication(): Error getting token', e);
+
+          return resolve();
+        });
+    });
   }
 
   function updateLinksWithEmail(email) {
@@ -753,42 +790,6 @@ settings:
         $el.setAttribute('href', href.toString());
       }
     })
-  }
-
-  function signUpHandler(token) {
-    return new Promise(function(resolve, reject) {
-      console.log('signUpHandler():', token);
-
-      // If not a signup, resolve
-      if (qsIsSignup !== 'true') {
-        return resolve();
-      }
-
-      // Resolve automatically after 100ms
-      setTimeout(function () {
-        return resolve();
-      }, 100);
-
-      // Make request
-      fetch(serverApiURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          authenticationToken: token,
-          command: 'user:sign-up',
-          payload: {
-            newsletterSignUp: qsNewsletter === 'true',
-            affiliateCode: qsAffiliateCode,
-          }
-        }),
-      })
-      .then(function () {
-        console.error('signUpHandler(): Complete');
-      })
-      .catch(function (e) {
-        console.error('signUpHandler(): Fail', e);
-      })
-    });
   }
 
   function redirect(url) {
@@ -915,42 +916,44 @@ settings:
   function createCustomToken(payload) {
     console.log('createCustomToken():', payload);
 
-    trackSignupOrSignin();
+    handleAuthentication()
+    .then(function () {
 
-    payload.user.getIdToken(true)
-    .then(function (token) {
-      console.log('createCustomToken(): token', token);
+      payload.user.getIdToken(true)
+      .then(function (token) {
+        console.log('createCustomToken(): token', token);
 
-      signUpHandler(token)
-      .then(function () {
-        fetch(serverApiURL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            command: 'user:create-custom-token',
-            authenticationToken: token,
-          }),
-        })
-        .then(function (res) { // This function runs only on success
-          if (!res.ok) {
-            return res.text()
-            .then(function (data) {
-              throw new Error(data || res.statusText || 'Unknown error.')
-            })
-          }
-
-          res.json()
-          .then(function (data) {
-            console.log('createCustomToken(): data.token', data.token);
-
-            window.tokenResult = data.token;
-
-            redirect();
+        signUpHandler(token)
+        .then(function () {
+          fetch(serverApiURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              command: 'user:create-custom-token',
+              authenticationToken: token,
+            }),
           })
-        })
-        .catch(function (e) { // This function runs only on error
-          console.error('createCustomToken(): Error', e);
-          display(e);
+          .then(function (res) { // This function runs only on success
+            if (!res.ok) {
+              return res.text()
+              .then(function (data) {
+                throw new Error(data || res.statusText || 'Unknown error.')
+              })
+            }
+
+            res.json()
+            .then(function (data) {
+              console.log('createCustomToken(): data.token', data.token);
+
+              window.tokenResult = data.token;
+
+              redirect();
+            })
+          })
+          .catch(function (e) { // This function runs only on error
+            console.error('createCustomToken(): Error', e);
+            display(e);
+          })
         })
       })
     })
