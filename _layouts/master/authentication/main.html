@@ -439,6 +439,7 @@ settings:
 
 <script type="text/javascript">
   var select;
+  var storage;
   var _;
   var url;
   var serverApiURL;
@@ -463,6 +464,7 @@ settings:
 
   Manager.auth().ready(function () {
     select = Manager.dom().select;
+    storage = Manager.storage();
     _ = Manager.utilities();
     var user = firebase.auth().currentUser;
     url = new URL(window.location.href);
@@ -697,7 +699,7 @@ settings:
       if (!user || !user.uid) { return resolve(); }
 
       var trackedSignupKey = 'trackedSignup.' + user.uid;
-      var trackedSignup = Manager.storage().get(trackedSignupKey, false);
+      var trackedSignup = storage.get(trackedSignupKey, false);
 
       var now = new Date();
       var signupDate = new Date(+user.metadata.createdAt);
@@ -710,7 +712,7 @@ settings:
       console.log('handleAuthentication():', providerId, accountAgeSeconds, trackedSignup, isSignUp);
 
       // Set the trackedSignup flag
-      Manager.storage().set(trackedSignupKey, true);
+      storage.set(trackedSignupKey, true);
 
       // If it's not a sign up, just resolve
       if (!isSignUp) {
@@ -760,7 +762,7 @@ settings:
               command: 'user:sign-up',
               payload: {
                 newsletterSignUp: select('.auth-newsletter-input').getValue(),
-                affiliateCode: store.get('affiliateCode', ''),
+                affiliateCode: storage.get('affiliateCode', ''),
               },
             }),
           })
@@ -793,7 +795,7 @@ settings:
   }
 
   function redirect(url) {
-    var delay = Manager.storage().get('auth.redirectDelay', 0);
+    var delay = storage.get('auth.redirectDelay', 0);
     url = url || redirectUrl;
 
     console.log('redirect():', delay, url);
@@ -857,7 +859,7 @@ settings:
   }
 
   // function redirect(url) {
-  //   var delay = Manager.storage().get('auth.redirectDelay', 0);
+  //   var delay = storage.get('auth.redirectDelay', 0);
   //   console.log('Redirecting with delay...', delay, url);
   //
   //   if (delay) {
@@ -923,37 +925,34 @@ settings:
       .then(function (token) {
         console.log('createCustomToken(): token', token);
 
-        signUpHandler(token)
-        .then(function () {
-          fetch(serverApiURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              command: 'user:create-custom-token',
-              authenticationToken: token,
-            }),
-          })
-          .then(function (res) { // This function runs only on success
-            if (!res.ok) {
-              return res.text()
-              .then(function (data) {
-                throw new Error(data || res.statusText || 'Unknown error.')
-              })
-            }
-
-            res.json()
+        fetch(serverApiURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            command: 'user:create-custom-token',
+            authenticationToken: token,
+          }),
+        })
+        .then(function (res) { // This function runs only on success
+          if (!res.ok) {
+            return res.text()
             .then(function (data) {
-              console.log('createCustomToken(): data.token', data.token);
-
-              window.tokenResult = data.token;
-
-              redirect();
+              throw new Error(data || res.statusText || 'Unknown error.')
             })
+          }
+
+          res.json()
+          .then(function (data) {
+            console.log('createCustomToken(): data.token', data.token);
+
+            window.tokenResult = data.token;
+
+            redirect();
           })
-          .catch(function (e) { // This function runs only on error
-            console.error('createCustomToken(): Error', e);
-            display(e);
-          })
+        })
+        .catch(function (e) { // This function runs only on error
+          console.error('createCustomToken(): Error', e);
+          display(e);
         })
       })
     })
