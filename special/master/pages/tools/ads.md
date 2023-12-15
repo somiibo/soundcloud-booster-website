@@ -48,24 +48,20 @@ This is an `adsense-multiplex.html` ad:
 
         console.log('.account().resolve()', accountData);
 
-        console.log('-----1')
-        account.handleAccount({
-          plan: {
-            id: 'premium',
-          }
-        })
-        console.log('-----2')
+        // account.handleAccount({
+        //   plan: {
+        //     id: 'premium',
+        //   }
+        // })
 
-        return resolve(accountData)
+        return;
       })
       .catch(function (e) {
-        console.log('--- 1', e)
-        return reject(e);
+        console.error('.account().resolve()', e);
       })
     })
     .catch(function (e) {
-        console.log('--- 2', e)
-      return reject(e);
+      console.error('.account().resolve()', e);
     })
   })
 </script>
