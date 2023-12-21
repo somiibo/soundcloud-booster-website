@@ -128,6 +128,7 @@
       options.unsaved.parent = options.unsaved.parent || '.dashboard-display-unsaved-popup';
 
       options.createDefaultElements = typeof options.createDefaultElements === 'undefined' ? true : options.createDefaultElements;
+      options.preventUnsavedNavigation = typeof options.preventUnsavedNavigation === 'undefined' ? true : options.preventUnsavedNavigation;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
 
       self.element.id = select(self.id);
@@ -300,7 +301,9 @@
 
       // Set allow leave
       if (['success'].includes(status)) {
-        self.setAllowLeave(true);
+        if (self.options.preventUnsavedNavigation) {
+          self.setAllowLeave(true);
+        }
       }
 
       return self;
@@ -403,7 +406,9 @@
           self.element.unsaved.parent.removeAttribute('hidden');
         }
 
-        self.setAllowLeave(false);
+        if (self.options.preventUnsavedNavigation) {
+          self.setAllowLeave(false);
+        }
 
         self.display('ready');
 
