@@ -130,6 +130,7 @@
       options.createDefaultElements = typeof options.createDefaultElements === 'undefined' ? true : options.createDefaultElements;
       options.preventUnsavedNavigation = typeof options.preventUnsavedNavigation === 'undefined' ? true : options.preventUnsavedNavigation;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
+      options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'array' : options.checkboxReturnType;
 
       self.element.id = select(self.id);
 
@@ -334,7 +335,7 @@
       .forEach(function (el) {
         var $el = select(el);
         var name = $el.getAttribute('name');
-        var value = select('#' + $form.id + ' [name="' + name + '"]').getValue();
+        var value = select('#' + $form.id + ' [name="' + name + '"]').getValue({returnType: self.options.checkboxReturnType});
 
         if (el.tagName === 'BUTTON') {
           return;
