@@ -263,7 +263,7 @@
           $el.removeAttribute('hidden');
 
           try {
-            var toast = new bootstrap.Toast($el, {})
+            var toast = new bootstrap.Toast($el, {autohide: false})
             toast.show();
           } catch (e) {
             // console.warn('[Dashboard] Unable to create error toast', e);
