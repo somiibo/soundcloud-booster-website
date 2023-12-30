@@ -350,6 +350,27 @@
       return self._handler.transformData(data);
     };
 
+    Dashboard.prototype.setFormData = function (settings) {
+      var self = this;
+      var data = {};
+      var $form = self.element.id.get(0);
+
+      $form.querySelectorAll(self._inputAndSubmit)
+      .forEach(function (el) {
+        var $el = select(el);
+        var name = $el.getAttribute('name');
+        var value = get(settings, name);
+
+        if (typeof value === 'undefined') {
+          return;
+        }
+
+        $el.setValue(value);
+      });
+
+      return self._handler.transformData(data);
+    };
+
     Dashboard.prototype.transformData = function (fn) {
       var self = this;
 
