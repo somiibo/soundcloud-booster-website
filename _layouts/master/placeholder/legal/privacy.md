@@ -68,15 +68,15 @@ In the event of a change of control, if we sell or otherwise transfer part or th
 ## How We Store Your Information
 
 ### Your Choices About Your Information:
-Your account information and profile privacy settings can be updated or changed by visitng your account profile at [{{ site.url }}/account]({{ site.url }}/account) or by contacting {{ site.brand.name }} directly at [{{ site.url }}/contact]({{ site.url }}/contact).
-- You may request to have your account deleted by visiting your account profile at [{{ site.url }}/account]({{ site.url }}/account)
+Your account information and profile privacy settings can be updated or changed by visiting your account profile at [{{ site.url }}/account]({{ site.url }}/account) or by contacting {{ site.brand.name }} directly at [{{ site.url }}/contact]({{ site.url }}/contact).
+- You may request to have your account deleted by visiting your account profile at [{{ site.url }}/account]({{ site.url }}/account#deleteAccount)
 - You may request to unsubscribe from emails by clicking the "unsubscribe" link inside the email.
 
 ## Children’s Privacy:
 When it comes to the collection of personal information from children under 13, the Children’s Online Privacy Protection Act (COPPA) puts parents in control. The Federal Trade Commission, the nation’s consumer protection agency enforces the COPPA Rule, which spells out what operators of websites and online services must do to protect children’s privacy and safety online. We do not specifically market to children under 13.
 
 ## Request your data to be removed or deleted
-If you would like your personally identifiable information to be deleted from our database you can request deletion here: [{{ site.url }}/account]({{ site.url }}/account)
+If you would like your personally identifiable information to be deleted from our database you can request deletion here: [{{ site.url }}/account]({{ site.url }}/account#deleteAccount)
 
 ## Acceptance of this policy
 Use of our site signifies your acceptance of this policy. If you do not accept the policy then please do not use this site. When registering we will further request your explicit acceptance of the privacy policy.

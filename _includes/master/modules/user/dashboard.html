@@ -128,7 +128,9 @@
       options.unsaved.parent = options.unsaved.parent || '.dashboard-display-unsaved-popup';
 
       options.createDefaultElements = typeof options.createDefaultElements === 'undefined' ? true : options.createDefaultElements;
+      options.preventUnsavedNavigation = typeof options.preventUnsavedNavigation === 'undefined' ? true : options.preventUnsavedNavigation;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
+      options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'object' : options.checkboxReturnType;
 
       self.element.id = select(self.id);
 
@@ -261,7 +263,7 @@
           $el.removeAttribute('hidden');
 
           try {
-            var toast = new bootstrap.Toast($el, {})
+            var toast = new bootstrap.Toast($el, {autohide: false})
             toast.show();
           } catch (e) {
             // console.warn('[Dashboard] Unable to create error toast', e);
@@ -300,7 +302,9 @@
 
       // Set allow leave
       if (['success'].includes(status)) {
-        self.setAllowLeave(true);
+        if (self.options.preventUnsavedNavigation) {
+          self.setAllowLeave(true);
+        }
       }
 
       return self;
@@ -331,7 +335,7 @@
       .forEach(function (el) {
         var $el = select(el);
         var name = $el.getAttribute('name');
-        var value = select('#' + $form.id + ' [name="' + name + '"]').getValue();
+        var value = select('#' + $form.id + ' [name="' + name + '"]').getValue({returnType: self.options.checkboxReturnType});
 
         if (el.tagName === 'BUTTON') {
           return;
@@ -341,6 +345,27 @@
         }
 
         set(data, name, value);
+      });
+
+      return self._handler.transformData(data);
+    };
+
+    Dashboard.prototype.setFormData = function (settings) {
+      var self = this;
+      var data = {};
+      var $form = self.element.id.get(0);
+
+      $form.querySelectorAll(self._inputAndSubmit)
+      .forEach(function (el) {
+        var $el = select(el);
+        var name = $el.getAttribute('name');
+        var value = get(settings, name);
+
+        if (typeof value === 'undefined') {
+          return;
+        }
+
+        $el.setValue(value);
       });
 
       return self._handler.transformData(data);
@@ -403,7 +428,9 @@
           self.element.unsaved.parent.removeAttribute('hidden');
         }
 
-        self.setAllowLeave(false);
+        if (self.options.preventUnsavedNavigation) {
+          self.setAllowLeave(false);
+        }
 
         self.display('ready');
 
