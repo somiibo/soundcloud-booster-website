@@ -1839,11 +1839,9 @@ settings:
         var $hashBtn = document.querySelector('*[href="' + currentURL.hash + '"]');
         // var $hashTrigger = select('*[data-hash-trigger="' + currentURL.hash + '"]');
         var $hashTrigger = select('*[data-hash-trigger]');
-        console.log('---$hashTrigger', $hashTrigger);
 
         // Unhide hash trigger
         $hashTrigger.each(function ($el) {
-          console.log('---$el', $el);
           if ($el.getAttribute('data-hash-trigger') === currentURL.hash) {
             $el.removeAttribute('hidden');
           } else {
