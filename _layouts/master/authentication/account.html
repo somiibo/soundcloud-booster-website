@@ -213,7 +213,7 @@ settings:
                   <i class="bi-toggle2-on nav-icon"></i> Active Sessions
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" data-hash-trigger="#deleteAccount" hidden>
                 <a class="nav-link" href="#deleteAccount">
                   <i class="bi-trash3 nav-icon"></i> Delete Account
                 </a>
@@ -935,7 +935,7 @@ settings:
 
 
             <!-- Card -->
-            <div id="deleteAccount" class="card">
+            <div id="deleteAccount" class="card" data-hash-trigger="#deleteAccount">
               <div class="card-header">
                 <h4 class="card-title"><i class="bi-trash3 nav-icon me-1"></i> Delete Account</h4>
               </div>
@@ -1241,9 +1241,9 @@ settings:
       linux: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/linux.svg',
     }
 
-    $authUserProfileImg.setAttribute('onerror', '')
+    $authUserProfileImg.setAttribute('onerror', '');
     $authUserProfileImg.src = gravatar;
-    $authUserProfileParent.href = 'https://gravatar.com'
+    $authUserProfileParent.href = 'https://gravatar.com';
 
     // Process
     if (!user) {
@@ -1835,12 +1835,25 @@ settings:
           return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
         })
 
-        if (currentURL.hash) {
-          var hashEl = document.querySelector('*[href="' + currentURL.hash + '"]');
-          // console.log('---hashEl', currentURL.hash, hashEl);
-          if (hashEl) {
-            hashEl.click();
+        // Handle hash
+        var $hashBtn = document.querySelector('*[href="' + currentURL.hash + '"]');
+        // var $hashTrigger = select('*[data-hash-trigger="' + currentURL.hash + '"]');
+        var $hashTrigger = select('*[data-hash-trigger]');
+        console.log('---$hashTrigger', $hashTrigger);
+
+        // Unhide hash trigger
+        $hashTrigger.each(function ($el) {
+          console.log('---$el', $el);
+          if ($el.getAttribute('data-hash-trigger') === currentURL.hash) {
+            $el.removeAttribute('hidden');
+          } else {
+            $el.setAttribute('hidden', true);
           }
+        })
+
+        // Click hash trigger
+        if ($hashBtn) {
+          $hashBtn.click();
         }
 
       })
