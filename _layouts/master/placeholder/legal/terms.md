@@ -137,7 +137,7 @@ Upon cancellation you will not be charged any further subscription fees. No paym
 
 Any other purchases, including one-time payments, add-ons, or other sales on our site that do not include a free trial period are final and non-refundable once processed.
 
-Should you request a refund, we will determine the eligibility of your refund. If approved, you will be refunded via the same payment method you originally used.
+Should you request a refund, we will determine the eligibility of your refund. If approved, you will be refunded via the same payment method you originally used. Requests can be made using our [refund request form](https://itwcreativeworks.com/portal/account/payment/refund).
 
 ### Debt Collection
 In the event of an outstanding balance on your account, we reserve the right to engage debt collection agencies to recover the unpaid amount.
