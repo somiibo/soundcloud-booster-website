@@ -382,7 +382,7 @@
     color: black;
   }
 
-  .master-alert-outdated {
+  /* .master-alert-outdated {
     background-color: #f44336;
   }
 
@@ -392,7 +392,7 @@
 
   .master-alert-sale {
     background-color: #237afc;
-  }
+  } */
 
   /* Chat box opener */
   #prechat-btn {
@@ -456,21 +456,21 @@
 <!-- Alerts -->
 <!-- Master - Outdated Alert Box -->
 <div
-  class="master-alert master-alert-top master-alert-fixed master-alert-outdated animation-fade-in"
+  class="master-alert master-alert-top master-alert-fixed master-alert-outdated bg-danger animation-fade-in"
   role="alert" aria-live="polite" aria-label="Outdated browser"
   hidden>
   <span class="master-alert-close">&times;</span>
   You are using an outdated browser that our site <strong>DOES NOT</strong> support. Please <a href="https://www.google.com/chrome" rel="nofollow" target="_blank">click here</a> to update your browser.
 </div>
 <div
-  class="master-alert master-alert-top master-alert-fixed master-alert-suspended animation-fade-in"
+  class="master-alert master-alert-top master-alert-fixed master-alert-suspended bg-danger animation-fade-in"
   role="alert" aria-live="polite" aria-label="Payment method issue"
   hidden>
   <span class="master-alert-close">&times;</span>
   There is a problem with your payment method. To coninue using {{ site.brand.name }}, please <a href="{{ site.url }}/account#billing" target="_blank">update your payment method</a>.
 </div>
 <div
-  class="master-alert master-alert-top master-alert-block master-alert-sale animation-fade-in"
+  class="master-alert master-alert-top master-alert-block master-alert-sale bg-primary animation-fade-in"
   role="alert" aria-live="polite" aria-label="Flash sale"
   hidden>
   <span class="master-alert-close">&times;</span>
