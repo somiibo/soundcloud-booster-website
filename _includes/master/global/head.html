@@ -343,7 +343,7 @@
     padding: 20px;
     color: white;
     left: 0;
-    z-index: 9999;
+    z-index: 999999;
     width: 100%;
   }
 
@@ -357,6 +357,9 @@
 
   .master-alert-fixed {
     position: fixed;
+  }
+
+  .master-alert-block {
   }
 
   .master-alert a {
@@ -476,7 +479,7 @@
   </div>
 </div>
 <div
-  class="master-alert master-alert-top master-alert-block master-alert-sale bg-primary animation-fade-in"
+  class="master-alert master-alert-top master-alert-fixed master-alert-sale bg-primary animation-fade-in"
   role="alert" aria-live="polite" aria-label="Flash sale"
   hidden>
   <span class="master-alert-close">&times;</span>
