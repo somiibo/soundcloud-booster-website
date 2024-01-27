@@ -382,7 +382,7 @@
     color: black;
   }
 
-  /* .master-alert-outdated {
+  .master-alert-outdated {
     background-color: #f44336;
   }
 
@@ -391,8 +391,8 @@
   }
 
   .master-alert-sale {
-    background-color: #237afc;
-  } */
+    background-color: #0d6efd;
+  }
 
   /* Chat box opener */
   #prechat-btn {
@@ -460,22 +460,31 @@
   role="alert" aria-live="polite" aria-label="Outdated browser"
   hidden>
   <span class="master-alert-close">&times;</span>
-  You are using an outdated browser that our site <strong>DOES NOT</strong> support. Please <a href="https://www.google.com/chrome" rel="nofollow" target="_blank">click here</a> to update your browser.
+  <div>
+    <i class="fa-solid fa-warning fa-bounce me-2"></i>
+    You are using an outdated browser that our site <strong>DOES NOT</strong> support. Please <a href="https://www.google.com/chrome" rel="nofollow" target="_blank">click here</a> to update your browser.
+  </div>
 </div>
 <div
   class="master-alert master-alert-top master-alert-fixed master-alert-suspended bg-danger animation-fade-in"
   role="alert" aria-live="polite" aria-label="Payment method issue"
   hidden>
   <span class="master-alert-close">&times;</span>
-  There is a problem with your payment method. To coninue using {{ site.brand.name }}, please <a href="{{ site.url }}/account#billing" target="_blank">update your payment method</a>.
+  <div>
+    <i class="fa-solid fa-warning fa-bounce me-2"></i>
+    There is a <strong>problem with your payment method</strong>. To continue using <strong>{{ site.brand.name }}</strong>, please <a href="{{ site.url }}/account#billing" target="_blank">update your payment method</a>.
+  </div>
 </div>
 <div
   class="master-alert master-alert-top master-alert-block master-alert-sale bg-primary animation-fade-in"
   role="alert" aria-live="polite" aria-label="Flash sale"
   hidden>
   <span class="master-alert-close">&times;</span>
-  <strong>FLASH SALE!</strong>
-  Save <strong>15%</strong> at checkout—today only!
+  <div>
+    <i class="fa-solid fa-stopwatch fa-beat  me-2"></i>
+    <strong>FLASH SALE!</strong>
+    Save <strong>15%</strong> at checkout—today only! <a href="{{ site.url }}/pricing" target="_blank">Claim discount</a>.
+  </div>
 </div>
 
 <!-- App - Head Content -->
