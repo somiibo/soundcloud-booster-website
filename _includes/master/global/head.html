@@ -341,13 +341,25 @@
   /* Alert box */
   .master-alert {
     padding: 20px;
-    background-color: #f44336;
     color: white;
-    bottom:0;
-    left:0;
-    position:fixed;
-    z-index:9999;
+    left: 0;
+    z-index: 999999;
     width: 100%;
+  }
+
+  .master-alert-top {
+    top: 0;
+  }
+
+  .master-alert-bottom {
+    bottom: 0;
+  }
+
+  .master-alert-fixed {
+    position: fixed;
+  }
+
+  .master-alert-block {
   }
 
   .master-alert a {
@@ -374,7 +386,15 @@
   }
 
   .master-alert-outdated {
-    display: none;
+    background-color: #f44336;
+  }
+
+  .master-alert-suspended {
+    background-color: #f44336;
+  }
+
+  .master-alert-sale {
+    background-color: #0d6efd;
   }
 
   /* Chat box opener */
@@ -422,10 +442,53 @@
   }
 </style>
 
-<!-- Style - IE 8 and Below Only -->
-<!--[if lte IE 8]>
-<link rel="stylesheet" type="text/css" href="/assets/css/master/lte-ie8.css?cb={{ site.time | date: '%s' }}">
+<!-- Style - IE 9 and Below Only -->
+<!--[if lte IE 9]>
+<link rel="stylesheet" type="text/css" href="/assets/css/master/lte-ie9.css?cb={{ site.time | date: '%s' }}">
 <![endif]-->
+
+<!-- Style - Scripts are Disabled -->
+<noscript>
+  <style media="screen">
+    .master-alert-outdated {
+      display: block !important;
+    }
+  </style>
+</noscript>
+
+<!-- Alerts -->
+<!-- Master - Outdated Alert Box -->
+<div
+  class="master-alert master-alert-top master-alert-fixed master-alert-outdated bg-danger animation-fade-in"
+  role="alert" aria-live="polite" aria-label="Outdated browser"
+  hidden>
+  <span class="master-alert-close">&times;</span>
+  <div>
+    <i class="fa-solid fa-warning fa-bounce me-2"></i>
+    You are using an outdated browser that our site <strong>DOES NOT</strong> support. Please <a href="https://www.google.com/chrome" rel="nofollow" target="_blank">click here</a> to update your browser.
+  </div>
+</div>
+<div
+  class="master-alert master-alert-top master-alert-fixed master-alert-suspended bg-danger animation-fade-in"
+  role="alert" aria-live="polite" aria-label="Payment method issue"
+  hidden>
+  <span class="master-alert-close">&times;</span>
+  <div>
+    <i class="fa-solid fa-warning fa-bounce me-2"></i>
+    There is a <strong>problem with your payment method</strong>. To continue using <strong>{{ site.brand.name }}</strong>, please <a href="{{ site.url }}/account#billing" target="_blank">update your payment method</a>.
+  </div>
+</div>
+<div
+  class="master-alert master-alert-top master-alert-fixed master-alert-sale bg-primary animation-fade-in"
+  role="alert" aria-live="polite" aria-label="Flash sale"
+  hidden>
+  <span class="master-alert-close">&times;</span>
+  <div>
+    <i class="fa-solid fa-stopwatch fa-beat  me-2"></i>
+    <strong>FLASH SALE!</strong>
+    Save <strong>15%</strong> at checkout—today only! <a href="{{ site.url }}/pricing" target="_blank">Claim discount</a>.
+  </div>
+</div>
 
 <!-- App - Head Content -->
 {%- if page.settings.include-app-head == false -%}
