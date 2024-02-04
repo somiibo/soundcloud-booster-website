@@ -709,7 +709,7 @@ settings:
       var providerId = _.get(providerData, Math.max(providerData.length - 1, 0) + '.providerId', 'password');
       var isSignUp = accountAgeSeconds < 30 && !trackedSignup;
 
-      console.log('handleAuthentication():', providerId, accountAgeSeconds, trackedSignup, isSignUp);
+      console.log('handleAuthentication():', user.uid, providerId, accountAgeSeconds, trackedSignup, isSignUp);
 
       // Set the trackedSignup flag
       storage.set(trackedSignupKey, true);
