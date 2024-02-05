@@ -756,12 +756,13 @@ settings:
         content_type: 'product',
       });
 
-      // Send user:sign-up request
+      // Get the token for the user
       user.getIdToken(false)
         .then(function(token) {
 
           console.log('handleAuthentication(): Sending user:sign-up request', token);
 
+          // Send the user:sign-up request
           fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
             method: 'POST',
             body: JSON.stringify({
@@ -773,14 +774,28 @@ settings:
               },
             }),
           })
+          .then(function (res) {
+            if (!res.ok) {
+              return res.text()
+              .then(function (data) {
+                throw new Error(data || res.statusText || 'Unknown error.')
+              })
+            } else {
+              console.log('handleAuthentication(): Sent user:sign-up request');
+
+              return resolve();
+            }
+          })
           .catch(function (e) {
             console.error('handleAuthentication(): Error sending user:sign-up request', e);
+
+            return resolve();
           })
 
           // We don't need to wait for the fetch to finish
-          setTimeout(function () {
-            return resolve();
-          }, 100);
+          // setTimeout(function () {
+          //   return resolve();
+          // }, 10000);
         })
         .catch(function(e) {
           console.error('handleAuthentication(): Error getting token', e);
