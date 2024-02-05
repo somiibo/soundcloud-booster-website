@@ -727,8 +727,13 @@ settings:
         // TikTok Pixel
         // ...
 
+        // Log
+        console.log('handleAuthentication(): Not a sign-up event');
+
         return resolve();
       }
+
+      console.log('handleAuthentication(): Is a sign-up event');
 
       // Google Analytics
       gtag('event', 'sign_up', {
@@ -751,9 +756,11 @@ settings:
         content_type: 'product',
       });
 
-      // Send user:signup request
+      // Send user:sign-up request
       user.getIdToken(false)
         .then(function(token) {
+
+          console.log('handleAuthentication(): Sending user:sign-up request', token);
 
           fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
             method: 'POST',
@@ -767,7 +774,7 @@ settings:
             }),
           })
           .catch(function (e) {
-            console.error('handleAuthentication(): Error sending user:signup request', e);
+            console.error('handleAuthentication(): Error sending user:sign-up request', e);
           })
 
           // We don't need to wait for the fetch to finish
