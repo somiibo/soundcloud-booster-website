@@ -316,6 +316,12 @@
       return self.options.template[id];
     };
 
+    // Dashboard.prototype.template = function (id, data) {
+    //   var self = this;
+
+    //   return self.options.template[id];
+    // };
+
     Dashboard.prototype.registerInput = function ($el) {
       var self = this;
 
@@ -355,16 +361,19 @@
       var data = {};
       var $form = self.element.id.get(0);
 
+      // Loop through all inputs and set the value
       $form.querySelectorAll(self._inputAndSubmit)
       .forEach(function (el) {
         var $el = select(el);
         var name = $el.getAttribute('name');
         var value = get(settings, name);
 
-        if (typeof value === 'undefined') {
+        // If no name or value, skip
+        if (!name || typeof value === 'undefined') {
           return;
         }
 
+        // Set value
         $el.setValue(value);
       });
 
