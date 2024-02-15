@@ -111,7 +111,8 @@ Tools.prototype.quitIfBadBuildEnvironment = function () {
     const result = (await self.getCurrentBranch()) === 'template' && !self.isTemplate;
 
     if (result) {
-      console.error('⛔️ Quitting because this is the template branch and we are working on a child project of the template.');
+      // console.error('⛔️ Quitting because this is the template branch and we are working on a child project of the template.');
+      console.error('⛔️ Branch change detected! Quitting safely...');
 
       process.exit(1);
     }
