@@ -244,7 +244,7 @@ settings:
                 <!-- Form -->
                 <div class="mb-3">
                   <label class="form-label" for="signupSrEmail">Your email</label>
-                  <input type="email" class="form-control form-control-md auth-email-element" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                  <input type="email" class="form-control form-control-md auth-email-input" id="signupSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
                   <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
                 </div>
                 <!-- End Form -->
@@ -338,7 +338,7 @@ settings:
                   <div class="d-grid mb-3">
                     <div class="mb-3">
                       <label class="form-label" for="forgotSrEmail">Your email</label>
-                      <input type="email" class="form-control form-control-md auth-email-element" id="forgotSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
+                      <input type="email" class="form-control form-control-md auth-email-input" id="forgotSrEmail" placeholder="jonsnow@gmail.com" aria-label="jonsnow@gmail.com" required autofocus autocomplete="email">
                       <!-- <span class="invalid-feedback">Please enter a valid email address.</span> -->
                     </div>
                     <button id="" class="btn btn-primary auth-forgot-email-btn" type="submit">Reset password</button>
@@ -490,7 +490,7 @@ settings:
     $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {})
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
     $authLinks = select('a[href*="/signin"], a[href*="/signup"]');
-    $emailInput = select('.auth-email-element');
+    $emailInput = select('.auth-email-input');
 
     // Handle clicks
     document.addEventListener('click', function (event) {
@@ -518,7 +518,7 @@ settings:
     var events = ['change', 'cut', 'paste', 'keydown']
     events.forEach(function (event) {
       document.addEventListener(event, function (event) {
-        if (event.target.matches('.auth-email-element')) {
+        if (event.target.matches('.auth-email-input')) {
           clearTimeout(updateTimeout);
           updateTimeout = setTimeout(function () {
             updateLinksWithEmail(event.target.value);

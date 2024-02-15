@@ -6,7 +6,7 @@ sitemap:
 ---
 
 # Attributes
-## .auth-email-element
+## .auth-email-input
 ## .auth-password-input
 ## .auth-password-confirm-input
   * When checking these, do an .each loop and use the first NON NULL value (to allow multiple inputs per page)
