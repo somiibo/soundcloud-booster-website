@@ -172,6 +172,13 @@
         }
       })
 
+      // Add query strings to form
+      Manager.properties.page.queryString.forEach(function (value, key) {
+        self.setFormData({
+          [key]: value,
+        });
+      });
+
       // self.display('loading');
       self.display('initializing');
 
@@ -186,6 +193,7 @@
         self._triggeredInitialOnChangeEvent = true;
       }
 
+      // Return
       return self;
     };
 
