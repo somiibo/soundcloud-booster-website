@@ -247,10 +247,12 @@
       .forEach(function (el) {
         var $el = select(el);
         var isPending = ['initializing', 'loading'].includes(status);
+        var isDisabledClass = el.classList.contains('disabled');
+        var isDisabledAttribute = el.hasAttribute('disabled');
 
-        if (isPending) {
+        if (isPending && (!isDisabledClass || !isDisabledAttribute)) {
           $el.addClass('disabled').setAttribute('disabled', true);
-        } else {
+        } else if (!isPending && (isDisabledClass || isDisabledAttribute)){
           $el.removeClass('disabled').removeAttribute('disabled');
         }
 
