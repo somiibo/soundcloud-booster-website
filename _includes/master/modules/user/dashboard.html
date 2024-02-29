@@ -6,7 +6,7 @@
   <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
     <div class="dashboard-status-listener toast bg-success text-white" data-status="success">
       <div class="d-flex">
-        <div class="toast-body text-left">
+        <div class="toast-body">
           <h4 class="text-white">Success!</h4>
           <span class="dashboard-status-listener-message" data-status="success">
             Unknown success
@@ -23,7 +23,7 @@
   <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
     <div class="dashboard-status-listener toast bg-danger text-white" data-status="error">
       <div class="d-flex">
-        <div class="toast-body text-left">
+        <div class="toast-body">
           <h4 class="text-white">Error!</h4>
           <span class="dashboard-status-listener-message" data-status="error">
             Unknown error
@@ -133,6 +133,7 @@
       options.preventUnsavedNavigation = typeof options.preventUnsavedNavigation === 'undefined' ? true : options.preventUnsavedNavigation;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
       options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'object' : options.checkboxReturnType;
+      options.allowMultipleSubmits = typeof options.allowMultipleSubmits === 'undefined' ? true : options.allowMultipleSubmits;
 
       self.element.id = select(self.id);
 
@@ -263,6 +264,11 @@
         // } else if (!isPending && (isDisabledClass || isDisabledAttribute)) {
         //   $el.removeClass('disabled').removeAttribute('disabled');
         // }
+
+        // Disable form if allowMultipleSubmits is false
+        if (status === 'success' && !self.options.allowMultipleSubmits) {
+          $el.addClass('disabled').setAttribute('disabled', true);
+        }
       });
 
       // Set dynamic state
@@ -321,6 +327,9 @@
       if (['success'].includes(status)) {
         if (self.options.preventUnsavedNavigation) {
           self.setAllowLeave(true);
+        }
+        if (self.options.allowMultipleSubmits) {
+          // self.setFormData({});
         }
       }
 
