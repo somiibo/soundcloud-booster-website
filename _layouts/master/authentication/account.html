@@ -192,6 +192,11 @@ settings:
                   <i class="bi-key nav-icon"></i> API Keys
                 </a>
               </li>
+              <li class="nav-item" hidden>
+                <a class="nav-link" href="#usage">
+                  <i class="bi-activity nav-icon"></i> Usage
+                </a>
+              </li>
               <li id="changePasswordParent" class="nav-item">
                 <a class="nav-link" href="#changePassword">
                   <i class="bi-shield-lock nav-icon"></i> Password
@@ -593,27 +598,13 @@ settings:
                   </div>
                   <!-- End Col -->
                 </div>
+
+                <div class="row">
+                  <p class="mb-0">
+                    You can view your plan benefits from the <a href="{{ site.url }}/pricing" target="_blank">pricing page</a>.
+                  </p>
+                </div>
                 <!-- End Row -->
-              </div>
-
-              <div class="card-body">
-                <p class="card-text">View and manage your account usage. Usage resets on <strong id="usage-reset"></strong>. </p>
-              </div>
-
-              <div class="table-responsive">
-                <table class="table table-thead-bordered table-nowrap table-align-middle card-table">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Metric</th>
-                      <th>Used</th>
-                      <th>Allowed</th>
-                    </tr>
-                  </thead>
-
-                  <tbody id="usage-table">
-
-                  </tbody>
-                </table>
               </div>
               <!-- End Body -->
             </div>
@@ -787,6 +778,39 @@ settings:
               </div>
               <!-- End Body -->
             </div>
+
+            <!-- Card -->
+            <div id="usage" class="card" hidden>
+              <div class="card-header">
+                <div class="d-flex align-items-center">
+                  <h4 class="mb-0"><i class="bi-activity nav-icon me-1"></i> Usage</h4>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <p class="card-text">
+                  View and manage your account usage. <span hidden>Usage resets on <strong id="usage-reset"></strong>. </span>
+                </p>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-thead-bordered table-nowrap table-align-middle card-table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Metric</th>
+                      <th>Used</th>
+                      <th>Allowed</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="usage-table">
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- End Body -->
+            </div>
+            <!-- End Card -->
 
             <!-- Card -->
             <div id="changePassword" class="card">
