@@ -104,7 +104,7 @@
       self._triggeredInitialOnChangeEvent = false;
       self._$manualChangeTriggerElement = null;
       self._elements = ['input', 'textarea', 'select'];
-      self._events = ['change', 'keydown']
+      self._events = ['change', 'keydown', 'cut', 'paste']
       self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
 
       // Set global libraries
@@ -112,6 +112,8 @@
       get = Manager.utilities().get;
       set = Manager.utilities().set;
       storage = Manager.storage();
+
+      self.status = 'initializing';
 
       return self;
     }
@@ -131,6 +133,7 @@
       options.preventUnsavedNavigation = typeof options.preventUnsavedNavigation === 'undefined' ? true : options.preventUnsavedNavigation;
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
       options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'object' : options.checkboxReturnType;
+      options.allowMultipleSubmits = typeof options.allowMultipleSubmits === 'undefined' ? true : options.allowMultipleSubmits;
 
       self.element.id = select(self.id);
 
@@ -172,6 +175,13 @@
         }
       })
 
+      // Add query strings to form
+      Manager.properties.page.queryString.forEach(function (value, key) {
+        self.setFormData({
+          [key]: value,
+        });
+      });
+
       // self.display('loading');
       self.display('initializing');
 
@@ -186,6 +196,7 @@
         self._triggeredInitialOnChangeEvent = true;
       }
 
+      // Return
       return self;
     };
 
@@ -228,23 +239,35 @@
         message = message || '';
       }
 
+      self.status = status;
+
       console.log('[Dashboard] display', self.id, 'status=', status, 'state=', state, 'message=', message);
 
       // Enable or disable all inputs and submit buttons
       elements
       .forEach(function (el) {
         var $el = select(el);
+        var isPending = ['initializing', 'loading'].includes(status);
+        var isDisabledClass = el.classList.contains('disabled');
+        var isDisabledAttribute = el.hasAttribute('disabled');
 
-        if (
-          ['initializing', 'loading'].includes(status)
-          && (!el.classList.contains('disabled') || !el.hasAttribute('disabled'))
-        ) {
+        if (isPending && (!isDisabledClass || !isDisabledAttribute)) {
           $el.addClass('disabled').setAttribute('disabled', true);
-        } else if (
-          el.classList.contains('disabled')
-          || el.hasAttribute('disabled')
-        ) {
+        } else if (!isPending && (isDisabledClass || isDisabledAttribute)){
           $el.removeClass('disabled').removeAttribute('disabled');
+        }
+
+        // var isDisabledClass = el.classList.contains('disabled');
+        // var isDisabledAttribute = el.hasAttribute('disabled');
+        // if (isPending && (!isDisabledClass || !isDisabledAttribute)) {
+        //   $el.addClass('disabled').setAttribute('disabled', true);
+        // } else if (!isPending && (isDisabledClass || isDisabledAttribute)) {
+        //   $el.removeClass('disabled').removeAttribute('disabled');
+        // }
+
+        // Disable form if allowMultipleSubmits is false
+        if (status === 'success' && !self.options.allowMultipleSubmits) {
+          $el.addClass('disabled').setAttribute('disabled', true);
         }
       });
 
@@ -316,6 +339,12 @@
       return self.options.template[id];
     };
 
+    // Dashboard.prototype.template = function (id, data) {
+    //   var self = this;
+
+    //   return self.options.template[id];
+    // };
+
     Dashboard.prototype.registerInput = function ($el) {
       var self = this;
 
@@ -355,16 +384,19 @@
       var data = {};
       var $form = self.element.id.get(0);
 
+      // Loop through all inputs and set the value
       $form.querySelectorAll(self._inputAndSubmit)
       .forEach(function (el) {
         var $el = select(el);
         var name = $el.getAttribute('name');
         var value = get(settings, name);
 
-        if (typeof value === 'undefined') {
+        // If no name or value, skip
+        if (!name || typeof value === 'undefined') {
           return;
         }
 
+        // Set value
         $el.setValue(value);
       });
 

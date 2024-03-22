@@ -192,6 +192,11 @@ settings:
                   <i class="bi-key nav-icon"></i> API Keys
                 </a>
               </li>
+              <li class="nav-item" hidden>
+                <a class="nav-link" href="#usage">
+                  <i class="bi-activity nav-icon"></i> Usage
+                </a>
+              </li>
               <li id="changePasswordParent" class="nav-item">
                 <a class="nav-link" href="#changePassword">
                   <i class="bi-shield-lock nav-icon"></i> Password
@@ -398,33 +403,6 @@ settings:
                   </div>
                   <!-- End Form -->
 
-                  <!-- Form -->
-                  <div class="row mb-3">
-                    <!-- <p class="text-dark mb-0">Phone</p> -->
-                    <label for="nationalNumberLabel" class="form-label">Phone</label>
-
-                    <div class="input-group mb-3">
-                      <select id="countryCodes" class="form-select flex-grow-0" name="telephone.countryCode" autocomplete="tel-country-code" style="min-width: 4rem; max-width: 8rem; width: 50%;">
-                      </select>
-                      <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
-                               "mask": "(000) 000-0000"
-                             }'>
-                    </div>
-                    <!-- <div class="col-3 pe-0">
-                      <label for="countryCodeLabel" class="form-label text-muted">Country code</label>
-                      <input type="text" id="countryCodeLabel" class="js-input-mask form-control" name="telephone.countryCode" placeholder="+x" aria-label="+1" value="" style="max-width: 5rem;" autocomplete="tel-country-code" data-hs-mask-options='{
-                               "mask": "+0000"
-                             }'>
-                    </div>
-                    <div class="col-9 ps-0">
-                      <label for="nationalNumberLabel" class="form-label text-muted">Number</label>
-
-                      <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
-                               "mask": "(000) 000-0000"
-                             }'>
-                    </div> -->
-                  </div>
-
                   <!-- <div class="mb-3">
                     <label for="phoneNumberLabel" class="form-label">Phone</label>
 
@@ -439,44 +417,73 @@ settings:
                   </div> -->
                   <!-- End Form -->
 
-                  <div class="mb-3">
-                    <label for="birthdayLabel" class="form-label">Birthday</label>
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <label for="birthdayLabel" class="form-label">Birthday</label>
 
-                    <input type="date" class="form-control" name="birthday.timestamp" id="birthdayLabel" placeholder="" aria-label="now" value="" autocomplete="bday">
-                  </div>
+                      <input type="date" class="form-control" name="birthday.timestamp" id="birthdayLabel" placeholder="" aria-label="now" value="" autocomplete="bday">
+                    </div>
+                    <div class="col-6">
+                      <label for="genderLabel" class="form-label">Gender</label>
 
-                  <div class="mb-3">
-                    <label for="genderLabel" class="form-label">Gender</label>
-
-                    <select id="genderLabel" name="gender" class="form-select" autocomplete="sex">
-                      <option value="">Choose a gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="countryLabel" class="form-label">Country</label>
-
-                    <!-- Select -->
-                    <select id="countryLabel" name="location.country" class="form-select" autocomplete="country">
-
-                    </select>
-                    <!-- <div class="tom-select-custom mb-4">
-                      <select class="js-select form-select" id="locationLabel">
-                        <option value="AF" data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/af.svg" alt="Afghanistan Flag" /><span class="text-truncate">Afghanistan</span></span>'>Afghanistan</option>
-                        <option value="AX" data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/ax.svg" alt="Aland Islands Flag" /><span class="text-truncate">Aland Islands</span></span>'>Aland Islands</option>
-                        <option value="ZW" data-option-template='<span class="d-flex align-items-center"><img class="avatar avatar-xss avatar-circle me-2" src="./assets/vendor/flag-icon-css/flags/1x1/zw.svg" alt="Zimbabwe Flag" /><span class="text-truncate">Zimbabwe</span></span>'>Zimbabwe</option>
+                      <select id="genderLabel" name="gender" class="form-select" autocomplete="sex">
+                        <option value="">Choose a gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
                       </select>
-                    </div> -->
-                    <!-- End Select -->
+                    </div>
+                  </div>
 
-                    <!-- <div class="mb-3">
-                      <input type="text" class="form-control" name="city" id="cityLabel" placeholder="City" aria-label="City" value="London">
-                    </div> -->
+                  <div class="row">
+                    <div class="col">
+                      <div class="mb-3">
+                        <label for="countryLabel" class="form-label">Country</label>
+                        <select id="countryLabel" name="location.country" class="form-select" autocomplete="country">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="mb-3">
+                        <label for="regionLabel" class="form-label">Region</label>
+                        <input type="text" id="regionLabel" name="location.region" class="form-control" autocomplete="region">
+                      </div>
+                    </div>
+                  </div>
 
-                    <!-- <input type="text" class="form-control" name="state" id="stateLabel" placeholder="State" aria-label="State"> -->
+                  <!-- Form -->
+                  <div class="row mb-3">
+                    <div class="col">
+                      <div class="mb-3">
+                        <label for="cityLabel" class="form-label">City</label>
+                        <input type="text" id="cityLabel" name="location.city" class="form-control" autocomplete="city">
+                      </div>
+                    </div>
+
+                    <div class="col">
+                      <label for="nationalNumberLabel" class="form-label">Phone</label>
+
+                      <div class="input-group mb-3">
+                        <select id="countryCodes" class="form-select flex-grow-0" name="telephone.countryCode" autocomplete="tel-country-code" style="min-width: 4rem; max-width: 8rem; width: 50%;">
+                        </select>
+                        <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
+                                "mask": "(000) 000-0000"
+                              }'>
+                      </div>
+                      <!-- <div class="col-3 pe-0">
+                        <label for="countryCodeLabel" class="form-label text-muted">Country code</label>
+                        <input type="text" id="countryCodeLabel" class="js-input-mask form-control" name="telephone.countryCode" placeholder="+x" aria-label="+1" value="" style="max-width: 5rem;" autocomplete="tel-country-code" data-hs-mask-options='{
+                                "mask": "+0000"
+                              }'>
+                      </div>
+                      <div class="col-9 ps-0">
+                        <label for="nationalNumberLabel" class="form-label text-muted">Number</label>
+
+                        <input type="text" id="nationalNumberLabel" class="js-input-mask form-control" name="telephone.national" placeholder="(xxx) xxx-xxxx" aria-label="(xxx) xxx-xxxx" value="" autocomplete="tel-national" data-hs-mask-options='{
+                                "mask": "(000) 000-0000"
+                              }'>
+                      </div> -->
+                    </div>
                   </div>
 
                   <!-- Form -->
@@ -591,27 +598,13 @@ settings:
                   </div>
                   <!-- End Col -->
                 </div>
+
+                <div class="row">
+                  <p class="mb-0">
+                    You can view your plan benefits from the <a href="{{ site.url }}/pricing" target="_blank">pricing page</a>.
+                  </p>
+                </div>
                 <!-- End Row -->
-              </div>
-
-              <div class="card-body">
-                <p class="card-text">View and manage your account usage. Usage resets on <strong id="usage-reset"></strong>. </p>
-              </div>
-
-              <div class="table-responsive">
-                <table class="table table-thead-bordered table-nowrap table-align-middle card-table">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Metric</th>
-                      <th>Used</th>
-                      <th>Allowed</th>
-                    </tr>
-                  </thead>
-
-                  <tbody id="usage-table">
-
-                  </tbody>
-                </table>
               </div>
               <!-- End Body -->
             </div>
@@ -785,6 +778,39 @@ settings:
               </div>
               <!-- End Body -->
             </div>
+
+            <!-- Card -->
+            <div id="usage" class="card" hidden>
+              <div class="card-header">
+                <div class="d-flex align-items-center">
+                  <h4 class="mb-0"><i class="bi-activity nav-icon me-1"></i> Usage</h4>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <p class="card-text">
+                  View and manage your account usage. <span hidden>Usage resets on <strong id="usage-reset"></strong>. </span>
+                </p>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table table-thead-bordered table-nowrap table-align-middle card-table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Metric</th>
+                      <th>Used</th>
+                      <th>Allowed</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="usage-table">
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- End Body -->
+            </div>
+            <!-- End Card -->
 
             <!-- Card -->
             <div id="changePassword" class="card">

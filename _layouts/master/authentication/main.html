@@ -709,7 +709,7 @@ settings:
       var providerId = _.get(providerData, Math.max(providerData.length - 1, 0) + '.providerId', 'password');
       var isSignUp = accountAgeSeconds < 30 && !trackedSignup;
 
-      console.log('handleAuthentication():', providerId, accountAgeSeconds, trackedSignup, isSignUp);
+      console.log('handleAuthentication():', user.uid, providerId, accountAgeSeconds, trackedSignup, isSignUp);
 
       // Set the trackedSignup flag
       storage.set(trackedSignupKey, true);
@@ -727,8 +727,13 @@ settings:
         // TikTok Pixel
         // ...
 
+        // Log
+        console.log('handleAuthentication(): Not a sign-up event');
+
         return resolve();
       }
+
+      console.log('handleAuthentication(): Is a sign-up event');
 
       // Google Analytics
       gtag('event', 'sign_up', {
@@ -751,10 +756,13 @@ settings:
         content_type: 'product',
       });
 
-      // Send user:signup request
+      // Get the token for the user
       user.getIdToken(false)
         .then(function(token) {
 
+          console.log('handleAuthentication(): Sending user:sign-up request', token);
+
+          // Send the user:sign-up request
           fetch('https://us-central1-' + Manager.properties.options.libraries.firebase_app.config.projectId + '.cloudfunctions.net/bm_api', {
             method: 'POST',
             body: JSON.stringify({
@@ -766,14 +774,28 @@ settings:
               },
             }),
           })
+          .then(function (res) {
+            if (!res.ok) {
+              return res.text()
+              .then(function (data) {
+                throw new Error(data || res.statusText || 'Unknown error.')
+              })
+            } else {
+              console.log('handleAuthentication(): Sent user:sign-up request');
+
+              return resolve();
+            }
+          })
           .catch(function (e) {
-            console.error('handleAuthentication(): Error sending user:signup request', e);
+            console.error('handleAuthentication(): Error sending user:sign-up request', e);
+
+            return resolve();
           })
 
           // We don't need to wait for the fetch to finish
-          setTimeout(function () {
-            return resolve();
-          }, 100);
+          // setTimeout(function () {
+          //   return resolve();
+          // }, 10000);
         })
         .catch(function(e) {
           console.error('handleAuthentication(): Error getting token', e);
