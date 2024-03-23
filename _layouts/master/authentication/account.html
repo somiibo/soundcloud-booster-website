@@ -178,7 +178,9 @@ settings:
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#billing">
-                  <i class="bi-credit-card nav-icon"></i> Billing
+                  <i class="bi-credit-card nav-icon"></i>
+                  <span class="auth-billing-suspended-message-element" hidden><i class="bi-exclamation-triangle-fill me-1 text-danger"></i></span>
+                  Billing
                 </a>
               </li>
 
@@ -562,9 +564,9 @@ settings:
                     <div class="alert alert-soft-danger" role="alert">
                       <h4 class="alert-heading">
                         <i class="fas fa-exclamation-triangle mr-1"></i>
-                        Action required
+                        Action Required!
                       </h4>
-                      Your premium features are temporarily paused due to a payment hiccup. Your subscription is not cancelled.
+                      Your <strong>{{ site.brand.name }} Premium</strong> features are temporarily paused due to an issue with your payment method. Your subscription is NOT cancelled.
                       <br>
                       <br>
                       To reactivate your premium features, please <a href="" class="auth-billing-update-btn" target="_blank">update your payment method</a> at your earliest convenience.
@@ -575,8 +577,16 @@ settings:
                 <div class="row">
                   <div class="col-md mb-4 mb-md-0">
                     <div class="mb-1">
-                      <span class="card-subtitle">Your plan<span class="auth-billing-frequency-element"></span>:</span>
-                      <h3><span class="auth-billing-plan-id-element"></span><span class="auth-billing-start-date-element"></span></h3>
+                      <h3 class="mb-1">
+                        <span class="auth-billing-plan-id-element"></span> Plan <span class="badge auth-billing-status-element auth-billing-status-color-element">Pending</span>
+                      </h3>
+                      <div class="text-muted mb-2">
+                        Renews <span class="auth-billing-frequency-element"></span> beginning <span class="auth-billing-start-date-element"></span>
+                      </div>
+                      <span class="card-subtitle">
+
+                      </span>
+
                     </div>
                     <div class="">
                       <small class="text-cap text-danger auth-billing-expiration-date-element" hidden></small>
@@ -893,6 +903,7 @@ settings:
 
                 <!-- Form -->
                 <form>
+
                   <div id="connectedAccountsParent" class="list-group list-group-lg list-group-flush list-group-no-gutters">
                     <!-- List Item -->
 
@@ -1096,7 +1107,8 @@ settings:
     <div class="d-flex">
       <div class="flex-shrink-0">
         <!-- <i class="bi-{icon} list-group-icon"></i> -->
-        <img class="avatar avatar-xs me-3" src="{icon}" alt="{identity}">
+        <!-- <img class="avatar avatar-xs me-3" src="{icon}" alt="{identity}"> -->
+        <img class="avatar avatar-s me-2" src="{icon}" alt="{identity}">
       </div>
 
       <div class="flex-grow-1 me-3">
@@ -1253,6 +1265,7 @@ settings:
       }
     }
     var signinMethodMap = {
+      password: 'https://cdn.itwcreativeworks.com/assets/general/images/font-awesome/svg/black/user-solid.svg',
       google: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/google.svg',
       facebook: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/facebook.svg',
       twitter: 'https://cdn.itwcreativeworks.com/assets/general/images/brands/color/twitter.svg',
@@ -1645,13 +1658,29 @@ settings:
             return
           }
 
+          // if (provider === 'password') {
+          //   // icon = '<i class="bi-person-fill _list-group-icon me-3 display-5"></i>';
+          //   icon = '<i class="bi-person-fill _list-group-icon me-1 display-4"></i>';
+          //   url = new URL('{{ site.url }}');
+          //   classAction = '';
+          //   shouldEnable = false;
+          // } else {
+          //   // icon = '<img class="avatar avatar-xs me-3" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
+          //   icon = '<img class="avatar avatar-s me-2" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
+          //   url = new URL('https://' + provider);
+          //   classAction = userHasEnabled ? 'auth-unlink-provider-btn' : 'auth-link-provider-btn';
+          //   shouldEnable = true;
+          // }
+
+          // Get icon
+          icon = '<img class="avatar avatar-s me-2" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
+
+          // Format other things
           if (provider === 'password') {
-            icon = '<i class="bi-person-fill _list-group-icon me-3 display-5"></i>';
             url = new URL('{{ site.url }}');
             classAction = '';
             shouldEnable = false;
           } else {
-            icon = '<img class="avatar avatar-xs me-3" src="' + signinMethodMap[plainId] + '" alt="' + provider + '">';
             url = new URL('https://' + provider);
             classAction = userHasEnabled ? 'auth-unlink-provider-btn' : 'auth-link-provider-btn';
             shouldEnable = true;
@@ -1689,7 +1718,7 @@ settings:
           var platform = (session.platform || 'unkown').toLowerCase();
           var platformHuman;
           var icon;
-          var iconHtml = '<img class="avatar avatar-xs me-3" src="{icon}" alt="' + platformHuman + '">'
+          var iconHtml = '<img class="avatar avatar-s me-2" src="{icon}" alt="' + platformHuman + '">'
           var iconFont = '<i class="bi-{icon} _list-group-icon me-3 display-5"></i> ';
 
           if (platform.match(/(mac|darwin)/ig)) {
