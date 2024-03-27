@@ -82,27 +82,27 @@ It is understood that:
 15. You agree that after {{ brand }} is installed on your computer, it may automatically update itself by installing new and/or revised files relevant to the application.
 16. The sharing of {{ brand }} accounts is strictly prohibited. {{ brand }} accounts with multiple simultaneous logins will be suspended or banned at our discretion.
 
-## Payments, Subscriptions and Cancellation Policy
-You need a subscription to use certain features of {{ brand }} Products. If you apply for a subscription, you must ensure all the information that you submit is true and accurate (including, without limitation, your credit/debit card number and expiration date, and other payment details) and that you have appropriate parental or guardian consent if you are under 18 years of age. You agree to pay all subscription fees specified when you apply including all applicable taxes.
+## Payments, Subscriptions, and Cancellation Policy
+You need a subscription to use certain features of {{ brand }} Products. If you apply for a subscription, you must ensure all the information you submit is true and accurate (including, without limitation, your credit/debit card number and expiration date, and other payment details) and that you have appropriate parental or guardian consent if you are under 18 years of age. You agree to pay all subscription fees specified when you apply, including all applicable taxes.
 
-By submitting your order you are making an offer to subscribe to the relevant part of the {{ brand }} Product(s). Your offer is accepted and a binding contract occurs when: (i) we send a message to your account mail inbox confirming that your payment has been received, or (ii) you log into or use a subscribers-only part of a {{ brand }} Product (whichever comes first).
+By submitting your order, you are making an offer to subscribe to the relevant part of the {{ brand }} Product(s). Your offer is accepted, and a binding contract occurs when: (i) we send a message to your account mail inbox confirming that your payment has been received, or (ii) you log into or use a subscribers-only part of a {{ brand }} Product (whichever comes first).
 
-ALL SUBSCRIPTION PAYMENTS WILL CONTINUE TO BE TAKEN IN ADVANCE AT THE RELEVANT INTERVALS (E.G. MONTHLY IN THE CASE OF MONTHLY SUBSCRIPTIONS) UNTIL YOU CANCEL YOUR SUBSCRIPTION.
+ALL SUBSCRIPTION PAYMENTS WILL CONTINUE TO BE TAKEN IN ADVANCE AT THE RELEVANT INTERVALS (E.G., MONTHLY IN THE CASE OF MONTHLY SUBSCRIPTIONS) UNTIL YOU CANCEL YOUR SUBSCRIPTION.
 
-Payments by credit/debit cards are also subject to our credit card agreement which forms part of these terms and conditions.
+Payments by credit/debit cards are subject to our credit card agreement, which forms part of these terms and conditions.
 
 We reserve the right to alter the amount or terms of our subscription fees at any time, with or without notice.
 
 We reserve the right to charge you for any unauthorized use of your subscription by third parties. We reserve the right to terminate your account without the possibility of a refund if we find that you are violating any portion of this contract.
 
-<!-- You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and manually canceling your subscription. Any other method of cancellation including email, phone, or other means will not be accepted unless otherwise stated or required by law.
+<!-- You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and manually canceling your subscription. Any other method of cancellation, including email, phone, or other means, will not be accepted unless otherwise stated or required by law.
 
-Upon cancellation you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
+Upon cancellation, you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
 
 ### Sales & Refund Policy
 All sales are final. If you experience issues, please contact {{ brand }}.
 
-If you request a refund we will determine the eligibility of your refund. Upon approval, you will be refunded by the same method of payment you originally used. -->
+If you request a refund, we will determine the eligibility of your refund. Upon approval, you will be refunded by the same method of payment you originally used. -->
 
 ### Free Trial Period Eligibility
 The availability and duration of the free trial period are subject to change and may not be available at all times. The current trial and pricing information is available on our [pricing page]({{ site.url }}/pricing).
