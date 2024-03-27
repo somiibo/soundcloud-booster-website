@@ -22,7 +22,6 @@ settings:
 {% capture brand %}{{ site.brand.name | liquify }}{% endcapture %}
 {% capture breadcrumb %}{{ page.meta.breadcrumb | default: layout.meta.breadcrumb | liquify }}{% endcapture %}
 
-
 Welcome to [{{ site.url }}]({{ site.url }}). This website is owned and operated by {{ brand }} ("{{ brand }}", "we", "us", or "our"). By visiting our website ("the website", "the site", "our website", or "our site"), using the {{ brand }} application ("the software", "the application", "our software", "our application", "our app", or "the app"), and/or accessing the information, resources, services, and tools we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ breadcrumb }} as stated in this policy. Our Policy applies to all visitors, users, and others who access the Service ("Users").
 
 All third-party trademarks are the property of their respective owners.
