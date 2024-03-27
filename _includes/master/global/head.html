@@ -135,6 +135,7 @@
       app: '{{ site.app }}',
       version: '{{ site.version }}',
       url: '{{ site.url }}',
+      buildTime: '{{ site.time | date: "%s" }}',
       cacheBreaker: '{{ site.time | date: "%s" }}',
       settings: {{ site.settings.manager-configuration | default: empty-braces }},
       brand: {
