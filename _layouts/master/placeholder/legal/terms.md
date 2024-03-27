@@ -23,13 +23,13 @@ settings:
 {% capture breadcrumb %}{{ page.meta.breadcrumb | default: layout.meta.breadcrumb | liquify }}{% endcapture %}
 
 
-Welcome to [{{ site.url }}]({{ site.url }}). This website is owned and operated by {{ brand }} ("{{ brand }}," "we," "us" or "our"). By visiting our website ("the website," "the site," "our website," or "our site"), using the {{ brand }} application ("the software," "the application," "our software," "our application," "our app," or "the app"), and/or accessing the information, resources, services, and tools that we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ breadcrumb }} as stated in this policy. Our Policy applies to all visitors, users, and others who access the Service ("Users").
+Welcome to [{{ site.url }}]({{ site.url }}). This website is owned and operated by {{ brand }} ("{{ brand }}", "we", "us", or "our"). By visiting our website ("the website", "the site", "our website", or "our site"), using the {{ brand }} application ("the software", "the application", "our software", "our application", "our app", or "the app"), and/or accessing the information, resources, services, and tools we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ breadcrumb }} as stated in this policy. Our Policy applies to all visitors, users, and others who access the Service ("Users").
 
-All third party trade marks are the property of their respective owners.
+All third-party trademarks are the property of their respective owners.
 
-Please read these {{ brand }} terms of service ("Terms of Service", "Agreement") carefully. These {{ breadcrumb }} govern your access to and use of the {{ brand }} services available at our website or through our application, and any updates, upgrades, modified versions, extensions, improvements and derivative works of the foregoing (collectively, the "Service").
+Please read these {{ brand }} Terms of Service ("Terms of Service", "Agreement") carefully. These {{ breadcrumb }} govern your access to and use of the {{ brand }} services available at our website or through our application, and any updates, upgrades, modified versions, extensions, improvements, and derivative works of the foregoing (collectively, the "Service").
 
-Our {{ breadcrumb }} is designed to provide transparency into our services and products, in a format that our users can easily navigate, read, and understand. We are dedicated to providing a fair and high quality service to you.
+Our {{ breadcrumb }} is designed to provide transparency into our services and products, in a format that our users can easily navigate, read, and understand. We are dedicated to providing a fair and high-quality service to you.
 
 "Subscriber" is used to describe a user of a {{ brand }} Product who pays a fee to obtain enhanced features of that {{ brand }} Product. More information about subscriptions can be found on our [pricing page]({{ site.url }}/pricing).
 
@@ -37,11 +37,11 @@ Our {{ breadcrumb }} is designed to provide transparency into our services and p
 
 This agreement is in effect as of October 25, 2017.
 
-We reserve the right to change the {{ breadcrumb }} from time to time without notice. You acknowledge and agree that it is your responsibility to review the {{ breadcrumb }} periodically to familiarize yourself with any modifications. Your continued use of this site after such modifications will constitute acknowledgement and agreement of the modified {{ breadcrumb }}.
+We reserve the right to change the {{ breadcrumb }} from time to time without notice. You acknowledge and agree that it is your responsibility to review the {{ breadcrumb }} periodically to familiarize yourself with any modifications. Your continued use of this site after such modifications will constitute acknowledgment and agreement of the modified {{ breadcrumb }}.
 
 We reserve the right to collect overdue payments from you. You agree to pay all reasonable costs and expenses (including legal fees) incurred by us in collecting any such overdue amounts.
 
-Please check the {{ breadcrumb }} whenever you use a {{ brand }} Product. If you are not a Subscriber, we will treat your continued use of a {{ brand }} Product as acceptance of these changes from their effective date (as shown above). If you are a Subscriber, we will treat the first renewal date of your subscription after the changes as your acceptance of the changes. If you do not agree with the changes you should cancel your subscription before the renewal date.
+Please check the {{ breadcrumb }} whenever you use a {{ brand }} Product. If you are not a Subscriber, we will treat your continued use of a {{ brand }} Product as acceptance of these changes from their effective date (as shown above). If you are a Subscriber, we will treat the first renewal date of your subscription after the changes as your acceptance of the changes. If you do not agree with the changes, you should cancel your subscription before the renewal date.
 
 ## Registration and Access
 You must be at least 13 years old or the minimum age required in your country to consent to use our services. If you are under 18 you must have your parent or legal guardian’s permission to use our services.
