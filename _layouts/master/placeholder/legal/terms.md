@@ -134,37 +134,37 @@ In the event of an outstanding balance on your account, we reserve the right to 
 
 ## Limitation of Warranties
 By using {{ brand }}, you understand and agree that all resources provided by {{ brand }} are "as is" and "as available". We do not represent or warrant to you that:
-1. The use of {{ brand }}’s resources will meet your needs or requirements
-2. The use of {{ brand }}’s resources will be uninterrupted, timely, secure, or free from errors
-3. The information obtained by using {{ brand }} will be accurate or reliable
-4. Any defects in the operation or functionality of {{ brand }} we provide will be repaired or corrected
+1. The use of {{ brand }}’s resources will meet your needs or requirements.
+2. The use of {{ brand }}’s resources will be uninterrupted, timely, secure, or free from errors.
+3. The information obtained by using {{ brand }} will be accurate or reliable.
+4. Any defects in the operation or functionality of any {{ brand }} resources we provide will be repaired or corrected.
     - a. Any content that you download or obtain through using {{ brand }} is done at your own discretion and risk. You are solely responsible for any damage to your computer or other devices for any loss of data that may result from the download of such content.
-    - b. No information or advice, whether expressed, implied, oral or written, obtained by you from {{ brand }} shall create any warranty, guarantee, or conditions of any kind, except for those expressly outlined in the Terms of Service.
+    - b. No information or advice, whether expressed, implied, oral, or written, obtained by you from {{ brand }} shall create any warranty, guarantee, or conditions of any kind, except for those expressly outlined in the Terms of Service.
 
 ## Limitation of Liabilities
-Any claim against {{ brand }} or it's owners, operators, officers, employees, and/or agents shall be limited to the amount that you as the user have paid for any resources or services provided by {{ brand }}. {{ brand }} is not liable for any direct, indirect, incidental, consequential, or exemplary loss or damages which may be incurred by you as a result of using {{ brand }}'s services and/or resources, or as a result of any changes, data loss or corruption, cancellation, loss of access, or downtime to the full extent that applicable limitation of liability laws apply.
+Any claim against {{ brand }} or its owners, operators, officers, employees, and/or agents shall be limited to the amount that you as the user have paid for any resources or services provided by {{ brand }}. {{ brand }} is not liable for any direct, indirect, incidental, consequential, or exemplary loss or damages which may be incurred by you as a result of using {{ brand }}'s services and/or resources, or as a result of any changes, data loss or corruption, cancellation, loss of access, or downtime to the full extent that applicable limitation of liability laws apply.
 
 ## Copyrights/Trademarks
-{{ brand }}’s logo, website content, blog content, website name, and code are the intellectual property of {{ brand }}, and are protected by applicable copyright and trademark law. Any inappropriate use, including but not limited to the reproduction, decompiling, distribution, display or transmission of any content on this site is strictly prohibited, unless it is specifically authorized by {{ brand }}.
+{{ brand }}’s logo, website content, blog content, website name, and code are the intellectual property of {{ brand }}, and are protected by applicable copyright and trademark laws. Any inappropriate use, including but not limited to the reproduction, decompiling, distribution, display, or transmission of any content on this site is strictly prohibited, unless it is specifically authorized by {{ brand }}.
 
 ## Termination of Use
-You agree that we may, at our sole discretion, suspend or terminate your access to all or part of our website and {{ brand }}’s resources with or without notice and for any reason, including but limited to, breach of this User Agreement, or any suspected illegal, fraudulent or abusive activity. Upon suspension or termination, your right to use {{ brand }}’s resources will immediately cease, and we reserve the right to remove or delete any information that you may have on file with us, including account or login information, without the possibility of a refund.
+You agree that we may, at our sole discretion, suspend or terminate your access to all or part of our website and {{ brand }}’s resources with or without notice and for any reason, including but not limited to, breach of this User Agreement, or any suspected illegal, fraudulent, or abusive activity. Upon suspension or termination, your right to use {{ brand }}’s resources will immediately cease, and we reserve the right to remove or delete any information that you may have on file with us, including any account or login information, without the possibility of a refund.
 
 ## Governing Law
-This website is controlled by {{ brand }}. It can be accessed by most countries around the world. By accessing our website, you agree that the statutes and laws of our state, without regard to the conflict of laws and the United Nations Convention on the International Sales of Goods, will apply to all matters relating to the use of this website and the purchase of any products or services through this site.
+This website is controlled by {{ brand }}. It can be accessed by most countries around the world. By accessing our website, you agree that the statutes and laws of our state, without regard to conflict of laws and the United Nations Convention on the International Sales of Goods, will apply to all matters relating to the use of this website and the purchase of any products or services through this site.
 
-Furthermore, any action to enforce the Terms of Service shall be brought in the federal or state courts. You agree to personal jurisdiction by such courts, and waive any jurisdictional, venue, or inconvenient forum objections to such courts.
+Furthermore, any action to enforce the Terms of Service shall be brought in the federal or state courts. You agree to personal jurisdiction by such courts and waive any jurisdictional, venue, or inconvenient forum objections to such courts.
 
 The License and this Agreement are governed by and construed in accordance with the laws of the State of California, United States of America. In the event of any dispute, you hereby expressly consent to the exclusive jurisdiction and venue in the state and federal courts of Los Angeles, California, United States.
 
 In recognition of the substantial nature of such potential damages and the difficulty of measuring economic losses to {{ brand }} as a result of a breach of the Agreement or License, and because of the immediate and irreparable damage that could be caused to {{ brand }} for which it would have no other adequate remedy, you agree that in the event of a breach of this Agreement or License, {{ brand }} shall be entitled to seek specific performance of this provision and injunctive and other equitable relief, as well as any monetary damages. In the event that {{ brand }} is required to initiate claims against you, {{ brand }} shall be entitled to recover its reasonable attorneys’ fees and costs.
 
-You agree to defend, indemnify and hold the Company and our officers, directors, employees, agents or affiliates, harmless from and against any and all claims, losses, liability costs and expenses (including but not limited to attorneys’ fees) arising from your use of the Software provided by {{ brand }}, or any third party’s rights, including but not limited to infringement of any copyright, violation of any proprietary right or invasion of any privacy rights. This obligation will survive the termination of this Agreement.
+You agree to defend, indemnify, and hold the Company and our officers, directors, employees, agents, or affiliates, harmless from and against any and all claims, losses, liability costs, and expenses (including but not limited to attorneys’ fees) arising from your use of the Software provided by {{ brand }}, or any third party’s rights, including but not limited to infringement of any copyright, violation of any proprietary right, or invasion of any privacy rights. This obligation will survive the termination of this Agreement.
 
-You agree that if any statement is found to void in this agreement that other statements will still stand.
+You agree that if any statement is found to be void in this agreement, other statements will still stand.
 
 ## Guarantee
-Unless otherwise expressed, {{ brand }} expressly disclaims all warranties and conditions of any kind, whether expressed or implied, including but not limited to, warranties and conditions of merchantability, fitness for a particular focus, and non-infringement.
+Unless otherwise expressed, {{ brand }} expressly disclaims all warranties and conditions of any kind, whether expressed or implied, including but not limited to, warranties and conditions of merchantability, fitness for a particular purpose, and non-infringement.
 
 ## Contact Information
 If you have any questions, comments, or concerns, please contact us: [{{ site.url }}/contact]({{ site.url }}/contact)
