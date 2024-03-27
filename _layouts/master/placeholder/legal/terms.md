@@ -23,7 +23,7 @@ settings:
 {% capture breadcrumb %}{{ page.meta.breadcrumb | default: layout.meta.breadcrumb | liquify }}{% endcapture %}
 
 
-Welcome to [{{ site.url }}]({{ site.url }}). This website is owned and operated by {{ brand }} ("{{ brand }}," "we," "us" or "our"). By visiting our website ("the website," "the site"), using the {{ brand }} application ("the software," "the application," "our software" or "our application"), and/or accessing the information, resources, services, and tools that we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ breadcrumb }} as stated in this policy. Our Policy applies to all visitors, users, and others who access the Service ("Users").
+Welcome to [{{ site.url }}]({{ site.url }}). This website is owned and operated by {{ brand }} ("{{ brand }}," "we," "us" or "our"). By visiting our website ("the website," "the site," "our website," or "our site"), using the {{ brand }} application ("the software," "the application," "our software," "our application," "our app," or "the app"), and/or accessing the information, resources, services, and tools that we provide, you acknowledge, understand, and agree to accept and adhere to the following {{ breadcrumb }} as stated in this policy. Our Policy applies to all visitors, users, and others who access the Service ("Users").
 
 All third party trade marks are the property of their respective owners.
 
@@ -31,7 +31,7 @@ Please read these {{ brand }} terms of service ("Terms of Service", "Agreement")
 
 Our {{ breadcrumb }} is designed to provide transparency into our services and products, in a format that our users can easily navigate, read, and understand. We are dedicated to providing a fair and high quality service to you.
 
-"Subscriber" or is used to describe a user of a {{ brand }} Product who pays a fee to obtain enhanced features of that {{ brand }} Product. More information about subscriptions can be found on our main site.
+"Subscriber" is used to describe a user of a {{ brand }} Product who pays a fee to obtain enhanced features of that {{ brand }} Product. More information about subscriptions can be found on our [pricing page]({{ site.url }}/pricing).
 
 "{{ brand }} Product(s)" is used as shorthand for our services including all {{ brand }} websites used to distribute these services and products published by {{ brand }}. THE ONGOING SUPPLY OF ANY PARTICULAR {{ brand }} PRODUCT IS NOT GUARANTEED. SOME {{ brand }} PRODUCTS HAVE AGE RESTRICTIONS.
 
