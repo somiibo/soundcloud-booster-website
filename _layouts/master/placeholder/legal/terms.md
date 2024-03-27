@@ -95,7 +95,7 @@ We reserve the right to alter the amount or terms of our subscription fees at an
 
 We reserve the right to charge you for any unauthorized use of your subscription by third parties. We reserve the right to terminate your account without the possibility of a refund if we find that you are violating any portion of this contract.
 
-<!-- You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and manually canceling your subscription. Any other method of cancellation, including email, phone, or other means, will not be accepted unless otherwise stated or required by law.
+<!-- You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and manually Cancelling your subscription. Any other method of cancellation, including email, phone, or other means, will not be accepted unless otherwise stated or required by law.
 
 Upon cancellation, you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
 
@@ -123,7 +123,7 @@ If your subscription plan did not include a free trial period, you are not eligi
 
 You may cancel your subscription at any time by visiting [{{ site.url }}/account]({{ site.url }}/account) and navigating to the Billing section of your account. Any other method of cancellation including email, phone, or other means will not be accepted unless otherwise stated or required by law.
 
-Upon cancellation you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
+Upon cancellation, you will not be charged any further subscription fees. No payments already made in respect of subscriptions will be refunded (wholly or partly).
 
 Any other purchases, including one-time payments, add-ons, or other sales on our site that do not include a free trial period are final and non-refundable once processed.
 
