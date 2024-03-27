@@ -44,53 +44,43 @@ We reserve the right to collect overdue payments from you. You agree to pay all 
 Please check the {{ breadcrumb }} whenever you use a {{ brand }} Product. If you are not a Subscriber, we will treat your continued use of a {{ brand }} Product as acceptance of these changes from their effective date (as shown above). If you are a Subscriber, we will treat the first renewal date of your subscription after the changes as your acceptance of the changes. If you do not agree with the changes, you should cancel your subscription before the renewal date.
 
 ## Registration and Access
-You must be at least 13 years old or the minimum age required in your country to consent to use our services. If you are under 18 you must have your parent or legal guardian’s permission to use our services.
+You must be at least 13 years old or the minimum age required in your country to consent to use our services. If you are under 18, you must have your parent or legal guardian's permission to use our services.
 
-You must provide accurate and complete information to register for an account to use our services. You may not share your account credentials or make your account available to anyone else and are responsible for all activities that occur under your account. If you create an account or use our servides on behalf of another person or entity, you must have the authority to accept these terms on their behalf.
+You must provide accurate and complete information to register for an account to use our services. You may not share your account credentials or make your account available to anyone else and are responsible for all activities that occur under your account. If you create an account or use our services on behalf of another person or entity, you must have the authority to accept these terms on their behalf.
 
 ## Responsible Use and Conduct
-By visiting our website and accessing the information, resources, services, products, and tools that {{ brand }} provides, you agree to use these resources for the purposes intended as permitted by the Terms of Service and by applicable laws, regulations and generally accepted online practices or guidelines.
+By visiting our website and accessing the information, resources, services, products, and tools that {{ brand }} provides, you agree to use these resources for the purposes intended as permitted by the Terms of Service and by applicable laws, regulations, and generally accepted online practices or guidelines.
 
 It is understood that:
 
 1. In accessing resources provided by {{ brand }}, you may be required to provide personal information (identification, contact details) as part of the registration process, or as part of your ability to use the resources. You maintain that any information provided will be accurate and up to date.
-2. You are responsible for maintaining the confidentiality of your login information associated with any account you use to access {{ brand }}’s resources. You are responsible for all activities that occur under your account.
-3. Accessing (or attempting to access) any of {{ brand }}’s resources by any other means than through the means provided is prohibited.
-4. You agree to not engage in activity that disrupts or interferes with {{ brand }}’s resources, including the servers and/or networks to which {{ brand }}’s resources are located or connected.
-5. Attempting to copy, duplicate, reproduce, sell, trade, or resell {{ brand }} resources is strictly prohibited.
-6. You understand that content presented to you as part of {{ brand }}’s service, including but not limited to advertisements, within {{ brand }} may be protected by intellectual property rights owned by the sponsors or advertisers providing the content. You may not modify, rent, lease, loan, sell, distribute, or create derivative works based on content you are exposed to through advertisements, unless you have specifically authorized to do so by the owners of that content in a separate agreement.
-    - a. You understand that using {{ brand }}’s service exposes you to content that you may find offensive, indecent, or objectionable, and that, in this respect, you use the Services at your own risk
+2. You are responsible for maintaining the confidentiality of your login information associated with any account you use to access {{ brand }}'s resources. You are responsible for all activities that occur under your account.
+3. Accessing (or attempting to access) any of {{ brand }}'s resources by any other means than through the means provided is prohibited.
+4. You agree not to engage in any activity that disrupts or interferes with {{ brand }}'s resources, including the servers and/or networks to which {{ brand }}'s resources are located or connected.
+5. Attempting to copy, duplicate, reproduce, sell, trade, or resell {{ brand }}'s resources is strictly prohibited.
+6. You understand that content presented to you as part of {{ brand }}'s service, including but not limited to advertisements, within {{ brand }}, may be protected by intellectual property rights owned by the sponsors or advertisers providing that content. You may not modify, rent, lease, loan, sell, distribute, or create derivative works based on content you are exposed to through advertisements, unless you have been specifically authorized to do so by the owners of that content in a separate agreement.
+    - a. You understand that using {{ brand }}'s service exposes you to content that you may find offensive, indecent, or objectionable, and that, in this respect, you use the Services at your own risk.
     - b. We provide open communication tools on our website through blog comments. You understand that we do not prescreen or monitor the content posted by users. If you choose to use this tool to submit any type of content to our website, then it is your personal responsibility to use these tools in a responsible and ethical manner.
-    - c. You agree that content you post will not be:
-        - i. Illegal, harmful, threatening, defamatory, abusive, harassing, degrading, intimidating, fraudulent, deceptive, invasive, racist, or contain any type of suggestive, inappropriate, or explicit language.
-        - ii. Infringes on any trademark, patent, trade secret, copyright, or other proprietary right of any party
-        - iii. Contain any type of unauthorized or unsolicited advertising
-        - iv. Impersonate any person or entity, including {{ brand }} employees or representatives
-        - v. If the Terms of Service are violated, you agree to indemnify and hold harmless {{ brand }}, its affiliates, its directors, officers, managers, employees, donors, agents, and licensors, from and against all losses, expenses, damages and costs, including reasonable attorneys’ fees, resulting from any violation of the Terms of Service or the failure to fulfill any obligations relating to your account incurred by you or any person using your account. We reserve the right to take over the exclusive defense of any claim for which we are entitled to indemnification under the Terms of Service. In such event, you shall provide us with such cooperation as is reasonably requested by us.
-
-- It is strictly prohibited to use the {{ brand }} website or {{ brand }} application for anything that:
-    - a. Is Illegal, harmful, threatening, defamatory, abusive, harassing, degrading, intimidating, fraudulent, deceptive, invasive, racist, or contain any type of suggestive, inappropriate, or explicit language.
+    - c. You agree that content you post will not:
+        - i. Be illegal, harmful, threatening, defamatory, abusive, harassing, degrading, intimidating, fraudulent, deceptive, invasive, racist, or contain any type of suggestive, inappropriate, or explicit language.
+        - ii. Infringe on any trademark, patent, trade secret, copyright, or other proprietary right of any party.
+        - iii. Contain any type of unauthorized or unsolicited advertising.
+        - iv. Impersonate any person or entity, including {{ brand }} employees or representatives.
+    - d. If the Terms of Service are violated, you agree to indemnify and hold harmless {{ brand }}, its affiliates, its directors, officers, managers, employees, donors, agents, and licensors, from and against all losses, expenses, damages, and costs, including reasonable attorneys' fees, resulting from any violation of the Terms of Service or the failure to fulfill any obligations relating to your account incurred by you or any person using your account. We reserve the right to take over the exclusive defense of any claim for which we are entitled to indemnification under the Terms of Service. In such an event, you shall provide us with such cooperation as is reasonably requested by us.
+7. It is strictly prohibited to use the {{ brand }} website or {{ brand }} application for anything that:
+    - a. Is illegal, harmful, threatening, defamatory, abusive, harassing, degrading, intimidating, fraudulent, deceptive, invasive, racist, or contains any type of suggestive, inappropriate, or explicit language.
     - b. Infringes on any trademark, patent, trade secret, copyright, agreement, or other proprietary right of any party.
     - c. Directly or indirectly affects the revenue, operations, or processes of another party.
-    - d. Creates an income or generates revenue for the user or another party.
-
-- You may not use {{ brand }} for commercial purposes or for purpose of resale or redistribution, whether or not you charge a fee, unless you have written permission from {{ brand }}.
-
-- In using the {{ brand }} application or the {{ brand }} website you understand that you may be required to view advertisements, view sponsored content, and/or interact, either manually or automatically, with online content including but not limited to other {{ brand }} users and/or their promoted content.
-
-- You agree to use {{ brand }} at your own risk and understand that anything that happens to your account(s) you may have with third party sites and services, including but not limited to the termination, suspension, or limiting of the account before, during or after your use of {{ brand }} is not the responsibility of {{ brand }}.
-
-- You agree to read and accept the terms of our [Privacy Policy]({{ site.url }}/privacy/).
-
-- In compliance with the GDPR you agree and understand that we only collect data that we deem is necessary to offer our services and that you have full right to deletion of the data if requested. You agree that any information you provide is freely given and that you are informed of your choice about providing this data. You agree to provide an unambiguous indication signifying the agreement to the collection and processing of personal data related to you.
-
-- You agree that {{ brand }} may collect, use and disclose your personal data which you have provided in this form, for providing marketing material that you have agreed to receive, in accordance with our [Privacy Policy]({{ site.url }}/privacy/).
-
-- By using {{ brand }} you agree to opt in to the tracking of usage data both in the website and in the application for the safety and betterment of our company.
-
-- You agree that after {{ brand }} is installed on your computer it may automatically update itself by installing new and/or revised files relevant to the application.
-
-- The sharing of {{ brand }} accounts is strictly prohibited. {{ brand }} accounts with multiple simultaneous logins to the app will be suspended or banned at our discretion.
+    - d. Creates income or generates revenue for the user or another party.
+8. You may not use {{ brand }} for commercial purposes or for the purpose of resale or redistribution, whether or not you charge a fee, unless you have written permission from {{ brand }}.
+9. In using the {{ brand }} application or the {{ brand }} website, you understand that you may be required to view advertisements, view sponsored content, and/or interact, either manually or automatically, with online content including but not limited to other {{ brand }} users and/or their promoted content.
+10. You agree to use {{ brand }} at your own risk and understand that anything that happens to your account(s) you may have with third-party sites and services, including but not limited to the termination, suspension, or limiting of the account before, during, or after your use of {{ brand }}, is not the responsibility of {{ brand }}.
+11. You agree to read and accept the terms of our [Privacy Policy]({{ site.url }}/privacy/).
+12. In compliance with the GDPR, you agree and understand that we only collect data that we deem necessary to offer our services and that you have full right to deletion of the data if requested. You agree that any information you provide is freely given and that you are informed of your choice about providing this data. You agree to provide an unambiguous indication signifying the agreement to the collection and processing of personal data related to you.
+13. You agree that {{ brand }} may collect, use, and disclose your personal data which you have provided in this form, for providing marketing material that you have agreed to receive, in accordance with our [Privacy Policy]({{ site.url }}/privacy/).
+14. By using {{ brand }}, you agree to opt in to the tracking of usage data both on the website and in the application for the safety and betterment of our company.
+15. You agree that after {{ brand }} is installed on your computer, it may automatically update itself by installing new and/or revised files relevant to the application.
+16. The sharing of {{ brand }} accounts is strictly prohibited. {{ brand }} accounts with multiple simultaneous logins will be suspended or banned at our discretion.
 
 ## Payments, Subscriptions and Cancellation Policy
 You need a subscription to use certain features of {{ brand }} Products. If you apply for a subscription, you must ensure all the information that you submit is true and accurate (including, without limitation, your credit/debit card number and expiration date, and other payment details) and that you have appropriate parental or guardian consent if you are under 18 years of age. You agree to pay all subscription fees specified when you apply including all applicable taxes.
