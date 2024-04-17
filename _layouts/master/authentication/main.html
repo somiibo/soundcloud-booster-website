@@ -138,9 +138,11 @@ settings:
 
   <!-- Content -->
   <div class="container py-5 py-sm-7">
-    <a class="d-flex justify-content-center mb-3 animation-slide-up" href="{{ site.url }}" target="_blank">
-      <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
-    </a>
+    <div class="d-flex justify-content-center mb-3">
+      <a class="animation-slide-up" href="{{ site.url }}" target="_blank">
+        <img class="zi-2" id="main-logo" src="{{ site.brand.logo-image-svg }}?cb={{ site.time | date: '%s' }}" alt="{{ site.brand.name }}" style="width: 8rem;">
+      </a>
+    </div>
 
     <div class="mx-auto animation-slide-up" style="max-width: 30rem;">
       <!-- Card -->
