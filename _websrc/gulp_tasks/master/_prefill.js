@@ -136,7 +136,7 @@ gulp.task('_prefill', () => {
 
       // only create these files if NOT on template
       if (!tools.isTemplate) {
-
+        await createFile(`.vscode/settings.json`, await readFile('./_websrc/templates/master/vscode/settings.json'));
       }
 
       // only create these files if IS ON template and IS NOT server
@@ -254,25 +254,28 @@ function generateCommonModules() {
   return contents;
 }
 
-async function createFile(file, contents) {
+async function createFile(file, contents, options) {
   const response = {
     exists: false,
-    error: null,
   }
+
+  options = options || {};
+  options.overwrite = typeof options.overwrite === 'undefined' ? false : options.overwrite;
 
   return new Promise(function(resolve, reject) {
     try {
-      if (jetpack.exists(file)) {
-        response.exists = true;
+      // Check if file exists
+      response.exists = jetpack.exists(file);
+
+      // If file exists and force is not true, resolve
+      if (response.exists && !options.overwrite) {
         resolve(response)
       } else {
-       jetpack.write(file, contents);
-       response.exists = false;
-       resolve(response);
+        jetpack.write(file, contents);
+        resolve(response);
       }
     } catch (e) {
-      response.error = e;
-      reject(response);
+      reject(e);
     }
   });
 }
