@@ -97,9 +97,10 @@
       self.allowLeave = true;
 
       self._handler = {
+        transformData: function (data) {return data},
         onSubmit: function () {},
         onChange: function () {},
-        transformData: function (data) {return data},
+        onStatus: function () {},
       }
       self._triggeredInitialOnChangeEvent = false;
       self._$manualChangeTriggerElement = null;
@@ -239,6 +240,7 @@
         message = message || '';
       }
 
+      // Set status
       self.status = status;
 
       console.log('[Dashboard] display', self.id, 'status=', status, 'state=', state, 'message=', message);
@@ -330,6 +332,9 @@
         }
       }
 
+      // Run onStatus
+      self.onStatus(status, message);
+
       return self;
     };
 
@@ -411,6 +416,14 @@
       return self;
     };
 
+    Dashboard.prototype.onChange = function (fn) {
+      var self = this;
+
+      self._handler.onChange = fn;
+
+      return self;
+    };
+
     Dashboard.prototype.onSubmit = function (fn) {
       var self = this;
 
@@ -419,10 +432,10 @@
       return self;
     };
 
-    Dashboard.prototype.onChange = function (fn) {
+    Dashboard.prototype.onStatus = function (fn) {
       var self = this;
 
-      self._handler.onChange = fn;
+      self._handler.onStatus = fn;
 
       return self;
     };
