@@ -308,11 +308,17 @@
         // If we are in the correct status
         if (s === status) {
 
+          // Show the element
+          $el.removeAttribute('hidden');
+
           // If no message, quit because we don't want to show empty feedback
           if (!message) { return }
 
-          // Show the element
-          $el.removeAttribute('hidden');
+          // Set the status message
+          $statusMessage
+          .each(function ($el) {
+            $el.innerHTML = message;
+          })
 
           // Attempt to show a toast
           try {
@@ -321,13 +327,8 @@
           } catch (e) {
             // console.warn('[Dashboard] Unable to create error toast', e);
           }
-
-          // Set the status message
-          $statusMessage
-          .each(function ($el) {
-            $el.innerHTML = message;
-          })
         } else {
+          // Hide the element
           $el.setAttribute('hidden', true);
         }
       })
