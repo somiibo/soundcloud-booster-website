@@ -84,3 +84,195 @@ footer, header, hgroup, menu, nav, section {
   -o-transition: all .3s cubic-bezier(.2,.3,0,1);
   transition: all .3s cubic-bezier(.2,.3,0,1);
 }
+
+/* @keyframes opacity {
+	0% {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.animation-opacity {
+	animation: opacity .25s ease-in-out;
+}
+
+@keyframes opacity-long {
+	0% {
+		opacity: 0;
+	}
+
+	90% {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.animation-opacity-long {
+	animation: opacity-long 3s ease-in-out;
+}
+
+@keyframes opacity-short {
+	0% {
+		opacity: 0;
+	}
+
+	80% {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.animation-opacity-short {
+	animation: opacity-short 1.5s ease-in-out;
+} */
+
+@keyframes popup {
+	0% {
+		transform: scale(.93);
+		opacity: .8;
+	}
+
+	50% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.animation-popup {
+	animation: popup .25s ease-in-out;
+}
+
+@keyframes popup-long {
+	0% {
+		transform: scale(.93);
+		opacity: 0;
+	}
+
+	85% {
+		transform: scale(.93);
+		opacity: 0;
+	}
+
+	90% {
+		transform: scale(.93);
+		opacity: .8;
+	}
+
+	95% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.animation-popup-long {
+	animation: popup-long 3s ease-in-out
+}
+
+@keyframes popup-short {
+	0% {
+		transform: scale(.93);
+		opacity: 0;
+	}
+
+	75% {
+		transform: scale(.93);
+		opacity: 0;
+	}
+
+	80% {
+		transform: scale(.93);
+		opacity: .8;
+	}
+
+	90% {
+		transform: scale(1.02);
+		opacity: 1;
+	}
+
+	to {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.animation-popup-short {
+	animation: popup-short 1.5s ease-in-out;
+}
+
+@keyframes pulse {
+	50% {
+		opacity: .5;
+	}
+}
+
+.animation-pulse {
+	animation: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: 0 50%;
+	}
+
+	50% {
+		background-position: 100% 50%;
+	}
+
+	to {
+		background-position: 0 50%;
+	}
+}
+
+.animation-shimmer {
+	animation: shimmer 3s ease-out infinite alternate;
+}
+
+@keyframes wiggle {
+	0%,
+	20%,
+	80%,
+	to {
+		transform: rotate(0deg);
+	}
+
+	30%,
+	60% {
+		transform: rotate(-2deg);
+	}
+
+	40%,
+	70% {
+		transform: rotate(2deg);
+	}
+
+	45% {
+		transform: rotate(-4deg);
+	}
+
+	55% {
+		transform: rotate(4deg);
+	}
+}
+
+.animation-wiggle {
+	animation: wiggle 1.5s ease-in-out infinite;
+}
