@@ -36,6 +36,23 @@
 '>
 </div>
 
+<div id="dashboard-template-display-ready" data-template='
+  <div class="toast-container position-fixed p-3 top-0 start-50 translate-middle-x" style="z-index: 1003; _min-width: 50vw;">
+    <div class="dashboard-status-listener toast bg-primary text-white" data-status="ready">
+      <div class="d-flex">
+        <div class="toast-body">
+          <h4 class="text-white">Alert!</h4>
+          <span class="dashboard-status-listener-message" data-status="ready">
+            Unknown ready
+          </span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+'>
+</div>
+
 <div id="dashboard-template-unsaved-popup" data-template='
   <div class="dashboard-display-unsaved-popup" hidden>
     <div class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-3" style="max-width: 40rem;" >
@@ -97,9 +114,10 @@
       self.allowLeave = true;
 
       self._handler = {
+        transformData: function (data) {return data},
         onSubmit: function () {},
         onChange: function () {},
-        transformData: function (data) {return data},
+        onStatus: function () {},
       }
       self._triggeredInitialOnChangeEvent = false;
       self._$manualChangeTriggerElement = null;
@@ -139,9 +157,13 @@
 
       // Create default elements
       if (options.createDefaultElements) {
-        self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-display-error').getAttribute('data-template'));
-        self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-display-success').getAttribute('data-template'));
-        self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById('dashboard-template-unsaved-popup').getAttribute('data-template'));
+        function create(id) {
+          self.element.id.get(0).insertAdjacentHTML('beforeend', document.getElementById(id).getAttribute('data-template'));
+        }
+        create('dashboard-template-display-success');
+        create('dashboard-template-display-error');
+        create('dashboard-template-display-ready');
+        create('dashboard-template-unsaved-popup');
       }
 
       // Setup the rest of the elements
@@ -239,6 +261,7 @@
         message = message || '';
       }
 
+      // Set status
       self.status = status;
 
       console.log('[Dashboard] display', self.id, 'status=', status, 'state=', state, 'message=', message);
@@ -282,21 +305,30 @@
       .each(function ($el) {
         var s = $el.getAttribute('data-status');
 
+        // If we are in the correct status
         if (s === status) {
+
+          // Show the element
           $el.removeAttribute('hidden');
 
+          // If no message, quit because we don't want to show empty feedback
+          if (!message) { return }
+
+          // Set the status message
+          $statusMessage
+          .each(function ($el) {
+            $el.innerHTML = message;
+          })
+
+          // Attempt to show a toast
           try {
             var toast = new bootstrap.Toast($el, {autohide: false})
             toast.show();
           } catch (e) {
             // console.warn('[Dashboard] Unable to create error toast', e);
           }
-
-          $statusMessage
-          .each(function ($el) {
-            $el.innerHTML = message;
-          })
         } else {
+          // Hide the element
           $el.setAttribute('hidden', true);
         }
       })
@@ -329,6 +361,9 @@
           self.setAllowLeave(true);
         }
       }
+
+      // Run onStatus
+      self._handler.onStatus(status, message);
 
       return self;
     };
@@ -411,6 +446,14 @@
       return self;
     };
 
+    Dashboard.prototype.onChange = function (fn) {
+      var self = this;
+
+      self._handler.onChange = fn;
+
+      return self;
+    };
+
     Dashboard.prototype.onSubmit = function (fn) {
       var self = this;
 
@@ -419,10 +462,10 @@
       return self;
     };
 
-    Dashboard.prototype.onChange = function (fn) {
+    Dashboard.prototype.onStatus = function (fn) {
       var self = this;
 
-      self._handler.onChange = fn;
+      self._handler.onStatus = fn;
 
       return self;
     };

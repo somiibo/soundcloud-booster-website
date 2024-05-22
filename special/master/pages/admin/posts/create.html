@@ -1383,8 +1383,8 @@ admin:
   }
 
   function randomizeHeaderImage() {
-    var search = dom.select('#headerImageKeywords').getValue() || dom.select('#excerpt').getValue() || dom.select('#title').getValue()
-    var url = 'https://api.unsplash.com/photos/random?client_id=' + UNSPLASH_API_KEY + '&orientation=landscape&query=' + encodeURIComponent(search)
+    var search = dom.select('#headerImageKeywords').getValue() || dom.select('#excerpt').getValue() || dom.select('#title').getValue();
+    var url = 'https://api.unsplash.com/photos/random?client_id=' + UNSPLASH_API_KEY + '&orientation=landscape&query=' + encodeURIComponent(search);
     var $unsplashCredits = dom.select('#unsplash-credits');
     var $unsplashCreditsArtist = dom.select('#unsplash-credits-artist');
     // console.log('===url', url);
