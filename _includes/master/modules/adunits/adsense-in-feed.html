@@ -1,7 +1,8 @@
 {%- if page.advertising.google-adsense == false -%}
 {%- elsif layout.advertising.google-adsense == false -%}
 {%- elsif site.advertising.google-adsense != false -%}
-  <!-- Adunit - Adsense In-feed Ad-->
+  <!-- Adunit - Adsense In-feed Ad -->
+  <!-- ADUNIT_TRIGGER_START -->
   {%- if include.include-adsense-script == true -%}
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{{ site.advertising.google-adsense }}" crossorigin="anonymous"></script>
   {%- endif -%}
@@ -27,4 +28,5 @@
   </div>
 
   {% include /master/modules/adunits/fallback/insert.html %}
+  <!-- ADUNIT_TRIGGER_END -->
 {%- endif -%}

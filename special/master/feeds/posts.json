@@ -11,18 +11,18 @@ permalink: /feeds/posts.json
   "description": "{{ site.brand.description }}",
   "generator": "Jekyll {{ jekyll.version }}",
   "language": "en",
-  "favicon": "",
+  "favicon": "{{ site.favicon.path }}",
   "items": [
     {%- assign sortedFeed = site.posts | limit:25 | sort: 'date' | reverse -%}
     {% for post in sortedFeed %}
     {
       "id": "{{ site.url }}{{ post.url }}",
       "url": "{{ site.url }}{{ post.url }}",
-      "title": "{% if post.meta.title %}{{ post.meta.title }}{% else %}{{ post.post.title }}{% endif %}",
-      "content_text": "{{ post.content | liquify | markdownify | strip_html | replace: '\n', ' ' | replace: '\r', ' ' | replace: '"', "'" | strip_newlines }}",
-      "content_html": "{{ post.content | liquify | markdownify | replace: '\n', ' ' | replace: '\r', ' ' | replace: '"', "'" | strip_newlines }}",
+      "title": "{{ post.title | strip_html | strip_newlines | json_escape }}",
       "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
-      "image": "{% if post.image %}{{ post.image }}{% endif %}",
+      "image": "{{ post.image }}",
+      "content_text": "{{ post.content | liquify | markdownify | strip_html | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
+      "content_html": "{{ post.content | liquify | markdownify | strip_ads | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
       "authors": [
         {
           "name": "{{ site.brand.name }}"
@@ -30,10 +30,10 @@ permalink: /feeds/posts.json
       ],
       "attachments": [
         {
-          "url": "{% if post.image %}{{ post.image }}{% endif %}"
+          "url": "{{ post.image }}"
         }
       ],
-      "summary": "{% if post.meta.description %}{{ post.meta.description | jsonify }}{% else %}{{ post.post.excerpt | jsonify }}{% endif %}",
+      "summary": "{{ post.post.excerpt | strip_html | strip_newlines | json_escape }}",
       "tags": ["{{ post.post.category }}"]
     }{% if forloop.last == false %},{% endif %}
     {% endfor %}
