@@ -31,12 +31,7 @@ permalink: /feeds/posts.xml
 
     {% assign sortedFeed = site.posts | sort: 'date' | reverse | limit:25 %}
 
-    {% for post in sortedFeed %}
-      {% comment %} Include this because limit:25 doesnt work?? {% endcomment %}
-      {% if forloop.index > 25 %}
-        {% break %}
-      {% endif %}
-
+    {% for post in sortedFeed limit:25 %}
       {%- capture post-title -%}
         {%- if post.meta.title -%}
           {{ post.meta.title }}
