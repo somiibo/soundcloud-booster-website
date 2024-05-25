@@ -1,0 +1,41 @@
+---
+layout: null
+permalink: /feeds/posts.json
+---
+
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "{{ site.brand.name }} Blog",
+  "home_page_url": "{{ site.url }}/blog",
+  "feed_url": "{{ site.url }}{{ page.url }}",
+  "description": "{{ site.brand.description }}",
+  "generator": "Jekyll {{ jekyll.version }}",
+  "language": "en",
+  "favicon": "",
+  "items": [
+    {%- assign sortedFeed = site.posts | limit:25 | sort: 'date' | reverse -%}
+    {% for post in sortedFeed %}
+    {
+      "id": "{{ site.url }}{{ post.url }}",
+      "url": "{{ site.url }}{{ post.url }}",
+      "title": "{% if post.meta.title %}{{ post.meta.title }}{% else %}{{ post.post.title }}{% endif %}",
+      "content_text": "{{ post.content | liquify | markdownify | strip_html | replace: '\n', ' ' | replace: '\r', ' ' | replace: '"', "'" | strip_newlines }}",
+      "content_html": "{{ post.content | liquify | markdownify | replace: '\n', ' ' | replace: '\r', ' ' | replace: '"', "'" | strip_newlines }}",
+      "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
+      "image": "{% if post.image %}{{ post.image }}{% endif %}",
+      "authors": [
+        {
+          "name": "{{ site.brand.name }}"
+        }
+      ],
+      "attachments": [
+        {
+          "url": "{% if post.image %}{{ post.image }}{% endif %}"
+        }
+      ],
+      "summary": "{% if post.meta.description %}{{ post.meta.description | jsonify }}{% else %}{{ post.post.excerpt | jsonify }}{% endif %}",
+      "tags": ["{{ post.post.category }}"]
+    }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ]
+}
