@@ -25,8 +25,11 @@ permalink: /feeds/posts.xml
     <lastBuildDate>
       {{ site.time | date: "%a, %d %b %Y %H:%M:%S" }} GMT
     </lastBuildDate>
+    <language>
+      <![CDATA[ en ]]>
+    </language>
 
-    {% assign sortedFeed = site.posts | limit:10 | sort: 'date' | reverse %}
+    {% assign sortedFeed = site.posts | limit:25 | sort: 'date' | reverse %}
 
     {% for post in sortedFeed %}
       {%- capture post-title -%}
@@ -62,7 +65,7 @@ permalink: /feeds/posts.xml
         </description>
         <content:encoded>
           <![CDATA[
-            {{ post.content | liquify | markdownify }}
+            {{ post.content | liquify | markdownify | strip_ads }}
           ]]>
         </content:encoded>
         <dc:creator>
