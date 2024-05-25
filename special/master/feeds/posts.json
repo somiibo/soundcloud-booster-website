@@ -13,29 +13,33 @@ permalink: /feeds/posts.json
   "language": "en",
   "favicon": "{{ site.favicon.path }}",
   "items": [
-    {%- assign sortedFeed = site.posts | limit:25 | sort: 'date' | reverse -%}
+    {%- assign sortedFeed = site.posts | sort: 'date' | reverse | limit:25 -%}
     {% for post in sortedFeed %}
-    {
-      "id": "{{ site.url }}{{ post.url }}",
-      "url": "{{ site.url }}{{ post.url }}",
-      "title": "{{ post.title | strip_html | strip_newlines | json_escape }}",
-      "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
-      "image": "{{ post.image }}",
-      "content_text": "{{ post.content | liquify | markdownify | strip_html | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
-      "content_html": "{{ post.content | liquify | markdownify | strip_ads | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
-      "authors": [
-        {
-          "name": "{{ site.brand.name }}"
-        }
-      ],
-      "attachments": [
-        {
-          "url": "{{ post.image }}"
-        }
-      ],
-      "summary": "{{ post.post.excerpt | strip_html | strip_newlines | json_escape }}",
-      "tags": ["{{ post.post.category }}"]
-    }{% if forloop.last == false %},{% endif %}
+      {% comment %} Include this because limit:25 doesnt work?? {% endcomment %}
+      {% if forloop.index > 25 %}
+        {% break %}
+      {% endif %}
+      {
+        "id": "{{ site.url }}{{ post.url }}",
+        "url": "{{ site.url }}{{ post.url }}",
+        "title": "{{ post.title | strip_html | strip_newlines | json_escape }}",
+        "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
+        "image": "{{ post.image }}",
+        "content_text": "{{ post.content | liquify | markdownify | strip_html | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
+        "content_html": "{{ post.content | liquify | markdownify | strip_ads | json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
+        "authors": [
+          {
+            "name": "{{ site.brand.name }}"
+          }
+        ],
+        "attachments": [
+          {
+            "url": "{{ post.image }}"
+          }
+        ],
+        "summary": "{{ post.post.excerpt | strip_html | strip_newlines | json_escape }}",
+        "tags": ["{{ post.post.category }}"]
+      }{% if forloop.last == false %},{% endif %}
     {% endfor %}
   ]
 }
