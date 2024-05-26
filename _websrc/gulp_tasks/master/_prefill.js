@@ -136,7 +136,11 @@ gulp.task('_prefill', () => {
 
       // only create these files if NOT on template
       if (!tools.isTemplate) {
+        // Create settings.json to hide master files
         await createFile(`.vscode/settings.json`, await readFile('./_websrc/templates/master/vscode/settings.json'));
+
+        // Create app blog post layout
+        await createFile(`./_layouts/app/blog/post.html`, await readFile('./_websrc/templates/app/placeholder/blog/post.html'));
       }
 
       // only create these files if IS ON template and IS NOT server
