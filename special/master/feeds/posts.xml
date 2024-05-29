@@ -65,7 +65,7 @@ permalink: /feeds/posts.xml
         </description>
         <content:encoded>
           <![CDATA[
-            {{ post.content | liquify | markdownify | strip_ads }}
+            {{ post.content | liquify | markdownify | uj_strip_ads }}
           ]]>
         </content:encoded>
         <dc:creator>
