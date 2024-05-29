@@ -62,6 +62,10 @@ sitemap:
           {%- include /master/helpers/blog-image.html class="img-fluid rounded-lg" -%}
         </div>
 
+        {% for category in page.post.categories %}
+          <a href="{{ site.url }}/category/{{ category | slugify }}" class="badge bg-secondary text-decoration-none">{{ category }}</a>
+        {% endfor %}
+
         <p>
           {{ page.post.excerpt | liquify }}
         </p>
