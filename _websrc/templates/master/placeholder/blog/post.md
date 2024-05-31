@@ -28,4 +28,3 @@ Between ads
 {% include /master/modules/adunits/adsense-in-article.html index="1" %}
 
 After ads
-```
