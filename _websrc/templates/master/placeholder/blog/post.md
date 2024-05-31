@@ -3,7 +3,7 @@
 layout: master/placeholder/blog/post
 sitemap:
   include: true
-  
+
 ### POST ONLY ###
 post:
   title: "Example post number {count}"
@@ -18,3 +18,14 @@ post:
 
 ## Title inside post {count}
 This is a wonderful paragrah inside a post! This is post #{count} with ID {id}.
+
+Before ads
+
+{% include /master/modules/adunits/adsense-in-article.html index="0" %}
+
+Between ads
+
+{% include /master/modules/adunits/adsense-in-article.html index="1" %}
+
+After ads
+```
