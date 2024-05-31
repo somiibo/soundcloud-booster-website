@@ -11,8 +11,8 @@ post:
   description: "This is a sample excerpt for post number {count}"
   author: alex
   id: {id}
-  tags: [tag, tag2, tag3]
-  categories: [marketing, business]
+  tags: ["business marketing"]
+  categories: ["Marketing", "Business"]
   affiliate-search-term: Marketing
 ---
 
