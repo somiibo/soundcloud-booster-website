@@ -28,7 +28,7 @@ permalink: /feeds/posts.json
         "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
         "image": "{{ post.image }}",
         "content_text": "{{ post.content | liquify | markdownify | strip_html | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
-        "content_html": "{{ post.content | uj_strip_ads | liquify | markdownify | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
+        "content_html": "{{ post.content | uj_strip_ads | liquify | markdownify | uj_strip_ads | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
         "authors": [
           {
             "name": "{{ site.brand.name }}"
