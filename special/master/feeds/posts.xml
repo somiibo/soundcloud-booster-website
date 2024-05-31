@@ -39,6 +39,11 @@ permalink: /feeds/posts.xml
           {{ post.post.title }}
         {%- endif -%}
       {%- endcapture -%}
+      {%- if post.post.categories -%}
+        {%- assign category = post.post.categories | first -%}
+      {%- else -%}
+        {%- assign category = "" -%}
+      {%- endif -%}
       <item>
         <title>
           <![CDATA[
@@ -75,7 +80,7 @@ permalink: /feeds/posts.xml
         </dc:creator>
         <category>
           <![CDATA[
-            {{ post.post.category }}
+            {{ category }}
           ]]>
         </category>
       </item>

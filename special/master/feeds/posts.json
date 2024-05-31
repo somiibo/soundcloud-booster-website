@@ -17,13 +17,18 @@ permalink: /feeds/posts.json
 
     {% for post in sortedFeed limit:25 %}
       {
+        {%- if post.post.categories -%}
+          {%- assign tags = post.post.categories | jsonify -%}
+        {%- else -%}
+          {%- assign tags = "[]" -%}
+        {%- endif -%}
         "id": "{{ site.url }}{{ post.url }}",
         "url": "{{ site.url }}{{ post.url }}",
         "title": "{{ post.title | strip_html | strip_newlines | uj_json_escape }}",
         "date_published": "{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}.000Z",
         "image": "{{ post.image }}",
         "content_text": "{{ post.content | liquify | markdownify | strip_html | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
-        "content_html": "{{ post.content | liquify | markdownify | uj_strip_ads | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
+        "content_html": "{{ post.content | uj_strip_ads | liquify | markdownify | uj_json_escape | replace: '\n', ' ' | replace: '\r', ' ' | strip_newlines }}",
         "authors": [
           {
             "name": "{{ site.brand.name }}"
@@ -35,7 +40,7 @@ permalink: /feeds/posts.json
           }
         ],
         "summary": "{{ post.post.excerpt | strip_html | strip_newlines | uj_json_escape }}",
-        "tags": ["{{ post.post.category }}"]
+        "tags": {{ tags }}
       }{% if forloop.last == false %},{% endif %}
     {% endfor %}
   ]
