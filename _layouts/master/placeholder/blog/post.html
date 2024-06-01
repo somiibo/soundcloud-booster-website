@@ -62,6 +62,19 @@ sitemap:
           {%- include /master/helpers/blog-image.html class="img-fluid rounded-lg" -%}
         </div>
 
+        {% for category in page.post.categories %}
+          <a href="{{ site.url }}/category/{{ category | slugify }}" class="badge bg-secondary text-decoration-none">{{ category }}</a>
+        {% endfor %}
+
+        <!-- Calculate read time in min -->
+        <span>
+          {%- include /master/helpers/read-time.html content=content -%} min read
+        </span>
+
+        <!-- Calculate comments -->
+        <span>
+          {%- include /master/helpers/fake-comments.html content=content -%} comments
+        </span>
         <p>
           {{ page.post.excerpt | liquify }}
         </p>
@@ -71,7 +84,6 @@ sitemap:
         {{ content }}
 
       </article>
-
 
       <div class="mb-3">
         {%- include /master/modules/engagement/social-share-kit.html -%}
