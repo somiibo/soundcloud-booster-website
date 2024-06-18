@@ -5,7 +5,8 @@ const _configYml = require('js-yaml').load(jetpack.read('_config.yml'));
 const del        = require('del');
 const tools      = new (require('../../libraries/tools.js'));
 const Global     = require('../../libraries/global.js');
-const fetch      = require('node-fetch');
+const fetch      = require('wonderful-fetch');
+const JSON5      = require('json5');
 
 gulp.task('_prefill', () => {
   return new Promise(async (resolve, reject) => {
@@ -188,55 +189,86 @@ gulp.task('_prefill', () => {
       // })
 
       // Get firebase-auth
+      const urlBase = 'https://ultimate-jekyll.firebaseapp.com'
       const firebaseAuthFiles = [
-        'handler.html',
-        'handler.js',
-        'experiments.js',
-        'iframe.html',
-        'iframe.js',
+        {
+          remote: '__/auth/handler',
+        },
+        {
+          remote: '__/auth/handler.js',
+        },
+        {
+          remote: '__/auth/experiments.js',
+        },
+        {
+          remote: '__/auth/iframe',
+        },
+        {
+          remote: '__/auth/iframe.js',
+        },
+        {
+          remote: '__/firebase/init.json',
+          custom: 'init',
+        }
       ]
-      const firebaseAuthPrefix = '__/auth';
       const firebaseAuthPromises = [];
       const firebaseAuthDir = './special/master/scripts/firebase-auth';
+      const firebaseConfig = eval(`(${_configYml.settings['manager-configuration']})`).libraries.firebase_app.config;
 
       // Clear files
       jetpack.remove(firebaseAuthDir);
 
+      // Create directory if not on server
       if (!tools.isServer) {
         await createFile(`${firebaseAuthDir}/.gitignore`, gitignore_ph);
       }
 
-      for (var i = 0; i < firebaseAuthFiles.length; i++) {
-        const file = firebaseAuthFiles[i];
-        const fileNoHTML = file.replace('.html', '');
-        const remoteFile = `https://ultimate-jekyll.firebaseapp.com/${firebaseAuthPrefix}/${fileNoHTML}`;
+      // Fetch files
+      for (let i = 0; i < firebaseAuthFiles.length; i++) {
+        const item = firebaseAuthFiles[i];
+        const remoteUrl = `${urlBase}/${item.remote}`;
+        const remote = item.remote;
+        const name = remoteUrl.split('/').pop();
+        const dir = `${firebaseAuthDir}/${name}`;
+        const custom = item.custom || false;
 
-        // console.log(`Fetching ${remoteFile}`);
+        function _write(content) {
+          jetpack.write(dir,
+            '---\n'
+            + `permalink: /${remote}\n`
+            + '---\n'
+            + '\n'
+            + content
+          )
+        }
 
-        firebaseAuthPromises.push(
-          fetch(remoteFile)
-          .then(async (res) => {
-            if (res.ok) {
-              jetpack.write(`${firebaseAuthDir}/${file}`,
-                '---\n'
-                + `permalink: /${firebaseAuthPrefix}/${fileNoHTML}\n`
-                + '---\n'
-                + '\n'
-                + await res.text()
-              )
-            } else {
-              throw new Error(`Failed to get ${file}`)
-            }
-          })
-          // .catch(e => {
-          //   console.error(e);
-          // })
-        )
+        if (custom === 'init') {
+          // Write custom content to init.json
+          _write(JSON.stringify(firebaseConfig, null, 2));
+        } else {
+          // Push promise
+          firebaseAuthPromises.push(
+            fetch(remoteUrl)
+            .then(async (res) => {
+              // Check if response is ok
+              if (!res.ok) {
+                throw new Error(`Failed to get ${remoteUrl}`)
+              }
+
+              // Write file
+              _write(await res.text());
+            })
+          )
+        }
       }
 
+      // Wait for all promises to resolve
       await Promise.all(firebaseAuthPromises);
 
+      // Set prefill status
       Global.set('prefillStatus', 'done');
+
+      // Resolve
       return resolve();
     } catch (e) {
       return reject(e)
