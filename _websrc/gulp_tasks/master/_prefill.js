@@ -189,10 +189,12 @@ gulp.task('_prefill', () => {
       // })
 
       // Get firebase-auth
-      const urlBase = 'https://ultimate-jekyll.firebaseapp.com'
+      const firebaseConfig = eval(`(${_configYml.settings['manager-configuration']})`).libraries.firebase_app.config;
+      const urlBase = `https://${firebaseConfig.projectId}.firebaseapp.com`;
       const firebaseAuthFiles = [
         {
           remote: '__/auth/handler',
+          local: 'handler.html',
         },
         {
           remote: '__/auth/handler.js',
@@ -202,6 +204,7 @@ gulp.task('_prefill', () => {
         },
         {
           remote: '__/auth/iframe',
+          local: 'iframe.html',
         },
         {
           remote: '__/auth/iframe.js',
@@ -213,7 +216,6 @@ gulp.task('_prefill', () => {
       ]
       const firebaseAuthPromises = [];
       const firebaseAuthDir = './special/master/scripts/firebase-auth';
-      const firebaseConfig = eval(`(${_configYml.settings['manager-configuration']})`).libraries.firebase_app.config;
 
       // Clear files
       jetpack.remove(firebaseAuthDir);
@@ -229,7 +231,8 @@ gulp.task('_prefill', () => {
         const remoteUrl = `${urlBase}/${item.remote}`;
         const remote = item.remote;
         const name = remoteUrl.split('/').pop();
-        const dir = `${firebaseAuthDir}/${name}`;
+        const local = item.local || name;
+        const dir = `${firebaseAuthDir}/${local}`;
         const custom = item.custom || false;
 
         function _write(content) {
