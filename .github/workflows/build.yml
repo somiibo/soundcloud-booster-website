@@ -105,4 +105,4 @@ jobs:
         uses: kolpav/purge-artifacts-action@v1
         with:
           token: ${{ secrets.GH_TOKEN }}
-          expire-in: 5 minutes # Set this to 0 to delete all artifacts
+          expire-in: 5 minutes # Set this to 0 to delete instantly
