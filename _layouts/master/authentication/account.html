@@ -1763,27 +1763,29 @@ settings:
         Object.keys(appData.oauth2)
         .forEach(function (provider, i) {
           // console.log('--appData.oauth2[provider]', appData.oauth2[provider]);
-          if (appData.oauth2[provider] && appData.oauth2[provider].enabled) {
-            var details = oauth2Map[provider];
-            if (!details) {
-              return
-            }
-
-            var identity = _.get(accountData.oauth2[provider] || {}, 'identity.' + details.identity, '');
-            if (identity) {
-              identity = '- ' + identity;
-            }
-
-            oauth2EnabledArray = oauth2EnabledArray.concat(provider);
-            connectedAccountsHtml += connectedAccountsTemplate
-              .replace(/{id}/img, provider)
-              .replace(/{icon}/img, details.icon)
-              .replace(/{name}/img, details.name)
-              .replace(/{identity}/img, identity)
-              .replace(/{homepage}/img, details.homepage)
-              .replace(/{description}/img, details.description)
-              .replace(/{scope}/img, encodeURIComponent(JSON.stringify(appData.oauth2[provider].scope || [])))
+          if (!appData.oauth2[provider] || !appData.oauth2[provider].enabled) {
+            return;
           }
+
+          var details = oauth2Map[provider];
+          if (!details) {
+            return;
+          }
+
+          var identity = _.get(accountData.oauth2[provider] || {}, 'identity.' + details.identity, '');
+          if (identity) {
+            identity = '- ' + identity;
+          }
+
+          oauth2EnabledArray = oauth2EnabledArray.concat(provider);
+          connectedAccountsHtml += connectedAccountsTemplate
+            .replace(/{id}/img, provider)
+            .replace(/{icon}/img, details.icon)
+            .replace(/{name}/img, details.name)
+            .replace(/{identity}/img, identity)
+            .replace(/{homepage}/img, details.homepage)
+            .replace(/{description}/img, details.description)
+            .replace(/{scope}/img, encodeURIComponent(JSON.stringify(appData.oauth2[provider].scope || [])))
         });
 
         if (oauth2EnabledArray.length === 0) {
@@ -1861,7 +1863,6 @@ settings:
             checkOAuth2Connection(provider);
           });
         }
-
 
         document.addEventListener('submit', function (event) {
           handleSubmit(event);
