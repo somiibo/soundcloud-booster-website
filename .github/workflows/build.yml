@@ -101,15 +101,21 @@ jobs:
           publish_dir: ./_site
       - name: Purge CloudFlare cache
         run: npm run cloudflare:purge
+
       # - name: Purge artifacts
       #   uses: kolpav/purge-artifacts-action@v1
       #   with:
       #     token: ${{ secrets.GH_TOKEN }}
       #     expire-in: 5 minutes # Set this to 0 to delete instantly
+
+      # - name: Purge artifacts
+      #   uses: c-hive/gha-remove-artifacts@v1
+      #   with:
+      #     age: '5 minutes' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
+      #     # Optional inputs
+      #     # skip-tags: true
+      #     # skip-recent: 5
       - name: Purge artifacts
-        uses: c-hive/gha-remove-artifacts@v1
+        uses: geekyeggo/delete-artifact@v5
         with:
-          age: '5 minutes' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
-          # Optional inputs
-          # skip-tags: true
-          # skip-recent: 5
+            name: github-pages
