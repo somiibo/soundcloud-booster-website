@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://itwcreativeworks.com">
-    <img src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="100" alt="ITW Creative Works">
+    <img src="https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/logo/itw-creative-works-brandmark-black-x.svg" width="100px" alt="ITW Creative Works">
   </a>
   <br>
   <br>
