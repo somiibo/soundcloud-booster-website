@@ -109,7 +109,7 @@ jobs:
       - name: Purge artifacts
         uses: c-hive/gha-remove-artifacts@v1
         with:
-          age: '1 minutes' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
+          age: '5 minutes' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
           # Optional inputs
           # skip-tags: true
           # skip-recent: 5
