@@ -28,7 +28,7 @@ jobs:
           git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git config --global user.name "$GITHUB_ACTOR"
       - name: Checkout main branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -40,7 +40,7 @@ jobs:
         run: |
           bundle install --path vendor/bundle
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 10
       - name: Run node install
@@ -95,7 +95,7 @@ jobs:
       #       -H "Authorization: token ${{ secrets.GH_TOKEN }}" \
       #       https://api.github.com/repos/$GITHUB_REPOSITORY/git/refs/heads/gh-pages
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           publish_dir: ./_site
@@ -105,4 +105,15 @@ jobs:
         uses: kolpav/purge-artifacts-action@v1
         with:
           token: ${{ secrets.GH_TOKEN }}
-          expire-in: 5 minutes # Set this to 0 to delete all artifacts
+          expire-in: 5 minutes # Set this to 0 to delete instantly
+      # - name: Purge artifacts
+      #   uses: c-hive/gha-remove-artifacts@v1
+      #   with:
+      #     age: '5 minutes' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
+      #     # Optional inputs
+      #     # skip-tags: true
+      #     # skip-recent: 5
+      # - name: Purge artifacts
+      #   uses: geekyeggo/delete-artifact@v5
+      #   with:
+      #       name: github-pages
