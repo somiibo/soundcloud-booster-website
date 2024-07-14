@@ -205,8 +205,8 @@ settings:
           config: {
             dsn: '',
             release: 'ultimate-jekyll-website',
-            replaysSessionSampleRate: 0.1,
-            replaysOnErrorSampleRate: 1.0,
+            replaysSessionSampleRate: 0.01,
+            replaysOnErrorSampleRate: 0.01,
           },
         },
       },
