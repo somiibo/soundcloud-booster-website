@@ -5,7 +5,7 @@ permalink: /search/cse
 
 ### REGULAR PAGES ###
 redirect:
-  url: "https://cse.google.com/cse?cx={{ site.advertising.cse-site-id }}"
+  url: "https://cse.google.com/cse?cx={{ site.advertising.cse-site-id }}&ie=UTF-8"
   modifier: "
     function (url) {
       var q = url.searchParams.get('q');

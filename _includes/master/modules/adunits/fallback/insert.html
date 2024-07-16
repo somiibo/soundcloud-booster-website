@@ -23,9 +23,27 @@
 
     var slotId = new Date().getTime();
 
+    // Selectors
     var vertSlotsSelector = '.uj-vert-unit';
     var vertSlotsSelectorLoaded = '.uj-vert-unit ins[data-ad-status]';
     var vertSlotsSelectorUnfilled = '.uj-vert-unit ins[data-ad-status="unfilled"]';
+
+    // Set the anti-vert detector script
+    /*
+      /bottomads.js
+      /content-ads.js
+      /core-ads.js
+      /insertads.js
+      /jsads.js
+      /left_ads.js
+      /nativeads.js
+      /openads.js
+      /popupads.js
+      /ads/ad-script.js?ad_network=123&tracking_id=abc#banner_ad
+    */
+    // var scriptUrl = '/assets/js/taboola_ads.js';
+    // var scriptUrl = 'assets/js/pagead.js';
+    var scriptUrl = '/assets/js/popupads.js?t1=/ads/native.js&t2=/nativeads.js&t3=/content-ads.js&cb=' + Manager.properties.global.cacheBreaker;
 
     // Check if being handled already
     if (window._ujVertCheckerStarted) {
@@ -39,12 +57,19 @@
       var command = message.command || '';
       var payload = message.payload || {};
 
+      // Log
+      console.log('Message', command, message, event.source);
+
+      // Handle the message
       if (command === 'uj-vert-unit:set-dimensions') {
+        // Get the iframe
         var $iframe = select('#uj-vert-' + payload.id).get(0);
 
-        console.log('Message', command, message, event.source);
-
+        // Set the dimensions
         $iframe.style.height = payload.height + 'px';
+      } else if (command === 'uj-vert-unit:click') {
+        // Navigate to the URL
+        window.location.href = payload.url;
       }
     }
 
@@ -82,9 +107,8 @@
 
     window.addEventListener('message', messageHandler, false);
 
-    // Load the adblocker detector
-    // Manager.dom().loadScript({src: '/assets/js/taboola_ads.js'})
-    Manager.dom().loadScript({src: '/assets/js/pagead.js'})
+    // Load the antivert checker
+    Manager.dom().loadScript({src: scriptUrl})
     .then(function (e) {
       console.log('Loaded antivert checker', e);
     })
