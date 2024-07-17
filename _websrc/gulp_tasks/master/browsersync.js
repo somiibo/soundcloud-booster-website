@@ -20,13 +20,16 @@ let workingUrl;
 gulp.task('browsersync', async () => {
   await tools.quitIfBadBuildEnvironment();
 
+  // Wait for the prefill to be done
   await tools.poll(() => Global.get('prefillStatus') === 'done', { timeout: 120000 });
 
+  // Check if the index.html file exists
   if (!fs.exists(`${config.jekyll.dest}/index.html`)) {
     fs.write(`${config.jekyll.dest}/index.html`, `<!doctype html> <html lang="en"> <head> <meta charset="utf-8"> <title>Initializing...</title> <meta name="description" content="Initializing..."> </head> <body> Initializing... <a href="#" onclick="window.location.href = window.location.href">refresh</a></body> </html>`)
   }
 
   // options: https://www.browsersync.io/docs/options
+  // Start the Browsersync server
   let settings = {
     port: config.port,
     browser: browser,
@@ -36,6 +39,14 @@ gulp.task('browsersync', async () => {
       middleware: async function (req, res, next) {
         const url = new URL(`http://localhost:4000${req.url}`);
         const pathname = url.pathname;
+
+        // Set the query object
+        req.query = {};
+
+        // Loop throough search params and log
+        newUrl.searchParams.forEach((value, key) => {
+          req.query[key] = value;
+        })
 
         // If the file has no ext, log it
         if (!path.extname(pathname)) {
