@@ -42,15 +42,41 @@ gulp.task('browsersync', async () => {
           console.log(`[Browsersync] Serving ${pathname}`);
         }
 
-        if (pathname.match(/_post.json/)) {
-          const createPost = require('./create-post.js');
-          const post = new createPost();
+        // Process the post request
+        if (pathname.match(/\/_process/)) {
+          const qsUrl = url.searchParams.get('url');
+          let lib;
 
-          return await post.create({
+          // Try to load the library
+          try {
+            lib = require(`../${qsUrl}`);
+          } catch (e) {
+            // Log the error
+            console.error(`[Browsersync] Error processing ${qsUrl}`);
+
+            // Set the status code
+            res.statusCode = 500;
+
+            // Return an error
+            return res.write(`Cannot find ${qsUrl}`);
+          }
+
+          // Log
+          console.log(`[Browsersync] Processing ${qsUrl}`);
+
+          // const createPost = require('./create-post.js');
+          // const post = new createPost();
+
+          // return await post.create({
+          //   req: req,
+          //   res: res,
+          // })
+          return await lib({
             req: req,
             res: res,
-          })
+          });
         }
+
         // Check if the URL is missing a trailing slash and does not have an extension
         if (!pathname.endsWith('/') && !path.extname(pathname)) {
           const newURL = `${pathname}.html`;
