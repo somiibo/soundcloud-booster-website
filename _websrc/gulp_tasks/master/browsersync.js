@@ -49,6 +49,10 @@ gulp.task('browsersync', async () => {
 
           // Try to load the library
           try {
+            // Clear the cache
+            delete require.cache[require.resolve(`../${qsUrl}`)];
+
+            // Load the library
             lib = require(`../${qsUrl}`);
           } catch (e) {
             // Log the error
