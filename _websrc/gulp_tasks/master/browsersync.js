@@ -44,7 +44,7 @@ gulp.task('browsersync', async () => {
         req.query = {};
 
         // Loop throough search params and log
-        newUrl.searchParams.forEach((value, key) => {
+        url.searchParams.forEach((value, key) => {
           req.query[key] = value;
         })
 
