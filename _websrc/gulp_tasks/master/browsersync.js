@@ -42,11 +42,7 @@ gulp.task('browsersync', async () => {
 
         // Set the query object
         req.query = {};
-
-        // Loop throough search params and log
-        url.searchParams.forEach((value, key) => {
-          req.query[key] = value;
-        })
+        req.body = {};
 
         // If the file has no ext, log it
         if (!path.extname(pathname)) {
@@ -57,6 +53,16 @@ gulp.task('browsersync', async () => {
         if (pathname.match(/\/_process/)) {
           const qsUrl = url.searchParams.get('url');
           let lib;
+
+          // Set query
+          url.searchParams.forEach((value, key) => {
+            req.query[key] = value;
+          })
+
+          // Set body
+          if (req.method === 'POST') {
+            req.body = await receiveRequestBody(req);
+          }
 
           // Try to load the library
           try {
@@ -159,6 +165,35 @@ gulp.task('browsersync', async () => {
     }
   });
 });
+
+function receiveRequestBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = [];
+
+    req.on('data', function (chunk) {
+      body.push(chunk.toString());
+    });
+
+    req.on('end', function () {
+      body = body.join('');
+
+      try {
+        // Attempt to parse the body as JSON
+        const parsedBody = JSON.parse(body);
+        console.log('Importing data...', parsedBody);
+        return resolve(parsedBody); // Resolve with parsed JSON if successful
+      } catch (error) {
+        // If parsing fails, resolve with the original body string
+        console.log('Importing data...', body);
+        return resolve(body);
+      }
+    });
+
+    req.on('error', function (err) {
+      return reject(err);
+    });
+  });
+}
 
 /**
  * Rebuild Jekyll & do page reload
