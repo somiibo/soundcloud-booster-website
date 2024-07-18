@@ -95,6 +95,25 @@ gulp.task('browsersync', async () => {
           return await lib({
             req: req,
             res: res,
+          })
+          .then((r) => {
+            res.statusCode = 200;
+
+            // Write the response (if it's JSON, set the content type)
+            try {
+              res.write(JSON.stringify(r));
+              res.setHeader('Content-Type', 'application/json');
+            } catch (e) {
+              res.write(r);
+            }
+
+            // End the response
+            res.end();
+          })
+          .catch((e) => {
+            res.statusCode = 500;
+            res.write(`Error processing ${qsUrl}`);
+            res.end();
           });
         }
 
@@ -177,14 +196,12 @@ function receiveRequestBody(req) {
     req.on('end', function () {
       body = body.join('');
 
+      // Attempt to parse the body as JSON
       try {
-        // Attempt to parse the body as JSON
         const parsedBody = JSON.parse(body);
-        console.log('Importing data...', parsedBody);
-        return resolve(parsedBody); // Resolve with parsed JSON if successful
+        return resolve(parsedBody);
       } catch (error) {
         // If parsing fails, resolve with the original body string
-        console.log('Importing data...', body);
         return resolve(body);
       }
     });
