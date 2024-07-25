@@ -235,14 +235,6 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/",
-        "title": "",
-        "desc": "",
-        "breadcrumb": "Home",
-        "category": "",
-        "type": ""
-      },
-    {
         "url": "https://soundcloudbooster.com/admin/notifications",
         "title": "Notifications",
         "desc": "View notifications",
@@ -263,6 +255,14 @@
         "title": "Explore Users",
         "desc": "Explore users with this Firestore query tool.",
         "breadcrumb": "Explore Users",
+        "category": "",
+        "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "Home",
         "category": "",
         "type": ""
       },
@@ -401,6 +401,14 @@
         "breadcrumb": "Webhook",
         "category": "",
         "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/blog/harness-the-power-of-soundcloud-booster-a-step-by-step-guide",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "",
+        "category": "",
+        "type": "post"
       },
     {
         "url": "https://soundcloudbooster.com/blog/the-ultimate-soundcloud-marketing-strategy-for-emerging-artists",
