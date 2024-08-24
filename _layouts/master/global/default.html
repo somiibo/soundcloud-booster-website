@@ -2,7 +2,7 @@
 layout: null
 ---
 <!DOCTYPE html>
-<html lang="en" {{ layout.html.attributes }} {{ page.html.attributes }}>
+<html lang="en" class="{{ layout.html.class }} {{ page.html.class }}" {{ layout.html.attributes }} {{ page.html.attributes }}>
   <head>
     <!-- Head -->
     {%- include /master/global/head.html -%}
