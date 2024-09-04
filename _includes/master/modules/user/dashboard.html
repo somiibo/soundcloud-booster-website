@@ -152,6 +152,7 @@
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
       options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'object' : options.checkboxReturnType;
       options.allowMultipleSubmits = typeof options.allowMultipleSubmits === 'undefined' ? true : options.allowMultipleSubmits;
+      options.initialStatus = options.initialStatus || 'ready';
 
       self.element.id = select(self.id);
 
@@ -178,6 +179,7 @@
       // Change handler
       self._setEventListeners();
 
+      // Submit handler
       self.element.id.get(0).addEventListener('submit', function (event) {
         console.log('[Dashboard]', self.id, 'submit event', event);
 
@@ -204,13 +206,20 @@
         });
       });
 
-      // self.display('loading');
+      // Set status
       self.display('initializing');
 
+      // Set options
       self.options = options;
 
       // Trigger initial event manually
       if (!self._triggeredInitialOnChangeEvent) {
+        // Set initial on change handler
+        // This is so we can set the initial status
+        self._initialOnChangeHandler = function () {
+          self.display(options.initialStatus);
+        }
+
         if (self._$manualChangeTriggerElement) {
           self.triggerOnChange();
         }
@@ -492,27 +501,43 @@
     Dashboard.prototype._changeHandler = function (event) {
       var self = this;
 
+      // Delay the change event so that the form can update
       setTimeout(function () {
+        // Prevent enter key from triggering change event so that it doesn't submit the form
         if (event.key === 'Enter') {
-          return
+          return;
         }
 
+        // Log
         console.log('[Dashboard]', self.id, 'change event', event);
 
+        // Show unsaved popup if enabled
         if (self.options.showUnsavedPopup) {
           self.element.unsaved.parent.removeAttribute('hidden');
         }
 
+        // Set allow leave to false
         if (self.options.preventUnsavedNavigation) {
           self.setAllowLeave(false);
         }
 
-        self.display('ready');
+        // Trigger initial handler to set the initial status
+        if (self._initialOnChangeHandler) {
+          self._initialOnChangeHandler();
 
+          // Reset it so it doesn't run again
+          self._initialOnChangeHandler = null;
+        } else {
+          // Set status to ready
+          self.display('ready');
+        }
+
+        // Run on change with form data
         self._handler.onChange(event, self.getFormData());
       }, 1);
     }
 
+    // Export to global
     window.Dashboard = Dashboard;
 
     // Log
