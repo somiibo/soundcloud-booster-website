@@ -374,6 +374,12 @@
       // Run onStatus
       self._handler.onStatus(status, message);
 
+      // Set initial on change handler to null so it doesn't run again
+      // If the dev manually calls .display() then it wont set automatically call the initial on change handler with the options.initialStatus
+      // If the dev does not call .display() then it will automatically call the initial on change handler with the options.initialStatus
+      self._initialOnChangeHandler = null;
+
+      // Return
       return self;
     };
 
@@ -524,9 +530,6 @@
         // Trigger initial handler to set the initial status
         if (self._initialOnChangeHandler) {
           self._initialOnChangeHandler();
-
-          // Reset it so it doesn't run again
-          self._initialOnChangeHandler = null;
         } else {
           // Set status to ready
           self.display('ready');
