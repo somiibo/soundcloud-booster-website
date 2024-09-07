@@ -217,6 +217,7 @@
         // Set initial on change handler
         // This is so we can set the initial status
         self._initialOnChangeHandler = function () {
+          self.setAllowLeave(true);
           self.display(options.initialStatus);
         }
 
@@ -531,7 +532,7 @@
         if (self._initialOnChangeHandler) {
           self._initialOnChangeHandler();
         } else {
-          // Set status to ready
+          // Set status to ready so if there's an error it will go away when they start typing again
           self.display('ready');
         }
 
