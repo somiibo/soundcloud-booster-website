@@ -124,6 +124,7 @@
       self._elements = ['input', 'textarea', 'select'];
       self._events = ['change', 'keydown', 'cut', 'paste']
       self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+      self._autoFocused = false;
 
       // Set global libraries
       select = Manager.dom().select;
@@ -183,8 +184,10 @@
       self.element.id.get(0).addEventListener('submit', function (event) {
         console.log('[Dashboard]', self.id, 'submit event', event);
 
+        // Change status
         self.display('loading');
 
+        // Fire submit handler
         self._handler.onSubmit(event, self.getFormData());
       });
 
@@ -284,10 +287,17 @@
         var isDisabledClass = el.classList.contains('disabled');
         var isDisabledAttribute = el.hasAttribute('disabled');
 
+        // Determine if we should disable the element
         if (isPending && (!isDisabledClass || !isDisabledAttribute)) {
           $el.addClass('disabled').setAttribute('disabled', true);
         } else if (!isPending && (isDisabledClass || isDisabledAttribute)){
           $el.removeClass('disabled').removeAttribute('disabled');
+        }
+
+        // If the element has autofocus, select the entire text
+        if (status === 'ready' && !self._autoFocused && el.hasAttribute('autofocus')) {
+          self._autoFocused = true;
+          el.select();
         }
 
         // var isDisabledClass = el.classList.contains('disabled');
