@@ -57,6 +57,11 @@
       var command = message.command || '';
       var payload = message.payload || {};
 
+      // Auto-set id
+      if (!payload.id && event.source.name) {
+        payload.id = event.source.name.replace('uj-vert-', '');
+      }
+
       // Log
       console.log('Message', command, message, event.source);
 
