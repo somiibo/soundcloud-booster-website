@@ -147,17 +147,17 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/admin/posts/create",
-        "title": "Create Post",
-        "desc": "Create blog posts with ease, including the beautiful markdown editor StackEdit.",
+        "url": "https://soundcloudbooster.com/admin/notifications/create",
+        "title": "Create Notification",
+        "desc": "Send push notifications to capture your audience!",
         "breadcrumb": "Create",
         "category": "",
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/admin/notifications/create",
-        "title": "Create Notification",
-        "desc": "Send push notifications to capture your audience!",
+        "url": "https://soundcloudbooster.com/admin/posts/create",
+        "title": "Create Post",
+        "desc": "Create blog posts with ease, including the beautiful markdown editor StackEdit.",
         "breadcrumb": "Create",
         "category": "",
         "type": ""
@@ -235,18 +235,18 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/",
-        "title": "",
-        "desc": "",
-        "breadcrumb": "Home",
-        "category": "",
-        "type": ""
-      },
-    {
         "url": "https://soundcloudbooster.com/admin/users",
         "title": "Explore Users",
         "desc": "Explore users with this Firestore query tool.",
         "breadcrumb": "Explore Users",
+        "category": "",
+        "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/admin/notifications",
+        "title": "Notifications",
+        "desc": "View notifications",
+        "breadcrumb": "Notifications",
         "category": "",
         "type": ""
       },
@@ -259,10 +259,10 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/admin/notifications",
-        "title": "Notifications",
-        "desc": "View notifications",
-        "breadcrumb": "Notifications",
+        "url": "https://soundcloudbooster.com/",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "Home",
         "category": "",
         "type": ""
       },
@@ -401,6 +401,14 @@
         "breadcrumb": "Webhook",
         "category": "",
         "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/blog/mastering-soundcloud-techniques-to-enhance-your-music-career",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "",
+        "category": "",
+        "type": "post"
       },
     {
         "url": "https://soundcloudbooster.com/blog/how-to-boost-your-soundcloud-engagement-with-free-tools",
