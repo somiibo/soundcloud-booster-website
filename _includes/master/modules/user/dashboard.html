@@ -106,6 +106,7 @@
 
     }
     var select;
+    var utilities;
     var get;
     var set;
     var storage;
@@ -147,8 +148,9 @@
 
       // Set global libraries
       select = Manager.dom().select;
-      get = Manager.utilities().get;
-      set = Manager.utilities().set;
+      utilities = Manager.utilities();
+      get = utilities.get;
+      set = utilities.set;
       storage = Manager.storage();
 
       self.status = 'initializing';
@@ -428,7 +430,7 @@
       for (var key in object) {
         if (object.hasOwnProperty(key)) {
           var regex = new RegExp('{\\s*' + key + '\\s*}', 'g');
-          template = template.replace(regex, object[key]);
+          template = template.replace(regex, utilities.escapeHTML(object[key]));
         }
       }
 
