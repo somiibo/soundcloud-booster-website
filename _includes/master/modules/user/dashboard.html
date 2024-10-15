@@ -484,6 +484,13 @@
       return self._handler.transformData(data);
     };
 
+    // Submit
+    Dashboard.prototype.submit = function () {
+      var self = this;
+
+      self.element.id.get(0).querySelector('button[type="submit"]').click();
+    };
+
     Dashboard.prototype.transformData = function (fn) {
       var self = this;
 
