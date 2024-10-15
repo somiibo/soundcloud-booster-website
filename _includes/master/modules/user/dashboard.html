@@ -420,6 +420,21 @@
       return self.options.template[id];
     };
 
+    Dashboard.prototype.resolveTemplate = function (id, object) {
+      var self = this;
+      var template = self.getTemplate(id);
+
+      // Loop through each key in object and replace {key} with object[key] value
+      for (var key in object) {
+        if (object.hasOwnProperty(key)) {
+          var regex = new RegExp('{\\s*' + key + '\\s*}', 'g');
+          template = template.replace(regex, object[key]);
+        }
+      }
+
+      return template;
+    };
+
     // Dashboard.prototype.template = function (id, data) {
     //   var self = this;
 
