@@ -225,11 +225,11 @@
       })
 
       // Add query strings to form
+      var qsData = {};
       Manager.properties.page.queryString.forEach(function (value, key) {
-        self.setFormData({
-          [key]: value,
-        });
+        set(qsData, key, value);
       });
+      self.setFormData(qsData);
 
       // Set status
       self.display('initializing');
@@ -453,7 +453,7 @@
       });
     };
 
-    Dashboard.prototype.getFormData = function () {
+    Dashboard.prototype.getFormData = function (transform) {
       var self = this;
       var data = {};
       var $form = self.element.id.get(0);
@@ -464,6 +464,7 @@
         var name = $el.getAttribute('name');
         var value = select('#' + $form.id + ' [name="' + name + '"]').getValue({returnType: self.options.checkboxReturnType});
 
+        // Skip if button
         if (el.tagName === 'BUTTON') {
           return;
         } else if (!name) {
@@ -471,15 +472,22 @@
           return;
         }
 
+        // Set the data
         set(data, name, value);
       });
 
+      // Return regular
+      if (transform === false) {
+        return data;
+      }
+
+      // Return transformed data
       return self._handler.transformData(data);
     };
 
     Dashboard.prototype.setFormData = function (settings) {
       var self = this;
-      var data = {};
+      var data = self.getFormData(false); // Don't transform data
       var $form = self.element.id.get(0);
 
       // Loop through all inputs and set the value
@@ -497,10 +505,11 @@
         // Set value
         $el.setValue(value);
 
-        // Update the data object
+        // Update the data object (@TODO is)
         set(data, name, value);
       });
 
+      // Return transformed data
       return self._handler.transformData(data);
     };
 
