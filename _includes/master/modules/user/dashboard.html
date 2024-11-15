@@ -496,6 +496,9 @@
 
         // Set value
         $el.setValue(value);
+
+        // Update the data object
+        set(data, name, value);
       });
 
       return self._handler.transformData(data);
