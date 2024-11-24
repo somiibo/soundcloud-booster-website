@@ -426,15 +426,22 @@
       var self = this;
       var template = self.getTemplate(id);
 
-      // Loop through each key in object and replace {key} with object[key] value
-      for (var key in object) {
-        if (object.hasOwnProperty(key)) {
-          var regex = new RegExp('{\\s*' + key + '\\s*}', 'g');
-          template = template.replace(regex, utilities.escapeHTML(object[key]));
+      function resolve(template, object, prefix) {
+        for (var key in object) {
+          if (object.hasOwnProperty(key)) {
+            var fullKey = prefix ? prefix + '.' + key : key;
+            var regex = new RegExp('{\\s*' + fullKey + '\\s*}', 'g');
+            if (typeof object[key] === 'object') {
+              template = resolve(template, object[key], fullKey);
+            } else {
+              template = template.replace(regex, utilities.escapeHTML(object[key]));
+            }
+          }
         }
+        return template;
       }
 
-      return template;
+      return resolve(template, object, '');
     };
 
     // Dashboard.prototype.template = function (id, data) {
