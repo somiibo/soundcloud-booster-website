@@ -422,33 +422,35 @@
       return self.options.template[id];
     };
 
-    Dashboard.prototype.resolveTemplate = function (id, object) {
+    Dashboard.prototype.resolveTemplate = function (id, data, options) {
       var self = this;
       var template = self.getTemplate(id);
 
-      function resolve(template, object, prefix) {
-        for (var key in object) {
-          if (object.hasOwnProperty(key)) {
+      // Set options
+      options = options || {};
+      options.escape = typeof options.escape === 'undefined' ? true : options.escape;
+      options.escapeIgnore = options.escapeIgnore || [];
+
+      function resolve(template, data, prefix) {
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
             var fullKey = prefix ? prefix + '.' + key : key;
             var regex = new RegExp('{\\s*' + fullKey + '\\s*}', 'g');
-            if (typeof object[key] === 'object') {
-              template = resolve(template, object[key], fullKey);
+
+            if (typeof data[key] === 'object') {
+              template = resolve(template, data[key], fullKey);
             } else {
-              template = template.replace(regex, utilities.escapeHTML(object[key]));
+              var shouldEscape = options.escape && !options.escapeIgnore.includes(fullKey);
+              var value = shouldEscape ? utilities.escapeHTML(data[key]) : data[key];
+              template = template.replace(regex, value);
             }
           }
         }
         return template;
       }
 
-      return resolve(template, object, '');
+      return resolve(template, data, '');
     };
-
-    // Dashboard.prototype.template = function (id, data) {
-    //   var self = this;
-
-    //   return self.options.template[id];
-    // };
 
     Dashboard.prototype.registerInput = function ($el) {
       var self = this;
