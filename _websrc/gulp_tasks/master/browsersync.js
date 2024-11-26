@@ -37,7 +37,7 @@ gulp.task('browsersync', async () => {
     server: {
       baseDir: config.jekyll.dest,
       middleware: async function (req, res, next) {
-        const url = new URL(`http://localhost:4000${req.url}`);
+        const url = new URL(`${localUrl}${req.url}`);
         const pathname = url.pathname;
 
         // Set the query object
