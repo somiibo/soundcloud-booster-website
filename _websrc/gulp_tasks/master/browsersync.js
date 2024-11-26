@@ -101,18 +101,18 @@ gulp.task('browsersync', async () => {
 
             // Write the response (if it's JSON, set the content type)
             try {
-              res.write(JSON.stringify(r));
+              r = JSON.stringify(r);
               res.setHeader('Content-Type', 'application/json');
             } catch (e) {
-              res.write(r);
             }
 
             // End the response
+            res.write(r);
             res.end();
           })
           .catch((e) => {
             res.statusCode = 500;
-            res.write(`Error processing ${qsUrl}`);
+            res.write(`Error processing ${qsUrl}: ${e}`);
             res.end();
           });
         }
