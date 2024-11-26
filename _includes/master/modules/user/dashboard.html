@@ -176,6 +176,11 @@
       options.allowMultipleSubmits = typeof options.allowMultipleSubmits === 'undefined' ? true : options.allowMultipleSubmits;
       options.initialStatus = options.initialStatus || 'ready';
 
+      // Convert options
+      options.convert = options.convert || {};
+      options.convert.boolean = typeof options.convert.boolean === 'undefined' ? true : options.convert.boolean;
+
+      // Set element
       self.element.id = select(self.id);
 
       // Create default elements
@@ -467,6 +472,7 @@
       var data = {};
       var $form = self.element.id.get(0);
 
+      // Loop through all inputs and set the value
       $form.querySelectorAll(self._inputAndSubmit)
       .forEach(function (el) {
         var $el = select(el);
@@ -479,6 +485,15 @@
         } else if (!name) {
           console.warn('[Dashboard] field name is blank', self.id, name, value, $el);
           return;
+        }
+
+        // Handle convert
+        if (self.options.convert.boolean) {
+          if (value === 'true') {
+            value = true;
+          } else if (value === 'false') {
+            value = false;
+          }
         }
 
         // Set the data
