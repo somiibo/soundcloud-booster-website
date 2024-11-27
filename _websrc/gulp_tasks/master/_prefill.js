@@ -67,6 +67,9 @@ gulp.task('_prefill', () => {
         // Create app gulp task
         await createFile('_websrc/gulp_tasks/app/main.js', await readFile('./_websrc/templates/master/js/app-gulp-task.js'))
 
+        // Create build-pre.js
+        await createFile('_websrc/gulp_tasks/app/build-pre.js', await readFile('./_websrc/templates/master/js/build-pre.js'))
+
         // Create build-post.js
         await createFile('_websrc/gulp_tasks/app/build-post.js', await readFile('./_websrc/templates/master/js/build-post.js'))
 
