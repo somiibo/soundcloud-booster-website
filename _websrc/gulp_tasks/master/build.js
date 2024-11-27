@@ -103,6 +103,9 @@ gulp.task('jekyll-build', async () => {
     return Promise.resolve();
   }
 
+  // Run app post-build.js
+  await require('../app/build-pre.js')();
+
   // Run Jekyll Build
   await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
 
