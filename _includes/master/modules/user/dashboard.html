@@ -229,6 +229,9 @@
         }
       })
 
+      // Set options
+      self.options = options;
+
       // Add query strings to form
       var qsData = {};
       Manager.properties.page.queryString.forEach(function (value, key) {
@@ -238,9 +241,6 @@
 
       // Set status
       self.display('initializing');
-
-      // Set options
-      self.options = options;
 
       // Trigger initial event manually
       if (!self._triggeredInitialOnChangeEvent) {
