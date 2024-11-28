@@ -104,7 +104,11 @@ gulp.task('jekyll-build', async () => {
   }
 
   // Run app post-build.js
-  await require('../app/build-pre.js')();
+  await require('../app/build-pre.js')()
+  .catch((e) => {
+    console.error('Error running app build-pre.js', e);
+    process.exit(1);
+  });
 
   // Run Jekyll Build
   await tools.execute(`${jekyll} build --config ${jekyllConfig} --incremental`);
@@ -113,7 +117,11 @@ gulp.task('jekyll-build', async () => {
   await postBuild();
 
   // Run app post-build.js
-  await require('../app/build-post.js')();
+  await require('../app/build-post.js')()
+  .catch((e) => {
+    console.error('Error running app build-post.js', e);
+    process.exit(1);
+  });
 
   return Promise.resolve();
 });
