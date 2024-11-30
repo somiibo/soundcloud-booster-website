@@ -143,7 +143,8 @@
       self._$manualChangeTriggerElement = null;
       self._elements = ['input', 'textarea', 'select'];
       self._events = ['change', 'keydown', 'cut', 'paste']
-      self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+      // self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+      self._inputAndSubmit = 'input, textarea, select, button, a';
       self._autoFocused = false;
 
       // Set global libraries
@@ -540,8 +541,9 @@
     // Submit
     Dashboard.prototype.submit = function () {
       var self = this;
+      var $form = self.element.id.get(0);
 
-      self.element.id.get(0).querySelector('button[type="submit"]').click();
+      $form.querySelector('button[type="submit"]').click();
     };
 
     Dashboard.prototype.transformData = function (fn) {
