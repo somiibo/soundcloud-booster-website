@@ -8,7 +8,7 @@ on:
       - main
       - template
   schedule:
-    - cron: '0 0 1 * *' # every 1st of the month at 12 am UTC
+      - cron: '30 1 1 * *' # every 1st of the month at 1:30 am UTC
 
 concurrency:
   group: ${{ github.ref }}
@@ -106,7 +106,7 @@ jobs:
         uses: kolpav/purge-artifacts-action@v1
         with:
           token: ${{ secrets.GH_TOKEN }}
-          expire-in: 5 minutes # Set this to 0 to delete instantly
+          expire-in: 30 minutes # Set this to 0 to delete instantly
       # - name: Purge artifacts
       #   uses: c-hive/gha-remove-artifacts@v1
       #   with:
