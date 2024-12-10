@@ -7,14 +7,24 @@ sitemap:
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {% assign pages = site.pages %}
-  {% assign posts = site.posts %}
-  {% assign data = pages | concat: posts %}
   {% assign default-time = site.time | date_to_xmlschema %}
 
-  {%- if site.sitemap.enable != false -%}
-    {% for page in data %}
+  {% for collection in site.collections %}
+    {% assign pages = pages | concat: collection.docs %}
+  {% endfor %}
 
-      {%- if page.url contains '/@reference' or page.layout contains 'redirect' or page.layout.sitemap.include == false or page.sitemap.include == false -%}
+  {%- if site.sitemap.enable != false -%}
+    {% for page in pages %}
+
+      {%- if page.url contains '/@reference' or page.url contains '/_' -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- if page.layout contains 'redirect' -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- if page.layout.sitemap.include == false or page.sitemap.include == false or page.layout_data.sitemap.include == false -%}
         {%- continue -%}
       {%- endif -%}
 
