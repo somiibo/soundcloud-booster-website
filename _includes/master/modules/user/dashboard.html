@@ -161,6 +161,7 @@
 
     Dashboard.prototype.register = function (id, options) {
       var self = this;
+      var query = Manager.properties.page.queryString;
 
       self.id = id;
 
@@ -210,6 +211,7 @@
 
       // Submit handler
       self.element.id.get(0).addEventListener('submit', function (event) {
+        // Log
         console.log('[Dashboard]', self.id, 'submit event', event);
 
         // Change status
@@ -235,7 +237,7 @@
 
       // Add query strings to form
       var qsData = {};
-      Manager.properties.page.queryString.forEach(function (value, key) {
+      query.forEach(function (value, key) {
         set(qsData, key, value);
       });
       self.setFormData(qsData);
@@ -250,6 +252,12 @@
         self._initialOnChangeHandler = function () {
           self.setAllowLeave(true);
           self.display(options.initialStatus);
+
+          // If submit is true, submit the form
+          if (query.get('submit') === 'true') {
+            console.log('[Dashboard] auto submit is enabled', self.id);
+            self.submit();
+          }
         }
 
         if (self._$manualChangeTriggerElement) {
@@ -640,7 +648,7 @@
     window.Dashboard = Dashboard;
 
     // Log
-    console.log('Dashboard loaded', Dashboard);
+    console.log('Dashboard loaded');
   }());
 </script>
 
