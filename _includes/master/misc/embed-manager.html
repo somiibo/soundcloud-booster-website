@@ -73,7 +73,7 @@
       }
     })
     .catch(function (e) {
-      var error = new Error('Failed to fetch build.json: ' + e)
+      var error = new Error('Failed to fetch build.json @ {{ site.url }}: ' + e)
       console.error(error);
       alert(error)
     })
@@ -90,7 +90,6 @@
             uid: user.uid,
             email: user.email,
           },
-
         }
       })
     })

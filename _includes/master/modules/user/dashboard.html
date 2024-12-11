@@ -81,12 +81,32 @@
 '>
 </div>
 
+<!-- <div id="dashboard-template-display-fatal" data-template='
+  <div class="dashboard-template-display-fatal" hidden>
+    <div class="d-flex justify-content-center align-items-center bg-dark h-100">
+      <div class="text-center">
+        <div class="mb-3">
+          <i class="fa-solid fa-exclamation-triangle fa-3x text-danger"></i>
+        </div>
+        <div class="dashboard-template-display-fatal-message">
+          There was a fatal error. Please reload the page.
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" onclick="window.location.reload();">Reload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+'>
+</div> -->
+
 <script type="text/javascript">
   (function() {
     var DashboardManager = {
 
     }
     var select;
+    var utilities;
     var get;
     var set;
     var storage;
@@ -123,12 +143,15 @@
       self._$manualChangeTriggerElement = null;
       self._elements = ['input', 'textarea', 'select'];
       self._events = ['change', 'keydown', 'cut', 'paste']
-      self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+      // self._inputAndSubmit = 'input, textarea, select, button[type="submit"]';
+      self._inputAndSubmit = 'input, textarea, select, button, a';
+      self._autoFocused = false;
 
       // Set global libraries
       select = Manager.dom().select;
-      get = Manager.utilities().get;
-      set = Manager.utilities().set;
+      utilities = Manager.utilities();
+      get = utilities.get;
+      set = utilities.set;
       storage = Manager.storage();
 
       self.status = 'initializing';
@@ -138,6 +161,7 @@
 
     Dashboard.prototype.register = function (id, options) {
       var self = this;
+      var query = Manager.properties.page.queryString;
 
       self.id = id;
 
@@ -152,7 +176,13 @@
       options.showUnsavedPopup = typeof options.showUnsavedPopup === 'undefined' ? true : options.showUnsavedPopup;
       options.checkboxReturnType = typeof options.checkboxReturnType === 'undefined' ? 'object' : options.checkboxReturnType;
       options.allowMultipleSubmits = typeof options.allowMultipleSubmits === 'undefined' ? true : options.allowMultipleSubmits;
+      options.initialStatus = options.initialStatus || 'ready';
 
+      // Convert options
+      options.convert = options.convert || {};
+      options.convert.boolean = typeof options.convert.boolean === 'undefined' ? true : options.convert.boolean;
+
+      // Set element
       self.element.id = select(self.id);
 
       // Create default elements
@@ -164,6 +194,7 @@
         create('dashboard-template-display-error');
         create('dashboard-template-display-ready');
         create('dashboard-template-unsaved-popup');
+        // create('dashboard-template-display-fatal');
       }
 
       // Setup the rest of the elements
@@ -178,11 +209,15 @@
       // Change handler
       self._setEventListeners();
 
+      // Submit handler
       self.element.id.get(0).addEventListener('submit', function (event) {
+        // Log
         console.log('[Dashboard]', self.id, 'submit event', event);
 
+        // Change status
         self.display('loading');
 
+        // Fire submit handler
         self._handler.onSubmit(event, self.getFormData());
       });
 
@@ -197,20 +232,34 @@
         }
       })
 
-      // Add query strings to form
-      Manager.properties.page.queryString.forEach(function (value, key) {
-        self.setFormData({
-          [key]: value,
-        });
-      });
-
-      // self.display('loading');
-      self.display('initializing');
-
+      // Set options
       self.options = options;
+
+      // Add query strings to form
+      var qsData = {};
+      query.forEach(function (value, key) {
+        set(qsData, key, value);
+      });
+      self.setFormData(qsData);
+
+      // Set status
+      self.display('initializing');
 
       // Trigger initial event manually
       if (!self._triggeredInitialOnChangeEvent) {
+        // Set initial on change handler
+        // This is so we can set the initial status
+        self._initialOnChangeHandler = function () {
+          self.setAllowLeave(true);
+          self.display(options.initialStatus);
+
+          // If submit is true, submit the form
+          if (query.get('submit') === 'true') {
+            console.log('[Dashboard] auto submit is enabled', self.id);
+            self.submit();
+          }
+        }
+
         if (self._$manualChangeTriggerElement) {
           self.triggerOnChange();
         }
@@ -274,10 +323,17 @@
         var isDisabledClass = el.classList.contains('disabled');
         var isDisabledAttribute = el.hasAttribute('disabled');
 
+        // Determine if we should disable the element
         if (isPending && (!isDisabledClass || !isDisabledAttribute)) {
           $el.addClass('disabled').setAttribute('disabled', true);
         } else if (!isPending && (isDisabledClass || isDisabledAttribute)){
           $el.removeClass('disabled').removeAttribute('disabled');
+        }
+
+        // If the element has autofocus, select the entire text
+        if (status === 'ready' && !self._autoFocused && el.hasAttribute('autofocus')) {
+          self._autoFocused = true;
+          el.select();
         }
 
         // var isDisabledClass = el.classList.contains('disabled');
@@ -365,6 +421,12 @@
       // Run onStatus
       self._handler.onStatus(status, message);
 
+      // Set initial on change handler to null so it doesn't run again
+      // If the dev manually calls .display() then it wont set automatically call the initial on change handler with the options.initialStatus
+      // If the dev does not call .display() then it will automatically call the initial on change handler with the options.initialStatus
+      self._initialOnChangeHandler = null;
+
+      // Return
       return self;
     };
 
@@ -374,11 +436,35 @@
       return self.options.template[id];
     };
 
-    // Dashboard.prototype.template = function (id, data) {
-    //   var self = this;
+    Dashboard.prototype.resolveTemplate = function (id, data, options) {
+      var self = this;
+      var template = self.getTemplate(id);
 
-    //   return self.options.template[id];
-    // };
+      // Set options
+      options = options || {};
+      options.escape = typeof options.escape === 'undefined' ? true : options.escape;
+      options.escapeIgnore = options.escapeIgnore || [];
+
+      function resolve(template, data, prefix) {
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            var fullKey = prefix ? prefix + '.' + key : key;
+            var regex = new RegExp('{\\s*' + fullKey + '\\s*}', 'g');
+
+            if (typeof data[key] === 'object') {
+              template = resolve(template, data[key], fullKey);
+            } else {
+              var shouldEscape = options.escape && !options.escapeIgnore.includes(fullKey);
+              var value = shouldEscape ? utilities.escapeHTML(data[key]) : data[key];
+              template = template.replace(regex, value);
+            }
+          }
+        }
+        return template;
+      }
+
+      return resolve(template, data, '');
+    };
 
     Dashboard.prototype.registerInput = function ($el) {
       var self = this;
@@ -390,17 +476,19 @@
       });
     };
 
-    Dashboard.prototype.getFormData = function () {
+    Dashboard.prototype.getFormData = function (transform) {
       var self = this;
       var data = {};
       var $form = self.element.id.get(0);
 
+      // Loop through all inputs and set the value
       $form.querySelectorAll(self._inputAndSubmit)
       .forEach(function (el) {
         var $el = select(el);
         var name = $el.getAttribute('name');
         var value = select('#' + $form.id + ' [name="' + name + '"]').getValue({returnType: self.options.checkboxReturnType});
 
+        // Skip if button
         if (el.tagName === 'BUTTON') {
           return;
         } else if (!name) {
@@ -408,15 +496,31 @@
           return;
         }
 
+        // Handle convert
+        if (self.options.convert.boolean) {
+          if (value === 'true') {
+            value = true;
+          } else if (value === 'false') {
+            value = false;
+          }
+        }
+
+        // Set the data
         set(data, name, value);
       });
 
+      // Return regular
+      if (transform === false) {
+        return data;
+      }
+
+      // Return transformed data
       return self._handler.transformData(data);
     };
 
     Dashboard.prototype.setFormData = function (settings) {
       var self = this;
-      var data = {};
+      var data = self.getFormData(false); // Don't transform data
       var $form = self.element.id.get(0);
 
       // Loop through all inputs and set the value
@@ -433,9 +537,21 @@
 
         // Set value
         $el.setValue(value);
+
+        // Update the data object
+        set(data, name, value);
       });
 
+      // Return transformed data
       return self._handler.transformData(data);
+    };
+
+    // Submit
+    Dashboard.prototype.submit = function () {
+      var self = this;
+      var $form = self.element.id.get(0);
+
+      $form.querySelector('button[type="submit"]').click();
     };
 
     Dashboard.prototype.transformData = function (fn) {
@@ -492,31 +608,47 @@
     Dashboard.prototype._changeHandler = function (event) {
       var self = this;
 
+      // Delay the change event so that the form can update
       setTimeout(function () {
+        // Prevent enter key from triggering change event so that it doesn't submit the form
         if (event.key === 'Enter') {
-          return
+          return;
         }
 
+        // Log
         console.log('[Dashboard]', self.id, 'change event', event);
 
+        // Show unsaved popup if enabled
         if (self.options.showUnsavedPopup) {
           self.element.unsaved.parent.removeAttribute('hidden');
         }
 
-        if (self.options.preventUnsavedNavigation) {
+        // Set allow leave to false only if its a trusted event
+        if (
+          self.options.preventUnsavedNavigation
+          && event.isTrusted
+        ) {
           self.setAllowLeave(false);
         }
 
-        self.display('ready');
+        // Trigger initial handler to set the initial status
+        if (self._initialOnChangeHandler) {
+          self._initialOnChangeHandler();
+        } else {
+          // Set status to ready so if there's an error it will go away when they start typing again
+          self.display('ready');
+        }
 
+        // Run on change with form data
         self._handler.onChange(event, self.getFormData());
       }, 1);
     }
 
+    // Export to global
     window.Dashboard = Dashboard;
 
     // Log
-    console.log('Dashboard loaded', Dashboard);
+    console.log('Dashboard loaded');
   }());
 </script>
 
