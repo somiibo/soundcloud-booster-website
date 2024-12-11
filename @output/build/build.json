@@ -5,13 +5,13 @@
     "name": "soundcloud-booster-website"
   },
   "npm-build": {
-    "timestamp": "2024-12-01T01:44:48.068Z"
+    "timestamp": "2024-12-11T11:56:41.367Z"
   },
   "gh-pages-push": {
     "timestamp": "%GHP_TIMESTAMP%"
   },
   "packages": {
-    "web-manager": "3.2.56"
+    "web-manager": "3.2.66"
   },
   "brand": {
     "name": "SoundCloud Booster",
