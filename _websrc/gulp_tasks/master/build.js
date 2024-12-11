@@ -21,16 +21,28 @@ let firstBuild = true;
 function areTasksCompleted() {
   let completed = true;
   const tasks = Object.keys(Global.get(`completed`, {_faketask: new Date()}));
+
+  // Loop through all tasks
   for (var i = 0, l = tasks.length; i < l; i++) {
     const task = tasks[i];
     const time = Global.get(`completed.${task}`, new Date(0));
     const diff = new Date().getTime() - time.getTime();
     const waitTime = firstBuild ? 10000 : 1000;
+
+    // Log
+    console.log('jekyll-build task', task, diff < waitTime);
+
+    // If the task hasn't completed in the last 10 seconds, we're not done
     if (diff < waitTime) {
       completed = false;
       break;
     }
   }
+
+  // Log
+  console.log('jekyll-build areTasksCompleted', completed);
+
+  // Return whether all tasks are completed
   return completed;
 }
 

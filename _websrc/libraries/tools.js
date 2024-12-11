@@ -16,12 +16,21 @@ Tools.prototype.startTask = function(name, timeout) {
   const now = new Date();
   timeout = timeout || 2;
   self.task = name;
-  // self.log('Starting...')
+
+  // Log starting task
+  console.log(`[${name}] Task starting...`);
+
+  // Set the task as completed in the future
   Global.set(`completed.${name}`, new Date(now.setTime(now.getTime() + (timeout * 60 * 1000))));
 }
 
 Tools.prototype.completeTask = function(name) {
   const self = this;
+
+  // Log completion
+  console.log(`[${name}] Task completed!`);
+
+  // Set the task as completed now
   Global.set(`completed.${name}`, new Date());
 
   return through.obj((file, enc, done) => {
