@@ -30,7 +30,7 @@ function areTasksCompleted() {
     const waitTime = firstBuild ? 10000 : 1000;
 
     // Log
-    console.log('jekyll-build task', task, diff < waitTime);
+    // console.log('jekyll-build task', task, diff < waitTime);
 
     // If the task hasn't completed in the last 10 seconds, we're not done
     if (diff < waitTime) {
@@ -40,7 +40,7 @@ function areTasksCompleted() {
   }
 
   // Log
-  console.log('jekyll-build areTasksCompleted', completed);
+  // console.log('jekyll-build areTasksCompleted', completed);
 
   // Return whether all tasks are completed
   return completed;

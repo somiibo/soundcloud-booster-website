@@ -30,6 +30,9 @@
 <meta name="MobileOptimized" content="320">
 <meta name="generator" content="Ultimate Jekyll">
 
+<!-- Referrer -->
+<meta name="referrer" content="{{ page.meta.referrer | default: layout.meta.referrer | default: site.meta.referrer | default: 'strict-origin-when-cross-origin' }}">
+
 <!-- Canonical -->
 <link rel="canonical" href="{{ site.url }}{{ page-url-stripped }}">
 
@@ -180,7 +183,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ favicon-path }}/favicon-32x32.png?cb={{ site.time | date: '%s' }}">
 <link rel="icon" type="image/png" sizes="16x16" href="{{ favicon-path }}/favicon-16x16.png?cb={{ site.time | date: '%s' }}">
 <link rel="mask-icon" href="{{ favicon-path }}/safari-pinned-tab.svg" color="{{ site.favicon.safari-pinned-tab }}">
-<link rel="shortcut icon" href="{{ favicon-path }}/favicon.ico?cb={{ site.time | date: '%s' }}">
+<link rel="shortcut icon" type="image/x-icon" href="{{ favicon-path }}/favicon.ico?cb={{ site.time | date: '%s' }}">
 <meta name="msapplication-TileColor" content="{{ site.favicon.msapp-tile-color }}">
 <meta name="msapplication-config" content="{{ favicon-path }}/browserconfig.xml?cb={{ site.time | date: '%s' }}">
 <meta name="theme-color" content="{{ site.favicon.theme-color }}">

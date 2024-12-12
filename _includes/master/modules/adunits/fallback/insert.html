@@ -57,13 +57,17 @@
       var command = message.command || '';
       var payload = message.payload || {};
 
-      // Auto-set id
-      if (!payload.id && event.source.name) {
-        payload.id = event.source.name.replace('uj-vert-', '');
+      // Auto-set id (inside try/catch to prevent errors CORS errors)
+      try {
+        if (!payload.id && event.source.name) {
+          payload.id = event.source.name.replace('uj-vert-', '');
+        }
+      } catch (e) {
+        console.warn('Failed to auto-set id', e);
       }
 
       // Log
-      console.log('Message', command, message, event.source);
+      console.log('Message', command, message, event.source, payload);
 
       // Handle the message
       if (command === 'uj-vert-unit:set-dimensions') {
