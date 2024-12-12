@@ -27,6 +27,8 @@ meta:
   og-image: "https://cdn.itwcreativeworks.com/assets/itw-creative-works/images/socials/itw-creative-works-brandmark-square-black-1024x1024.png"
   keywords: "" # false or blank to disable, comma separated kws
   viewport: "" # string, leave blank to use default
+  index: true # true | false
+  referrer: null
 
 launcher:
   download: "" # string, example: https://example.com/download
