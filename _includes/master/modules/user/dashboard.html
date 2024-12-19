@@ -373,7 +373,8 @@
           // Set the status message
           $statusMessage
           .each(function ($el) {
-            $el.innerHTML = message;
+            // $el.innerHTML = message;
+            $el.innerText = message;
           })
 
           // Attempt to show a toast
@@ -399,7 +400,8 @@
 
           $stateMessage
           .each(function ($el) {
-            $el.innerHTML = message;
+            // $el.innerHTML = message;
+            $el.innerText = message;
           })
         } else {
           $el.setAttribute('hidden', true);
