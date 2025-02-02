@@ -520,41 +520,44 @@ meta:
           if (path === 'notifications.total') {
             var title = `Notification Total Log: ${date} @ ${time}`;
 
-            WonderfulFetch(`https://us-central1-itw-creative-works.cloudfunctions.net/sendEmail`, {
+            WonderfulFetch(`${Manager.properties.global.functionsUrl}/bm_api`, {
               method: 'post',
               response: 'json',
               log: true,
               authorization: 'firebase',
               body: {
-                app: 'itw-creative-works',
-                to: {
-                  email: user.email,
-                },
-                categories: [`admin/promo-server-log`],
-                subject: title,
-                template: 'd-b7f8da3c98ad49a2ad1e187f3a67b546',
-                group: 8275,
-                copy: false,
-                ensureUnique: false,
-                data: {
-                  email: {
-                    preview: title,
+                command: 'admin:send-email',
+                payload: {
+                  app: 'itw-creative-works',
+                  to: {
+                    email: user.email,
                   },
-                  body: {
-                    title: title,
-                    message: `
-                    <strong>Total:</strong> ${total}
+                  categories: [`admin/promo-server-log`],
+                  subject: title,
+                  template: 'd-b7f8da3c98ad49a2ad1e187f3a67b546',
+                  group: 8275,
+                  copy: false,
+                  ensureUnique: false,
+                  data: {
+                    email: {
+                      preview: title,
+                    },
+                    body: {
+                      title: title,
+                      message: `
+                      <strong>Total:</strong> ${total}
 
-                    <br>
-                    <strong>History:</strong> <br>
-                    <pre>
-                      <code>
-                        ${JSON.stringify(currentHistory, null, 2)}
-                      </code>
-                    </pre>
-                    `
-                  }
-                },
+                      <br>
+                      <strong>History:</strong> <br>
+                      <pre>
+                        <code>
+                          ${JSON.stringify(currentHistory, null, 2)}
+                        </code>
+                      </pre>
+                      `
+                    }
+                  },
+                }
               },
             })
           }
