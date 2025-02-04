@@ -342,7 +342,6 @@ meta:
       }
 
       // Fix types
-      var functionsUrl = getFunctionsUrl();
       var newUrl = new URL('https://promo-server.itwcreativeworks.com/redirect/notification');
 
       // Add promotion query parameter
@@ -358,10 +357,10 @@ meta:
       data.reach = reach;
 
       // Log
-      console.log('Final Data:', functionsUrl, data);
+      console.log('Final Data:', getAPIFunctionsUrl(), data);
 
       // Publish the notification
-      return WonderfulFetch(functionsUrl, {
+      return WonderfulFetch(getAPIFunctionsUrl(), {
         method: 'POST',
         timeout: 60000,
         response: 'json',
@@ -424,7 +423,7 @@ meta:
 
       // Get sessions
       function _get(path, index) {
-        return WonderfulFetch(Manager.properties.global.functionsUrl + '/bm_api', {
+        return WonderfulFetch(getAPIFunctionsUrl(), {
           method: 'POST',
           timeout: 60000,
           response: 'json',
@@ -520,7 +519,7 @@ meta:
           if (path === 'notifications.total') {
             var title = `Notification Total Log: ${date} @ ${time}`;
 
-            WonderfulFetch(`${Manager.properties.global.functionsUrl}/bm_api`, {
+            WonderfulFetch(getAPIFunctionsUrl(), {
               method: 'post',
               response: 'json',
               log: true,
@@ -627,12 +626,12 @@ meta:
       };
     }
 
-    function getFunctionsUrl() {
+    function getAPIFunctionsUrl() {
       if (qsDevelopment) {
         return 'http://localhost:5001/promo-server-api/us-central1/bm_api';
       }
 
-      return Manager.properties.global.functionsUrl + '/bm_api';
+      return `${Manager.properties.global.functionsUrl}/bm_api`;
     }
   });
 </script>

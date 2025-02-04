@@ -6,8 +6,7 @@ sitemap:
 ---
 ; // This fixes the frontmatter formatting
 
-// self.addEventListener('install', function(event) {
-// });
+// Service Worker Manager
 var window = self;
 var SWManager = {
   config: {},
@@ -32,18 +31,59 @@ var SWManager = {
 
 // Setup
 try {
+  // Parse config file
   SWManager.config = JSON.parse(new URL(self.location).searchParams.get('config'));
+
+  // Set up SWManager
   SWManager.version = SWManager.config.v;
   SWManager.environment = SWManager.config.env;
   SWManager.brand.name = SWManager.config.name;
   SWManager.app = SWManager.config.id || (SWManager.brand.name.toLowerCase().replace(' ', '-') || 'default');
   SWManager.cache.breaker = SWManager.config.cb;
   SWManager.cache.name = SWManager.app + '-' + SWManager.cache.breaker;
-  log('master-service-worker.js setup: ', self.location.pathname, SWManager.cache.name, SWManager)
+
+  // Log
+  log('Setup succeeded:', self.location.pathname, SWManager.version, SWManager.cache.name, SWManager)
 } catch (e) {
-  console.error('master-service-worker.js failed setup.', e)
+  console.error('Setup failed:', e)
 }
 
+// Force service worker to use the latest version
+self.addEventListener('install', (event) => {
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+// Handle clicks on notifications
+// Open the URL of the notification
+// ⚠️⚠️⚠️ THIS MUST BE PLACED BEFORE THE FIREBASE IMPORTS HANDLER ⚠️⚠️⚠️
+// https://stackoverflow.com/questions/78270541/cant-catch-fcm-notificationclick-event-in-service-worker-using-firebase-messa
+self.addEventListener('notificationclick', (event) => {
+  // Get the properties of the notification
+  const notification = event.notification;
+  const data = (notification.data && notification.data.FCM_MSG ? notification.data.FCM_MSG.data : null) || {};
+  const payload = (notification.data && notification.data.FCM_MSG ? notification.data.FCM_MSG.notification : null) || {};
+
+  // Get the click action
+  const clickAction = payload.click_action || data.click_action || '/';
+
+  // Log
+  log('Event: notificationclick event', event);
+  log('Event: notificationclick data', data);
+  log('Event: notificationclick payload', payload);
+  log('Event: notificationclick clickAction', clickAction);
+
+  // Handle the click
+  event.waitUntil(
+    clients.openWindow(clickAction)
+  );
+
+  // Close the notification
+  notification.close();
+});
 
 // Messaging/Notifications resoruces
 // https://firebase.google.com/docs/cloud-messaging/js/receive
@@ -83,37 +123,17 @@ try {
   //   self.registration.showNotification(title, options);
   // });
 
-  // Handle clicks on notifications
-  // Open the URL of the notification
-  self.addEventListener('notificationclick', (event) => {
-    // Get the URL of the notification
-    const notification = event.notification;
-    const action = event.action;
-    const data = notification.data || {};
-
-    // Log
-    log('master-service-worker.js notificationclick ', event, notification, action, data);
-
-    // Close the notification
-    // notification.close();
-
-    // Handle the click
-    event.waitUntil(
-      clients.openWindow(data.click_action)
-    );
-  });
-
   // Log
-  log('master-service-worker.js initialized Firebase.');
+  log('Firebase initialized successfully');
 } catch (e) {
-  console.error('master-service-worker.js failed to initialize Firebase.', e);
+  console.error('Firebase failed to initialize', e);
 }
 
 // Cache
 try {
   // // importScripts('libraries/serviceworker-cache-polyfill.js');
   // SWManager.libraries.cachePolyfill = true;
-  // log('master-service-worker.js cache name = ' + SWManager.cache.name);
+  // log('cache name = ' + SWManager.cache.name);
   //
   // // Refresh button breaks: https://redfin.engineering/how-to-fix-the-refresh-button-when-using-service-workers-a8e27af6df68
   // // - https://redfin.engineering/service-workers-break-the-browsers-refresh-button-by-default-here-s-why-56f9417694
@@ -130,10 +150,10 @@ try {
   // //         '/assets/js/main.js',
   // //       ])
   // //       .then(function() {
-  // //         log('master-service-worker.js cached resources.');
+  // //         log('cached resources.');
   // //         self.skipWaiting();
   // //       })
-  // //       .catch(function() { log('master-service-worker.js failed to cache resources.') });
+  // //       .catch(function() { log('failed to cache resources.') });
   // //     })
   // //   );
   // // });
@@ -173,7 +193,7 @@ try {
   // // });
 
 } catch (e) {
-  console.error('master-service-worker.js failed to cache resources.', e);
+  console.error('Cache failed to initialize', e);
 }
 
 // Load PromoServer
@@ -194,16 +214,16 @@ try {
 //     });
 
 //     SWManager.libraries.promoServer.handle();
-//     log('master-service-worker.js handling PromoServer.');
+//     log('handling PromoServer.');
 //   }, SWManager.environment === 'development' ? 1 : 30000);
-//   log('master-service-worker.js initialized PromoServer.');
+//   log('initialized PromoServer.');
 // } catch (e) {
-//   console.error('master-service-worker.js failed to import promo-server.js', e);
+//   console.error('PromoServer failed to initialize', e);
 // }
 
 // Send messages: https://stackoverflow.com/questions/35725594/how-do-i-pass-data-like-a-user-id-to-a-web-worker-for-fetching-additional-push
 // more messaging: http://craig-russell.co.uk/2016/01/29/service-worker-messaging.html#.XSKpRZNKiL8
-self.addEventListener('message', function(event) {
+self.addEventListener('message', (event) => {
   var data;
   var response = {status: 'success', command: '', data: {}};
   try {
@@ -218,23 +238,23 @@ self.addEventListener('message', function(event) {
 
     if (data.command === '') { return };
 
-    log('master-service-worker.js postMessage ', data);
+    log('Event: postMessage ', data);
 
     if (data.command === 'function') {
       data.args.function = data.args.function || function() {};
       data.args.function();
     } else if (data.command === 'debug') {
-      console.log('master-service-worker.js Debug data =', data);
+      console.log('Debug data =', data);
       event.ports[0].postMessage(response);
     } else if (data.command === 'skipWaiting') {
       self.skipWaiting();
       event.ports[0].postMessage(response);
     } else if (data.command === 'unregister') {
       self.registration.unregister()
-      .then(function() {
+      .then(() => {
         event.ports[0].postMessage(response);
       })
-      .catch(function() {
+      .catch(() => {
         response.status = 'fail';
         event.ports[0].postMessage(response);
       });
@@ -249,18 +269,18 @@ self.addEventListener('message', function(event) {
         '/assets/js/main.js',
       ];
       var pagesToCache = arrayUnique(data.args.pages.concat(defaultPages));
-      caches.open(SWManager.cache.name).then(function (cache){
+      caches.open(SWManager.cache.name).then(cache => {
         return cache.addAll(
           pagesToCache
         )
-        .then(function() {
-          log('master-service-worker.js cached resources.');
+        .then(() => {
+          log('Cached resources.');
           event.ports[0].postMessage(response);
         })
-        .catch(function() {
+        .catch(() => {
           response.status = 'fail';
           event.ports[0].postMessage(response);
-          log('master-service-worker.js failed to cache resources.')
+          log('Failed to cache resources.')
         });
       })
     }
@@ -269,43 +289,48 @@ self.addEventListener('message', function(event) {
   } catch (e) {
     response.success = 'fail';
     try { event.ports[0].postMessage(response) } catch (e) {}
-    log('master-service-worker.js failed to receive message: ', data, e);
+    log('Failed to receive message: ', data, e);
   }
 
 });
 
 function log() {
-  try {
-    if (SWManager.environment === 'development') {
-      var args = Array.prototype.slice.call(arguments);
-      args.unshift('[SW DEV LOG]');
-      console.log.apply(console, args);
-    } else if (false) {
+  // Get arguments
+  var args = Array.prototype.slice.call(arguments);
 
-    }
-  } catch (e) {
+  // Add prefix
+  args.unshift(`[${new Date().toISOString()}] service-worker:`);
 
-  }
+  // Log
+  console.log.apply(console, args);
 }
 
 function arrayUnique(array) {
-    var a = array.concat();
-    for(var i=0; i<a.length; ++i) {
-        for(var j=i+1; j<a.length; ++j) {
-            if(a[i] === a[j])
-                a.splice(j--, 1);
-        }
+  var a = array.concat();
+
+  // Loop through array
+  for(var i=0; i<a.length; ++i) {
+    for(var j=i+1; j<a.length; ++j) {
+      if(a[i] === a[j]) {
+        a.splice(j--, 1);
+      }
     }
+  }
 
-    return a;
+  // Return
+  return a;
 }
-
 
 // Load other Service Worker
 try {
+  // Import other service worker
   importScripts('assets/js/app/service-worker.js');
+
+  // Set flag
   SWManager.libraries.app = true;
-  log('master-service-worker.js imported app/service-worker.js');
+
+  // Log
+  log('Import of app/service-worker.js succeeded');
 } catch (e) {
-  console.error('master-service-worker.js failed to import app/service-worker.js', e);
+  console.error('Import of app/service-worker.js failed', e);
 }
