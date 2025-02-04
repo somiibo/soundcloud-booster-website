@@ -79,7 +79,7 @@ meta:
                   <small class="d-block _form-text text-muted">
                       The icon URL of the notification
                   </small>
-                  <input type="url" class="form-control" name="icon" id="icon" value="{{ site.brand.logo-image }}" placeholder="" aria-label="" required>
+                  <input type="url" class="form-control" name="notification.icon" id="icon" value="{{ site.brand.logo-image }}" placeholder="" aria-label="" required>
               </div>
               <div class="col-12 col-md-2 _col-sm-12">
                   <img class="img-fluid img-thumbnail" id="preview-icon" src="" alt="" style="max-height: 200px;">
@@ -92,21 +92,21 @@ meta:
           <label for="title" class="_form-label text-dark">
             Title <span class="text-danger">*</span>
           </label>
-          <input type="text" class="form-control" name="title" id="title" placeholder="Notification Title" aria-label="Notification Title" required>
+          <input type="text" class="form-control" name="notification.title" id="title" placeholder="Notification Title" aria-label="Notification Title" required>
         </div>
         <!-- Body -->
         <div class="mb-4">
           <label for="body" class="text-dark">
             Body <span class="text-danger">*</span>
           </label>
-          <textarea id="body" name="body" class="form-control" rows="3" placeholder="Notification Body" required></textarea>
+          <textarea id="body" name="notification.body" class="form-control" rows="3" placeholder="Notification Body" required></textarea>
         </div>
         <!-- Click Action -->
         <div class="mb-4">
           <label for="clickAction" class="_form-label text-dark">
             Click Action URL <span class="text-danger">*</span>
           </label>
-          <input type="url" class="form-control" name="clickAction" id="clickAction" value="{{ site.url }}" required>
+          <input type="url" class="form-control" name="notification.clickAction" id="clickAction" value="{{ site.url }}" required>
         </div>
         <!-- Auto-Submit -->
         <div class="mb-4">
@@ -300,7 +300,7 @@ meta:
       var $target = event.target;
 
       // Set the icon preview
-      select('#preview-icon').setAttribute('src', data.icon);
+      select('#preview-icon').setAttribute('src', data.notification.icon);
 
       // Update the user count
       clearTimeout(timeouts.stats);
@@ -331,13 +331,13 @@ meta:
 
       // NEW CHECKS
       // Check for required fields
-      if (!data.icon) {
+      if (!data.notification.icon) {
         return dashboard.display(new Error('Icon is required'));
-      } else if (!data.title) {
+      } else if (!data.notification.title) {
         return dashboard.display(new Error('Title is required'));
-      } else if (!data.body) {
+      } else if (!data.notification.body) {
         return dashboard.display(new Error('Body is required'));
-      } else if (!data.clickAction) {
+      } else if (!data.notification.clickAction) {
         return dashboard.display(new Error('Click Action URL is required'));
       }
 
@@ -347,9 +347,9 @@ meta:
       // Add promotion query parameter
       newUrl.searchParams.set('id', data.id);
       newUrl.searchParams.set('type', 'notification');
-      newUrl.searchParams.set('url', data.clickAction);
+      newUrl.searchParams.set('url', data.notification.clickAction);
 
-      data.clickAction = newUrl.toString();
+      data.notification.clickAction = newUrl.toString();
 
       // Add reach stats
       // This has to be done here to ensure the data is added AFTER it is retrieved in fetchSessions()
@@ -406,8 +406,10 @@ meta:
     // Check if DEV
     if (Manager.isDevelopment()) {
       dashboard.setFormData({
-        title: 'Test Notification',
-        body: 'This is a test notification',
+        notification: {
+          title: 'Test Notification',
+          body: 'This is a test notification',
+        }
       });
     }
 
