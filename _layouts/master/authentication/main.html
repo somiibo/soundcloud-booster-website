@@ -490,7 +490,12 @@ settings:
     redirectUrl = qsDestination || url.origin;
     serverApiURL = serverApiURL.replace(/PROJECT_ID/g, Manager.properties.options.libraries.firebase_app.config.projectId)
 
-    $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {})
+    // TODO: REMOVE TRY/CATCH WHEN CDN.ITWCREATIVEWORKS.COM IS WORKING
+    try {
+      $authErrorModal = new bootstrap.Modal(document.getElementById('auth-error-modal'), {})
+    } catch (e) {
+      console.error('main(): Error creating modal', e);
+    }
     $authErrorModalMessage = document.getElementById('auth-error-modal-message');
     $authLinks = select('a[href*="/signin"], a[href*="/signup"]');
     $emailInput = select('.auth-email-input');
@@ -1005,7 +1010,12 @@ settings:
 
     console.log('display():', type, msg, providerDetails)
 
-    $authErrorModal.hide();
+    // TODO: REMOVE TRY/CATCH WHEN CDN.ITWCREATIVEWORKS.COM IS WORKING
+    try {
+      $authErrorModal.hide();
+    } catch (e) {
+      console.error('display(): Error hiding modal', e);
+    }
 
     alertEl
       .setAttribute('hidden', true)

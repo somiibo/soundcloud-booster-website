@@ -1876,11 +1876,16 @@ settings:
           $personalInformationSavePopup.removeAttribute('hidden')
         })
 
-        new bootstrap.ScrollSpy(document.body, {
-          target: '#navbarSettings',
-          offset: 100,
-          // offset: 0,
-        })
+        // TODO: REMOVE TRY/CATCH WHEN CDN.ITWCREATIVEWORKS.COM IS FIXED
+        try {
+          new bootstrap.ScrollSpy(document.body, {
+            target: '#navbarSettings',
+            offset: 100,
+            // offset: 0,
+          })
+        } catch (e) {
+          console.error('ScrollSpy', e);
+        }
 
         new HSScrollspy('#navbarVerticalNavMenu', {
           breakpoint: 'lg',
@@ -1894,10 +1899,15 @@ settings:
 
         // accountResultEl.setInnerHTML(JSON.stringify(accountData, null, 2));
 
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
-        })
+        // TODO: REMOVE TRY/CATCH WHEN CDN.ITWCREATIVEWORKS.COM IS FIXED
+        try {
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+          var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return bootstrap.Tooltip.getOrCreateInstance(tooltipTriggerEl)
+          })
+        } catch (e) {
+          console.error('Tooltip', e);
+        }
 
         // Handle hash
         var $hashBtn = document.querySelector('*[href="' + currentURL.hash + '"]');
@@ -2041,10 +2051,18 @@ settings:
     function toast(type, message) {
       var $el = document.getElementById('toast-main');
       $el.classList.remove('bg-primary', 'bg-danger', 'bg-success');
-      var $toast = bootstrap.Toast.getOrCreateInstance($el, {
-        delay: 5000,
-        autohide: false,
-      })
+      var $toast;
+
+      // TODO: REMOVE TRY/CATCH WHEN CDN.ITWCREATIVEWORKS.COM IS FIXED
+      try {
+        $toast = bootstrap.Toast.getOrCreateInstance($el, {
+          delay: 5000,
+          autohide: false,
+        })
+      } catch (e) {
+        console.error('Toast', e);
+      }
+
       var $body = $el.querySelector('.toast-body')
 
       $toast.hide();
