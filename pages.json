@@ -235,18 +235,18 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/admin/posts",
-        "title": "Posts",
-        "desc": "View posts",
-        "breadcrumb": "Posts",
-        "category": "",
-        "type": ""
-      },
-    {
         "url": "https://soundcloudbooster.com/admin/users",
         "title": "Explore Users",
         "desc": "Explore users with this Firestore query tool.",
         "breadcrumb": "Explore Users",
+        "category": "",
+        "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/admin/posts",
+        "title": "Posts",
+        "desc": "View posts",
+        "breadcrumb": "Posts",
         "category": "",
         "type": ""
       },
@@ -401,6 +401,14 @@
         "breadcrumb": "Webhook",
         "category": "",
         "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/blog/how-to-leverage-soundcloud-booster-for-optimal-growth",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "",
+        "category": "",
+        "type": "post"
       },
     {
         "url": "https://soundcloudbooster.com/blog/what-are-the-key-benefits-of-using-soundcloud-automation-tools",
