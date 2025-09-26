@@ -115,18 +115,18 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/checkout/confirmation",
-        "title": "Thank you!",
-        "desc": "Thanks for checking out!",
-        "breadcrumb": "Thank you",
-        "category": "",
-        "type": ""
-      },
-    {
         "url": "https://soundcloudbooster.com/submission/confirmation",
         "title": "Submission Confirmation",
         "desc": "Thank you for taking the time to submit your request. We will get back to you as soon a possible.",
         "breadcrumb": "Submission",
+        "category": "",
+        "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/checkout/confirmation",
+        "title": "Thank you!",
+        "desc": "Thanks for checking out!",
+        "breadcrumb": "Thank you",
         "category": "",
         "type": ""
       },
@@ -235,18 +235,18 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/",
-        "title": "",
-        "desc": "",
-        "breadcrumb": "Home",
-        "category": "",
-        "type": ""
-      },
-    {
         "url": "https://soundcloudbooster.com/admin/posts",
         "title": "Posts",
         "desc": "View posts",
         "breadcrumb": "Posts",
+        "category": "",
+        "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/admin/notifications",
+        "title": "Notifications",
+        "desc": "View notifications",
+        "breadcrumb": "Notifications",
         "category": "",
         "type": ""
       },
@@ -259,10 +259,10 @@
         "type": ""
       },
     {
-        "url": "https://soundcloudbooster.com/admin/notifications",
-        "title": "Notifications",
-        "desc": "View notifications",
-        "breadcrumb": "Notifications",
+        "url": "https://soundcloudbooster.com/",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "Home",
         "category": "",
         "type": ""
       },
@@ -401,6 +401,14 @@
         "breadcrumb": "Webhook",
         "category": "",
         "type": ""
+      },
+    {
+        "url": "https://soundcloudbooster.com/blog/soundcloud-marketing-in-2025-tips-for-staying-ahead-of-the-curve",
+        "title": "",
+        "desc": "",
+        "breadcrumb": "",
+        "category": "",
+        "type": "post"
       },
     {
         "url": "https://soundcloudbooster.com/blog/soundcloud-marketing-a-deep-dive-into-advanced-techniques",
