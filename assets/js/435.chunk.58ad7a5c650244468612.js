@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkultimate_jekyll=self.webpackChunkultimate_jekyll||[]).push([[435],{435:(e,l,n)=>{function t(e,l){const{webManager:n}=e;console.log("Running initialize()")}n.d(l,{default:()=>t})}}]);
