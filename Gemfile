@@ -8,15 +8,15 @@ source "https://rubygems.org"
 #
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
-gem "jekyll", "= 4.3.2"
+gem "jekyll", "= 4.4.1"
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
   # Master Plugins
   gem "jekyll-paginate-v2", "= 3.0.0"
   gem "jekyll-liquify", "= 0.0.2" # ❌ Version 0.0.3 breaks the site
-  gem "jekyll-truthyfalsy", "~> 1.0"
   gem "jekyll-uj-powertools", "~> 1.0"
+  gem "jekyll-truthyfalsy", "~> 1.0"
 
   # Project Plugins
 end

@@ -1,0 +1,69 @@
+{
+  logo: {
+    href: '/dashboard'
+  },
+  links: [
+    {
+      label: 'Dashboard',
+      href: '/dashboard',
+      icon: 'gauge-high'
+    },
+    {
+      header: true,
+      label: 'Main Menu'
+    },
+    {
+      label: 'Analytics',
+      href: '/dashboard/analytics',
+      icon: 'chart-line'
+    },
+    {
+      label: 'Projects',
+      href: null,
+      icon: 'folder',
+      dropdown: [
+        {
+          label: 'All Projects',
+          href: '/dashboard/projects',
+          icon: 'list'
+        },
+        {
+          label: 'Create New',
+          href: '/dashboard/projects/new',
+          icon: 'plus'
+        }
+      ]
+    },
+    {
+      label: 'Users',
+      href: '/dashboard/users',
+      icon: 'users'
+    },
+    // {
+    //   divider: true
+    // },
+    {
+      header: true,
+      label: 'Settings'
+    },
+    {
+      label: 'Account',
+      href: '/dashboard/account',
+      icon: 'user-gear'
+    },
+    {
+      label: 'Billing',
+      href: '/dashboard/billing',
+      icon: 'credit-card',
+      badge: {
+        text: 'Pro',
+        color: 'primary'
+      }
+    },
+    {
+      label: 'Settings',
+      href: '/dashboard/settings',
+      icon: 'gear'
+    }
+  ]
+}

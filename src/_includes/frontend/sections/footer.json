@@ -1,0 +1,78 @@
+{
+  logo: {
+    href: '/',
+    // src: null,
+    // text: '{{ site.brand.name }}',
+    description: '{{ site.brand.description }}',
+  },
+  links: [
+    {
+      label: 'Company',
+      href: null,
+      links: [
+        {
+          label: 'About Us',
+          href: '/about',
+        },
+        {
+          label: 'Pricing',
+          href: '/pricing',
+        },
+        {
+          label: 'Contact Us',
+          href: '/contact',
+        },
+        {
+          label: 'Download',
+          href: '/download',
+        },
+      ],
+    },
+    {
+      label: 'Explore',
+      href: null,
+      links: [
+        {
+          label: 'Blog',
+          href: '/blog',
+        },
+        {
+          label: 'Discord',
+          href: '/discord',
+        },
+        {
+          label: 'Careers',
+          href: '/careers',
+        },
+      ],
+    },
+    {
+      label: 'Account',
+      href: null,
+      links: [
+        {
+          label: 'Sign Up',
+          href: '/signup',
+        },
+        {
+          label: 'Sign In',
+          href: '/signin',
+        },
+        {
+          label: 'My Account',
+          href: '/account',
+        },
+      ],
+    },
+  ],
+  socials: {
+    enabled: true,
+  },
+  copyright: {
+    enabled: true,
+    text: null,
+  },
+  legal: {
+    enabled: true,
+  },
+}

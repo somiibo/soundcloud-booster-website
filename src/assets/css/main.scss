@@ -1,0 +1,41 @@
+// ============================================
+// Theme Configuration
+// ============================================
+// Customize Classy theme variables here
+// See: ultimate-jekyll-manager/src/assets/themes/classy/_config.scss for all available variables
+
+@use 'ultimate-jekyll-manager' as * with (
+  // ============================================
+  // Brand Colors
+  // ============================================
+  $primary: #5B47FB,
+  // $secondary: #6C757D,
+
+  // ============================================
+  // Backgrounds
+  // ============================================
+  // $classy-bg-light: #FFFFFF,
+  // $classy-bg-dark: #212529,
+
+  // ============================================
+  // Typography (uncomment to customize)
+  // ============================================
+  // $font-family-sans-serif: 'Inter' -apple-system sans-serif,
+  // $headings-font-weight: 800,
+
+  // ============================================
+  // Borders (uncomment to customize)
+  // ============================================
+  // $border-radius: 1rem,
+  // $border-radius-lg: 1.5rem,
+
+  // ============================================
+  // Add more customizations below
+  // See _config.scss for 60+ customizable variables
+  // ============================================
+);
+
+// ============================================
+// Custom Styles
+// ============================================
+// Add your project-specific CSS below...

@@ -1,0 +1,72 @@
+{
+  actions: [
+    {
+      type: 'notifications',
+      icon: 'bell',
+      label: 'Notifications',
+      badge: {
+        text: '3',
+        color: 'danger'
+      },
+      dropdown: [
+        {
+          title: 'New message',
+          message: 'You have a new message from John',
+          time: '5 min ago',
+          icon: 'envelope',
+          icon_color: 'primary',
+          href: '/dashboard/messages',
+          unread: true
+        },
+        {
+          title: 'System update',
+          message: 'Your account has been updated',
+          time: '1 hour ago',
+          icon: 'circle-check',
+          icon_color: 'success',
+          href: '/dashboard/settings'
+        },
+        {
+          divider: true
+        },
+        {
+          title: 'See all notifications',
+          href: '/dashboard/notifications',
+          icon: 'arrow-right'
+        }
+      ]
+    },
+    {
+      type: 'account',
+      attributes: [
+        ['data-wm-bind', '@show auth.user'],
+        ['hidden', '']
+      ],
+      dropdown: [
+        {
+          label: 'Profile',
+          href: '/account#profile',
+          icon: 'user'
+        },
+        {
+          label: 'Subscription',
+          href: '/account#billing',
+          icon: 'crown'
+        },
+        {
+          label: 'Settings',
+          href: '/account#settings',
+          icon: 'gear'
+        },
+        {
+          divider: true
+        },
+        {
+          label: 'Sign Out',
+          icon: 'arrow-right-from-bracket',
+          class: 'auth-signout-btn text-danger'
+        }
+      ]
+    }
+  ]
+}
