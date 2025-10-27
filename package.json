@@ -15,7 +15,6 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "^5.0.1",
-    "ultimate-jekyll-manager": "^0.0.103"
-  },
-  "dependencies": {}
+    "ultimate-jekyll-manager": "^0.0.106"
+  }
 }
