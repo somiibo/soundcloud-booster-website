@@ -14,9 +14,9 @@ gem "jekyll", "= 4.4.1"
 group :jekyll_plugins do
   # Master Plugins
   gem "jekyll-paginate-v2", "= 3.0.0"
-  gem "jekyll-liquify", "= 0.0.2" # ❌ Version 0.0.3 breaks the site
+  # gem "jekyll-liquify", "= 0.0.2" # ❌ Version 0.0.3 breaks the site
   gem "jekyll-uj-powertools", "~> 1.0"
-  gem "jekyll-truthyfalsy", "~> 1.0"
+  # gem "jekyll-truthyfalsy", "~> 1.0"
 
   # Project Plugins
 end

@@ -44,28 +44,37 @@
       ],
       dropdown: [
         {
-          label: 'Profile',
+          label: 'Account',
           href: '/account#profile',
-          icon: 'user'
+          icon: 'user-gear'
         },
         {
-          label: 'Subscription',
-          href: '/account#billing',
-          icon: 'crown'
+          label: 'Dashboard',
+          href: '/dashboard',
+          icon: 'gauge-high'
         },
         {
-          label: 'Settings',
-          href: '/account#settings',
-          icon: 'gear'
+          divider: true,
+          attributes: [
+            ['data-wm-bind', '@show auth.account.roles.admin']
+          ]
         },
         {
-          divider: true
+          label: 'Admin Panel',
+          href: '/admin',
+          icon: 'shield-halved',
+          attributes: [
+            ['data-wm-bind', '@show auth.account.roles.admin']
+          ]
+        },
+        {
+          divider: true,
         },
         {
           label: 'Sign Out',
           icon: 'arrow-right-from-bracket',
           class: 'auth-signout-btn text-danger'
-        }
+        },
       ]
     }
   ]

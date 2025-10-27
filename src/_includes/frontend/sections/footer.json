@@ -1,8 +1,7 @@
 {
   logo: {
     href: '/',
-    // src: null,
-    // text: '{{ site.brand.name }}',
+    class: 'filter-adaptive',
     description: '{{ site.brand.description }}',
   },
   links: [

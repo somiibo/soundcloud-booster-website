@@ -1,6 +1,7 @@
 {
   logo: {
-    href: '/dashboard'
+    href: '/',
+    class: 'filter-adaptive'
   },
   links: [
     {
@@ -12,58 +13,60 @@
       header: true,
       label: 'Main Menu'
     },
+    // {
+    //   label: 'Analytics',
+    //   href: '/dashboard/analytics',
+    //   icon: 'chart-line'
+    // },
     {
-      label: 'Analytics',
-      href: '/dashboard/analytics',
-      icon: 'chart-line'
-    },
-    {
-      label: 'Projects',
+      label: 'Items',
       href: null,
       icon: 'folder',
       dropdown: [
         {
-          label: 'All Projects',
-          href: '/dashboard/projects',
+          label: 'All Items',
+          href: '/dashboard/items',
           icon: 'list'
         },
         {
           label: 'Create New',
-          href: '/dashboard/projects/new',
+          href: '/dashboard/items/new',
           icon: 'plus'
         }
       ]
     },
-    {
-      label: 'Users',
-      href: '/dashboard/users',
-      icon: 'users'
-    },
     // {
-    //   divider: true
+    //   label: 'Users',
+    //   href: '/dashboard/users',
+    //   icon: 'users'
     // },
     {
       header: true,
-      label: 'Settings'
+      label: 'Explore'
     },
     {
       label: 'Account',
-      href: '/dashboard/account',
+      href: '/account#profile',
       icon: 'user-gear'
     },
     {
-      label: 'Billing',
-      href: '/dashboard/billing',
-      icon: 'credit-card',
-      badge: {
-        text: 'Pro',
-        color: 'primary'
-      }
+      label: 'Homepage',
+      href: '/',
+      icon: 'house'
     },
-    {
-      label: 'Settings',
-      href: '/dashboard/settings',
-      icon: 'gear'
+    // {
+    //   label: 'Billing',
+    //   href: '/dashboard/billing',
+    //   icon: 'credit-card',
+    //   badge: {
+    //     text: 'Pro',
+    //     color: 'primary'
+    //   }
+    // },
+  ],
+  bottom: {
+    ad: {
+      enabled: true,
     }
-  ]
+  }
 }
