@@ -1,0 +1,6 @@
+Contact: mailto:
+Contact: https://soundcloudbooster.com/contact
+Preferred-Languages: en
+Canonical: https://soundcloudbooster.com/.well-known/security.txt
+Policy: https://soundcloudbooster.com/privacy
+Expires: 2026-12-31T23:59:59.000Z
