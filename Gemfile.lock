@@ -38,15 +38,10 @@ GEM
       safe_yaml (~> 1.0)
       terminal-table (>= 1.8, < 4.0)
       webrick (~> 1.7)
-    jekyll-liquify (0.0.2)
-      liquid (>= 2.5, < 5.0)
-      redcarpet (~> 3.1)
     jekyll-paginate-v2 (3.0.0)
       jekyll (>= 3.0, < 5.0)
     jekyll-sass-converter (3.0.0)
       sass-embedded (~> 1.54)
-    jekyll-truthyfalsy (1.0.3)
-      jekyll (>= 3.0, < 5.0)
     jekyll-uj-powertools (1.6.19)
       jekyll (>= 3.0, < 5.0)
       nokogiri (>= 1.17)
@@ -92,9 +87,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll (= 4.4.1)
-  jekyll-liquify (= 0.0.2)
   jekyll-paginate-v2 (= 3.0.0)
-  jekyll-truthyfalsy (~> 1.0)
   jekyll-uj-powertools (~> 1.0)
   redcarpet (= 3.5.1)
   tzinfo-data
