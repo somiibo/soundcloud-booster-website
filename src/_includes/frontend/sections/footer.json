@@ -2,7 +2,7 @@
   logo: {
     href: '/',
     class: 'filter-adaptive',
-    description: '{{ site.brand.description }}',
+    description: '{{ site.meta.description }}',
   },
   links: [
     {
