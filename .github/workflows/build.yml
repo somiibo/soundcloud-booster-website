@@ -8,7 +8,7 @@ on:
       - main
       - template
   schedule:
-      - cron: '30 1 1 * *' # every 1st of the month at 1:30 am UTC
+    - cron: '30 1 1 * *' # auto-build schedule (configurable in ultimate-jekyll-manager.json)
 
 concurrency:
   group: ${{ github.ref }}

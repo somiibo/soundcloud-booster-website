@@ -1,6 +1,6 @@
 ---
 ### ALL PAGES ###
-layout: app/blog/post
+layout: blueprint/blog/post
 
 ### POST ONLY ###
 post:
@@ -35,7 +35,7 @@ First off, SoundCloud marketing helps you stand out in a sea of artists. Think a
 
 Moreover, marketing strategically on SoundCloud opens doors to networking opportunities. It's not just about numbers; it's about connecting with the right audience. By effectively marketing your music, you attract listeners who genuinely vibe with your style, creating a loyal fan base that sticks around longer than a one-hit wonder. Remember, building connections is key in the music industry. You never know when a simple share might lead to your big break!
 
-{% include /master/modules/adunits/adsense-in-article.html index="0" %}
+
 
 And let's not forget the treasure trove of data SoundCloud provides. Marketing your music allows you to tap into valuable insights about your listeners. Understanding who's tuning in and where they're from can shape your future projects and tours. It's like having a crystal ball that reveals the secrets of your fanbase!
 
@@ -65,7 +65,7 @@ Alright, emerging artists, here's the deal: social media is your backstage pass 
 
 First up, when you share your SoundCloud tracks on social media, you're not just posting a link. You're opening a portal to your musical world. This is where social media integration comes into play. It's all about creating a seamless experience for your followers, making it easy for them to discover, listen, and fall in love with your music.
 
-{% include /master/modules/adunits/adsense-in-article.html index="1" %}
+
 
 Consider using Instagram Stories to give sneak peeks of your upcoming tracks or behind-the-scenes glimpses of your creative process. Stories can be your canvas, where you paint vivid pictures of your musical journey. Don't forget to use hashtags strategically to reach a wider audience and grow followers who are thirsty for fresh sounds.
 
