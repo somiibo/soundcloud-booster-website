@@ -1,0 +1,2 @@
+/*! For license information please see 223.chunk.68f83523eb60ed5e665b.js.LICENSE.txt */
+"use strict";(self.webpackChunkultimate_jekyll=self.webpackChunkultimate_jekyll||[]).push([[223],{223:(e,l,a)=>{a.d(l,{initializeApp:()=>i.Wp});var i=a(9943);(0,i.KO)("firebase","12.5.0","app")}}]);

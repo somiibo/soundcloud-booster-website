@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkultimate_jekyll=self.webpackChunkultimate_jekyll||[]).push([[3987],{3987:(e,t,l)=>{function s(e,t=""){return e&&e.isDevelopment()&&"development"===t?"http://localhost:5002":"https://api.itwcreativeworks.com"}l.r(t),l.d(t,{getApiBaseUrl:()=>s})}}]);

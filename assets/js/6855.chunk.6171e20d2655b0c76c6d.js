@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkultimate_jekyll=self.webpackChunkultimate_jekyll||[]).push([[6855],{6855:(e,t,a)=>{a.r(t),a.d(t,{default:()=>l});var n=a(2717);const l=(e,t)=>new Promise(async function(t,a){const{webManager:l}=e;return await(0,n.A)(e),t()})}}]);

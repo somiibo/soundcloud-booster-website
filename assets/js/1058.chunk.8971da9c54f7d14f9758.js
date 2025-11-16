@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkultimate_jekyll=self.webpackChunkultimate_jekyll||[]).push([[1058],{1058:(e,t,l)=>{l.r(t),l.d(t,{state:()=>i});const i={confirmation:{order:{id:"Loading...",productName:"Product",total:"$0.00",currency:"USD"},subscription:{show:!1,hasFreeTrial:!1,billingCycle:"",infoText:""},loaded:!1}}}}]);
